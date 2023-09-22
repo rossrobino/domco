@@ -24,9 +24,6 @@ let fileExists = async (file) => {
  * @returns an object containing the `build` function
  */
 const importBuild = async (buildFilePath) => {
-	const __filename = url.fileURLToPath(import.meta.url);
-	const __dirname = path.dirname(__filename);
-
 	/**
 	 * @param {Document} document
 	 * @returns the modified document
@@ -61,9 +58,15 @@ const importBuild = async (buildFilePath) => {
 	const { text } = firstFile;
 
 	const module = { exports: { build } };
+
 	const script = new Script(text);
+
+	const __filename = url.fileURLToPath(import.meta.url);
+	const __dirname = path.dirname(__filename);
 	const sandbox = { require: () => {}, module, __dirname, __filename };
+
 	const context = createContext(sandbox);
+
 	script.runInContext(context);
 
 	return { build: module.exports.build };
@@ -120,7 +123,6 @@ export default () => {
 			};
 		},
 		transformIndexHtml: {
-			order: "pre",
 			handler: async (html, ctx) => {
 				const routePath = path.join(root, ctx.originalUrl || "");
 				console.log(html);
