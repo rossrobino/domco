@@ -1,0 +1,10 @@
+{
+	"name": "html-kit-monorepo",
+	"private": true,
+	"workspaces": [
+		"packages/*"
+	],
+	"devDependencies": {
+		"html-kit": "workspace:*"
+	}
+}

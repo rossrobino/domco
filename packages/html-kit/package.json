@@ -1,0 +1,21 @@
+{
+	"name": "html-kit",
+	"type": "module",
+	"keywords": [
+		"vite-plugin"
+	],
+	"types": "types/index.d.ts",
+	"main": "src/index.js",
+	"scripts": {
+		"build": "tsc"
+	},
+	"devDependencies": {
+		"@types/node": "^20.6.3",
+		"typescript": "^5.2.2"
+	},
+	"dependencies": {
+		"esbuild": "^0.19.3",
+		"linkedom": "^0.15.3",
+		"vite": "^4.4.5"
+	}
+}
