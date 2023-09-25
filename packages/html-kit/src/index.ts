@@ -2,7 +2,7 @@ import type { PluginOption } from "vite";
 import { config } from "./hooks/config";
 import { transformIndexHtml } from "./hooks/transformIndexHtml";
 import { configureServer } from "./hooks/configureServer";
-import type { Build, BuildResult } from "./types";
+import type { Build, BuildContext, BuildResult } from "./types";
 
 const htmlKit = (): PluginOption => {
 	return {
@@ -13,4 +13,4 @@ const htmlKit = (): PluginOption => {
 	};
 };
 
-export { htmlKit, type Build, type BuildResult };
+export { htmlKit, type Build, type BuildContext, type BuildResult };
