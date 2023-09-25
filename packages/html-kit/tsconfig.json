@@ -17,8 +17,10 @@
 		"module": "ESNext",
 		"noEmit": true,
 		"lib": ["ES2022", "DOM", "DOM.Iterable"],
-		"declaration": true
+		"declaration": true,
+		"rootDir": "src",
+		"types": ["bun-types", "@types/web"]
 	},
 	"include": ["src/**/*"],
-	"exclude": ["**/*.test.ts"]
+	"exclude": ["node_modules"]
 }

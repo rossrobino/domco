@@ -1,24 +1,25 @@
 {
-	"name": "html-kit-test",
-	"private": true,
-	"version": "0.0.0",
-	"type": "module",
-	"scripts": {
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"preview": "vite preview"
-	},
-	"devDependencies": {
-		"@tailwindcss/typography": "^0.5.10",
-		"@types/node": "^20.6.3",
-		"autoprefixer": "^10.4.16",
-		"html-kit": "workspace:../packages/html-kit",
-		"prettier": "^3.0.3",
-		"prettier-plugin-tailwindcss": "^0.5.4",
-		"robino": "^0.0.39",
-		"tailwindcss": "^3.3.3",
-		"typescript": "^5.0.2",
-		"uico": "^0.1.5",
-		"vite": "^4.4.5"
-	}
+  "name": "html-kit-test",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/node": "^20.6.3",
+    "autoprefixer": "^10.4.16",
+    "html-kit": "workspace:../packages/html-kit",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.4",
+    "robino": "^0.0.39",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.0.2",
+    "uico": "^0.1.5",
+    "vite": "^4.4.5",
+    "zod": "^3.22.2"
+  }
 }

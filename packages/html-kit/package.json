@@ -21,6 +21,8 @@
   },
   "devDependencies": {
     "@types/node": "^20.6.3",
+    "@types/web": "^0.0.115",
+    "bun-types": "latest",
     "prettier": "^3.0.3",
     "robino": "^0.0.39",
     "tsup": "^7.2.0",
