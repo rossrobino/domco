@@ -3,7 +3,13 @@ import fs from "node:fs/promises";
 import type { UserConfig } from "vite";
 
 export const info = {
-	root: "src/routes",
+	paths: {
+		routes: "src/routes",
+		outDir: "build",
+	},
+	fileNames: {
+		indexBuild: "index.build",
+	},
 };
 
 export const config = async (): Promise<UserConfig> => {
@@ -17,20 +23,20 @@ export const config = async (): Promise<UserConfig> => {
 			if (file.isDirectory()) {
 				await entryPoints(path.join(dirPath, file.name));
 			} else if (file.name === "index.html") {
-				const relativePath = path.relative(info.root, dirPath);
+				const relativePath = path.relative(info.paths.routes, dirPath);
 				input[relativePath] = path.join(process.cwd(), dirPath, file.name);
 			}
 		}
 		return input;
 	};
 
-	const input = await entryPoints(info.root);
+	const input = await entryPoints(info.paths.routes);
 
 	return {
-		root: info.root,
+		root: info.paths.routes,
 		appType: "mpa",
 		build: {
-			outDir: "../../build",
+			outDir: info.paths.outDir,
 			emptyOutDir: true,
 			rollupOptions: { input },
 		},

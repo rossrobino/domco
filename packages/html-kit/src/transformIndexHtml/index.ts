@@ -1,18 +1,24 @@
 import path from "node:path";
 import { parseHTML } from "linkedom";
-import { info } from "../config/index.js";
+import { info } from "../config";
 import * as esbuild from "esbuild";
-import { fileExists } from "../util/index.js";
+import { fileExists } from "../util";
 import url from "node:url";
 import { Script, createContext } from "node:vm";
 import type { IndexHtmlTransform } from "vite";
 
 export const transformIndexHtml: IndexHtmlTransform = {
 	handler: async (html, ctx) => {
-		const routePath = path.join(info.root, ctx.originalUrl || "");
+		const routePath = path.join(info.paths.routes, ctx.originalUrl || "");
 
-		const buildFilePathTs = path.resolve(routePath, "+build.ts");
-		const buildFilePathJs = path.resolve(routePath, "+build.js");
+		const buildFilePathTs = path.resolve(
+			routePath,
+			`${info.fileNames.indexBuild}.ts`,
+		);
+		const buildFilePathJs = path.resolve(
+			routePath,
+			`${info.fileNames.indexBuild}.js`,
+		);
 		let buildFilePath = "";
 
 		if (await fileExists(buildFilePathTs)) {
@@ -22,14 +28,6 @@ export const transformIndexHtml: IndexHtmlTransform = {
 		} else {
 			return html;
 		}
-
-		ctx.server?.watcher.on("change", (file) => {
-			if (file === buildFilePath) {
-				ctx.server?.ws.send({
-					type: "full-reload",
-				});
-			}
-		});
 
 		const { build } = await importBuild(buildFilePath);
 
