@@ -1,10 +1,11 @@
+import type { PathLike } from "node:fs";
 import fs from "node:fs/promises";
 
 /**
- * @param {import("fs").PathLike} filePath
+ * @param filePath
  * @returns true if the file exists
  */
-export const fileExists = async (filePath) => {
+export const fileExists = async (filePath: PathLike) => {
 	try {
 		await fs.access(filePath);
 		return true;

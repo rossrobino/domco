@@ -1,22 +1,14 @@
 import path from "node:path";
 import fs from "node:fs/promises";
+import type { UserConfig } from "vite";
 
 export const info = {
 	root: "src/routes",
 };
 
-/**
- *
- * @returns {Promise<import("vite").UserConfig>}
- */
-export const config = async () => {
-	/**
-	 * finds the entry points
-	 * @param {string} dirPath
-	 */
-	const entryPoints = async (dirPath) => {
-		/** @type {Record<string, string>} */
-		const input = {};
+export const config = async (): Promise<UserConfig> => {
+	const entryPoints = async (dirPath: string) => {
+		const input: Record<string, string> = {};
 		const files = await fs.readdir(dirPath, {
 			withFileTypes: true,
 		});

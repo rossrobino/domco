@@ -2,23 +2,23 @@
 	"compilerOptions": {
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"target": "es2022",
+		"target": "ES2022",
 		"verbatimModuleSyntax": true,
 		"allowJs": true,
 		"checkJs": true,
 		"resolveJsonModule": true,
 		"moduleDetection": "force",
 		"strict": true,
+		"allowImportingTsExtensions": true,
 		"noUncheckedIndexedAccess": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"moduleResolution": "NodeNext",
-		"module": "NodeNext",
-		"outDir": "types",
-		"lib": ["es2022", "DOM", "DOM.Iterable"],
-		"declaration": true,
-		"emitDeclarationOnly": true
+		"moduleResolution": "Bundler",
+		"module": "ESNext",
+		"noEmit": true,
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+		"declaration": true
 	},
-	"include": ["**/*.js"],
-	"exclude": ["node_modules", "**/*.test.js"]
+	"include": ["src/**/*"],
+	"exclude": ["**/*.test.ts"]
 }

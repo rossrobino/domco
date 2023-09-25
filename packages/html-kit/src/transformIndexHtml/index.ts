@@ -5,11 +5,9 @@ import * as esbuild from "esbuild";
 import { fileExists } from "../util/index.js";
 import url from "node:url";
 import { Script, createContext } from "node:vm";
+import type { IndexHtmlTransform } from "vite";
 
-/**
- * @type {import("vite").IndexHtmlTransform}
- */
-export const transformIndexHtml = {
+export const transformIndexHtml: IndexHtmlTransform = {
 	handler: async (html, ctx) => {
 		const routePath = path.join(info.root, ctx.originalUrl || "");
 
@@ -45,18 +43,17 @@ export const transformIndexHtml = {
 
 /**
  * gets the build function from the neighbor `build` file
- * @param {string} buildFilePath
+ * @param buildFilePath
  * @returns an object containing the `build` function
  */
-const importBuild = async (buildFilePath) => {
+const importBuild = async (buildFilePath: string) => {
 	/**
 	 * @param {Document} document
 	 * @returns the modified document
 	 */
-	const build = async (document) => document;
+	const build = async (document: Document) => document;
 
-	/** @type {import("esbuild").BuildResult} */
-	let result;
+	let result: esbuild.BuildResult;
 	try {
 		result = await esbuild.build({
 			bundle: true,
