@@ -4,18 +4,28 @@
 	"keywords": [
 		"vite-plugin"
 	],
-	"types": "types/index.d.ts",
-	"main": "src/index.js",
+	"types": "./types/index.d.ts",
+	"main": "./index.js",
+	"exports": {
+		".": {
+			"types": "./types/index.d.ts",
+			"default": "./index.js"
+		}
+	},
 	"scripts": {
+		"dev": "tsc --watch",
 		"build": "tsc"
 	},
 	"devDependencies": {
 		"@types/node": "^20.6.3",
+		"prettier": "^3.0.3",
+		"robino": "^0.0.39",
 		"typescript": "^5.2.2"
 	},
 	"dependencies": {
 		"esbuild": "^0.19.3",
 		"linkedom": "^0.15.3",
 		"vite": "^4.4.5"
-	}
+	},
+	"prettier": "robino/config/prettier"
 }
