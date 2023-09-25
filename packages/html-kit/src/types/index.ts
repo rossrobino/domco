@@ -1,5 +1,7 @@
+import { parseHTML } from "linkedom";
+
 export type Build = (
-	window: Window,
+	parseHtmlResult: ReturnType<typeof parseHTML>,
 	context: BuildContext,
 ) => Promise<BuildResult>;
 
