@@ -1,16 +1,7 @@
 import path from "node:path";
 import fs from "node:fs/promises";
 import type { UserConfig } from "vite";
-
-export const info = {
-	paths: {
-		routes: "src/routes",
-		outDir: "build",
-	},
-	fileNames: {
-		indexBuild: "index.build",
-	},
-};
+import { info } from "../../info";
 
 export const config = async (): Promise<UserConfig> => {
 	const entryPoints = async (dirPath: string) => {

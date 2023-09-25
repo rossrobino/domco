@@ -1,9 +1,10 @@
 import type { PluginOption } from "vite";
-import { config } from "./config";
-import { transformIndexHtml } from "./transformIndexHtml";
-import { configureServer } from "./configureServer";
+import { config } from "./hooks/config";
+import { transformIndexHtml } from "./hooks/transformIndexHtml";
+import { configureServer } from "./hooks/configureServer";
+import type { Build, BuildResult } from "./types";
 
-export const htmlKit = (): PluginOption => {
+const htmlKit = (): PluginOption => {
 	return {
 		name: "html-kit",
 		configureServer,
@@ -11,3 +12,5 @@ export const htmlKit = (): PluginOption => {
 		transformIndexHtml,
 	};
 };
+
+export { htmlKit, type Build, type BuildResult };

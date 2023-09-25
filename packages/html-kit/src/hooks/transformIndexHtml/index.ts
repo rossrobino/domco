@@ -1,23 +1,25 @@
 import path from "node:path";
 import { parseHTML } from "linkedom";
-import { info } from "../config";
+import { info } from "../../info";
 import * as esbuild from "esbuild";
-import { fileExists } from "../util";
+import { fileExists } from "../../util";
 import url from "node:url";
 import { Script, createContext } from "node:vm";
 import type { IndexHtmlTransform } from "vite";
+import type { Build } from "../../types";
 
 export const transformIndexHtml: IndexHtmlTransform = {
 	handler: async (html, ctx) => {
-		const routePath = path.join(info.paths.routes, ctx.originalUrl || "");
+		const route = ctx.originalUrl || "";
+		const routePath = path.join(info.paths.routes, route);
 
 		const buildFilePathTs = path.resolve(
 			routePath,
-			`${info.fileNames.indexBuild}.ts`,
+			`${info.files.indexBuild}.ts`,
 		);
 		const buildFilePathJs = path.resolve(
 			routePath,
-			`${info.fileNames.indexBuild}.js`,
+			`${info.files.indexBuild}.js`,
 		);
 		let buildFilePath = "";
 
@@ -31,11 +33,11 @@ export const transformIndexHtml: IndexHtmlTransform = {
 
 		const { build } = await importBuild(buildFilePath);
 
-		const { document } = parseHTML(html, "text/html");
+		const parseHtmlResult = parseHTML(html, "text/html");
 
-		const rendered = await build(document);
+		const result = await build(parseHtmlResult, { route });
 
-		return rendered.toString();
+		return result.document.toString();
 	},
 };
 
@@ -45,11 +47,9 @@ export const transformIndexHtml: IndexHtmlTransform = {
  * @returns an object containing the `build` function
  */
 const importBuild = async (buildFilePath: string) => {
-	/**
-	 * @param {Document} document
-	 * @returns the modified document
-	 */
-	const build = async (document: Document) => document;
+	const build: Build = async ({ document }) => {
+		return { document };
+	};
 
 	let result: esbuild.BuildResult;
 	try {

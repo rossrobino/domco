@@ -1,8 +1,8 @@
-import type { Build } from "html-kit";
+import { type Build } from "html-kit";
 
-export const build: Build = async ({ document }) => {
+export const build: Build = async ({ document }, { route }) => {
 	const anchor = document.createElement("a");
-	anchor.textContent = "Build hi";
+	anchor.textContent = route;
 	anchor.href = "https://robino.dev";
 	document.querySelector("main")?.append(anchor);
 
