@@ -10,6 +10,7 @@ export const config = async (): Promise<UserConfig> => {
 	});
 	return {
 		root: info.paths.routes,
+		publicDir: path.join(process.cwd(), "src", "public"),
 		resolve: {
 			alias: [
 				{

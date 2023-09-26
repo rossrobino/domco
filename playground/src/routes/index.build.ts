@@ -1,6 +1,5 @@
 import type { Build } from "html-kit";
 import { process } from "robino/util/md";
-import { z } from "zod";
 import { chunk } from "$lib/util/chunk";
 import fs from "fs/promises";
 
@@ -30,20 +29,9 @@ export const build: Build = async ({
 
 	// processed markdown //
 	const md = await fs.readFile("src/lib/content/markdown.md", "utf-8"); // don't use relative paths
-	const frontmatterSchema = z
-		.object({
-			title: z.string(),
-			description: z.string(),
-		})
-		.strict();
-	// use any library, this function is a wrapper around `marked`
-	const { frontmatter, html } = process(md, frontmatterSchema);
 
-	const title = document.querySelector("#title");
-	if (title) title.innerHTML = frontmatter.title;
-
-	const description = document.querySelector("#description");
-	if (description) description.innerHTML = frontmatter.description;
+	// use any library, this function uses `marked`
+	const { html } = process(md);
 
 	const article = document.querySelector("#md");
 	if (article) article.innerHTML = html;

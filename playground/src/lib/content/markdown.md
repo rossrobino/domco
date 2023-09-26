@@ -1,8 +1,3 @@
----
-title: Title
-description: Description
----
+# Home
 
-### Markdown Content
-
-This is rendered on the server, find the code in `src/routes/index.build.ts`.
+This markdown is rendered on the server, find the code in `src/routes/index.build.ts`.

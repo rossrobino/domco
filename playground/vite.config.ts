@@ -3,7 +3,6 @@ import { htmlKit } from "html-kit";
 import tailwindcss from "tailwindcss";
 import autoprefixer from "autoprefixer";
 import typography from "@tailwindcss/typography";
-import { uico } from "uico";
 
 export default defineConfig({
 	plugins: [htmlKit()],
@@ -12,7 +11,7 @@ export default defineConfig({
 			plugins: [
 				tailwindcss({
 					content: ["./src/**/*.{html,js,ts}"],
-					plugins: [typography, uico],
+					plugins: [typography],
 				}),
 				autoprefixer(),
 			],
