@@ -10,14 +10,14 @@
 	},
 	"devDependencies": {
 		"@tailwindcss/typography": "^0.5.10",
-		"@types/node": "^20.6.3",
+		"@types/node": "^20.7.0",
 		"autoprefixer": "^10.4.16",
 		"domco": "workspace:../packages/domco",
 		"prettier": "^3.0.3",
 		"prettier-plugin-tailwindcss": "^0.5.4",
 		"robino": "^0.0.39",
 		"tailwindcss": "^3.3.3",
-		"typescript": "^5.0.2",
-		"vite": "^4.4.5"
+		"typescript": "^5.2.2",
+		"vite": "^4.4.9"
 	}
 }
