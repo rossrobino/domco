@@ -1,10 +1,10 @@
 {
-	"name": "html-kit-monorepo",
+	"name": "domco-monorepo",
 	"private": true,
 	"workspaces": [
 		"packages/*"
 	],
 	"devDependencies": {
-		"html-kit": "workspace:*"
+		"domco": "workspace:*"
 	}
 }

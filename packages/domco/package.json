@@ -1,0 +1,39 @@
+{
+	"name": "domco",
+	"version": "0.0.1",
+	"type": "module",
+	"keywords": [
+		"vite-plugin"
+	],
+	"types": "./dist/index.d.ts",
+	"main": "./dist/index.js",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"dev": "tsup --watch",
+		"build": "tsup",
+		"pub": "bun run build && npm publish --access=public"
+	},
+	"devDependencies": {
+		"@types/node": "^20.6.3",
+		"@types/web": "^0.0.115",
+		"bun-types": "latest",
+		"prettier": "^3.0.3",
+		"robino": "^0.0.39",
+		"tsup": "^7.2.0",
+		"typescript": "^5.2.2"
+	},
+	"dependencies": {
+		"esbuild": "^0.19.3",
+		"linkedom": "^0.15.3",
+		"vite": "^4.4.5"
+	},
+	"prettier": "robino/config/prettier"
+}

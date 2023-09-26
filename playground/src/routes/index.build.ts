@@ -1,4 +1,4 @@
-import type { Build } from "html-kit";
+import type { Build } from "../../../packages/domco/dist";
 import { process } from "robino/util/md";
 import { chunk } from "$lib/util/chunk";
 import fs from "fs/promises";

@@ -7,8 +7,8 @@ test("transpile and import entry", async () => {
 	const filePath = path.join(process.cwd(), "src", "index.ts");
 
 	console.log(path.join(process.cwd()));
-	const { htmlKit } = await transpileImport<{ htmlKit: () => PluginOption }>(
+	const { domco } = await transpileImport<{ domco: () => PluginOption }>(
 		filePath,
 	);
-	console.log(htmlKit.toString());
+	console.log(domco.toString());
 });

@@ -4,13 +4,13 @@ import { transformIndexHtml } from "./hooks/transformIndexHtml";
 import { configureServer } from "./hooks/configureServer";
 import type { Build, BuildContext, BuildResult } from "./types";
 
-const htmlKit = (): PluginOption => {
+const domco = (): PluginOption => {
 	return {
-		name: "html-kit",
+		name: "domco",
 		configureServer,
 		config,
 		transformIndexHtml,
 	};
 };
 
-export { htmlKit, type Build, type BuildContext, type BuildResult };
+export { domco, type Build, type BuildContext, type BuildResult };
