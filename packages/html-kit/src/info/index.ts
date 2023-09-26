@@ -5,5 +5,6 @@ export const info = {
 	},
 	files: {
 		indexBuild: "index.build",
+		layoutBuild: "layout.build",
 	},
 };

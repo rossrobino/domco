@@ -1,9 +1,7 @@
 import { type Build } from "html-kit";
 
-export const build: Build = async ({ document }, { route }) => {
-	const p = document.createElement("p");
-	p.textContent = `Current route: ${route}`;
-	document.querySelector("main")?.append(p);
-
+export const build: Build = async ({ document }) => {
+	const div = document.querySelector("#indexBuild");
+	if (div) div.textContent = "index.build";
 	return { document };
 };

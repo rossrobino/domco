@@ -27,7 +27,7 @@ export const build: Build = async ({
 	);
 	main?.append(document.createElement("custom-element"));
 
-	// processed markdown //
+	// process markdown //
 	const md = await fs.readFile("src/lib/content/markdown.md", "utf-8"); // don't use relative paths
 
 	// use any library, this function uses `marked`

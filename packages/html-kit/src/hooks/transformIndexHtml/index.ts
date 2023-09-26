@@ -13,39 +13,28 @@ export const transformIndexHtml: IndexHtmlTransform = {
 		const route = path.dirname(ctx.path);
 		const routePath = path.resolve(path.join(info.paths.routes, route));
 
-		// layout
-		html = await applyLayout(routePath, html);
+		html = await applyLayout({ routePath, html });
 
-		// index.build
-		const indexBuildPathTs = path.resolve(
+		html = await applyBuild({
+			buildFilename: info.files.layoutBuild,
+			route,
 			routePath,
-			`${info.files.indexBuild}.ts`,
-		);
-		const indexBuildPathJs = path.resolve(
+			html,
+		});
+
+		html = await applyBuild({
+			buildFilename: info.files.indexBuild,
+			route,
 			routePath,
-			`${info.files.indexBuild}.js`,
-		);
+			html,
+		});
 
-		let indexBuildPath = "";
-		if (await fileExists(indexBuildPathTs)) {
-			indexBuildPath = indexBuildPathTs;
-		} else if (await fileExists(indexBuildPathJs)) {
-			indexBuildPath = indexBuildPathJs;
-		} else {
-			return html;
-		}
-
-		const { build } = await transpileImport<{ build: Build }>(indexBuildPath);
-
-		const parseHtmlResult = parseHTML(html, "text/html");
-
-		const result = await build(parseHtmlResult, { route });
-
-		return result.document.toString();
+		return html;
 	},
 };
 
-const applyLayout = async (routePath: string, html: string) => {
+const applyLayout = async (options: { routePath: string; html: string }) => {
+	let { routePath, html } = options;
 	const layoutPath = path.resolve(routePath, "layout.html");
 
 	if (await fileExists(layoutPath)) {
@@ -57,7 +46,52 @@ const applyLayout = async (routePath: string, html: string) => {
 	const parentRoutePath = path.dirname(routePath);
 
 	if (parentRoutePath.includes(info.paths.routes)) {
-		html = await applyLayout(parentRoutePath, html);
+		html = await applyLayout({ routePath: parentRoutePath, html });
+	}
+
+	return html;
+};
+
+const applyBuild = async (options: {
+	buildFilename: string;
+	route: string;
+	routePath: string;
+	html: string;
+}) => {
+	let { buildFilename, route, routePath, html } = options;
+	const parentRoutePath = path.dirname(routePath);
+	const buildPathTs = path.resolve(routePath, `${buildFilename}.ts`);
+	const buildPathJs = path.resolve(routePath, `${buildFilename}.js`);
+
+	let buildPath = "";
+	if (await fileExists(buildPathTs)) {
+		buildPath = buildPathTs;
+	} else if (await fileExists(buildPathJs)) {
+		buildPath = buildPathJs;
+	}
+
+	if (buildPath) {
+		const { build } = await transpileImport<{ build: Build }>(buildPath);
+
+		const parseHtmlResult = parseHTML(html, "text/html");
+
+		const result = await build(parseHtmlResult, { route });
+
+		html = result.document.toString();
+	}
+
+	if (
+		buildFilename === info.files.layoutBuild &&
+		parentRoutePath.includes(info.paths.routes)
+	) {
+		// if layout.build, and in a nested dir
+		// run the parent's layout
+		html = await applyBuild({
+			buildFilename,
+			route,
+			routePath: parentRoutePath,
+			html,
+		});
 	}
 
 	return html;
