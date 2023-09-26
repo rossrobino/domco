@@ -3,9 +3,7 @@ title: Title
 description: Description
 ---
 
-# Heading 1
-
-## Heading 2
+### Markdown Content
 
 Paragraph
 

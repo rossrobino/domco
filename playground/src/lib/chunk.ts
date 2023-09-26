@@ -1,1 +1,1 @@
-export const chunk = "chunk";
+export const chunk = "An imported chunk";

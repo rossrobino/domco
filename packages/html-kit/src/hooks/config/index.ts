@@ -8,7 +8,6 @@ export const config = async (): Promise<UserConfig> => {
 		dirPath: info.paths.routes,
 		fileName: "index.html",
 	});
-
 	return {
 		root: info.paths.routes,
 		build: {

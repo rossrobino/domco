@@ -2,6 +2,7 @@ import type { Build } from "html-kit";
 import { process } from "robino/util/md";
 import { z } from "zod";
 import { chunk } from "../lib/chunk";
+import fs from "fs/promises";
 
 export const build: Build = async ({
 	document,
@@ -10,11 +11,10 @@ export const build: Build = async ({
 }) => {
 	const main = document.querySelector("main");
 
-	// anchor element
-	const anchor = document.createElement("a");
-	anchor.textContent = "Build hi";
-	anchor.href = "https://robino.dev";
-	main?.append(anchor);
+	// p element
+	const p = document.createElement("p");
+	p.textContent = chunk;
+	main?.append(p);
 
 	// custom element
 	customElements.define(
@@ -22,22 +22,28 @@ export const build: Build = async ({
 		class extends HTMLElement {
 			constructor() {
 				super();
-				this.innerHTML = "<div>A Custom Element</div>" + chunk;
+				this.innerHTML = "<div>A Custom Element</div>";
 			}
 		},
 	);
 	main?.append(document.createElement("custom-element"));
 
+	// processed markdown
+	const md = await fs.readFile("src/lib/markdown.md", "utf-8"); // don't use relative paths
 	const frontmatterSchema = z
 		.object({
 			title: z.string(),
 			description: z.string(),
 		})
 		.strict();
+	const { frontmatter, html } = process(md, frontmatterSchema);
 
-	// const md = await fs.readFile("../lib/markdown.md", "utf-8"); // this doesn't work
+	const title = document.querySelector("#title");
+	if (title) title.innerHTML = frontmatter.title;
 
-	const { html } = process("- markdown content", frontmatterSchema);
+	const description = document.querySelector("#description");
+	if (description) description.innerHTML = frontmatter.description;
+
 	const article = document.querySelector("#md");
 	if (article) article.innerHTML = html;
 
