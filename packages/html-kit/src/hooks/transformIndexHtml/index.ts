@@ -14,7 +14,6 @@ export const transformIndexHtml: IndexHtmlTransform = {
 		const routePath = path.resolve(path.join(info.paths.routes, route));
 
 		// layout
-		// I need this to work for nested layouts as well. The nested layout should be applied first, and then all of the other layouts that exists above it
 		html = await applyLayout(routePath, html);
 
 		// index.build
