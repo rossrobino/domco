@@ -10,6 +10,14 @@ export const config = async (): Promise<UserConfig> => {
 	});
 	return {
 		root: info.paths.routes,
+		resolve: {
+			alias: [
+				{
+					find: "$lib",
+					replacement: path.resolve("./src/lib"),
+				},
+			],
+		},
 		build: {
 			outDir: path.join(process.cwd(), "dist"),
 			emptyOutDir: true,

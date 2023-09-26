@@ -1,7 +1,7 @@
 import type { Build } from "html-kit";
 import { process } from "robino/util/md";
 import { z } from "zod";
-import { chunk } from "../lib/chunk";
+import { chunk } from "$lib/chunk";
 import fs from "fs/promises";
 
 export const build: Build = async ({
