@@ -4,17 +4,19 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="./style.postcss" />
+		<link rel="stylesheet" href="/style.postcss" />
 		<title>html-kit</title>
-		<script type="module" crossorigin="" src="./client.ts"></script>
 	</head>
 	<body class="prose">
 		<header>
 			<div class="p-6 text-4xl font-extrabold">html-kit</div>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/nested/">Nested</a></li>
+			</ul>
 		</header>
 		<main class="p-6">
-			<slot />
+			<slot></slot>
 		</main>
-		<footer class="p-6">Footer</footer>
 	</body>
 </html>
