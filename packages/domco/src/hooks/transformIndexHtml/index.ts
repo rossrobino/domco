@@ -40,7 +40,7 @@ const applyLayout = async (options: { routePath: string; html: string }) => {
 	if (await fileExists(layoutPath)) {
 		// If a layout exists, apply it
 		const code = await fs.readFile(layoutPath, "utf-8");
-		html = code.split("<slot></slot>").join(html);
+		html = code.replace(/<slot>(.*?)<\/slot>/, html);
 	}
 
 	const parentRoutePath = path.dirname(routePath);
