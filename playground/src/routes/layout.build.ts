@@ -5,5 +5,5 @@ export const build: Build = async ({ document }, { route }) => {
 	if (h1) {
 		h1.textContent = route === "/" ? "home" : route.split("/").join(" ");
 	}
-	return { document };
+	return document;
 };

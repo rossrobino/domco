@@ -6,7 +6,7 @@ import { findAllPaths } from "../../util/findAllPaths";
 export const config = async (): Promise<UserConfig> => {
 	const input = await findAllPaths({
 		dirPath: info.paths.routes,
-		fileName: "index.html",
+		fileName: `${info.files.index}.html`,
 	});
 	return {
 		root: info.paths.routes,

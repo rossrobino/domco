@@ -35,7 +35,7 @@ export const transformIndexHtml: IndexHtmlTransform = {
 
 const applyLayout = async (options: { routePath: string; html: string }) => {
 	let { routePath, html } = options;
-	const layoutPath = path.resolve(routePath, "layout.html");
+	const layoutPath = path.resolve(routePath, `${info.files.layout}.html`);
 
 	if (await fileExists(layoutPath)) {
 		// If a layout exists, apply it
@@ -77,7 +77,7 @@ const applyBuild = async (options: {
 
 		const result = await build(parseHtmlResult, { route });
 
-		html = result.document.toString();
+		html = result.toString();
 	}
 
 	if (

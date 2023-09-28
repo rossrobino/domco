@@ -2,7 +2,7 @@ import type { PluginOption } from "vite";
 import { config } from "./hooks/config";
 import { transformIndexHtml } from "./hooks/transformIndexHtml";
 import { configureServer } from "./hooks/configureServer";
-import type { Build, BuildContext, BuildResult } from "./types";
+import type { Build, BuildContext, Element } from "./types";
 
 const domco = (): PluginOption => {
 	return {
@@ -13,4 +13,4 @@ const domco = (): PluginOption => {
 	};
 };
 
-export { domco, type Build, type BuildContext, type BuildResult };
+export { domco, type Build, type BuildContext, type Element };

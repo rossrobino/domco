@@ -1,31 +1,13 @@
 import type { Build } from "domco";
 import { process } from "robino/util/md";
-import { chunk } from "$lib/util/chunk";
 import fs from "fs/promises";
+import { CustomElement } from "$lib/components/CustomElement";
 
-export const build: Build = async ({
-	document,
-	customElements,
-	HTMLElement,
-}) => {
-	const main = document.querySelector("main");
-
-	// p element with imported content //
-	const p = document.createElement("p");
-	p.textContent = chunk;
-	main?.append(p);
+export const build: Build = async (window) => {
+	let { document } = window;
 
 	// custom element //
-	customElements.define(
-		"custom-element",
-		class extends HTMLElement {
-			constructor() {
-				super();
-				this.innerHTML = "<div>A custom element</div>";
-			}
-		},
-	);
-	main?.append(document.createElement("custom-element"));
+	await CustomElement(window);
 
 	// process markdown //
 	const md = await fs.readFile("src/lib/content/markdown.md", "utf-8"); // don't use relative paths
@@ -37,5 +19,5 @@ export const build: Build = async ({
 	if (article) article.innerHTML = html;
 
 	// return the rendered document, `./index.html` will be updated with the result
-	return { document };
+	return document;
 };

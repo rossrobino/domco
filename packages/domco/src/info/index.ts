@@ -4,6 +4,8 @@ export const info = {
 		outDir: "build",
 	},
 	files: {
+		index: "index",
+		layout: "layout",
 		indexBuild: "index.build",
 		layoutBuild: "layout.build",
 	},
