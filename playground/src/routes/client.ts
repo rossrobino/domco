@@ -1,9 +1,10 @@
 // nothing special about this file/name, gets processed by vite since it's imported in an html file
 
-import { CustomElement } from "$lib/components/CustomElement";
+import { userButton } from "$lib/blocks/userButton";
 import { chunk } from "$lib/util/chunk";
+import { addBlocks } from "domco";
 
 console.log(chunk);
 
-// custom element //
-await CustomElement(window);
+// custom element hydrated on the client //
+await addBlocks(window, [userButton]);

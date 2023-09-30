@@ -12,7 +12,7 @@
 		"@tailwindcss/typography": "^0.5.10",
 		"@types/node": "^20.7.0",
 		"autoprefixer": "^10.4.16",
-		"domco": "workspace:../packages/domco",
+		"domco": "workspace:../package/domco",
 		"prettier": "^3.0.3",
 		"prettier-plugin-tailwindcss": "^0.5.4",
 		"robino": "^0.0.39",

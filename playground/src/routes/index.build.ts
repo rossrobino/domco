@@ -1,13 +1,12 @@
-import type { Build } from "domco";
+import { addBlocks, type Build } from "domco";
 import { process } from "robino/util/md";
 import fs from "fs/promises";
-import { CustomElement } from "$lib/components/CustomElement";
+import { userButton } from "$lib/blocks/userButton";
 
 export const build: Build = async (window) => {
-	let { document } = window;
+	await addBlocks(window, [userButton]);
 
-	// custom element //
-	await CustomElement(window);
+	let { document } = window;
 
 	// process markdown //
 	const md = await fs.readFile("src/lib/content/markdown.md", "utf-8"); // don't use relative paths
@@ -17,7 +16,4 @@ export const build: Build = async (window) => {
 
 	const article = document.querySelector("#md");
 	if (article) article.innerHTML = html;
-
-	// return the rendered document, `./index.html` will be updated with the result
-	return document;
 };

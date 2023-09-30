@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import { domco } from "domco";
+import { domco } from "domco/plugin";
 import tailwindcss from "tailwindcss";
 import autoprefixer from "autoprefixer";
 

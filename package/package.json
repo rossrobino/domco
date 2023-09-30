@@ -1,0 +1,51 @@
+{
+	"name": "domco",
+	"description": "The JavaScript Meta-Framework",
+	"version": "0.0.4",
+	"type": "module",
+	"keywords": [
+		"vite-plugin"
+	],
+	"types": "./index.d.ts",
+	"main": "./index.js",
+	"exports": {
+		".": {
+			"types": "./index.d.ts",
+			"default": "./index.js"
+		},
+		"./plugin": {
+			"types": "./plugin/index.d.ts",
+			"default": "./plugin/index.js"
+		}
+	},
+	"scripts": {
+		"dev": "tsc --project tsconfig.build.json --watch",
+		"format": "prettier --write .",
+		"build:clean": "rm -rf ./domco",
+		"build:js": "tsc --project tsconfig.build.json",
+		"build:copy": "cp package.json ./domco",
+		"build": "bun build:clean && bun build:js && bun build:copy",
+		"pub:only": "npm publish --access public ./domco",
+		"pub": "bun i && bun format && bun run build && bun pub:only"
+	},
+	"author": {
+		"name": "Ross Robino",
+		"url": "https://robino.dev"
+	},
+	"repository": "github:rossrobino/domco",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^20.6.3",
+		"@types/web": "^0.0.115",
+		"bun-types": "latest",
+		"prettier": "^3.0.3",
+		"robino": "^0.0.39",
+		"typescript": "^5.2.2"
+	},
+	"dependencies": {
+		"esbuild": "^0.19.3",
+		"linkedom": "^0.15.3",
+		"vite": "^4.4.5"
+	},
+	"prettier": "robino/config/prettier"
+}

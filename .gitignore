@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+domco
 build
 .vercel
 dist-ssr
