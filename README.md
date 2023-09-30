@@ -51,10 +51,9 @@ An `index.build.ts` or `index.build.js` file can be created to modify the conten
 import type { Build } from "domco";
 
 export const build: Build = async ({ document }) => {
-	const main = document.querySelector("main");
 	const p = document.createElement("p");
 	p.textContent = "A server rendered paragraph.";
-	main?.append(p);
+	document.body.appendChild(p);
 };
 ```
 
