@@ -32,8 +32,6 @@ Layouts can be created in any directory within `src/routes`, and will apply to a
 
 An `index.build.ts` or `index.build.js` file can be created to modify the contents of `./index.html` at _build_ time. Any of the properties on `window` are available through the first argument, properties like `document`, `customElements`, and `HTMLElement` can be utilized on the server here.
 
-This function must return an object containing the modified `document` to be written to the output.
-
 [Document methods](https://developer.mozilla.org/en-US/docs/Web/API/Document) or other rendering techniques can be utilized to create new content and make updates. You can run this same code contained in the function body on the client to have it rendered on the client instead.
 
 ```ts
@@ -45,8 +43,6 @@ export const build: Build = async ({ document }) => {
 	const p = document.createElement("p");
 	p.textContent = "A server rendered paragraph.";
 	main?.append(p);
-
-	return { document };
 };
 ```
 
