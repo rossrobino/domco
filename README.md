@@ -1,16 +1,36 @@
 # domco
 
-## The JavaScript Meta-Framework
+## Build-Time Rendering Without Templates
 
-If you want to build a website that is statically generated at build time with dynamic content, most would reach for a framework that includes some sort of template file type that you have to learn. This could be considered overkill in many situations and leaves you with skills and dependencies that go out of date.
+Breaking free from the constraints of traditional static site generators, which often dictate familiarization with various template file types, **domco** presents an refreshing solution. It encourages you to utilize the JavaScript standard APIs that you are familiar with, and work undeterred by the shifts in the landscape of server side JavaScript tooling.
 
-With **domco** you can take the skills you have on the frontend, and write the same code on the backend to update the document at _build_ time.
+Take for instance, fetching data from a CMS and having it rendered on a page. Your website already handles this task smoothly in the browser.
 
-**domco** is a Vite plugin that allows you to use `window` methods on the server at build time. You can copy client side code directly into a loader to run at build time instead.
+```js
+// client side JavaScript
+const res = await fetch("https://my-cms...");
+const data = await res.json();
+const article = document.querySelector("article");
+article.innerHtml = data.html;
+```
+
+Now, what if you could take this same code, the knowledge you already possess, and leverage them to update the document on the backend at _build_ time? **domco** enables you to do exactly that.
+
+```ts
+// src/routes/index.build.ts
+import type { Build } from "domco";
+
+export const build: Build = async ({ document }) => {
+	const res = await fetch("https://my-cms...");
+	const data = await res.json();
+	const article = document.querySelector("article");
+	article.innerHtml = data.html;
+};
+```
 
 ## Tooling
 
-**domco** is built on the latest technologies that provide a great developer experience.
+**domco** is built on the latest technologies that provide a great developer experience with near instant feedback.
 
 -   [Vite](https://vitejs.dev)
 -   [esbuild](https://esbuild.github.io/)
@@ -63,7 +83,41 @@ A `layout.build` file can also be created which executes on the current route an
 
 ### Block
 
+When you need to import from another module that also uses `window` methods, you'll need to use _dependency injection_ since these are not available on the server. To do this, provide the `window` methods as an argument to those imported functions. **domco** provides a type `Block` to help with this. Blocks can be run on the client or the server by passing in the `window` object from the `build` function, or from the browser's runtime.
+
+```ts
+// src/lib/blocks/myBlock.ts
+import { Block } from "domco";
+
+export const functionThatUsesDocument: Block = async ({ document }) => {
+	document.querySelector("p");
+	...
+}
+```
+
+And then in a `.build` file you can utilize these modules.
+
+```ts
+// src/routes/index.build.ts
+import { addBlocks, type Build } from "domco";
+import { functionThatUsesDocument } from "$lib/blocks/myBlock.ts";
+
+export const build: Build = async (window) => {
+	await functionThatUsesDocument(window);
+```
+
 #### addBlocks
+
+**domco** also provides a helper function to run multiple blocks asynchronously---`addBlocks`. This can be utilized on in a build function, or on the client.
+
+```ts
+// src/routes/index.build.ts
+import { addBlocks, type Build } from "domco";
+import { functionThatUsesDocument, anotherFunction } from "$lib/blocks/myBlock.ts";
+
+export const build: Build = async (window) => {
+	await addBlocks(window, [functionThatUsesDocument, anotherFunction]);
+```
 
 ### public
 
