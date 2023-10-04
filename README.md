@@ -40,11 +40,11 @@ export const build: Build = async ({ document }) => {
 
 ## Getting Started
 
-**domco** is a Vite plugin that adds the following functionality.
-
 ```bash
 npm create domco@latest
 ```
+
+**domco** is a Vite plugin that adds the following functionality.
 
 ### HTML
 
@@ -55,6 +55,11 @@ Routes are located in `src/routes` - this serves as the root directory of your V
 Each of the `index.html` pages in `src/routes` are processed as separate entry points automatically.
 
 For example, to add the `/nested` route, add `src/routes/nested/index.html`.
+
+Imports in this file are relative to the final `index.html` page, if you want to have the same file imported in all routes using a layout, use a absolute path instead of a relative one.
+
+-   `/style.css` - adds `src/routes/style.css` to every page
+-   `./style.css` - adds `src/routes/[currentRoute]/style.css` to every page
 
 #### layout
 
@@ -132,3 +137,7 @@ The `src/public` directory is for housing static assets that you do not want mod
 ### lib
 
 `src/lib` has been configured with the `$lib` alias for convenience. This is a good place to house shared code that will be imported in other places in your project such as blocks or types.
+
+### Deploy
+
+Since **domco** is just a Vite plugin, it can be deployed on services like Vercel with zero configuration. You can also build locally and output to `./dist`.
