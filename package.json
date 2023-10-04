@@ -5,6 +5,7 @@
 		"dist/*"
 	],
 	"devDependencies": {
+		"create-domco": "workspace:*",
 		"domco": "workspace:*"
 	}
 }

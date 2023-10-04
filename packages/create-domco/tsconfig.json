@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"target": "ESNext",
+		"verbatimModuleSyntax": true,
+		"allowJs": true,
+		"checkJs": true,
+		"resolveJsonModule": true,
+		"moduleDetection": "force",
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"moduleResolution": "NodeNext",
+		"module": "NodeNext",
+		"declaration": true,
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		"types": ["bun-types", "@types/web"],
+		"rootDir": ".",
+		"outDir": "../../dist/create-domco"
+	}
+}

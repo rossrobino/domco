@@ -20,9 +20,11 @@
 		"noUncheckedIndexedAccess": true,
 		"noFallthroughCasesInSwitch": true,
 
+		/* check js with JSDoc */
 		"allowJs": true,
 		"checkJs": true,
 
+		/* aliases */
 		"paths": {
 			"$lib": ["./src/lib"],
 			"$lib/*": ["./src/lib/*"]

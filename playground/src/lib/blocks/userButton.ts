@@ -1,4 +1,4 @@
-import { Block } from "../../../../dist/domco";
+import { Block } from "domco";
 
 export const userButton: Block = async ({
 	document,
