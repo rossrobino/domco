@@ -2,7 +2,7 @@
 
 import { userButton } from "$lib/blocks/userButton";
 import { chunk } from "$lib/util/chunk";
-import { addBlocks } from "domco";
+import { addBlocks } from "../../../dist/domco";
 
 console.log(chunk);
 

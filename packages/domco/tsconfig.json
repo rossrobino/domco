@@ -17,7 +17,7 @@
 		"declaration": true,
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"types": ["bun-types", "@types/web"],
-		"rootDir": "src",
-		"outDir": "domco"
+		"rootDir": ".",
+		"outDir": "../../dist/domco"
 	}
 }

@@ -1,4 +1,4 @@
-import { type Build } from "domco";
+import { type Build } from "../../../dist/domco";
 
 export const build: Build = async ({ document }, { route }) => {
 	const h1 = document.querySelector("h1");
