@@ -43,7 +43,7 @@ export const build: Build = async ({ document }) => {
 **domco** is a Vite plugin that adds the following functionality.
 
 ```bash
-npm create domco
+npm create domco@latest
 ```
 
 ### HTML

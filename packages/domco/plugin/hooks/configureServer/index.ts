@@ -3,7 +3,8 @@ import type { ServerHook } from "vite";
 export const configureServer: ServerHook = (server) => {
 	server.watcher.add(process.cwd()); // instead of `root`
 	server.watcher.on("change", (file) => {
-		if (file.endsWith(".md")) {
+		const fullReload = /(.*)(\.(build.js|build.ts|md|txt|json))$/;
+		if (fullReload.test(file)) {
 			server.ws.send({
 				type: "full-reload",
 			});
