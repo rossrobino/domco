@@ -138,6 +138,6 @@ The `src/public` directory is for housing static assets that you do not want mod
 
 `src/lib` has been configured with the `$lib` alias for convenience. This is a good place to house shared code that will be imported in other places in your project such as blocks or types.
 
-### Deploy
+## Deploy
 
 Since **domco** is just a Vite plugin, it can be deployed on services like Vercel with zero configuration. You can also build locally and output to `./dist`.
