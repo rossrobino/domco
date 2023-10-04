@@ -94,7 +94,7 @@ A `layout.build` file can also be created which executes on the current route an
 
 ### Block
 
-When you need to import from another module that also uses `window` methods, you'll need to use _dependency injection_ since these are not available to a server side JavaScript runtime. To do this, provide the `window` methods as an argument to those imported functions. **domco** provides a type `Block` to help with this. Blocks can be run on the client or the server by passing in the `window` object from the `build` function, or from the browser's runtime.
+When you need to import from another module that also the `window` object, you'll need to use _dependency injection_ since `window` is not available to a server side JavaScript runtime. To do this, provide `window` as an argument to those imported functions. **domco** provides a type `Block` to help with this. Blocks can be run on the client or the server by passing in the `window` object from the `build` function, or from the browser's runtime.
 
 ```ts
 // src/lib/blocks/myBlock.ts
