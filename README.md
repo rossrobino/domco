@@ -2,7 +2,7 @@
 
 ## Build-Time Rendering Without Templates
 
-Breaking free from the constraints of traditional static site generators, which often dictate familiarization with various template file types, **domco** presents an refreshing solution. It encourages you to utilize the JavaScript standard APIs that you are familiar with, and work undeterred by the shifts in the landscape of server side JavaScript tooling.
+In contrast to other static site generators, which often require familiarization with various template file types, **domco** presents an refreshing solution. It enables you to utilize familiar front-end JavaScript standard APIs on the server at build time, and work undeterred by the shifts in the landscape of server side JavaScript tooling.
 
 Take for instance, fetching data from a CMS and having it rendered on a page. Your website already handles this task smoothly in the browser.
 
@@ -14,7 +14,7 @@ const article = document.querySelector("article");
 article.innerHtml = data.html;
 ```
 
-Now, what if you could take this same code, the knowledge you already possess, and leverage them to update the document on the backend at _build_ time? **domco** enables you to do exactly that.
+Now, what if you could take this same code, and run it to update the HTML at _build_ time? **domco** enables you to do exactly that.
 
 ```ts
 // src/routes/index.build.ts
@@ -40,21 +40,23 @@ export const build: Build = async ({ document }) => {
 
 ## Getting Started
 
+**domco** is a Vite plugin that adds the following functionality.
+
 ### HTML
 
-#### index.html
+#### index
 
-Routes are located in `src/routes` - this serves as the root directory of your Vite project. To create another route, simply add another `index.html` file in another directory within `src/routes`.
+Routes are located in `src/routes` - this serves as the root directory of your Vite project. This mimics the structure of your output directory. To create another route, simply add another `index.html` file in another directory within `src/routes`.
 
-Each of the `index.html` pages in `src/routes` are processed as separate entry points by Vite.
+Each of the `index.html` pages in `src/routes` are processed as separate entry points automatically.
 
 For example, to add the `/nested` route, add `src/routes/nested/index.html`.
 
-#### layout.html
+#### layout
 
-A `layout.html` file can be utilized to create a layout that wraps around the content of other pages. Be sure to include a `<slot></slot>` within the layout that designates where `index.html` should be rendered.
+A `layout.html` file can be utilized to create a layout that wraps around the content of other pages. Include a `<slot></slot>` within the layout that designates where `index.html` should be rendered.
 
-Layouts wrap all nested routes. For example, `src/routes/layout.html` also wraps `src/routes/nested/index.html`.
+Layouts wrap _all nested routes_. For example, `src/routes/layout.html` also wraps `src/routes/nested/index.html`.
 
 Layouts can be created in any directory within `src/routes`, and will apply to all other nested `index.html` files.
 
@@ -62,9 +64,9 @@ Layouts can be created in any directory within `src/routes`, and will apply to a
 
 #### index.build
 
-An `index.build.ts` or `index.build.js` file can be created to modify the contents of `./index.html` at _build_ time. These files must export a `build` function that modifies the passed in window. Any of the properties on `window` are available through the first argument, properties like `document`, `customElements`, and `HTMLElement` can be utilized on the server here.
+An `index.build.ts` or `index.build.js` file can be created to modify the contents of `./index.html` at _build_ time. These files must export a `build` function that modifies the passed in `window` object created from `./index.html` with `linkedom`.
 
-[Document methods](https://developer.mozilla.org/en-US/docs/Web/API/Document) or other rendering techniques can be utilized to create new content and make updates. You can run the code contained in the `build` function body on the client to have it rendered on the client instead.
+Any of the properties on `window` are available through the first argument. [Document methods](https://developer.mozilla.org/en-US/docs/Web/API/Document) or other rendering techniques can be utilized to create new content and make updates at build time. You can run the code contained in the `build` function body on the client to have it rendered on the client instead.
 
 ```ts
 // src/routes/index.build.ts
@@ -83,7 +85,7 @@ A `layout.build` file can also be created which executes on the current route an
 
 ### Block
 
-When you need to import from another module that also uses `window` methods, you'll need to use _dependency injection_ since these are not available on the server. To do this, provide the `window` methods as an argument to those imported functions. **domco** provides a type `Block` to help with this. Blocks can be run on the client or the server by passing in the `window` object from the `build` function, or from the browser's runtime.
+When you need to import from another module that also uses `window` methods, you'll need to use _dependency injection_ since these are not available to a server side JavaScript runtime. To do this, provide the `window` methods as an argument to those imported functions. **domco** provides a type `Block` to help with this. Blocks can be run on the client or the server by passing in the `window` object from the `build` function, or from the browser's runtime.
 
 ```ts
 // src/lib/blocks/myBlock.ts
@@ -108,7 +110,7 @@ export const build: Build = async (window) => {
 
 #### addBlocks
 
-**domco** also provides a helper function to run multiple blocks asynchronously---`addBlocks`. This can be utilized on in a build function, or on the client.
+**domco** also provides a helper function to run multiple blocks asynchronously---`addBlocks`. This can be utilized in a `build` function, or on the client directly.
 
 ```ts
 // src/routes/index.build.ts
@@ -121,8 +123,8 @@ export const build: Build = async (window) => {
 
 ### public
 
-The `src/public` directory is for housing static assets that you do not want modified in your final build, these will be copied into the output directory.
+The `src/public` directory is for housing static assets that you do not want modified in your final build, these will be copied into the output directory. For example, to reference `../public/image.png`, write `/image.png`.
 
 ### lib
 
-`src/lib` has been configured with the `$lib` alias for convenience. This is a good place to house shared code that will be imported in other places in your project.
+`src/lib` has been configured with the `$lib` alias for convenience. This is a good place to house shared code that will be imported in other places in your project such as blocks or types.
