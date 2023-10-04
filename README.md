@@ -56,11 +56,6 @@ Each of the `index.html` pages in `src/routes` are processed as separate entry p
 
 For example, to add the `/nested` route, add `src/routes/nested/index.html`.
 
-Imports in this file are relative to the final `index.html` page, if you want to have the same file imported in all routes using a layout, use a absolute path instead of a relative one.
-
--   `/style.css` - adds `src/routes/style.css` to every page
--   `./style.css` - adds `src/routes/[currentRoute]/style.css` to every page
-
 #### layout
 
 A `layout.html` file can be utilized to create a layout that wraps around the content of other pages. Include a `<slot></slot>` within the layout that designates where `index.html` should be rendered.
@@ -68,6 +63,11 @@ A `layout.html` file can be utilized to create a layout that wraps around the co
 Layouts wrap _all nested routes_. For example, `src/routes/layout.html` also wraps `src/routes/nested/index.html`.
 
 Layouts can be created in any directory within `src/routes`, and will apply to all other nested `index.html` files.
+
+Imports in this file are relative to the final `index.html` page, if you want to have the same file imported in all routes using a layout, use a absolute path instead of a relative one.
+
+-   `/style.css` - adds `src/routes/style.css` to every page
+-   `./style.css` - adds `src/routes/[currentRoute]/style.css` to every page
 
 ### Build
 
