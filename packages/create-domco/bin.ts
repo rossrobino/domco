@@ -53,18 +53,44 @@ if (p.isCancel(dir)) {
 		p.cancel("Operation cancelled.");
 		process.exit(0);
 	} else {
-		const s = p.spinner();
+		const extras = await p.multiselect({
+			message: "Select additional options (use arrow keys/space bar)",
+			required: false,
+			options: [
+				{
+					value: "prettier",
+					label: "Add Prettier for formatting",
+				},
+				{
+					value: "tailwind",
+					label: "Add TailwindCSS for styling",
+				},
+			],
+		});
 
-		s.start("Creating project");
+		if (p.isCancel(extras)) {
+			p.cancel("Operation cancelled.");
+			process.exit(0);
+		} else {
+			const prettier = extras.includes("prettier");
+			const tailwind = extras.includes("tailwind");
 
-		await writeFiles(dir, getFiles(lang as string));
+			const s = p.spinner();
 
-		s.stop("Files created");
+			s.start("Creating project");
 
-		p.outro(
-			`Complete!\n\n${
-				dir === "." ? "" : `cd ${dir}\n`
-			}npm install\nnpm run dev`,
-		);
+			await writeFiles(
+				dir,
+				getFiles({ lang: String(lang), prettier, tailwind }),
+			);
+
+			s.stop("Files created");
+
+			p.outro(
+				`Complete!\n\n${
+					dir === "." ? "" : `cd ${dir}\n`
+				}npm install\nnpm run dev`,
+			);
+		}
 	}
 }

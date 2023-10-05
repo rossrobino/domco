@@ -1,4 +1,12 @@
-export const getFiles = (lang: string) => {
+export const getFiles = (options: {
+	lang: string;
+	tailwind: boolean;
+	prettier: boolean;
+}) => {
+	const { lang, tailwind, prettier } = options;
+
+	const styleFileName = tailwind ? "style.postcss" : "style.css";
+
 	const files: { name: string; contents: string }[] = [
 		{
 			name: "package.json",
@@ -10,11 +18,21 @@ export const getFiles = (lang: string) => {
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
-		"preview": "vite preview"
+		"preview": "vite preview"${
+			prettier ? `,\n\t\t"format": "prettier --write ."` : ``
+		}
 	},
 	"devDependencies": {
 		"@types/node": "^20.7.0",
-		"domco": "^0.0.9",
+		"domco": "^0.0.9",${prettier ? `\n\t\t"prettier": "^3.0.3",` : ""}${
+			prettier && tailwind
+				? `\n\t\t"prettier-plugin-tailwindcss": "^0.5.4",`
+				: ""
+		}${
+			tailwind
+				? `\n\t\t"tailwindcss": "^3.3.3",\n\t\t"autoprefixer": "^10.4.16",`
+				: ""
+		}
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9"
 	}
@@ -63,9 +81,17 @@ export const getFiles = (lang: string) => {
 			name: `vite.config.${lang}`,
 			contents: `import { defineConfig } from "vite";
 import { domco } from "domco/plugin";
-
+${
+	tailwind
+		? `import tailwindcss from "tailwindcss";\nimport autoprefixer from "autoprefixer";\n`
+		: ``
+}
 export default defineConfig({
-	plugins: [domco()],
+	plugins: [domco()],${
+		tailwind
+			? `\n\tcss: {\n\t\tpostcss: {\n\t\t\tplugins: [tailwindcss(), autoprefixer()]\n\t\t}\n\t}`
+			: ``
+	}
 });
 `,
 		},
@@ -88,7 +114,7 @@ dist
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="/style.css" />
+		<link rel="stylesheet" href="/${styleFileName}" />
 		<title>Title</title>
 	</head>
 	<body></body>
@@ -109,11 +135,49 @@ export const build${lang === "ts" ? `: Build` : ""} = async ({ document }) => {
 };
 `,
 		},
-		{ name: `src/routes/style.css`, contents: `` },
+		{
+			name: `src/routes/${styleFileName}`,
+			contents: tailwind
+				? `@tailwind base;
+@tailwind components;
+@tailwind utilities;
+`
+				: ``,
+		},
 		{
 			name: `src/lib/index.${lang}`,
 			contents: `// place files you want to import through the \`$lib\` alias in this folder.\n`,
 		},
 	];
+
+	if (prettier) {
+		files.push({
+			name: "prettier.config.js",
+			contents: `/** @type {import("prettier").Config} */
+export default {${
+				tailwind ? `\n\tplugins: ["prettier-plugin-tailwindcss"],\n` : ""
+			}};`,
+		});
+		files.push({
+			name: ".prettierignore",
+			contents: `.DS_Store\nnode_modules\n/dist\n.env\n.env.*\npackage-lock.json\npnpm-lock.yaml\nyarn.lock\nbun.lockb\n`,
+		});
+	}
+
+	if (tailwind) {
+		files.push({
+			name: `tailwind.config.${lang}`,
+			contents: `${
+				lang === "ts"
+					? `import type { Config } from "tailwindcss";\n`
+					: `/** @type {import("tailwindcss").Config} */`
+			}
+export default {
+	content: ["./src/**/*.{html,js,ts}"],
+}${lang === "ts" ? ` satisfies Config` : ``};
+`,
+		});
+	}
+
 	return files;
 };
