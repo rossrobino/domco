@@ -2,6 +2,7 @@ import path from "node:path";
 import * as esbuild from "esbuild";
 import fs from "node:fs/promises";
 import os from "node:os";
+import { pathToFileURL } from "node:url";
 
 /**
  * Transpile and import a TypeScript file using esbuild
@@ -45,8 +46,8 @@ export async function transpileImport<T>(filePath: string): Promise<T> {
 	);
 	await fs.writeFile(tempFilePath, firstFile.text);
 
-	// import file as a module
-	const module = await import(tempFilePath);
+	// import file as a module -- file url conversion required for windows
+	const module = await import(String(new URL(pathToFileURL(tempFilePath))));
 
 	// delete temp file
 	await fs.unlink(tempFilePath);

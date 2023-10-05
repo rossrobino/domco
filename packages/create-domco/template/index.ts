@@ -14,7 +14,7 @@ export const getFiles = (lang: string) => {
 	},
 	"devDependencies": {
 		"@types/node": "^20.7.0",
-		"domco": "^0.0.8",
+		"domco": "^0.0.9",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9"
 	}
