@@ -1,42 +1,57 @@
 import path from "node:path";
+import fs from "node:fs/promises";
 import { parseHTML } from "linkedom";
 import type { IndexHtmlTransform, IndexHtmlTransformContext } from "vite";
-import type { Build } from "../../../types/index.js";
+import type { Build, Generated } from "../../../types/index.js";
 import { info } from "../../../info/index.js";
 import { fileExists } from "../../../util/fileExists/index.js";
 import { transpileImport } from "../../../util/transpileImport/index.js";
-import fs from "node:fs/promises";
+import { getParams, insertParams } from "../../../util/routeParams/index.js";
 
 export const transformIndexHtml = async () => {
-	const indexHtmlTransform: IndexHtmlTransform = {
-		order: "pre",
-		handler: async (html, ctx) => {
-			const route = path.dirname(ctx.path);
-			const routePath = path.resolve(path.join(info.paths.routes, route));
-
-			html = await applyLayout({ routePath, html });
-
-			const sharedOptions = {
-				route,
-				routePath,
-				ctx,
-				html,
-			};
-
-			html = await applyBuild({
-				buildFilename: info.files.layoutBuild,
-				...sharedOptions,
-			});
-
-			html = await applyBuild({
-				buildFilename: info.files.indexBuild,
-				...sharedOptions,
-			});
-
-			return html;
-		},
+	const indexHtmlTransformPre = () => {
+		const result: IndexHtmlTransform = {
+			order: "pre",
+			handler: async (html, ctx) => {
+				const route = path.dirname(ctx.path);
+				const routePath = path.resolve(path.join(info.paths.routes, route));
+				html = await applyLayout({ routePath, html });
+				return html;
+			},
+		};
+		return result;
 	};
-	return { indexHtmlTransform: () => indexHtmlTransform };
+	const indexHtmlTransformPost = (generated: Generated) => {
+		const result: IndexHtmlTransform = {
+			order: "post",
+			handler: async (html, ctx) => {
+				const route = path.dirname(ctx.path);
+				const routePath = path.resolve(path.join(info.paths.routes, route));
+
+				html = await applyBuild({
+					buildFilename: info.files.layoutBuild,
+					route,
+					routePath,
+					ctx,
+					generated,
+					html,
+				});
+
+				html = await applyBuild({
+					buildFilename: info.files.indexBuild,
+					route,
+					routePath,
+					ctx,
+					generated,
+					html,
+				});
+
+				return html;
+			},
+		};
+		return result;
+	};
+	return { indexHtmlTransformPre, indexHtmlTransformPost };
 };
 
 const applyLayout = async (options: { routePath: string; html: string }) => {
@@ -63,9 +78,10 @@ const applyBuild = async (options: {
 	route: string;
 	routePath: string;
 	ctx: IndexHtmlTransformContext;
+	generated: Generated;
 	html: string;
 }) => {
-	let { buildFilename, route, routePath, html, ctx } = options;
+	let { buildFilename, route, routePath, html, ctx, generated } = options;
 	const parentRoutePath = path.dirname(routePath);
 	const buildPathTs = path.resolve(routePath, `${buildFilename}.ts`);
 	const buildPathJs = path.resolve(routePath, `${buildFilename}.js`);
@@ -78,26 +94,40 @@ const applyBuild = async (options: {
 	}
 
 	if (buildPath) {
-		const { build, paths } = await transpileImport<{
+		const { build, params } = await transpileImport<{
 			build?: Build;
-			paths?: { params: Record<string, string> }[];
+			params?: Record<string, string>[];
 		}>(buildPath);
 
 		if (build) {
 			const buildMode = ctx.server?.config.command !== "serve";
-			if (buildMode) {
-				if (paths) {
-					for (const obj of paths) {
-						console.log(obj);
+			if (buildMode && params) {
+				if (params) {
+					for (const currentParams of params) {
+						const parseHtmlResult = parseHTML(html);
+						const url = await insertParams(route, currentParams);
+						await build(parseHtmlResult, {
+							route: { id: route, url },
+							params: currentParams,
+						});
+						const fileName = `${url}/index.html`;
+						const source = parseHtmlResult.document.toString();
+						generated.add.push({
+							fileName,
+							source,
+						});
+						generated.delete = route;
 					}
 				}
+			} else {
+				const url = ctx.originalUrl || "";
+				const parseHtmlResult = parseHTML(html);
+				await build(parseHtmlResult, {
+					route: { id: route, url },
+					params: await getParams(route, url),
+				});
+				html = parseHtmlResult.document.toString();
 			}
-
-			const parseHtmlResult = parseHTML(html, "text/html");
-
-			await build(parseHtmlResult, { route });
-
-			html = parseHtmlResult.document.toString();
 		}
 	}
 
@@ -112,11 +142,10 @@ const applyBuild = async (options: {
 			route,
 			routePath: parentRoutePath,
 			ctx,
+			generated,
 			html,
 		});
 	}
-
-	console.log(html);
 
 	return html;
 };

@@ -9,4 +9,4 @@ export const info = {
 		indexBuild: "index.build",
 		layoutBuild: "layout.build",
 	},
-};
+} as const;

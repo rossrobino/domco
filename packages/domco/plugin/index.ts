@@ -2,32 +2,39 @@ import type { PluginOption } from "vite";
 import { configureServer } from "./hooks/configureServer/index.js";
 import { config } from "./hooks/config/index.js";
 import { transformIndexHtml } from "./hooks/transformIndexHtml/index.js";
+import fs from "node:fs/promises";
+import path from "node:path";
+import type { Generated } from "../types/index.js";
+
+const generated: Generated = { add: [], delete: "" };
 
 const { setConfig, entryPoints } = await config();
-const { indexHtmlTransform } = await transformIndexHtml();
+const { indexHtmlTransformPost, indexHtmlTransformPre } =
+	await transformIndexHtml();
 
 export const domco = (): PluginOption => {
-	return {
-		name: "domco",
-		configureServer: configureServer({ entryPoints }),
-		config: setConfig(),
-		transformIndexHtml: indexHtmlTransform(),
-		generateBundle(option, bundle) {
-			this.emitFile({
-				type: "asset",
-				fileName: "hi/index.html",
-				source: `
-		<!DOCTYPE html>
-		<html>
-		<head>
-		  <meta charset="UTF-8">
-		  <title>Title</title>
-		 </head>
-		<body>
-		  <script src="/style.postcss" type="module"></script>
-		</body>
-		</html>`,
-			});
+	return [
+		{
+			name: "domco-pre",
+			transformIndexHtml: indexHtmlTransformPre(),
 		},
-	};
+		{
+			name: "domco",
+			configureServer: configureServer({ entryPoints }),
+			config: setConfig(),
+			transformIndexHtml: indexHtmlTransformPost(generated),
+			async writeBundle() {
+				for (const file of generated.add) {
+					const { fileName, source } = file;
+					const filePath = `${process.cwd()}/dist${fileName}`;
+					await fs.mkdir(path.dirname(filePath), { recursive: true });
+					await fs.writeFile(filePath, source, "utf-8");
+				}
+				await fs.rm(`${process.cwd()}/dist${generated.delete}`, {
+					recursive: true,
+					force: true,
+				});
+			},
+		},
+	];
 };

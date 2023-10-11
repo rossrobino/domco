@@ -27,7 +27,20 @@ export type Build = (
 /** context about the current page to utilize during the build */
 export interface BuildContext {
 	/** current route */
-	route: string;
+	route: {
+		/** unresolved route: `/posts/[slug]` */
+		id: string;
+		/** resolved route with params: `/posts/my-post` */
+		url: string;
+	};
+	/**
+	 * the current routes parameters
+	 *
+	 * given the file `src/routes/posts/[slug]/index.build.ts`
+	 *
+	 * `params` would be `{ slug: "my-post" }`
+	 */
+	params: Record<string, string>;
 }
 
 /**
@@ -60,3 +73,10 @@ export type Block = (
 	window: Window & typeof globalThis,
 	data?: any,
 ) => Promise<any>;
+
+export type Generated = {
+	/** files to add at the end of the build */
+	add: { fileName: string; source: string }[];
+	/** directory to delete at the end of the build */
+	delete: string;
+};
