@@ -1,13 +1,13 @@
 import path from "node:path";
 import { parseHTML } from "linkedom";
-import type { IndexHtmlTransform } from "vite";
+import type { IndexHtmlTransform, IndexHtmlTransformContext } from "vite";
 import type { Build } from "../../../types/index.js";
 import { info } from "../../../info/index.js";
 import { fileExists } from "../../../util/fileExists/index.js";
 import { transpileImport } from "../../../util/transpileImport/index.js";
 import fs from "node:fs/promises";
 
-export const transformIndexHtml = () => {
+export const transformIndexHtml = async () => {
 	const indexHtmlTransform: IndexHtmlTransform = {
 		order: "pre",
 		handler: async (html, ctx) => {
@@ -16,24 +16,27 @@ export const transformIndexHtml = () => {
 
 			html = await applyLayout({ routePath, html });
 
-			html = await applyBuild({
-				buildFilename: info.files.layoutBuild,
+			const sharedOptions = {
 				route,
 				routePath,
+				ctx,
 				html,
+			};
+
+			html = await applyBuild({
+				buildFilename: info.files.layoutBuild,
+				...sharedOptions,
 			});
 
 			html = await applyBuild({
 				buildFilename: info.files.indexBuild,
-				route,
-				routePath,
-				html,
+				...sharedOptions,
 			});
 
 			return html;
 		},
 	};
-	return indexHtmlTransform;
+	return { indexHtmlTransform: () => indexHtmlTransform };
 };
 
 const applyLayout = async (options: { routePath: string; html: string }) => {
@@ -59,9 +62,10 @@ const applyBuild = async (options: {
 	buildFilename: string;
 	route: string;
 	routePath: string;
+	ctx: IndexHtmlTransformContext;
 	html: string;
 }) => {
-	let { buildFilename, route, routePath, html } = options;
+	let { buildFilename, route, routePath, html, ctx } = options;
 	const parentRoutePath = path.dirname(routePath);
 	const buildPathTs = path.resolve(routePath, `${buildFilename}.ts`);
 	const buildPathJs = path.resolve(routePath, `${buildFilename}.js`);
@@ -74,13 +78,27 @@ const applyBuild = async (options: {
 	}
 
 	if (buildPath) {
-		const { build } = await transpileImport<{ build: Build }>(buildPath);
+		const { build, paths } = await transpileImport<{
+			build?: Build;
+			paths?: { params: Record<string, string> }[];
+		}>(buildPath);
 
-		const parseHtmlResult = parseHTML(html, "text/html");
+		if (build) {
+			const buildMode = ctx.server?.config.command !== "serve";
+			if (buildMode) {
+				if (paths) {
+					for (const obj of paths) {
+						console.log(obj);
+					}
+				}
+			}
 
-		await build(parseHtmlResult, { route });
+			const parseHtmlResult = parseHTML(html, "text/html");
 
-		html = parseHtmlResult.document.toString();
+			await build(parseHtmlResult, { route });
+
+			html = parseHtmlResult.document.toString();
+		}
 	}
 
 	if (
@@ -93,9 +111,12 @@ const applyBuild = async (options: {
 			buildFilename,
 			route,
 			routePath: parentRoutePath,
+			ctx,
 			html,
 		});
 	}
+
+	console.log(html);
 
 	return html;
 };
