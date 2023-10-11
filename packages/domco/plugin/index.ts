@@ -6,8 +6,8 @@ import { transformIndexHtml } from "./hooks/transformIndexHtml/index.js";
 export const domco = (): PluginOption => {
 	return {
 		name: "domco",
-		configureServer,
-		config,
-		transformIndexHtml,
+		configureServer: configureServer(),
+		config: config(),
+		transformIndexHtml: transformIndexHtml(),
 	};
 };

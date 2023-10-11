@@ -7,30 +7,33 @@ import { fileExists } from "../../../util/fileExists/index.js";
 import { transpileImport } from "../../../util/transpileImport/index.js";
 import fs from "node:fs/promises";
 
-export const transformIndexHtml: IndexHtmlTransform = {
-	order: "pre",
-	handler: async (html, ctx) => {
-		const route = path.dirname(ctx.path);
-		const routePath = path.resolve(path.join(info.paths.routes, route));
+export const transformIndexHtml = () => {
+	const indexHtmlTransform: IndexHtmlTransform = {
+		order: "pre",
+		handler: async (html, ctx) => {
+			const route = path.dirname(ctx.path);
+			const routePath = path.resolve(path.join(info.paths.routes, route));
 
-		html = await applyLayout({ routePath, html });
+			html = await applyLayout({ routePath, html });
 
-		html = await applyBuild({
-			buildFilename: info.files.layoutBuild,
-			route,
-			routePath,
-			html,
-		});
+			html = await applyBuild({
+				buildFilename: info.files.layoutBuild,
+				route,
+				routePath,
+				html,
+			});
 
-		html = await applyBuild({
-			buildFilename: info.files.indexBuild,
-			route,
-			routePath,
-			html,
-		});
+			html = await applyBuild({
+				buildFilename: info.files.indexBuild,
+				route,
+				routePath,
+				html,
+			});
 
-		return html;
-	},
+			return html;
+		},
+	};
+	return indexHtmlTransform;
 };
 
 const applyLayout = async (options: { routePath: string; html: string }) => {
