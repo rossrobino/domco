@@ -6,7 +6,11 @@ import type { Build, Generated } from "../../../types/index.js";
 import { info } from "../../../info/index.js";
 import { fileExists } from "../../../util/fileExists/index.js";
 import { transpileImport } from "../../../util/transpileImport/index.js";
-import { getParams, insertParams } from "../../../util/routeParams/index.js";
+import {
+	getParams,
+	insertParams,
+	trimDynamic,
+} from "../../../util/routeUtils/index.js";
 
 export const transformIndexHtml = async () => {
 	const indexHtmlTransformPre = () => {
@@ -118,7 +122,7 @@ const applyBuild = async (options: {
 							fileName,
 							source,
 						});
-						generated.delete = route;
+						generated.delete.push(await trimDynamic(route));
 					}
 				}
 			} else {

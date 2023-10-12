@@ -19,13 +19,15 @@
  * }
  * ```
  */
-export type Build = (
+export type Build<
+	Params extends Array<Record<string, string>> = Array<Record<string, string>>,
+> = (
 	window: Window & typeof globalThis,
-	context: BuildContext,
+	context: BuildContext<Params[number]>,
 ) => Promise<any>;
 
 /** context about the current page to utilize during the build */
-export interface BuildContext {
+export interface BuildContext<Params> {
 	/** current route */
 	route: {
 		/** unresolved route: `/posts/[slug]` */
@@ -40,7 +42,7 @@ export interface BuildContext {
 	 *
 	 * `params` would be `{ slug: "my-post" }`
 	 */
-	params: Record<string, string>;
+	params: Params;
 }
 
 /**
@@ -78,5 +80,5 @@ export type Generated = {
 	/** files to add at the end of the build */
 	add: { fileName: string; source: string }[];
 	/** directory to delete at the end of the build */
-	delete: string;
+	delete: string[];
 };

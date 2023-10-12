@@ -32,9 +32,9 @@ export const build: Build = async ({ document }) => {
 
 **domco** is built on the latest technologies that provide a great developer experience with near instant feedback.
 
--   [Vite](https://vitejs.dev)
--   [esbuild](https://esbuild.github.io/)
--   [linkedom](https://github.com/WebReflection/linkedom)
+- [Vite](https://vitejs.dev)
+- [esbuild](https://esbuild.github.io/)
+- [linkedom](https://github.com/WebReflection/linkedom)
 
 ---
 
@@ -66,8 +66,8 @@ Layouts can be created in any directory within `src/routes`, and will apply to a
 
 Imports in this file are relative to the final `index.html` page, if you want to have the same file imported in all routes using a layout, use a absolute path instead of a relative one.
 
--   `/style.css` - adds `src/routes/style.css` to every page
--   `./style.css` - adds `src/routes/[currentRoute]/style.css` to every page
+- `/style.css` - adds `src/routes/style.css` to every page
+- `./style.css` - adds `src/routes/[currentRoute]/style.css` to every page
 
 ### Build
 
@@ -91,6 +91,55 @@ export const build: Build = async ({ document }) => {
 #### layout.build
 
 A `layout.build` file can also be created which executes on the current route and all nested routes.
+
+### Dynamic routes
+
+Specify dynamic routes to generate using brackets as directory names.
+
+```
+.
+└── src/
+    └── routes/
+        └── posts/
+            └── [slug]/
+                ├── index.build.ts
+                └── index.html
+```
+
+Then in `index.build` you can provide the possible parameters. Pass `typeof params` to `Build` to type the `params` object.
+
+```ts
+// src/routes/posts/[slug]/index.build.ts
+import { Build } from "domco";
+
+export const params = [
+	{ slug: "first-post" },
+	{ slug: "second-post" },
+	{ slug: "third-post" },
+];
+
+export const build: Build<typeof params> = async ({ document }, { params }) => {
+	const h2 = document.querySelector("h2");
+	if (h2) h2.textContent = params.slug;
+};
+```
+
+This configuration would generate the following file structure.
+
+```
+.
+└── src/
+    └── routes/
+        └── posts/
+            ├── first-post/
+            │   └── index.html
+            ├── second-post/
+            │   └── index.html
+            └── third-post/
+                └── index.html
+```
+
+In the case of `src/routes/posts/[slug]/nested/[another]/index.build.ts`, specify a key for each parameter: `{ slug: "slug", another: "another" }`.
 
 ### Block
 

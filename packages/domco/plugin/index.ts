@@ -6,7 +6,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { Generated } from "../types/index.js";
 
-const generated: Generated = { add: [], delete: "" };
+const generated: Generated = { add: [], delete: [] };
 
 const { setConfig, entryPoints } = await config();
 const { indexHtmlTransformPost, indexHtmlTransformPre } =
@@ -30,10 +30,12 @@ export const domco = (): PluginOption => {
 					await fs.mkdir(path.dirname(filePath), { recursive: true });
 					await fs.writeFile(filePath, source, "utf-8");
 				}
-				await fs.rm(`${process.cwd()}/dist${generated.delete}`, {
-					recursive: true,
-					force: true,
-				});
+				for (const dir of generated.delete) {
+					await fs.rm(`${process.cwd()}/dist${dir}`, {
+						recursive: true,
+						force: true,
+					});
+				}
 			},
 		},
 	];

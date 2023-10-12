@@ -1,4 +1,4 @@
-import { getParams, insertParams } from "./index.js";
+import { getParams, insertParams, trimDynamic } from "./index.js";
 import { expect, test } from "bun:test";
 
 test("getParams", async () => {
@@ -14,4 +14,10 @@ test("insertParams", async () => {
 			name: "hello-world",
 		}),
 	).toEqual(`posts/123/hello-world`);
+});
+
+test("trimDynamic", async () => {
+	expect(await trimDynamic(`posts/[postId]/[name]/another`)).toEqual(
+		`posts/[postId]`,
+	);
 });

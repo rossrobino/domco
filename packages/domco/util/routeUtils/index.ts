@@ -45,3 +45,17 @@ export const insertParams = async (
 		)
 		.join("/");
 };
+
+/**
+ * trims the dynamic route to the first dynamic segment
+ *
+ * @param route the dynamic route, for example `/posts/[postId]/[another]`
+ * @returns the first dynamic dir, in this case - `/posts/[postId]`
+ */
+export const trimDynamic = async (route: string) => {
+	const segments = route.split("/");
+	const lastIndex = segments.findIndex(
+		(segment) => segment.startsWith("[") && segment.endsWith("]"),
+	);
+	return segments.slice(0, lastIndex + 1).join("/");
+};
