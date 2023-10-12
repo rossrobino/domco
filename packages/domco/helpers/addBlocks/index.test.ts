@@ -4,14 +4,14 @@ import type { Block } from "../../index.js";
 
 const block1: Block = async () => {
 	const startTime = Date.now();
-	await new Promise((resolve) => setTimeout(resolve, 500));
+	await new Promise((resolve) => setTimeout(resolve, 50));
 	const endTime = Date.now();
 	return endTime - startTime;
 };
 
 const block2: Block = async () => {
 	const startTime = Date.now();
-	await new Promise((resolve) => setTimeout(resolve, 300));
+	await new Promise((resolve) => setTimeout(resolve, 30));
 	const endTime = Date.now();
 	return endTime - startTime;
 };
@@ -42,6 +42,6 @@ test("addBlocks should run blocks asynchronously", async () => {
 		{ status: "fulfilled", value: "result3" },
 	]);
 
-	expect(endTime - startTime).toBeGreaterThanOrEqual(500);
-	expect(endTime - startTime).toBeLessThanOrEqual(600);
+	expect(endTime - startTime).toBeGreaterThanOrEqual(50);
+	expect(endTime - startTime).toBeLessThanOrEqual(60);
 });
