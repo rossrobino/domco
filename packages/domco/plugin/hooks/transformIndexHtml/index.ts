@@ -10,6 +10,8 @@ import { getParams, insertParams } from "../../../util/routeParams/index.js";
 
 export const transformIndexHtml = async () => {
 	const indexHtmlTransformPre = () => {
+		// the layout needs to be applied `order: "pre"` in order for the linked
+		// assets to be updated afterwards
 		const result: IndexHtmlTransform = {
 			order: "pre",
 			handler: async (html, ctx) => {
