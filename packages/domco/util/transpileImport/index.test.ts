@@ -5,7 +5,6 @@ import path from "node:path";
 test("transpile and import domco", async () => {
 	const filePath = path.join(process.cwd(), "index.ts");
 
-	console.log(filePath);
 	const { addBlocks } = await transpileImport<{ addBlocks: () => any }>(
 		filePath,
 	);
