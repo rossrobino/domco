@@ -14,8 +14,9 @@
  * export const build: Build = async ({ document }) => {
  *     // modify the contents of `./index.html`
  *
- *     const el = document.querySelector("#id");
- *     el.textContent = "Rendered on the server.";
+ *     const p = document.createElement("p");
+ * 	   p.textContent = "A server rendered paragraph.";
+ *     document.body.appendChild(p);
  * }
  * ```
  */
