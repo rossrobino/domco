@@ -86,11 +86,12 @@ if (p.isCancel(dir)) {
 
 			s.stop("Files created");
 
-			p.outro(
-				`Complete!\n\n${
-					dir === "." ? "" : `cd ${dir}\n`
-				}npm install\nnpm run dev`,
+			p.note(
+				`${dir === "." ? "" : `cd ${dir}\n`}npm install\nnpm run dev`,
+				`Next steps`,
 			);
+
+			p.outro(`https://github.com/rossrobino/domco`);
 		}
 	}
 }
