@@ -1,6 +1,8 @@
+import path from "node:path";
+
 export const info = {
 	paths: {
-		routes: "src/routes",
+		routes: `src${path.sep}routes`,
 		outDir: "build",
 	},
 	files: {

@@ -20,7 +20,9 @@
  * ```
  */
 export type Build<
-	Params extends Array<Record<string, string>> = Array<Record<string, string>>,
+	Params extends ReadonlyArray<Record<string, string>> = ReadonlyArray<
+		Record<string, string>
+	>,
 > = (
 	window: Window & typeof globalThis,
 	context: BuildContext<Params[number]>,

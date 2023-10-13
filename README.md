@@ -116,7 +116,7 @@ export const params = [
 	{ slug: "first-post" },
 	{ slug: "second-post" },
 	{ slug: "third-post" },
-];
+] as const;
 
 export const build: Build<typeof params> = async ({ document }, { params }) => {
 	const h2 = document.querySelector("h2");

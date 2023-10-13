@@ -1,3 +1,4 @@
+import path from "node:path";
 import type { ServerHook } from "vite";
 
 export const configureServer = (options: {
@@ -26,7 +27,7 @@ export const configureServer = (options: {
 			// ones that have "[" will be dynamic
 			const dynPaths = actualPaths.filter((v) => v.includes("["));
 			for (const dynPath of dynPaths) {
-				const dynSegments = dynPath.split("/");
+				const dynSegments = dynPath.split(path.sep);
 				if (dynSegments.length === reqSegments.length) {
 					// the paths are the same length, try to process
 					for (let i = 0; i < reqSegments.length; i++) {
