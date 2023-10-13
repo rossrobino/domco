@@ -32,9 +32,9 @@ export const build: Build = async ({ document }) => {
 
 **domco** is built on the latest technologies that provide a great developer experience with near instant feedback.
 
-- [Vite](https://vitejs.dev)
-- [esbuild](https://esbuild.github.io/)
-- [linkedom](https://github.com/WebReflection/linkedom)
+-   [Vite](https://vitejs.dev)
+-   [esbuild](https://esbuild.github.io/)
+-   [linkedom](https://github.com/WebReflection/linkedom)
 
 ---
 
@@ -66,8 +66,8 @@ Layouts can be created in any directory within `src/routes`, and will apply to a
 
 Imports in this file are relative to the final `index.html` page, if you want to have the same file imported in all routes using a layout, use a absolute path instead of a relative one.
 
-- `/style.css` - adds `src/routes/style.css` to every page
-- `./style.css` - adds `src/routes/[currentRoute]/style.css` to every page
+-   `/style.css` - adds `src/routes/style.css` to every page
+-   `./style.css` - adds `src/routes/[currentRoute]/style.css` to every page
 
 ### Build
 
@@ -106,7 +106,7 @@ Specify dynamic routes to generate using brackets as directory names.
                 └── index.html
 ```
 
-Then in `index.build` you can provide the possible parameters. Pass `typeof params` to `Build` to type the `params` object.
+Then in `index.build` you can provide the possible parameters by exporting a `params` array. Pass `typeof params` to `Build` to type the `params` object.
 
 ```ts
 // src/routes/posts/[slug]/index.build.ts
@@ -173,10 +173,14 @@ export const build: Build = async (window) => {
 ```ts
 // src/routes/index.build.ts
 import { addBlocks, type Build } from "domco";
-import { functionThatUsesDocument, anotherFunction } from "$lib/blocks/myBlock.ts";
+import {
+	functionThatUsesDocument,
+	anotherFunction,
+} from "$lib/blocks/myBlock.ts";
 
 export const build: Build = async (window) => {
 	await addBlocks(window, [functionThatUsesDocument, anotherFunction]);
+};
 ```
 
 ### public
