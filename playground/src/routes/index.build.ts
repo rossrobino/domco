@@ -1,12 +1,13 @@
 import { addBlocks, type Build } from "domco";
 import { process } from "robino/util/md";
 import fs from "fs/promises";
-import { userButton } from "$lib/blocks/userButton";
+import { userButton } from "$lib/blocks/userElement";
+import { shareButton } from "$lib/blocks/shareButton";
 
 export const build: Build = async (window) => {
 	const { document } = window;
 
-	await addBlocks(window, [userButton]);
+	await addBlocks(window, [userButton, shareButton]);
 
 	// process markdown //
 	const md = await fs.readFile("src/lib/content/markdown.md", "utf-8"); // don't use relative paths
