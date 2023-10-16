@@ -9,20 +9,19 @@ import type { Generated } from "../types/index.js";
 const generated: Generated = { add: [], delete: [] };
 
 const { setConfig, entryPoints } = await config();
-const { indexHtmlTransformPost, indexHtmlTransformPre } =
-	await transformIndexHtml();
+const { htmlParseTransform, layoutTransform } = await transformIndexHtml();
 
 export const domco = (): PluginOption => {
 	return [
 		{
-			name: "domco-pre",
-			transformIndexHtml: indexHtmlTransformPre(),
+			name: "domco-layoutTransform",
+			transformIndexHtml: layoutTransform(),
 		},
 		{
-			name: "domco",
+			name: "domco-main",
 			configureServer: configureServer({ entryPoints }),
 			config: setConfig(),
-			transformIndexHtml: indexHtmlTransformPost(generated),
+			transformIndexHtml: htmlParseTransform(generated),
 			async writeBundle() {
 				for (const file of generated.add) {
 					const { fileName, source } = file;

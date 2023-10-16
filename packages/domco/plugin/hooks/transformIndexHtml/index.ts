@@ -13,7 +13,7 @@ import {
 } from "../../../util/routeUtils/index.js";
 
 export const transformIndexHtml = async () => {
-	const indexHtmlTransformPre = () => {
+	const layoutTransform = () => {
 		// the layout needs to be applied `order: "pre"` in order for the linked
 		// assets to be updated afterwards
 		const result: IndexHtmlTransform = {
@@ -27,7 +27,7 @@ export const transformIndexHtml = async () => {
 		};
 		return result;
 	};
-	const indexHtmlTransformPost = (generated: Generated) => {
+	const htmlParseTransform = (generated: Generated) => {
 		const result: IndexHtmlTransform = {
 			order: "post",
 			handler: async (html, ctx) => {
@@ -57,7 +57,7 @@ export const transformIndexHtml = async () => {
 		};
 		return result;
 	};
-	return { indexHtmlTransformPre, indexHtmlTransformPost };
+	return { layoutTransform, htmlParseTransform };
 };
 
 const applyLayout = async (options: { routePath: string; html: string }) => {
