@@ -194,3 +194,7 @@ The `src/public` directory is for housing static assets that you do not want mod
 ## Deploy
 
 Since **domco** is just a Vite plugin, it can be deployed on services like Vercel with zero configuration. You can also build locally and output to `./dist`.
+
+## HTML Minification
+
+**domco** minifies html during during build using [html-minifier-terser](https://github.com/terser/html-minifier-terser).

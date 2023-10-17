@@ -1,6 +1,7 @@
 import path from "node:path";
 import fs from "node:fs/promises";
 import { parseHTML } from "linkedom";
+import { minify } from "html-minifier-terser";
 import type { IndexHtmlTransform, IndexHtmlTransformContext } from "vite";
 import type { Build, Generated } from "../../../types/index.js";
 import { info } from "../../../info/index.js";
@@ -33,6 +34,7 @@ export const transformIndexHtml = async () => {
 			handler: async (html, ctx) => {
 				const route = path.dirname(ctx.path);
 				const routePath = path.resolve(path.join(info.paths.routes, route));
+				const buildMode = ctx.server?.config.command !== "serve";
 
 				html = await applyBuild({
 					buildFilename: info.files.layoutBuild,
@@ -41,6 +43,7 @@ export const transformIndexHtml = async () => {
 					ctx,
 					generated,
 					html,
+					buildMode,
 				});
 
 				html = await applyBuild({
@@ -50,7 +53,10 @@ export const transformIndexHtml = async () => {
 					ctx,
 					generated,
 					html,
+					buildMode,
 				});
+
+				if (buildMode) html = await minifyHtml(html);
 
 				return html;
 			},
@@ -86,8 +92,10 @@ const applyBuild = async (options: {
 	ctx: IndexHtmlTransformContext;
 	generated: Generated;
 	html: string;
+	buildMode: boolean;
 }) => {
-	let { buildFilename, route, routePath, html, ctx, generated } = options;
+	let { buildFilename, route, routePath, html, ctx, generated, buildMode } =
+		options;
 	const parentRoutePath = path.dirname(routePath);
 	const buildPathTs = path.resolve(routePath, `${buildFilename}.ts`);
 	const buildPathJs = path.resolve(routePath, `${buildFilename}.js`);
@@ -106,7 +114,6 @@ const applyBuild = async (options: {
 		}>(buildPath);
 
 		if (build) {
-			const buildMode = ctx.server?.config.command !== "serve";
 			if (buildMode && params) {
 				if (params) {
 					for (const currentParams of params) {
@@ -150,8 +157,23 @@ const applyBuild = async (options: {
 			ctx,
 			generated,
 			html,
+			buildMode,
 		});
 	}
 
 	return html;
+};
+
+const minifyHtml = async (html: string) => {
+	return await minify(html, {
+		removeComments: true,
+		collapseBooleanAttributes: true,
+		removeEmptyAttributes: true,
+		collapseWhitespace: true,
+		minifyCSS: true,
+		minifyJS: true,
+		useShortDoctype: true,
+		html5: true,
+		quoteCharacter: '"',
+	});
 };
