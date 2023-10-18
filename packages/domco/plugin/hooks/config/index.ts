@@ -22,6 +22,7 @@ export const config = async () => {
 				],
 			},
 			build: {
+				manifest: true,
 				outDir: path.join(process.cwd(), "dist"),
 				emptyOutDir: true,
 				rollupOptions: { input },

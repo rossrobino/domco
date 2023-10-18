@@ -2,10 +2,7 @@
 
 import { ShareUrl } from "$lib/elements/ShareUrl";
 import { userButton } from "$lib/blocks/userElement";
-import { chunk } from "$lib/util/chunk";
 import { addBlocks } from "domco";
-
-console.log(chunk);
 
 customElements.define("share-url", ShareUrl);
 

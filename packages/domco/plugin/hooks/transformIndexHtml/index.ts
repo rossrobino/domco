@@ -116,28 +116,26 @@ const applyBuild = async (options: {
 
 		if (build) {
 			if (buildMode && params) {
-				if (params) {
-					for (const currentParams of params) {
-						const parseHtmlResult = parseHTML(html);
-						const url = await insertParams(route, currentParams);
-						await build(parseHtmlResult, {
-							route: { id: route, url },
-							params: currentParams,
-						});
-						const fileName = `${url}/index.html`;
-						const source = parseHtmlResult.document.toString();
-						generated.add.push({
-							fileName,
-							source: await minifyHtml(source),
-						});
-						generated.delete.push(await trimDynamic(route));
-					}
+				for (const currentParams of params) {
+					const parseHtmlResult = parseHTML(html);
+					await build(parseHtmlResult, {
+						route: { id: route },
+						params: currentParams,
+					});
+					const url = await insertParams(route, currentParams);
+					const fileName = `${url}/index.html`;
+					const source = parseHtmlResult.document.toString();
+					generated.add.push({
+						fileName,
+						source: await minifyHtml(source),
+					});
+					generated.delete.push(await trimDynamic(route));
 				}
 			} else {
 				const url = ctx.originalUrl || "";
 				const parseHtmlResult = parseHTML(html);
 				await build(parseHtmlResult, {
-					route: { id: route, url },
+					route: { id: route },
 					params: await getParams(route, url),
 				});
 				html = parseHtmlResult.document.toString();

@@ -33,10 +33,8 @@ export type Build<
 export interface BuildContext<Params> {
 	/** current route */
 	route: {
-		/** unresolved route: `/posts/[slug]` */
+		/** route: `/posts/[slug]` */
 		id: string;
-		/** resolved route with params: `/posts/my-post` */
-		url: string;
 	};
 	/**
 	 * the current routes parameters
