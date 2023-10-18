@@ -4,6 +4,7 @@ import * as p from "@clack/prompts";
 import { getFiles } from "./template/index.js";
 import { writeFile, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import whichPmRuns from "which-pm-runs";
 
 /**
  * Writes an array of files to the specified directory.
@@ -28,6 +29,8 @@ const writeFiles = async (
 		}),
 	);
 };
+
+const pm = whichPmRuns()?.name || "npm";
 
 p.intro("Welcome to domco");
 
@@ -87,7 +90,7 @@ if (p.isCancel(dir)) {
 			s.stop("Files created");
 
 			p.note(
-				`${dir === "." ? "" : `cd ${dir}\n`}npm install\nnpm run dev`,
+				`${dir === "." ? "" : `cd ${dir}\n`}${pm} install\n${pm} run dev`,
 				`Next steps`,
 			);
 

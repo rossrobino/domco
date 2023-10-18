@@ -1,7 +1,7 @@
 {
 	"name": "create-domco",
 	"description": "Create a new domco project",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"type": "module",
 	"types": "./index.d.ts",
 	"main": "./index.js",
@@ -23,11 +23,13 @@
 	"repository": "github:rossrobino/domco",
 	"license": "MIT",
 	"dependencies": {
-		"@clack/prompts": "^0.7.0"
+		"@clack/prompts": "^0.7.0",
+		"which-pm-runs": "^1.1.0"
 	},
 	"devDependencies": {
 		"@types/node": "^20.6.3",
 		"@types/web": "^0.0.115",
+		"@types/which-pm-runs": "^1.0.0",
 		"bun-types": "latest",
 		"prettier": "^3.0.3",
 		"robino": "^0.0.39",
