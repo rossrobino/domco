@@ -1,7 +1,6 @@
 import path from "node:path";
 import fs from "node:fs/promises";
 import { parseHTML } from "linkedom";
-import { minify } from "html-minifier-terser";
 import type { IndexHtmlTransform, IndexHtmlTransformContext } from "vite";
 import type { Build, Generated } from "../../../types/index.js";
 import { info } from "../../../info/index.js";
@@ -12,6 +11,7 @@ import {
 	insertParams,
 	trimDynamic,
 } from "../../../util/routeUtils/index.js";
+import { minifyHtml } from "../../../util/minifyHtml/index.js";
 
 export const transformIndexHtml = async () => {
 	const layoutTransform = () => {
@@ -28,7 +28,8 @@ export const transformIndexHtml = async () => {
 		};
 		return result;
 	};
-	const htmlParseTransform = (generated: Generated) => {
+	const htmlParseTransform = (options: { generated: Generated }) => {
+		const { generated } = options;
 		const result: IndexHtmlTransform = {
 			order: "post",
 			handler: async (html, ctx) => {
@@ -127,7 +128,7 @@ const applyBuild = async (options: {
 						const source = parseHtmlResult.document.toString();
 						generated.add.push({
 							fileName,
-							source,
+							source: await minifyHtml(source),
 						});
 						generated.delete.push(await trimDynamic(route));
 					}
@@ -162,18 +163,4 @@ const applyBuild = async (options: {
 	}
 
 	return html;
-};
-
-const minifyHtml = async (html: string) => {
-	return await minify(html, {
-		removeComments: true,
-		collapseBooleanAttributes: true,
-		removeEmptyAttributes: true,
-		collapseWhitespace: true,
-		minifyCSS: true,
-		minifyJS: true,
-		useShortDoctype: true,
-		html5: true,
-		quoteCharacter: '"',
-	});
 };
