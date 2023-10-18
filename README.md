@@ -143,7 +143,7 @@ In the case of `src/routes/posts/[slug]/nested/[another]/index.build.ts`, specif
 
 ### Block
 
-When you need to import from another module that also the `window` object, you'll need to use _dependency injection_ since `window` is not available to a server side JavaScript runtime. To do this, provide `window` as an argument to those imported functions. **domco** provides a type `Block` to help with this. Blocks can be run on the client or the server by passing in the `window` object from the `build` function, or from the browser's runtime.
+When you need to import from another module that also the `window` object on the server, you'll need to use _dependency injection_ since `window` is not available to a server side JavaScript runtime. To do this, provide `window` as an argument to those imported functions. **domco** provides a type `Block` to help with this. Blocks can be run on the client or the server by passing in the `window` object from the `build` function, or from the browser's runtime.
 
 ```ts
 // src/lib/blocks/myBlock.ts
@@ -168,7 +168,7 @@ export const build: Build = async (window) => {
 
 #### addBlocks
 
-**domco** also provides a helper function to run multiple blocks asynchronously---`addBlocks`. This can be utilized in a `build` function, or on the client directly.
+**domco** also provides a helper function to run multiple blocks asynchronously---`addBlocks`.
 
 ```ts
 // src/routes/index.build.ts
