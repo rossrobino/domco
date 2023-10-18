@@ -10,6 +10,7 @@ export const config = async () => {
 	});
 	const setConfig = async () => {
 		const userConfig: UserConfig = {
+			appType: "mpa",
 			root: info.paths.routes,
 			publicDir: path.join(process.cwd(), "src", "public"),
 			resolve: {
