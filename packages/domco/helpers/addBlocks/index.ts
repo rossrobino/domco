@@ -11,7 +11,7 @@ import type { Block } from "../../types/index.js";
  *
  * @example
  * ```ts
- * // src/routes/index.build.ts
+ * // src/index.build.ts
  * import { type Build, addBlocks } from "domco";
  * import { myBlock, anotherBlock } from "$lib/blocks/myBlocks";
  *

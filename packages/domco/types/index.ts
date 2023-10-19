@@ -8,7 +8,7 @@
  *
  * @example
  * ```ts
- * // src/routes/index.build.ts
+ * // src/index.build.ts
  * import type { Build } from "domco";
  *
  * export const build: Build = async ({ document }) => {
@@ -39,7 +39,7 @@ export interface BuildContext<Params> {
 	/**
 	 * the current routes parameters
 	 *
-	 * given the file `src/routes/posts/[slug]/index.build.ts`
+	 * given the file `src/posts/[slug]/index.build.ts`
 	 *
 	 * `params` would be `{ slug: "my-post" }`
 	 */
@@ -60,7 +60,7 @@ export interface BuildContext<Params> {
  *     // modify the document
  * }
  *
- * // src/routes/index.build.ts
+ * // src/index.build.ts
  * import { type Build, addBlocks } from "domco";
  * import { myBlock } from "$lib/blocks/myBlock";
  *
