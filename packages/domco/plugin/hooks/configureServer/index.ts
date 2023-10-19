@@ -7,15 +7,16 @@ export const configureServer = (options: {
 	const { entryPoints } = options;
 
 	const serverHook: ServerHook = (server) => {
+		const sendFullReload = () => server.ws.send({ type: "full-reload" });
 		server.watcher.add(process.cwd()); // instead of `root`
 		server.watcher.on("change", (file) => {
 			const fullReload = /(.*)(\.(build.js|build.ts|md|txt|json))$/;
 			if (fullReload.test(file)) {
-				server.ws.send({
-					type: "full-reload",
-				});
+				sendFullReload();
 			}
 		});
+		server.watcher.on("add", sendFullReload);
+		server.watcher.on("unlink", sendFullReload);
 		server.middlewares.use((req, _, next) => {
 			if (!req.url) return next();
 			const requestURL = new URL(req.url, `http://${req.headers.host}`);
