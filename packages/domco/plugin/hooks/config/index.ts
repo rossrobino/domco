@@ -5,14 +5,14 @@ import { findAllPaths } from "../../../util/findAllPaths/index.js";
 
 export const config = async () => {
 	const input = await findAllPaths({
-		dirPath: info.paths.routes,
+		dirPath: info.paths.root,
 		fileName: `${info.files.index}.html`,
 	});
 	const setConfig = async () => {
 		const userConfig: UserConfig = {
 			appType: "mpa",
-			root: info.paths.routes,
-			publicDir: path.join(process.cwd(), "src", "public"),
+			root: info.paths.root,
+			publicDir: info.paths.publicDir,
 			resolve: {
 				alias: [
 					{
@@ -22,8 +22,7 @@ export const config = async () => {
 				],
 			},
 			build: {
-				manifest: true,
-				outDir: path.join(process.cwd(), "dist"),
+				outDir: info.paths.outDir,
 				emptyOutDir: true,
 				rollupOptions: { input },
 				target: "es2022",

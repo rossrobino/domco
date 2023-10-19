@@ -24,7 +24,7 @@ export const getFiles = (options: {
 	},
 	"devDependencies": {
 		"@types/node": "^20.7.0",
-		"domco": "^0.2.2",${prettier ? `\n\t\t"prettier": "^3.0.3",` : ""}${
+		"domco": "^0.2.3",${prettier ? `\n\t\t"prettier": "^3.0.3",` : ""}${
 			prettier && tailwind
 				? `\n\t\t"prettier-plugin-tailwindcss": "^0.5.4",`
 				: ""
@@ -43,10 +43,10 @@ export const getFiles = (options: {
 			name: "tsconfig.json",
 			contents: `{
 	"compilerOptions": {
-		"target": "ES2020",
+		"target": "ES2022",
 		"useDefineForClassFields": true,
 		"module": "ESNext",
-		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
 		"skipLibCheck": true,
 
 		/* Bundler mode */
@@ -108,7 +108,7 @@ dist
 `,
 		},
 		{
-			name: "src/routes/index.html",
+			name: "src/index.html",
 			contents: `<!doctype html>
 <html lang="en">
 	<head>
@@ -124,7 +124,7 @@ dist
 `,
 		},
 		{
-			name: `src/routes/index.build.${lang}`,
+			name: `src/index.build.${lang}`,
 			contents: `${
 				lang === "ts"
 					? `import { type Build } from "domco";\n`
@@ -138,7 +138,7 @@ export const build${lang === "ts" ? `: Build` : ""} = async ({ document }) => {
 `,
 		},
 		{
-			name: `src/routes/${styleFileName}`,
+			name: `src/${styleFileName}`,
 			contents: tailwind
 				? `@tailwind base;
 @tailwind components;
@@ -151,7 +151,7 @@ export const build${lang === "ts" ? `: Build` : ""} = async ({ document }) => {
 			contents: `// place files you want to import through the \`$lib\` alias in this folder.\n`,
 		},
 		{
-			name: "src/public/favicon.svg",
+			name: "public/favicon.svg",
 			contents: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z" clip-rule="evenodd" /></svg>`,
 		},
 	];

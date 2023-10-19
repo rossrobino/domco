@@ -17,7 +17,7 @@ article.innerHtml = data.html;
 Now, what if you could take this same code, and run it to update the HTML at _build_ time? **domco** enables you to do exactly that.
 
 ```ts
-// src/routes/index.build.ts
+// src/index.build.ts
 import type { Build } from "domco";
 
 export const build: Build = async ({ document }) => {
@@ -50,24 +50,19 @@ npm create domco@latest
 
 #### index
 
-Routes are located in `src/routes` - this serves as the root directory of your Vite project. This mimics the structure of your output directory. To create another route, simply add another `index.html` file in another directory within `src/routes`.
+Your project is located in `src` - this serves as the root directory of your Vite project. This mimics the structure of your output directory---`dist`. To create another route, simply add another `index.html` file in another directory within `src`.
 
-Each of the `index.html` pages in `src/routes` are processed as separate entry points automatically.
+Each of the `index.html` pages in `src` are processed as separate entry points automatically.
 
-For example, to add the `/nested` route, add `src/routes/nested/index.html`.
+For example, to add the `/nested` route, add `src/nested/index.html`.
 
 #### layout
 
 A `layout.html` file can be utilized to create a layout that wraps around the content of other pages. Include a `<slot></slot>` within the layout that designates where `index.html` should be rendered.
 
-Layouts wrap _all nested routes_. For example, `src/routes/layout.html` also wraps `src/routes/nested/index.html`.
+Layouts wrap _all nested routes_. For example, `src/layout.html` also wraps `src/nested/index.html`.
 
-Layouts can be created in any directory within `src/routes`, and will apply to all other nested `index.html` files.
-
-Imports in this file are relative to the final `index.html` page, if you want to have the same file imported in all routes using a layout, use a absolute path instead of a relative one.
-
--   `/style.css` - adds `src/routes/style.css` to every page
--   `./style.css` - adds `src/routes/[currentRoute]/style.css` to every page
+Layouts can be created in any directory within `src`, and will apply to all other nested `index.html` files.
 
 ### Build
 
@@ -78,7 +73,7 @@ An `index.build.ts` or `index.build.js` file can be created to modify the conten
 Any of the properties on `window` are available through the first argument. [Document methods](https://developer.mozilla.org/en-US/docs/Web/API/Document) or other rendering techniques can be utilized to create new content and make updates at build time. You can run the code contained in the `build` function body on the client to have it rendered on the client instead.
 
 ```ts
-// src/routes/index.build.ts
+// src/index.build.ts
 import type { Build } from "domco";
 
 export const build: Build = async ({ document }) => {
@@ -99,17 +94,16 @@ Specify dynamic routes to generate using brackets as directory names.
 ```
 .
 └── src/
-    └── routes/
-        └── posts/
-            └── [slug]/
-                ├── index.build.ts
-                └── index.html
+	└── posts/
+		└── [slug]/
+			├── index.build.ts
+			└── index.html
 ```
 
 Then in `index.build` you can provide the possible parameters by exporting a `params` array. Pass `typeof params` to `Build` to type the `params` object.
 
 ```ts
-// src/routes/posts/[slug]/index.build.ts
+// src/posts/[slug]/index.build.ts
 import { Build } from "domco";
 
 export const params = [
@@ -129,17 +123,16 @@ This configuration would generate the following file structure.
 ```
 .
 └── src/
-    └── routes/
-        └── posts/
-            ├── first-post/
-            │   └── index.html
-            ├── second-post/
-            │   └── index.html
-            └── third-post/
-                └── index.html
+	└── posts/
+		├── first-post/
+		│   └── index.html
+		├── second-post/
+		│   └── index.html
+		└── third-post/
+			└── index.html
 ```
 
-In the case of `src/routes/posts/[slug]/nested/[another]/index.build.ts`, specify a key for each parameter: `{ slug: "slug", another: "another" }`.
+In the case of `src/posts/[slug]/nested/[another]/index.build.ts`, specify a key for each parameter: `{ slug: "slug", another: "another" }`.
 
 ### Block
 
@@ -158,7 +151,7 @@ export const functionThatUsesDocument: Block = async ({ document }) => {
 And then in a `.build` file you can utilize these modules.
 
 ```ts
-// src/routes/index.build.ts
+// src/index.build.ts
 import { addBlocks, type Build } from "domco";
 import { functionThatUsesDocument } from "$lib/blocks/myBlock.ts";
 
@@ -171,7 +164,7 @@ export const build: Build = async (window) => {
 **domco** also provides a helper function to run multiple blocks asynchronously---`addBlocks`.
 
 ```ts
-// src/routes/index.build.ts
+// src/index.build.ts
 import { addBlocks, type Build } from "domco";
 import {
 	functionThatUsesDocument,
@@ -185,16 +178,20 @@ export const build: Build = async (window) => {
 
 ### public
 
-The `src/public` directory is for housing static assets that you do not want modified in your final build, these will be copied into the output directory. For example, to reference `../public/image.png`, write `/image.png`.
+The `public` directory is for housing static assets that you do not want modified in your final build, these will be copied into the output directory. For example, to reference `../public/image.png`, write `/image.png`.
 
 ### lib
 
-`src/lib` has been configured with the `$lib` alias for convenience. This is a good place to house shared code that will be imported in other places in your project such as blocks or types.
+`src/lib` has been configured with the `$lib` alias for convenience. This is a good place to house shared code that will be imported in other places in your project such as blocks or types. Don't create an `index.html` file in `lib` if you don't want it to contain any routes.
 
 ## Deploy
 
-Since **domco** is just a Vite plugin, it can be deployed on services like Vercel with zero configuration. You can also build locally and output to `./dist`.
+Since **domco** is just a Vite plugin, it can be deployed on services like Vercel with zero configuration. You can also build locally and output to `dist`.
 
 ## HTML Minification
 
 **domco** minifies html during during build using [html-minifier-terser](https://github.com/terser/html-minifier-terser).
+
+## Tips
+
+-   Use absolute paths that start with `/` in the `src` attribute of script tags.

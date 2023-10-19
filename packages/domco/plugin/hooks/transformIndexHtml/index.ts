@@ -21,7 +21,7 @@ export const transformIndexHtml = async () => {
 			order: "pre",
 			handler: async (html, ctx) => {
 				const route = path.dirname(ctx.path);
-				const routePath = path.resolve(path.join(info.paths.routes, route));
+				const routePath = path.resolve(path.join(info.paths.root, route));
 				html = await applyLayout({ routePath, html });
 				return html;
 			},
@@ -34,7 +34,7 @@ export const transformIndexHtml = async () => {
 			order: "post",
 			handler: async (html, ctx) => {
 				const route = path.dirname(ctx.path);
-				const routePath = path.resolve(path.join(info.paths.routes, route));
+				const routePath = path.resolve(path.join(info.paths.root, route));
 				const buildMode = ctx.server?.config.command !== "serve";
 
 				html = await applyBuild({
@@ -79,7 +79,7 @@ const applyLayout = async (options: { routePath: string; html: string }) => {
 
 	const parentRoutePath = path.dirname(routePath);
 
-	if (parentRoutePath.includes(info.paths.routes)) {
+	if (parentRoutePath.includes(info.paths.root)) {
 		html = await applyLayout({ routePath: parentRoutePath, html });
 	}
 
@@ -145,7 +145,7 @@ const applyBuild = async (options: {
 
 	if (
 		buildFilename === info.files.layoutBuild &&
-		parentRoutePath.includes(info.paths.routes)
+		parentRoutePath.includes(info.paths.root)
 	) {
 		// if layout.build, and in a nested dir
 		// run the parent's layout

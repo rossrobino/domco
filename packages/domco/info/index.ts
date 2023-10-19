@@ -2,8 +2,9 @@ import path from "node:path";
 
 export const info = {
 	paths: {
-		routes: `src${path.sep}routes`,
-		outDir: "build",
+		root: "src",
+		publicDir: path.join(process.cwd(), "public"),
+		outDir: path.join(process.cwd(), "dist"),
 	},
 	files: {
 		index: "index",

@@ -1,7 +1,7 @@
 import { addBlocks, type Build } from "domco";
 import { process } from "robino/util/md";
 import fs from "fs/promises";
-import { userButton } from "$lib/blocks/userElement";
+import { userButton } from "./lib/blocks/userElement";
 
 export const build: Build = async (window) => {
 	const { document } = window;

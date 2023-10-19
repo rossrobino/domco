@@ -22,7 +22,7 @@ export const findAllPaths = async (options: {
 			});
 			Object.assign(input, subDirPaths);
 		} else if (file.name === fileName) {
-			const relativePath = path.relative(info.paths.routes, dirPath);
+			const relativePath = path.relative(info.paths.root, dirPath);
 			input[relativePath] = path.join(process.cwd(), dirPath, file.name);
 		}
 	}
