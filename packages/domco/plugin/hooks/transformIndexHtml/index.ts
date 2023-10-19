@@ -79,7 +79,7 @@ const applyLayout = async (options: { routePath: string; html: string }) => {
 
 	const parentRoutePath = path.dirname(routePath);
 
-	if (parentRoutePath.includes(info.paths.root)) {
+	if (parentRoutePath.includes(path.join(process.cwd(), info.paths.root))) {
 		html = await applyLayout({ routePath: parentRoutePath, html });
 	}
 
@@ -145,7 +145,7 @@ const applyBuild = async (options: {
 
 	if (
 		buildFilename === info.files.layoutBuild &&
-		parentRoutePath.includes(info.paths.root)
+		parentRoutePath.includes(path.join(process.cwd(), info.paths.root))
 	) {
 		// if layout.build, and in a nested dir
 		// run the parent's layout

@@ -194,4 +194,4 @@ Since **domco** is just a Vite plugin, it can be deployed on services like Verce
 
 ## Tips
 
--   Use absolute paths that start with `/` in the `src` attribute of script tags.
+-   Use absolute paths that start with `/` in the `src` attribute of script tags, these paths are relative to the `src` directory.
