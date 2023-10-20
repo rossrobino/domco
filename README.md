@@ -1,5 +1,20 @@
 # domco
 
+```bash
+npm create domco@latest
+```
+
+## Features
+
+**domco** is a Vite plugin that adds the following functionality.
+
+-   Build time rendering using vanilla JS
+-   Static site generation with [generated routes](#dynamic-routes)
+-   [HTML layouts](#layout)
+-   [MPA configuration](#html)
+-   [Prefetching](#prefetch)
+-   [HTML minification](#html-minification)
+
 ## Build-Time Rendering Without Templates
 
 In contrast to other static site generators, which often require familiarization with various template file types, **domco** presents an refreshing solution. It enables you to utilize familiar front-end JavaScript standard APIs on the server at build time, and work undeterred by the shifts in the landscape of server side JavaScript tooling.
@@ -14,7 +29,7 @@ const article = document.querySelector("article");
 article.innerHtml = data.html;
 ```
 
-Now, what if you could take this same code, and run it to update the HTML at _build_ time? **domco** enables you to do exactly that.
+Now, what if you could take this same code, and run it to update the HTML at _build_ time? **domco** enables you to do exactly that without having to rely on a UI library to take care of the rendering on the server.
 
 ```ts
 // src/index.build.ts
@@ -44,8 +59,6 @@ export const build: Build = async ({ document }) => {
 npm create domco@latest
 ```
 
-**domco** is a Vite plugin that adds the following functionality.
-
 ### HTML
 
 #### index
@@ -58,7 +71,7 @@ For example, to add the `/nested` route, add `src/nested/index.html`.
 
 #### layout
 
-A `layout.html` file can be utilized to create a layout that wraps around the content of other pages. Include a `<slot></slot>` within the layout that designates where `index.html` should be rendered.
+A `layout.html` file can be utilized to create a layout that wraps around the content of other pages. Include a `<slot></slot>` within the layout that designates where `index.html` should be rendered. This makes it easy to apply markup, styles, and scripts to multiple pages without having to rewrite any code.
 
 Layouts wrap _all nested routes_. For example, `src/layout.html` also wraps `src/nested/index.html`.
 
@@ -159,9 +172,39 @@ export const build: Build = async (window) => {
 	await functionThatUsesDocument(window);
 ```
 
-#### addBlocks
+**domco** also provides a helper function to run multiple blocks asynchronously---[`addBlocks`](#addBlocks).
 
-**domco** also provides a helper function to run multiple blocks asynchronously---`addBlocks`.
+### public
+
+The `public` directory is for housing static assets that you do not want modified in your final build, these will be copied into the output directory. For example, to reference `../public/image.png`, write `/image.png`.
+
+### lib
+
+`src/lib` has been configured with the `$lib` alias for convenience. This is a good place to house shared code that will be imported in other places in your project such as blocks or types. Don't create an `index.html` file in `lib` if you don't want it to contain any routes.
+
+## API Reference
+
+### prefetch
+
+`prefetch` is a client side function that can be utilized to load the HTML from other pages before they have been navigated to. Optionally, set your own `selector` or `event` type. Progressively enhance with the [Speculation Rules API](https://developer.mozilla.org/en-US/docs/Web/API/Speculation_Rules_API) to prerender the page with the `prerender` option.
+
+```ts
+// src/layout.ts
+import { prefetch } from "domco";
+
+prefetch();
+
+// or prerender if supported
+prefetch({ prerender: true });
+
+// or apply to anchors with a href that starts with "/posts",
+// when they are in the viewport
+prefetch({ selector: "a[href^='/posts']", event: "visible" });
+```
+
+### addBlocks
+
+Use to execute multiple blocks asynchronously.
 
 ```ts
 // src/index.build.ts
@@ -175,14 +218,6 @@ export const build: Build = async (window) => {
 	await addBlocks(window, [functionThatUsesDocument, anotherFunction]);
 };
 ```
-
-### public
-
-The `public` directory is for housing static assets that you do not want modified in your final build, these will be copied into the output directory. For example, to reference `../public/image.png`, write `/image.png`.
-
-### lib
-
-`src/lib` has been configured with the `$lib` alias for convenience. This is a good place to house shared code that will be imported in other places in your project such as blocks or types. Don't create an `index.html` file in `lib` if you don't want it to contain any routes.
 
 ## Deploy
 
