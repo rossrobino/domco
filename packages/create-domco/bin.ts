@@ -61,6 +61,10 @@ if (p.isCancel(dir)) {
 			required: false,
 			options: [
 				{
+					value: "layout",
+					label: "Add root layout.html",
+				},
+				{
 					value: "prettier",
 					label: "Add Prettier for formatting",
 				},
@@ -75,6 +79,7 @@ if (p.isCancel(dir)) {
 			p.cancel("Operation cancelled.");
 			process.exit(0);
 		} else {
+			const layout = extras.includes("layout");
 			const prettier = extras.includes("prettier");
 			const tailwind = extras.includes("tailwind");
 
@@ -84,7 +89,7 @@ if (p.isCancel(dir)) {
 
 			await writeFiles(
 				dir,
-				getFiles({ lang: String(lang), prettier, tailwind }),
+				getFiles({ lang: String(lang), prettier, tailwind, layout }),
 			);
 
 			s.stop("Files created");

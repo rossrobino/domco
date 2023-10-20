@@ -2,8 +2,9 @@ export const getFiles = (options: {
 	lang: string;
 	tailwind: boolean;
 	prettier: boolean;
+	layout: boolean;
 }) => {
-	const { lang, tailwind, prettier } = options;
+	const { lang, tailwind, prettier, layout } = options;
 
 	const styleFileName = tailwind ? "style.postcss" : "style.css";
 
@@ -108,7 +109,7 @@ dist
 `,
 		},
 		{
-			name: "src/index.html",
+			name: layout ? "src/layout.html" : "src/index.html",
 			contents: `<!doctype html>
 <html lang="en">
 	<head>
@@ -119,7 +120,7 @@ dist
 		<title>Title</title>
 		<meta name="description" content="Description" />
 	</head>
-	<body></body>
+	<body>${layout ? `<slot></slot>` : ""}</body>
 </html>
 `,
 		},
@@ -160,13 +161,21 @@ export const build${lang === "ts" ? `: Build` : ""} = async ({ document }) => {
 		files.push({
 			name: "prettier.config.js",
 			contents: `/** @type {import("prettier").Config} */
-export default {${
-				tailwind ? `\n\tplugins: ["prettier-plugin-tailwindcss"],\n` : ""
-			}};`,
+export default {
+	useTabs: true,${
+		tailwind ? `\n\tplugins: ["prettier-plugin-tailwindcss"],\n` : ""
+	}};`,
 		});
 		files.push({
 			name: ".prettierignore",
 			contents: `.DS_Store\nnode_modules\n/dist\n.env\n.env.*\npackage-lock.json\npnpm-lock.yaml\nyarn.lock\nbun.lockb\n`,
+		});
+	}
+
+	if (layout) {
+		files.push({
+			name: "src/index.html",
+			contents: "<!-- wrapped by src/layout.html -->\n",
 		});
 	}
 
