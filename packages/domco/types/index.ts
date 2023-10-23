@@ -29,33 +29,33 @@ export type Build<
 	context: BuildContext<Params[number]>,
 ) => Promise<any>;
 
-/** context about the current page to utilize during the build */
-export interface BuildContext<Params> {
-	/** current route */
+/** Context about the current page to utilize during the build */
+export type BuildContext<Params> = {
+	/** Information about the current route */
 	route: {
-		/** route: `/posts/[slug]` */
+		/** The route as a string, for example: `/posts/[slug]` */
 		id: string;
 	};
 	/**
-	 * the current routes parameters
-	 *
-	 * given the file `src/posts/[slug]/index.build.ts`
-	 *
-	 * `params` would be `{ slug: "my-post" }`
+	 * The current route's parameters,
+	 * given the file `src/posts/[slug]/index.build.ts`,
+	 * `params` could be `[{ slug: "my-post" }]`
 	 */
 	params: Params;
-}
+};
 
 /**
- * - import and utilize a block inside of a `Build` function
- * - wrapper function to provide the `window` in other imported modules
+ * - Import and utilize a block inside of a `Build` function
+ * - Wrapper function to provide the `window` in other imported modules
  *
  * @param window a `Window` object representing the `./index.html` file of the `index.build` page where the function is being run
  * @param data an object containing data to pass into the function
  *
  * @example
  * ```ts
- * // src/lib/blocks/myBlock
+ * // src/lib/blocks/myBlock.ts
+ * import type { Block } from "domco";
+ *
  * export const myBlock: Block = async ({ document }) => {
  *     // modify the document
  * }

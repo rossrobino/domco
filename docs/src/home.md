@@ -1,17 +1,13 @@
-# domco
-
-[Documentation](https://domco.robino.dev/docs/learn)
-
 ## Features
 
 **domco** is a [Vite](https://vitejs.dev) plugin that adds the following functionality.
 
--   [MPA configuration](/docs/learn#html)
--   [HTML layouts](/docs/learn#layout)
--   [Build time rendering](/docs/learn#build) using browser APIs
--   [Static site generation](/docs/learn#dynamic-routes) with generated routes
--   [Prefetching](/docs/modules#prefetch)
--   [HTML minification](/docs/learn#html-minification)
+- [MPA configuration](/docs/learn#html)
+- [HTML layouts](/docs/learn#layout)
+- [Build time rendering](/docs/learn#build) using browser APIs
+- [Static site generation](/docs/learn#dynamic-routes) with generated routes
+- [Prefetching](/docs/modules#prefetch)
+- [HTML minification](/docs/learn#html-minification)
 
 **domco** is under development and has not reached version 1.0, please file any issues [on GitHub](https://github.com/rossrobino/domco/issues).
 

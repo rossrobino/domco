@@ -38,7 +38,7 @@ export const transformIndexHtml = async () => {
 				const buildMode = ctx.server?.config.command !== "serve";
 
 				html = await applyBuild({
-					buildFilename: info.files.layoutBuild,
+					buildFilename: info.files.indexBuild,
 					route,
 					routePath,
 					ctx,
@@ -48,7 +48,7 @@ export const transformIndexHtml = async () => {
 				});
 
 				html = await applyBuild({
-					buildFilename: info.files.indexBuild,
+					buildFilename: info.files.layoutBuild,
 					route,
 					routePath,
 					ctx,

@@ -61,7 +61,7 @@ export const prefetch = (
 	let prefetchTimer: NodeJS.Timeout;
 
 	const listener = (e: Event) => {
-		const { href } = e.target as HTMLAnchorElement;
+		const { href } = e.currentTarget as HTMLAnchorElement;
 		const isCurrent = href === window.location.href;
 		if (!isCurrent) {
 			prefetchTimer = setTimeout(() => {
