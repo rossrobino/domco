@@ -116,7 +116,7 @@ export const prefetch = (
 	const observer = new IntersectionObserver((entries) => {
 		for (const e of entries) {
 			if (e.isIntersecting) {
-				listener({ target: e.target } as any);
+				listener({ currentTarget: e.target } as any);
 			}
 		}
 	});
@@ -131,7 +131,7 @@ export const prefetch = (
 			observer.observe(anchor);
 		} else {
 			// load
-			listener({ target: anchor } as any);
+			listener({ currentTarget: anchor } as any);
 		}
 	}
 };
