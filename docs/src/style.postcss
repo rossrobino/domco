@@ -19,7 +19,7 @@
 		--card: 0 0% 0%; /* black */
 		--card-foreground: 240 4.9% 83.9%; /* zinc-300 */
 		--border: 240 5.3% 26.1%; /* zinc-700 */
-		--radius: 0.5rem;
+		--radius: 1rem;
 	}
 	h1 {
 		text-wrap: balance;
@@ -29,6 +29,17 @@
 	}
 	pre code {
 		background-color: transparent !important;
+	}
+	pre,
+	.copy-text {
+		cursor: copy;
+	}
+	pre:active,
+	.copy-text:active {
+		cursor: default;
+	}
+	summary {
+		cursor: pointer;
 	}
 }
 

@@ -1,6 +1,6 @@
 ## Create
 
-After you're familiar with HTML, CSS, JavaScript, and Node, [Vite](https://vitejs.dev/) is a great tool to build a website. It has become the build tool that many popular frameworks today use under the hood. At a high level, it provides two key scripts, `dev`---a development server, and `build`---a bundler.
+After you're familiar with HTML, CSS, JavaScript, and Node, [Vite](https://vitejs.dev/) is a great tool to build a website. It is a build tool that many popular frameworks today use under the hood. At a high level, it provides two key scripts, `dev`---a development server, and `build`---a bundler.
 
 The development server makes it easier to see updates in your website as you make changes, while the build command helps you ship the minimum amount of code that is required for your site to run to users.
 
@@ -218,7 +218,7 @@ export const build: Build = async (window) => {
 
 ## domco API
 
-**domco** functions can be imported from `"domco"`, read more about them [here](/docs/modules#functions-1).
+**domco** functions can be imported from `"domco"`, [read more about them here](/docs/modules#functions-1).
 
 ## public
 

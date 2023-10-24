@@ -17,7 +17,9 @@
 
 ## Overview
 
-In contrast to other static site generators, which often require familiarization with various template file types, **domco** presents an refreshing solution. It enables you to utilize familiar browser APIs on the server at build time, and work undeterred by the shifts in the landscape of server side JavaScript tooling.
+In contrast to other static site generators, which often require familiarization with various template file types, **domco** presents an refreshing solution. It enables you to utilize HTML, CSS, and JavaScript, and work undeterred by the shifts in the landscape of server side JavaScript tooling.
+
+One key feature **domco** provides is the use of browser APIs on the server through the usage of [linkedom](https://github.com/WebReflection/linkedom).
 
 Take for instance, fetching data from a CMS and having it rendered on a page. Your website already handles this task smoothly in the browser.
 
@@ -29,7 +31,26 @@ const article = document.querySelector("article");
 article.innerHtml = data.html;
 ```
 
-Now, what if you could take this same code, and run it to update the HTML at _build_ time? **domco** enables you to do exactly that without having to rely on a UI library to take care of the rendering on the server.
+Now, what if you could take this same code, and run it at _build_ time? Move this to a server context, you [usually run into this guy](https://www.google.com/search?q=document+is+not+defined):
+
+> ReferenceError: document is not defined
+
+Most frameworks require you to learn a new strategy for rendering on the server, for example using JSX, or a markdown file with front-matter variables.
+
+```jsx
+// ReactServerComponent.jsx
+const ServerComponent = () => {
+	const res = await fetch("https://my-cms...");
+	const data = await res.json();
+	return <article>{data.html}</article>;
+};
+
+export default ServerComponent;
+```
+
+These strategies work well, but also create another abstraction on top of what you already know. They also have some limitations, for example, what if you want to modify the result of some markdown after it gets processed into HTML? It quickly becomes difficult without something like `document.querySelector`.
+
+With **domco** you do not need learn a new API, UI framework, or even language to update HTML at build time. You can just make updates to the HTML using familiar browser APIs within a build function, ensuring less JavaScript get shipped to each user.
 
 ```ts
 // src/index.build.ts
@@ -42,3 +63,5 @@ export const build: Build = async ({ document }) => {
 	article.innerHtml = data.html;
 };
 ```
+
+**domco** aims to provide many of the features and developer experience of modern frameworks without having to learn a new language.

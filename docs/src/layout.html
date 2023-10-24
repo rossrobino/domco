@@ -7,12 +7,13 @@
 		<link rel="stylesheet" href="/style.postcss" />
 		<script type="module" src="/layout.client.ts"></script>
 		<title>domco</title>
+		<meta name="description" content="Build Time Rendering Without Templates" />
 	</head>
 	<body
 		class="min-w-[300px] justify-center bg-background text-foreground md:flex"
 	>
 		<div
-			class="prose prose-zinc prose-invert max-w-[768px] prose-a:link selection:bg-accent selection:text-accent-foreground prose-h5:font-semibold prose-p:before:content-none prose-p:after:content-none prose-code:rounded-sm prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none prose-pre:border"
+			class="prose prose-zinc prose-invert max-w-[768px] font-old-style prose-a:link md:prose-lg selection:bg-accent selection:text-accent-foreground prose-h5:font-semibold prose-p:before:content-none prose-p:after:content-none prose-code:rounded-sm prose-code:bg-muted prose-code:px-2 prose-code:py-1 prose-code:before:content-none prose-code:after:content-none prose-pre:rounded prose-pre:border-2"
 		>
 			<header class="not-prose flex items-center justify-between gap-6 p-6">
 				<a
@@ -26,23 +27,15 @@
 						<a href="/docs/learn" class="link">Docs</a>
 					</li>
 					<li>
-						<share-url>
-							<button class="button button-outline">Share</button>
-						</share-url>
+						<a href="/docs/modules" class="link">Modules</a>
 					</li>
 				</ul>
 			</header>
 			<main class="p-6">
 				<slot></slot>
 			</main>
-			<footer class="not-prose mb-8 p-6">
+			<footer class="not-prose mb-8 flex justify-between p-6">
 				<ul class="flex flex-col gap-2">
-					<li>
-						<a href="/docs/learn" class="link">Documentation</a>
-					</li>
-					<li>
-						<a href="/docs/modules" class="link">Modules</a>
-					</li>
 					<li>
 						<a class="link" href="https://github.com/rossrobino/domco">
 							GitHub
@@ -50,6 +43,11 @@
 					</li>
 					<li>MIT License</li>
 				</ul>
+				<div>
+					<share-url>
+						<button class="button button-outline">Share</button>
+					</share-url>
+				</div>
 			</footer>
 		</div>
 	</body>
