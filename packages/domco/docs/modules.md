@@ -1,17 +1,4 @@
-# Modules
 
-## Table of contents
-
-### Type Aliases
-
-- [Block](/docs/modules#block)
-- [Build](/docs/modules#build)
-- [BuildContext](/docs/modules#buildcontext)
-
-### Functions
-
-- [addBlocks](/docs/modules#addblocks)
-- [prefetch](/docs/modules#prefetch)
 
 ## Type Aliases
 
@@ -61,7 +48,7 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[types/index.ts:75](https://github.com/rossrobino/domco/blob/9475322/packages/domco/types/index.ts#L75)
+[types/index.ts:75](https://github.com/rossrobino/domco/blob/341595f/packages/domco/types/index.ts#L75)
 
 ___
 
@@ -111,7 +98,7 @@ export const build: Build = async ({ document }) => {
 
 #### Defined in
 
-[types/index.ts:23](https://github.com/rossrobino/domco/blob/9475322/packages/domco/types/index.ts#L23)
+[types/index.ts:23](https://github.com/rossrobino/domco/blob/341595f/packages/domco/types/index.ts#L23)
 
 ___
 
@@ -137,7 +124,7 @@ Context about the current page to utilize during the build
 
 #### Defined in
 
-[types/index.ts:33](https://github.com/rossrobino/domco/blob/9475322/packages/domco/types/index.ts#L33)
+[types/index.ts:33](https://github.com/rossrobino/domco/blob/341595f/packages/domco/types/index.ts#L33)
 
 ## Functions
 
@@ -176,7 +163,7 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[helpers/addBlocks/index.ts:23](https://github.com/rossrobino/domco/blob/9475322/packages/domco/helpers/addBlocks/index.ts#L23)
+[helpers/addBlocks/index.ts:23](https://github.com/rossrobino/domco/blob/341595f/packages/domco/helpers/addBlocks/index.ts#L23)
 
 ___
 
@@ -212,4 +199,4 @@ prefetch({ prerender: true });
 
 #### Defined in
 
-[helpers/prefetch/index.ts:28](https://github.com/rossrobino/domco/blob/9475322/packages/domco/helpers/prefetch/index.ts#L28)
+[helpers/prefetch/index.ts:28](https://github.com/rossrobino/domco/blob/341595f/packages/domco/helpers/prefetch/index.ts#L28)

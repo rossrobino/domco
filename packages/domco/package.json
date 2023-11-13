@@ -27,7 +27,7 @@
 		"build": "bun build:clean && bun build:js && bun build:copy && bun doc",
 		"pub:only": "npm publish --access public ../../dist/domco",
 		"pub": "bun i && bun format && bun run build && bun pub:only",
-		"doc": "typedoc --out docs --plugin typedoc-plugin-markdown index.ts --hideBreadcrumbs --githubPages false --publicPath /docs/ && bun scripts/docs/index.ts"
+		"doc": "typedoc --out docs --plugin typedoc-plugin-markdown index.ts --hideBreadcrumbs --hideInPageTOC --githubPages false --publicPath /docs/ && bun scripts/docs/index.ts"
 	},
 	"author": {
 		"name": "Ross Robino",

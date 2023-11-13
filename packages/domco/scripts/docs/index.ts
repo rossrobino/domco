@@ -15,7 +15,7 @@ const removeMdLinks = async (dirPath: string) => {
 			text = text.replaceAll(".md", "");
 			text = text.replaceAll("html-kit", "domco");
 			text = text.replaceAll("\\>", ">");
-			text = text.replaceAll("# domco", "# Modules");
+			text = text.replaceAll("# domco", "");
 			await Bun.write(filePath, text);
 			console.log("modified: " + filePath);
 		}
