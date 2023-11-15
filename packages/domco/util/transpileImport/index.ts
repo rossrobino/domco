@@ -5,7 +5,7 @@ import os from "node:os";
 import { pathToFileURL } from "node:url";
 
 /**
- * Transpile and import a TypeScript file using esbuild
+ * Transpile, bundle, and import a TypeScript file using esbuild
  * @param filePath - Path to the TypeScript file
  * @returns The exported content of the transpiled file
  */

@@ -4,7 +4,13 @@
 
 ### Block
 
-Ƭ **Block**: (`window`: `Window` & typeof `globalThis`, `data?`: `any`) => `Promise`<`any`>
+Ƭ **Block**<`T`>: (`window`: `Window` & typeof `globalThis`, `data?`: `T`) => `Promise`<`any`>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `undefined` |
 
 #### Type declaration
 
@@ -18,7 +24,7 @@
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `window` | `Window` & typeof `globalThis` | a `Window` object representing the `./index.html` file of the `index.build` page where the function is being run |
-| `data?` | `any` | an object containing data to pass into the function |
+| `data?` | `T` | data to pass into the function |
 
 ##### Returns
 
@@ -48,7 +54,7 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[types/index.ts:75](https://github.com/rossrobino/domco/blob/341595f/packages/domco/types/index.ts#L75)
+[types/index.ts:72](https://github.com/rossrobino/domco/blob/916d2a3/packages/domco/types/index.ts#L72)
 
 ___
 
@@ -98,7 +104,7 @@ export const build: Build = async ({ document }) => {
 
 #### Defined in
 
-[types/index.ts:23](https://github.com/rossrobino/domco/blob/341595f/packages/domco/types/index.ts#L23)
+[types/index.ts:23](https://github.com/rossrobino/domco/blob/916d2a3/packages/domco/types/index.ts#L23)
 
 ___
 
@@ -119,12 +125,11 @@ Context about the current page to utilize during the build
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `params` | `Params` | The current route's parameters, given the file `src/posts/[slug]/index.build.ts`, `params` could be `[{ slug: "my-post" }]` |
-| `route` | { `id`: `string`  } | Information about the current route |
-| `route.id` | `string` | The route as a string, for example: `/posts/[slug]` |
+| `route` | `string` | The route as a string, for example: `/posts/[slug]` |
 
 #### Defined in
 
-[types/index.ts:33](https://github.com/rossrobino/domco/blob/341595f/packages/domco/types/index.ts#L33)
+[types/index.ts:33](https://github.com/rossrobino/domco/blob/916d2a3/packages/domco/types/index.ts#L33)
 
 ## Functions
 
@@ -141,7 +146,7 @@ with `Promise.allSettled`, passing the `window` and optionally
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `window` | `Window` & typeof `globalThis` | the `Window` object to be passed into each block |
-| `blocks` | ([`Block`](/docs/modules#block) \| { `block`: [`Block`](/docs/modules#block) ; `data`: `any`  })[] | an array of blocks |
+| `blocks` | ([`Block`](/docs/modules#block)<`any`> \| { `block`: [`Block`](/docs/modules#block)<`any`> ; `data`: `any`  })[] | an array of blocks |
 
 #### Returns
 
@@ -163,7 +168,7 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[helpers/addBlocks/index.ts:23](https://github.com/rossrobino/domco/blob/341595f/packages/domco/helpers/addBlocks/index.ts#L23)
+[helpers/addBlocks/index.ts:23](https://github.com/rossrobino/domco/blob/916d2a3/packages/domco/helpers/addBlocks/index.ts#L23)
 
 ___
 
@@ -199,4 +204,4 @@ prefetch({ prerender: true });
 
 #### Defined in
 
-[helpers/prefetch/index.ts:28](https://github.com/rossrobino/domco/blob/341595f/packages/domco/helpers/prefetch/index.ts#L28)
+[helpers/prefetch/index.ts:28](https://github.com/rossrobino/domco/blob/916d2a3/packages/domco/helpers/prefetch/index.ts#L28)

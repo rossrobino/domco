@@ -109,6 +109,11 @@ const applyBuild = async (options: {
 	}
 
 	if (buildPath) {
+		const projectDir = process.cwd();
+
+		// chdir to `src` so that all urls start there in .build files
+		process.chdir(path.join(process.cwd(), info.paths.root));
+
 		const { build, params } = await transpileImport<{
 			build?: Build;
 			params?: Record<string, string>[];
@@ -119,7 +124,7 @@ const applyBuild = async (options: {
 				for (const currentParams of params) {
 					const parseHtmlResult = parseHTML(html);
 					await build(parseHtmlResult, {
-						route: { id: route },
+						route,
 						params: currentParams,
 					});
 					const url = await insertParams(route, currentParams);
@@ -135,12 +140,15 @@ const applyBuild = async (options: {
 				const url = ctx.originalUrl || "";
 				const parseHtmlResult = parseHTML(html);
 				await build(parseHtmlResult, {
-					route: { id: route },
+					route,
 					params: await getParams(route, url),
 				});
 				html = parseHtmlResult.document.toString();
 			}
 		}
+
+		// change back to project dir
+		process.chdir(projectDir);
 	}
 
 	if (

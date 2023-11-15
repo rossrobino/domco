@@ -31,7 +31,7 @@ For example, to add the `/nested` route, add `src/nested/index.html`.
 ```
 .
 └── src/
-	└── index.html
+	├── index.html
 	└── nested/
 		└── index.html
 ```
@@ -45,8 +45,8 @@ Layouts make it easier to apply markup, styles, and scripts to multiple pages wi
 ```
 .
 └── src/
-	└── index.html
-	└── layout.html
+	├── index.html
+	├── layout.html
 	└── nested/
 		└── index.html
 ```
@@ -71,9 +71,9 @@ Styles can be linked to an HTML page using the `link` tag within the `head` tag.
 ```
 .
 └── src/
-	└── index.client.ts
-	└── index.html
-	└── layout.html
+	├── index.client.ts
+	├── index.html
+	├── layout.html
 	└── nested/
 		└── index.html
 ```
@@ -128,9 +128,9 @@ A `layout.build` file can also be created which executes on the current route an
 ```
 .
 └── src/
-	└── index.html
-	└── layout.build.ts
-	└── layout.html
+	├── index.html
+	├── layout.build.ts
+	├── layout.html
 	└── nested/
 		└── index.html
 ```
@@ -228,8 +228,6 @@ The [`public` directory](https://vitejs.dev/guide/assets.html#the-public-directo
 
 `src/lib` has been configured with the `$lib` alias for convenience. This is a good place to house shared code that will be imported in other places in your project such as blocks or types.
 
-> Don't create an `index.html` file in `lib` if you don't want it to contain any routes.
-
 ## Building for Production
 
 Run the following command to execute `vite build` and build your project, you will see the results outputted to the `dist` folder.
@@ -244,4 +242,6 @@ npm run build
 
 ### Deploy
 
-Since **domco** is just a Vite plugin, it can be deployed on services like [Vercel](https://vercel.com/) with zero configuration. These services will run `vite build` on a remote server for you and deploy your project to a content delivery network.
+**domco** generates a static site, which makes it easy to deploy on a variety of platforms.
+
+Since **domco** is a Vite plugin, it can be deployed on services like [Vercel](https://vercel.com/) with zero configuration. These services will run `vite build` on a remote server for you and deploy your project to a content delivery network.

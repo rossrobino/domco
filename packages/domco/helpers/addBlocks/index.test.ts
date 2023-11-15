@@ -16,7 +16,7 @@ const block2: Block = async () => {
 	return endTime - startTime;
 };
 
-const block3: Block = async (_, data) => {
+const block3: Block<string> = async (_, data) => {
 	return data;
 };
 

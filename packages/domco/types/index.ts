@@ -31,11 +31,8 @@ export type Build<
 
 /** Context about the current page to utilize during the build */
 export type BuildContext<Params> = {
-	/** Information about the current route */
-	route: {
-		/** The route as a string, for example: `/posts/[slug]` */
-		id: string;
-	};
+	/** The route as a string, for example: `/posts/[slug]` */
+	route: string;
 	/**
 	 * The current route's parameters,
 	 * given the file `src/posts/[slug]/index.build.ts`,
@@ -49,7 +46,7 @@ export type BuildContext<Params> = {
  * - Wrapper function to provide the `window` in other imported modules
  *
  * @param window a `Window` object representing the `./index.html` file of the `index.build` page where the function is being run
- * @param data an object containing data to pass into the function
+ * @param data data to pass into the function
  *
  * @example
  * ```ts
@@ -72,9 +69,9 @@ export type BuildContext<Params> = {
  * }
  * ```
  */
-export type Block = (
+export type Block<T = undefined> = (
 	window: Window & typeof globalThis,
-	data?: any,
+	data?: T,
 ) => Promise<any>;
 
 export type Generated = {

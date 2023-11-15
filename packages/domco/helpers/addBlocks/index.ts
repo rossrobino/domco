@@ -22,7 +22,10 @@ import type { Block } from "../../types/index.js";
  */
 export const addBlocks = async (
 	window: Window & typeof globalThis,
-	blocks: ({ block: Block; data: Parameters<Block>[1] } | Block)[],
+	blocks: (
+		| { block: Block<any>; data: Parameters<Block<any>>[1] }
+		| Block<any>
+	)[],
 ) => {
 	const result = await Promise.allSettled(
 		blocks.map((block) => {
