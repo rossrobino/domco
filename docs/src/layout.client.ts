@@ -1,7 +1,7 @@
 import { prefetch } from "domco";
 import { ShareUrl } from "$lib/elements/ShareUrl";
 
-prefetch({ prerender: true, event: "visible" });
+prefetch({ prerender: true });
 
 customElements.define("share-url", ShareUrl);
 
