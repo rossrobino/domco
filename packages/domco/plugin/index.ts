@@ -3,7 +3,7 @@ import { configureServer } from "./hooks/configureServer/index.js";
 import { config } from "./hooks/config/index.js";
 import { transformIndexHtml } from "./hooks/transformIndexHtml/index.js";
 import type { Generated } from "../types/index.js";
-import { writeBundle } from "./writeBundle/index.js";
+import { writeBundle } from "./hooks/writeBundle/index.js";
 
 const generated: Generated = { add: [], delete: [] };
 

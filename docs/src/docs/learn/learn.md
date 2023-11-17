@@ -98,11 +98,11 @@ When building a website, it's often useful to render content with JavaScript ins
 
 Rendering on the client has some drawbacks, especially if the content that is rendered is the same for every user. Browsers process HTML first before JavaScript, so if the JavaScript to render the HTML hasn't run yet, users won't see the resulting HTML until it has completed. This can lead to an undesirable experience if the user has to wait for the page to load, or the content they are viewing shifts after it loads.
 
-**domco** uses [linkedom](https://github.com/WebReflection/linkedom) to enable you to utilize the same code that is written on the client, to update the HTML at _build_ time. This way, the code gets ran once, and users enjoy a "pre-rendered" result without having to load any JavaScript.
+**domco** uses [LinkeDOM](https://github.com/WebReflection/linkedom) to enable you to utilize the same code that is written on the client, to update the HTML at _build_ time. This way, the code gets ran once, and users enjoy a "pre-rendered" result without having to load any JavaScript.
 
 ### index.build
 
-An `index.build` file can be created to modify the contents of the `index.html` file in the same directory at _build_ time. These files must export a [`build`](/docs/modules#build) function that modifies the passed in `window` object created from `./index.html` with [linkedom](https://github.com/WebReflection/linkedom).
+An `index.build` file can be created to modify the contents of the `index.html` file in the same directory at _build_ time. These files must export a [`build`](/docs/modules#build) function that modifies the passed in `window` object created from `./index.html` with [LinkeDOM](https://github.com/WebReflection/linkedom).
 
 ```ts
 // src/index.build.ts

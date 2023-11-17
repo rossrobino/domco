@@ -4,7 +4,7 @@
 
 ### Block
 
-Ƭ **Block**<`T`>: (`window`: `Window` & typeof `globalThis`, `data?`: `T`) => `Promise`<`any`>
+Ƭ **Block**\<`T`>: (`window`: `Window` & typeof `globalThis`, `data?`: `T`) => `Promise`\<`any`>
 
 #### Type parameters
 
@@ -14,7 +14,7 @@
 
 #### Type declaration
 
-▸ (`window`, `data?`): `Promise`<`any`>
+▸ (`window`, `data?`): `Promise`\<`any`>
 
 - Import and utilize a block inside of a `Build` function
 - Wrapper function to provide the `window` in other imported modules
@@ -28,7 +28,7 @@
 
 ##### Returns
 
-`Promise`<`any`>
+`Promise`\<`any`>
 
 **`Example`**
 
@@ -54,23 +54,23 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[types/index.ts:72](https://github.com/rossrobino/domco/blob/916d2a3/packages/domco/types/index.ts#L72)
+[types/index.ts:72](https://github.com/rossrobino/domco/blob/4eaa737/packages/domco/types/index.ts#L72)
 
 ___
 
 ### Build
 
-Ƭ **Build**<`Params`>: (`window`: `Window` & typeof `globalThis`, `context`: [`BuildContext`](/docs/modules#buildcontext)<`Params`[`number`]>) => `Promise`<`any`>
+Ƭ **Build**\<`Params`>: (`window`: `Window` & typeof `globalThis`, `context`: [`BuildContext`](/docs/modules#buildcontext)\<`Params`[`number`]>) => `Promise`\<`any`>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `Params` | extends `ReadonlyArray`<`Record`<`string`, `string`>> = `ReadonlyArray`<`Record`<`string`, `string`>> |
+| `Params` | extends `ReadonlyArray`\<`Record`\<`string`, `string`>> = `ReadonlyArray`\<`Record`\<`string`, `string`>> |
 
 #### Type declaration
 
-▸ (`window`, `context`): `Promise`<`any`>
+▸ (`window`, `context`): `Promise`\<`any`>
 
 - utilized in `index.build` or `layout.build` files.
 - export a `build` function from these files to run it at build time
@@ -81,11 +81,11 @@ on the corresponding `.html` pages.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `window` | `Window` & typeof `globalThis` | a `Window` object representing `./index.html` |
-| `context` | [`BuildContext`](/docs/modules#buildcontext)<`Params`[`number`]> | context about the current route |
+| `context` | [`BuildContext`](/docs/modules#buildcontext)\<`Params`[`number`]> | context about the current route |
 
 ##### Returns
 
-`Promise`<`any`>
+`Promise`\<`any`>
 
 **`Example`**
 
@@ -104,13 +104,13 @@ export const build: Build = async ({ document }) => {
 
 #### Defined in
 
-[types/index.ts:23](https://github.com/rossrobino/domco/blob/916d2a3/packages/domco/types/index.ts#L23)
+[types/index.ts:23](https://github.com/rossrobino/domco/blob/4eaa737/packages/domco/types/index.ts#L23)
 
 ___
 
 ### BuildContext
 
-Ƭ **BuildContext**<`Params`>: `Object`
+Ƭ **BuildContext**\<`Params`>: `Object`
 
 Context about the current page to utilize during the build
 
@@ -129,13 +129,13 @@ Context about the current page to utilize during the build
 
 #### Defined in
 
-[types/index.ts:33](https://github.com/rossrobino/domco/blob/916d2a3/packages/domco/types/index.ts#L33)
+[types/index.ts:33](https://github.com/rossrobino/domco/blob/4eaa737/packages/domco/types/index.ts#L33)
 
 ## Functions
 
 ### addBlocks
 
-▸ **addBlocks**(`window`, `blocks`): `Promise`<`PromiseSettledResult`<`any`>[]>
+▸ **addBlocks**(`window`, `blocks`): `Promise`\<`PromiseSettledResult`\<`any`>[]>
 
 A helper function that runs an array of blocks asynchronously
 with `Promise.allSettled`, passing the `window` and optionally
@@ -146,11 +146,11 @@ with `Promise.allSettled`, passing the `window` and optionally
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `window` | `Window` & typeof `globalThis` | the `Window` object to be passed into each block |
-| `blocks` | ([`Block`](/docs/modules#block)<`any`> \| { `block`: [`Block`](/docs/modules#block)<`any`> ; `data`: `any`  })[] | an array of blocks |
+| `blocks` | ([`Block`](/docs/modules#block)\<`any`> \| \{ `block`: [`Block`](/docs/modules#block)\<`any`> ; `data`: `any`  })[] | an array of blocks |
 
 #### Returns
 
-`Promise`<`PromiseSettledResult`<`any`>[]>
+`Promise`\<`PromiseSettledResult`\<`any`>[]>
 
 an array containing the results of each block
 
@@ -168,7 +168,7 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[helpers/addBlocks/index.ts:23](https://github.com/rossrobino/domco/blob/916d2a3/packages/domco/helpers/addBlocks/index.ts#L23)
+[helpers/addBlocks/index.ts:23](https://github.com/rossrobino/domco/blob/4eaa737/packages/domco/helpers/addBlocks/index.ts#L23)
 
 ___
 
@@ -204,4 +204,4 @@ prefetch({ prerender: true });
 
 #### Defined in
 
-[helpers/prefetch/index.ts:28](https://github.com/rossrobino/domco/blob/916d2a3/packages/domco/helpers/prefetch/index.ts#L28)
+[helpers/prefetch/index.ts:28](https://github.com/rossrobino/domco/blob/4eaa737/packages/domco/helpers/prefetch/index.ts#L28)

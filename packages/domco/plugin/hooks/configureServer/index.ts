@@ -19,11 +19,8 @@ export const configureServer = (options: {
 		server.watcher.on("unlink", sendFullReload);
 		server.middlewares.use((req, _, next) => {
 			if (!req.url) return next();
-			const requestURL = new URL(req.url, `http://${req.headers.host}`);
 			// remove the empty strings since `dynPath` will not have those
-			const reqSegments = requestURL.pathname
-				.split("/")
-				.filter((v) => v !== "");
+			const reqSegments = req.url.split("/").filter((v) => v !== "");
 			const actualPaths = Object.keys(entryPoints);
 			// ones that have "[" will be dynamic
 			const dynPaths = actualPaths.filter((v) => v.includes("["));
@@ -40,8 +37,7 @@ export const configureServer = (options: {
 						} else if (dynSegment?.startsWith("[")) {
 							// segment is dynamic, correct to the actual
 							reqSegments[i] = dynSegment;
-							requestURL.pathname = "/" + reqSegments.join("/");
-							req.url = requestURL.toString();
+							req.url = "/" + reqSegments.join("/");
 						} else {
 							// segments do not match and are not dynamic, stop checking
 							break;
@@ -57,8 +53,7 @@ export const configureServer = (options: {
 			if (!req.url) return next();
 			const requestURL = new URL(req.url, `http://${req.headers.host}`);
 			if (/^\/(?:[^@]+\/)*[^@./]+$/g.test(requestURL.pathname)) {
-				requestURL.pathname += "/";
-				req.url = requestURL.toString();
+				req.url += "/";
 			}
 			return next();
 		});

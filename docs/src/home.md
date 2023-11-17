@@ -15,7 +15,7 @@
 
 In contrast to other static site generators, which often require familiarization with various template file types, **domco** presents an refreshing solution. It enables you to utilize HTML, CSS, and JavaScript, and work undeterred by the shifts in the landscape of server side JavaScript tooling.
 
-One key feature **domco** provides is the use of browser APIs on the server through the usage of [linkedom](https://github.com/WebReflection/linkedom).
+One key feature **domco** provides is the use of browser APIs on the server through the usage of [LinkeDOM](https://github.com/WebReflection/linkedom).
 
 Take for instance, fetching data from a CMS and having it rendered on a page. Your website already handles this task smoothly in the browser.
 
