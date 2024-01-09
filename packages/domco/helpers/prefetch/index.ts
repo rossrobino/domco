@@ -86,15 +86,14 @@ export const prefetch = (
 					if (isNew) {
 						const specScript = document.createElement("script");
 						specScript.type = speculationrules;
-						const specRules = {
+						specScript.textContent = JSON.stringify({
 							prerender: [
 								{
 									source: "list",
 									urls: [pathname],
 								},
 							],
-						};
-						specScript.textContent = JSON.stringify(specRules);
+						});
 						document.head.appendChild(specScript);
 					}
 				} else if (

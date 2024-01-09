@@ -12,6 +12,7 @@ export const build: Build = async ({
 	headings.forEach((heading) => {
 		if (heading && heading.id) {
 			const id = heading.id;
+			heading.classList.add("flex");
 			heading.innerHTML = /*html*/ `
 				<a href="#${id}" class="not-prose hover:underline flex items-center gap-1">
 					${heading.innerHTML}

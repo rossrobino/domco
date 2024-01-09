@@ -3,26 +3,24 @@
 @tailwind utilities;
 
 @layer base {
+	/** https://uico.robino.dev */
 	:root {
-		--background: 240 10% 3.9%; /* zinc-950 */
-		--foreground: 240 4.9% 83.9%; /* zinc-300 */
-		--muted: 240 5.9% 10%; /* zinc-900 */
-		--muted-foreground: 240 5% 64.9%; /* zinc-400 */
-		--primary: 240 4.8% 95.9%; /* zinc-100 */
-		--primary-foreground: 240 5.9% 10%; /* zinc-900 */
-		--secondary: 224 76.3% 48%; /* blue-700 */
-		--secondary-foreground: 240 4.8% 95.9%; /* zinc-100 */
-		--destructive: 0 73.7% 41.8%; /* red-700 */
-		--destructive-foreground: 240 4.8% 95.9%; /* zinc-100 */
-		--accent: 50 97.8% 63.5%; /* yellow-300 */
-		--accent-foreground: 240 5.9% 10%; /* zinc-900 */
-		--card: 0 0% 0%; /* black */
-		--card-foreground: 240 4.9% 83.9%; /* zinc-300 */
-		--border: 240 4.9% 83.9%;
-		--radius: 1rem;
-	}
-	h1 {
-		text-wrap: balance;
+		--background: 99% 0.005 257; /* slate-50 */
+		--foreground: 37% 0.05 257; /* 700 */
+		--muted: 93% 0.015 257; /* 200 */
+		--muted-foreground: 44% 0.05 257; /* 600 */
+		--primary: 28% 0.05 257; /* 800 */
+		--primary-foreground: 97% 0.01 257; /* 100 */
+		--secondary: 87% 0.022 257; /* 300 */
+		--secondary-foreground: 22% 0.05 257; /* 900 */
+		--destructive: 56% 0.19 17; /* rose-700 */
+		--destructive-foreground: 100% 0 0; /* white */
+		--accent: 28% 0.05 257; /* 800 */
+		--accent-foreground: 93% 0.015 257; /* 200 */
+		--card: 100% 0 0; /* white */
+		--card-foreground: 37% 0.05 257; /* 700 */
+		--border: 93% 0.015 257; /* 200 */
+		--radius: 0.3rem;
 	}
 	p {
 		text-wrap: pretty;
@@ -55,18 +53,16 @@
 	.hljs-built_in,
 	.hljs-symbol,
 	.hljs-bullet {
-		color: theme("colors.red.500");
+		color: theme("colors.rose.500");
 	}
 
 	.hljs-title,
 	.hljs-title.class_,
 	.hljs-title.class_.inherited__,
 	.hljs-title.function_ {
-		color: theme("colors.yellow.300");
+		color: theme("colors.violet.300");
 	}
 
-	.hljs-attr,
-	.hljs-attribute,
 	.hljs-literal,
 	.hljs-meta,
 	.hljs-number,
@@ -75,19 +71,19 @@
 	.hljs-selector-attr,
 	.hljs-selector-class,
 	.hljs-selector-id {
-		color: theme("colors.blue.400");
+		color: theme("colors.sky.300");
 	}
 
 	.hljs-regexp,
 	.hljs-string,
 	.hljs-meta .hljs-string {
-		color: theme("colors.blue.300");
+		color: theme("colors.sky.200");
 	}
 
 	.hljs-comment,
 	.hljs-code,
 	.hljs-formula {
-		color: theme("colors.zinc.400");
+		color: theme("colors.slate.400");
 	}
 
 	.hljs-name,
@@ -98,12 +94,14 @@
 		color: theme("colors.teal.300");
 	}
 
+	.hljs-attr,
+	.hljs-attribute,
 	.hljs-subst {
-		color: theme("colors.zinc.200");
+		color: theme("colors.slate.100");
 	}
 
 	.hljs-section {
-		color: theme("colors.blue.500");
+		color: theme("colors.sky.500");
 	}
 
 	.hljs-emphasis {

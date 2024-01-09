@@ -24,18 +24,18 @@ export const getFiles = (options: {
 		}
 	},
 	"devDependencies": {
-		"@types/node": "^20.9.1",
-		"domco": "^0.3.5",${prettier ? `\n\t\t"prettier": "^3.1.0",` : ""}${
+		"@types/node": "^20.10.7",
+		"domco": "^0.3.6",${prettier ? `\n\t\t"prettier": "^3.1.1",` : ""}${
 			prettier && tailwind
-				? `\n\t\t"prettier-plugin-tailwindcss": "^0.5.7",`
+				? `\n\t\t"prettier-plugin-tailwindcss": "^0.5.11",`
 				: ""
 		}${
 			tailwind
-				? `\n\t\t"tailwindcss": "^3.3.5",\n\t\t"autoprefixer": "^10.4.16",`
+				? `\n\t\t"tailwindcss": "^3.4.1",\n\t\t"autoprefixer": "^10.4.16",`
 				: ""
 		}
-		"typescript": "^5.2.2",
-		"vite": "^5.0.0"
+		"typescript": "^5.3.3",
+		"vite": "^5.0.11"
 	}
 }
 `,

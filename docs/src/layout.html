@@ -10,40 +10,36 @@
 		<meta name="description" content="Build Time Rendering Without Templates" />
 	</head>
 	<body
-		class="min-w-[300px] justify-center bg-background text-foreground md:flex"
+		class="prose prose-slate mx-auto max-w-[80ch] bg-background font-humanist-classical text-foreground selection:bg-foreground selection:text-background prose-headings:font-antique prose-pre:-mx-6 prose-pre:rounded-none prose-pre:px-8 prose-pre:sm:mx-0 prose-pre:sm:rounded-md prose-pre:sm:px-4"
 	>
-		<div
-			class="prose prose-zinc prose-invert max-w-[768px] font-old-style prose-a:link md:prose-lg selection:bg-secondary selection:text-secondary-foreground prose-h5:font-semibold prose-p:before:content-none prose-p:after:content-none prose-pre:rounded prose-pre:border-2 prose-pre:border-muted"
-		>
-			<header class="not-prose flex items-center justify-between gap-6 p-6">
-				<a class="block text-2xl font-extrabold no-underline" href="/">domco</a>
-				<ul class="flex items-center gap-4">
-					<li>
-						<a href="/docs/learn" class="link">Learn</a>
-					</li>
-					<li>
-						<a href="/docs/modules" class="link">Modules</a>
-					</li>
-				</ul>
-			</header>
-			<main class="p-6">
-				<slot></slot>
-			</main>
-			<footer class="not-prose mb-8 flex justify-between p-6">
-				<ul class="flex flex-col gap-2">
-					<li>
-						<a class="link" href="https://github.com/rossrobino/domco">
-							GitHub
-						</a>
-					</li>
-					<li>MIT License</li>
-				</ul>
-				<div>
-					<share-url>
-						<button class="button button-outline">Share</button>
-					</share-url>
-				</div>
-			</footer>
-		</div>
+		<header class="not-prose flex items-center justify-between gap-6 p-6">
+			<a class="block font-antique text-2xl font-bold no-underline" href="/">
+				domco
+			</a>
+			<ul class="flex items-center gap-4">
+				<li>
+					<a href="/docs/learn" class="link">Learn</a>
+				</li>
+				<li>
+					<a href="/docs/modules" class="link">Modules</a>
+				</li>
+			</ul>
+		</header>
+		<main class="p-6">
+			<slot></slot>
+		</main>
+		<footer class="not-prose mb-8 flex justify-between p-6">
+			<ul class="flex flex-col gap-2">
+				<li>
+					<a class="link" href="https://github.com/rossrobino/domco">GitHub</a>
+				</li>
+				<li>MIT License</li>
+			</ul>
+			<div>
+				<share-url>
+					<button class="button button-outline">Share</button>
+				</share-url>
+			</div>
+		</footer>
 	</body>
 </html>
