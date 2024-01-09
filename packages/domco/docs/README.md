@@ -1,6 +1,6 @@
 
 
-[Documentation](https://domco.robino.dev/docs/learn)
+[Documentation](https://domco.robino.dev)
 
 ## Features
 
