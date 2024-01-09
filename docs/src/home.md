@@ -27,14 +27,14 @@ const article = document.querySelector("article");
 article.innerHtml = data.html;
 ```
 
-Now, what if you could take this same code, and run it at _build_ time? Move this to a server context, you [usually run into this guy](https://www.google.com/search?q=document+is+not+defined):
+Now, what if you could take this same code, and run it at _build_ time? Move this to a server context, you [usually run into this](https://www.google.com/search?q=document+is+not+defined):
 
 <div class="flex flex-col items-center justify-center gap-4">
-	<div
-		class="flex -rotate-2 items-center justify-center border-2 border-destructive px-4 py-3 font-mono rounded"
-	>
-		ReferenceError: document is not defined
-	</div>
+    <div
+        class="flex -rotate-2 items-center justify-center border-2 border-destructive px-4 py-3 font-mono rounded"
+    >
+        ReferenceError: document is not defined
+    </div>
 </div>
 
 Most frameworks require you to learn a new strategy for rendering on the server, for example using JSX, or a markdown file with front-matter variables.
@@ -42,15 +42,19 @@ Most frameworks require you to learn a new strategy for rendering on the server,
 ```jsx
 // ReactServerComponent.jsx
 const ServerComponent = () => {
-	const res = await fetch("https://my-cms...");
-	const data = await res.json();
-	return <article>{data.html}</article>;
+    const res = await fetch("https://my-cms...");
+    const data = await res.json();
+    return <article>{data.html}</article>;
 };
 
 export default ServerComponent;
 ```
 
 These strategies work well, but also create another abstraction on top of what you already know. They also have some limitations, for example, what if you want to modify the result of some markdown after it gets processed into HTML? It quickly becomes difficult without something like `document.querySelector`.
+
+> JavaScript is great at manipulating the DOM.
+
+--- [The Primeagen](https://youtu.be/UdCXUVhVSEE?t=3202)
 
 With **domco** you do not need learn a new API, UI framework, or even language to update HTML at build time. You can just make updates to the HTML using familiar browser APIs within a build function, ensuring less JavaScript get shipped to each user.
 
