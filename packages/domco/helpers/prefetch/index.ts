@@ -1,13 +1,9 @@
-interface SpecRules {
-	prerender?: {
-		source: string;
-		urls: string[];
-	}[];
-}
-
-const sel = "a[href^='/']";
-const hover = "hover";
+const defaultSelector = "a[href^='/']";
+const defaultEvent = "hover";
 const speculationrules = "speculationrules";
+
+/* the current urls that have been prefetched already */
+const prefetchedUrls: string[] = [];
 
 /**
  * Use on the client to prefetch/prerender the content for link tags
@@ -33,6 +29,9 @@ export const prefetch = (
 		 *
 		 * For example, set to `"a[href^='/posts']"` to apply only
 		 * to routes that begin with "/posts", or use another attribute entirely.
+		 *
+		 * If you are selecting another element instead of an `a` tag, be sure the element
+		 * has a `href` property.
 		 */
 		selector?: string;
 		/**
@@ -47,90 +46,92 @@ export const prefetch = (
 		/**
 		 * Determines when the prefetch takes place, defaults to `"hover"`.
 		 *
-		 * - `"hover"` - after mouseover or focus for > 200ms
+		 * - `"hover"` - after `mouseover` or `focus` for > 200ms, and on `touchstart` for mobile
 		 * - `"visible"` - within viewport
 		 * - `"load"` - when script is loaded, use carefully
 		 */
 		event?: "hover" | "load" | "visible";
-	} = { selector: sel, prerender: false, event: hover },
+	} = { selector: defaultSelector, prerender: false, event: defaultEvent },
+	// above is the default if undefined
 ) => {
-	const { selector = sel, prerender = false, event = hover } = options;
+	// defaults if partially defined
+	const {
+		selector = defaultSelector,
+		prerender = false,
+		event = defaultEvent,
+	} = options;
 
 	const anchors = document.querySelectorAll<HTMLAnchorElement>(selector);
 
-	let prefetchTimer: NodeJS.Timeout;
-
-	const listener = (e: Event) => {
-		const { href } = e.currentTarget as HTMLAnchorElement;
-		const isCurrent = href === window.location.href;
-		if (!isCurrent) {
-			prefetchTimer = setTimeout(() => {
-				const pathname = new URL(href).pathname;
+	const appendTag = (href: string) => {
+		if (!(href === window.location.href)) {
+			const url = new URL(href).pathname;
+			if (!prefetchedUrls.includes(url)) {
+				// if it's not already there
+				prefetchedUrls.push(url);
 				if (
 					prerender &&
 					HTMLScriptElement.supports &&
 					HTMLScriptElement.supports(speculationrules)
 				) {
-					let isNew = true;
-					// check if it's already there
-					const existing = document.querySelectorAll<HTMLScriptElement>(
-						`script[type='${speculationrules}']`,
-					);
-					for (const s of existing) {
-						const rules = JSON.parse(s.textContent || "{}") as SpecRules;
-						if (rules.prerender?.at(0)?.urls.includes(pathname)) {
-							isNew = false;
-							break;
-						}
-					}
-					if (isNew) {
-						const specScript = document.createElement("script");
-						specScript.type = speculationrules;
-						specScript.textContent = JSON.stringify({
-							prerender: [
-								{
-									source: "list",
-									urls: [pathname],
-								},
-							],
-						});
-						document.head.appendChild(specScript);
-					}
-				} else if (
-					document.querySelector(`link[href='${pathname}']`) === null
-				) {
+					const specScript = document.createElement("script");
+					specScript.type = speculationrules;
+					specScript.textContent = JSON.stringify({
+						prerender: [
+							{
+								source: "list",
+								urls: [url],
+							},
+						],
+					});
+					document.head.append(specScript);
+				} else {
 					// prerender off/not supported, and it isn't already there
 					const link = document.createElement("link");
 					link.rel = "prefetch";
 					link.as = "document";
-					link.href = pathname;
-					document.head.appendChild(link);
+					link.href = url;
+					document.head.append(link);
 				}
-			}, 200);
+			}
 		}
 	};
+
+	let prefetchTimer: NodeJS.Timeout;
+
+	/**
+	 * @param delay ms delay - for `hover`
+	 * @returns the event listener with delay
+	 */
+	const listener =
+		(delay = 200) =>
+		(e: Event) => {
+			const { href } = e.currentTarget as HTMLAnchorElement;
+			prefetchTimer = setTimeout(() => appendTag(href), delay);
+		};
 
 	const reset = () => clearTimeout(prefetchTimer);
 
 	const observer = new IntersectionObserver((entries) => {
 		for (const e of entries) {
 			if (e.isIntersecting) {
-				listener({ currentTarget: e.target } as any);
+				appendTag((e.target as HTMLAnchorElement).href);
 			}
 		}
 	});
 
 	for (const anchor of anchors) {
-		if (event === hover) {
-			anchor.addEventListener("mouseover", listener);
-			anchor.addEventListener("focus", listener);
+		if (event === "hover") {
+			anchor.addEventListener("mouseover", listener());
 			anchor.addEventListener("mouseout", reset);
+			anchor.addEventListener("focus", listener());
 			anchor.addEventListener("focusout", reset);
+			anchor.addEventListener("touchstart", listener(0));
 		} else if (event === "visible") {
 			observer.observe(anchor);
 		} else {
 			// load
-			listener({ currentTarget: anchor } as any);
+			appendTag(anchor.href);
 		}
 	}
 };
