@@ -1,9 +1,5 @@
-import { prefetch } from "domco";
-import { ShareUrl } from "$lib/elements/ShareUrl";
-
-prefetch({ prerender: true, event: "visible" });
-
-customElements.define("share-url", ShareUrl);
+import "drab/share/define";
+import "drab/prefetch/define";
 
 const pres = document.querySelectorAll("pre, .copy-text");
 

@@ -54,7 +54,7 @@ Promise\<any>
 
 #### Defined in
 
-[types/index.ts:72](https://github.com/rossrobino/domco/blob/d3c58e8/packages/domco/types/index.ts#L72)
+[types/index.ts:72](https://github.com/rossrobino/domco/blob/e0bc14d/packages/domco/types/index.ts#L72)
 
 ___
 
@@ -104,7 +104,7 @@ Promise\<any>
 
 #### Defined in
 
-[types/index.ts:23](https://github.com/rossrobino/domco/blob/d3c58e8/packages/domco/types/index.ts#L23)
+[types/index.ts:23](https://github.com/rossrobino/domco/blob/e0bc14d/packages/domco/types/index.ts#L23)
 
 ___
 
@@ -129,7 +129,7 @@ Context about the current page to utilize during the build
 
 #### Defined in
 
-[types/index.ts:33](https://github.com/rossrobino/domco/blob/d3c58e8/packages/domco/types/index.ts#L33)
+[types/index.ts:33](https://github.com/rossrobino/domco/blob/e0bc14d/packages/domco/types/index.ts#L33)
 
 ## Functions
 
@@ -168,40 +168,4 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[helpers/addBlocks/index.ts:23](https://github.com/rossrobino/domco/blob/d3c58e8/packages/domco/helpers/addBlocks/index.ts#L23)
-
-___
-
-### prefetch
-
-▸ **prefetch**(`options?`): void
-
-Use on the client to prefetch/prerender the content for link tags
-on the current page.
-
-Can also be used more than once with different options for different selectors.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options` | Object | prefetch options |
-| `options.event?` | "hover" \| "load" \| "visible" | Determines when the prefetch takes place, defaults to `"hover"`. - `"hover"` - after `mouseover` or `focus` for > 200ms, and on `touchstart` for mobile - `"visible"` - within viewport - `"load"` - when script is loaded, use carefully |
-| `options.prerender?` | boolean | Uses the experimental Speculation Rules API when supported to prerender on the client, defaults to `false`. Browsers that do not support will still use `<link rel="prefetch">` instead. [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/Speculation_Rules_API) |
-| `options.selector?` | string | css selector for the anchor elements, defaults to elements that start with "/" `"a[href^='/']"`. For example, set to `"a[href^='/posts']"` to apply only to routes that begin with "/posts", or use another attribute entirely. If you are selecting another element instead of an `a` tag, be sure the element has a `href` property. |
-
-#### Returns
-
-void
-
-**`Example`**
-
-```js
-import { prefetch } from "domco";
-
-prefetch({ prerender: true });
-```
-
-#### Defined in
-
-[helpers/prefetch/index.ts:24](https://github.com/rossrobino/domco/blob/d3c58e8/packages/domco/helpers/prefetch/index.ts#L24)
+[helpers/addBlocks/index.ts:23](https://github.com/rossrobino/domco/blob/e0bc14d/packages/domco/helpers/addBlocks/index.ts#L23)

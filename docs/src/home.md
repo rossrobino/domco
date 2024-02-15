@@ -6,7 +6,6 @@
 - [HTML layouts](/docs/learn#layout)
 - [Build time rendering](/docs/learn#build) using browser APIs
 - [Static site generation](/docs/learn#dynamic-routes) with generated routes
-- [Prefetching](/docs/modules#prefetch)
 - [HTML minification](/docs/learn#html-minification)
 
 **domco** is under development and has not reached version 1.0, please file any issues [on GitHub](https://github.com/rossrobino/domco/issues).

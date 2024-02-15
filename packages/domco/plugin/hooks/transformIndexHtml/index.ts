@@ -28,6 +28,7 @@ export const transformIndexHtml = async () => {
 		};
 		return result;
 	};
+
 	const htmlParseTransform = (options: { generated: Generated }) => {
 		const { generated } = options;
 		const result: IndexHtmlTransform = {
@@ -64,6 +65,7 @@ export const transformIndexHtml = async () => {
 		};
 		return result;
 	};
+
 	return { layoutTransform, htmlParseTransform };
 };
 
@@ -102,6 +104,7 @@ const applyBuild = async (options: {
 	const buildPathJs = path.resolve(routePath, `${buildFilename}.js`);
 
 	let buildPath = "";
+
 	if (await fileExists(buildPathTs)) {
 		buildPath = buildPathTs;
 	} else if (await fileExists(buildPathJs)) {

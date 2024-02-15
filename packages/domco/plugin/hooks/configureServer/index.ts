@@ -7,23 +7,31 @@ export const configureServer = (options: {
 	const { entryPoints } = options;
 
 	const serverHook: ServerHook = (server) => {
-		const sendFullReload = () => server.ws.send({ type: "full-reload" });
+		const sendFullReload = () => server.hot.send({ type: "full-reload" });
+
 		server.watcher.add(process.cwd()); // instead of `root`
+
 		server.watcher.on("change", (file) => {
 			const fullReload = /(.*)(\.(build.js|build.ts|md|txt|json))$/;
 			if (fullReload.test(file)) {
 				sendFullReload();
 			}
 		});
+
 		server.watcher.on("add", sendFullReload);
+
 		server.watcher.on("unlink", sendFullReload);
+
 		server.middlewares.use((req, _, next) => {
 			if (!req.url) return next();
 			// remove the empty strings since `dynPath` will not have those
 			const reqSegments = req.url.split("/").filter((v) => v !== "");
+
 			const actualPaths = Object.keys(entryPoints);
+
 			// ones that have "[" will be dynamic
 			const dynPaths = actualPaths.filter((v) => v.includes("["));
+
 			for (const dynPath of dynPaths) {
 				const dynSegments = dynPath.split(path.sep);
 				if (dynSegments.length === reqSegments.length) {
@@ -31,6 +39,7 @@ export const configureServer = (options: {
 					for (let i = 0; i < reqSegments.length; i++) {
 						const reqSegment = reqSegments[i];
 						const dynSegment = dynSegments[i];
+
 						if (reqSegment === dynSegment) {
 							// segments match, go to next
 							continue;
@@ -45,8 +54,10 @@ export const configureServer = (options: {
 					}
 				}
 			}
+
 			return next();
 		});
+
 		// fixes trailing slash for dev server
 		// https://github.com/vitejs/vite/issues/6596
 		server.middlewares.use((req, _, next) => {
@@ -58,5 +69,6 @@ export const configureServer = (options: {
 			return next();
 		});
 	};
+
 	return serverHook;
 };

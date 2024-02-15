@@ -10,7 +10,6 @@
 -   [HTML layouts](https://domco.robino.dev/docs/learn#layout)
 -   [Build time rendering](https://domco.robino.dev/docs/learn#build) using browser APIs
 -   [Static site generation](https://domco.robino.dev/docs/learn#dynamic-routes) with generated routes
--   [Prefetching](https://domco.robino.dev/docs/modules#prefetch)
 -   [HTML minification](https://domco.robino.dev/docs/learn#html-minification)
 
 **domco** is under development and has not reached version 1.0, please file any issues [on GitHub](https://github.com/rossrobino/domco/issues).

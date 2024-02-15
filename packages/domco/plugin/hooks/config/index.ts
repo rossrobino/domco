@@ -8,6 +8,7 @@ export const config = async () => {
 		dirPath: info.paths.root,
 		fileName: `${info.files.index}.html`,
 	});
+
 	const setConfig = async () => {
 		const userConfig: UserConfig = {
 			appType: "mpa",
@@ -30,5 +31,6 @@ export const config = async () => {
 		};
 		return userConfig;
 	};
+
 	return { setConfig: () => setConfig, entryPoints: input };
 };
