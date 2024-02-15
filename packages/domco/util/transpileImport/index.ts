@@ -47,7 +47,9 @@ export async function transpileImport<T>(filePath: string): Promise<T> {
 	await fs.writeFile(tempFilePath, firstFile.text);
 
 	// import file as a module -- file url conversion required for windows
-	const module = await import(String(new URL(pathToFileURL(tempFilePath))));
+	const module = await import(
+		String(new URL(pathToFileURL(tempFilePath).href))
+	);
 
 	// delete temp file
 	await fs.unlink(tempFilePath);

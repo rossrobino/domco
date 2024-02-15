@@ -4,7 +4,7 @@ import fs from "fs/promises";
 
 export const build: Build = async ({ document }) => {
 	const md = await fs.readFile("src/home.md", "utf-8");
-	const { html } = process(md);
+	const { html } = await process(md);
 	const article = document.querySelector("article");
 	if (article) article.innerHTML = html;
 };

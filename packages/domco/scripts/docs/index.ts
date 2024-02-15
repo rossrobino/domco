@@ -10,13 +10,12 @@ const removeMdLinks = async (dirPath: string) => {
 			await removeMdLinks(filePath);
 		}
 		if (filePath.endsWith("md")) {
-			const mdFile = Bun.file(filePath);
-			let text = await mdFile.text();
+			let text = await fs.readFile(filePath, "utf-8");
 			text = text.replaceAll(".md", "");
 			text = text.replaceAll("html-kit", "domco");
 			text = text.replaceAll("\\>", ">");
 			text = text.replaceAll("# domco", "");
-			await Bun.write(filePath, text);
+			await fs.writeFile(filePath, text);
 			console.log("modified: " + filePath);
 		}
 	}

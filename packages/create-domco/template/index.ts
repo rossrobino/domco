@@ -25,7 +25,7 @@ export const getFiles = (options: {
 	},
 	"devDependencies": {
 		"@types/node": "^20.10.7",
-		"domco": "^0.3.7",${prettier ? `\n\t\t"prettier": "^3.1.1",` : ""}${
+		"domco": "^0.3.8",${prettier ? `\n\t\t"prettier": "^3.1.1",` : ""}${
 			prettier && tailwind
 				? `\n\t\t"prettier-plugin-tailwindcss": "^0.5.11",`
 				: ""
