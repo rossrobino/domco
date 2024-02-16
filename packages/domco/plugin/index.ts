@@ -52,52 +52,28 @@ const generated: {
 export const domco = (): PluginOption => {
 	return [
 		{
-			name: "domco-layout",
-			transformIndexHtml: {
-				// the layout needs to be applied `order: "pre"` in order for the linked
-				// assets to be updated afterwards
-				order: "pre",
-				handler: async (html, ctx) => {
-					const route = path.dirname(ctx.path);
-					const routePath = path.resolve(path.join(info.paths.root, route));
-
-					const applyLayout = async (options: {
-						routePath: string;
-						html: string;
-					}) => {
-						let { routePath, html } = options;
-						const layoutPath = path.resolve(
-							routePath,
-							`${info.files.layout}.html`,
-						);
-
-						if (await fileExists(layoutPath)) {
-							// If a layout exists, apply it
-							const code = await fs.readFile(layoutPath, "utf-8");
-							html = code.replace(/<slot>(.*?)<\/slot>/, html);
-						}
-
-						const parentRoutePath = path.dirname(routePath);
-
-						if (
-							parentRoutePath.includes(
-								path.join(process.cwd(), info.paths.root),
-							)
-						) {
-							// recursively apply layout
-							html = await applyLayout({ routePath: parentRoutePath, html });
-						}
-
-						return html;
-					};
-
-					return await applyLayout({ routePath, html });
-				},
+			name: "domco-config",
+			config() {
+				return {
+					appType: "mpa",
+					root: info.paths.root,
+					publicDir: info.paths.publicDir,
+					resolve: {
+						alias: [
+							{
+								find: "$lib",
+								replacement: path.resolve("src", "lib"),
+							},
+						],
+					},
+					build: {
+						outDir: info.paths.outDir,
+						emptyOutDir: true,
+						rollupOptions: { input: entryPoints },
+					},
+				};
 			},
-		},
 
-		{
-			name: "domco-main",
 			configureServer(server) {
 				const sendFullReload = () => server.hot.send({ type: "full-reload" });
 
@@ -111,7 +87,6 @@ export const domco = (): PluginOption => {
 				});
 
 				server.watcher.on("add", sendFullReload);
-
 				server.watcher.on("unlink", sendFullReload);
 
 				server.middlewares.use((req, _, next) => {
@@ -161,28 +136,55 @@ export const domco = (): PluginOption => {
 					return next();
 				});
 			},
+		},
 
-			config() {
-				return {
-					appType: "mpa",
-					root: info.paths.root,
-					publicDir: info.paths.publicDir,
-					resolve: {
-						alias: [
-							{
-								find: "$lib",
-								replacement: path.resolve("src", "lib"),
-							},
-						],
-					},
-					build: {
-						outDir: info.paths.outDir,
-						emptyOutDir: true,
-						rollupOptions: { input: entryPoints },
-					},
-				};
+		{
+			name: "domco-layout",
+			transformIndexHtml: {
+				// the layout needs to be applied `order: "pre"` in order for the linked
+				// assets to be updated afterwards
+				order: "pre",
+				handler: async (html, ctx) => {
+					const route = path.dirname(ctx.path);
+					const routePath = path.resolve(path.join(info.paths.root, route));
+
+					const applyLayout = async (options: {
+						routePath: string;
+						html: string;
+					}) => {
+						let { routePath, html } = options;
+						const layoutPath = path.resolve(
+							routePath,
+							`${info.files.layout}.html`,
+						);
+
+						if (await fileExists(layoutPath)) {
+							// If a layout exists, apply it
+							const code = await fs.readFile(layoutPath, "utf-8");
+							html = code.replace(/<slot>(.*?)<\/slot>/, html);
+						}
+
+						const parentRoutePath = path.dirname(routePath);
+
+						if (
+							parentRoutePath.includes(
+								path.join(process.cwd(), info.paths.root),
+							)
+						) {
+							// recursively apply layout
+							html = await applyLayout({ routePath: parentRoutePath, html });
+						}
+
+						return html;
+					};
+
+					return await applyLayout({ routePath, html });
+				},
 			},
+		},
 
+		{
+			name: "domco-main",
 			transformIndexHtml: {
 				order: "post",
 				handler: async (html, ctx) => {
