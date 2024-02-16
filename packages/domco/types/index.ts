@@ -73,10 +73,3 @@ export type Block<T = undefined> = (
 	window: Window & typeof globalThis,
 	data?: T,
 ) => Promise<any>;
-
-export type Generated = {
-	/** files to add at the end of the build */
-	add: { fileName: string; source: string }[];
-	/** directory to delete at the end of the build */
-	delete: string[];
-};

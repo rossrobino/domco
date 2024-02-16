@@ -1,6 +1,6 @@
 // types
 import type { PluginOption } from "vite";
-import type { Build, Generated } from "../types/index.js";
+import type { Build } from "../types/index.js";
 
 // node
 import path from "node:path";
@@ -41,7 +41,13 @@ const entryPoints = await findAllPaths({
 });
 
 /** Generated routes with params */
-const generated: Generated = { add: [], delete: [] };
+const generated: {
+	/** files to add at the end of the build */
+	add: { fileName: string; source: string }[];
+
+	/** directory to delete at the end of the build */
+	delete: string[];
+} = { add: [], delete: [] };
 
 export const domco = (): PluginOption => {
 	return [
