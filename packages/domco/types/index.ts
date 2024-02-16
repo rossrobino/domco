@@ -1,3 +1,5 @@
+import type { DOMWindow } from "jsdom";
+
 /**
  * - utilized in `index.build` or `layout.build` files.
  * - export a `build` function from these files to run it at build time
@@ -24,15 +26,13 @@ export type Build<
 	Params extends ReadonlyArray<Record<string, string>> = ReadonlyArray<
 		Record<string, string>
 	>,
-> = (
-	window: Window & typeof globalThis,
-	context: BuildContext<Params[number]>,
-) => Promise<any>;
+> = (window: DOMWindow, context: BuildContext<Params[number]>) => any;
 
 /** Context about the current page to utilize during the build */
 export type BuildContext<Params> = {
 	/** The route as a string, for example: `/posts/[slug]` */
 	route: string;
+
 	/**
 	 * The current route's parameters,
 	 * given the file `src/posts/[slug]/index.build.ts`,
@@ -69,7 +69,4 @@ export type BuildContext<Params> = {
  * }
  * ```
  */
-export type Block<T = undefined> = (
-	window: Window & typeof globalThis,
-	data?: T,
-) => Promise<any>;
+export type Block<T = undefined> = (window: DOMWindow, data?: T) => any;

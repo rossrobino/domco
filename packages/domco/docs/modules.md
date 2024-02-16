@@ -4,7 +4,7 @@
 
 ### Block
 
-Ƭ **Block**: Function
+Ƭ **Block**\<`T`>: (`window`: `DOMWindow`, `data?`: `T`) => `any`
 
 - Import and utilize a block inside of a `Build` function
 - Wrapper function to provide the `window` in other imported modules
@@ -35,32 +35,32 @@ export const build: Build = async (window) => {
 
 | Name | Type |
 | :------ | :------ |
-| `T` | undefined |
+| `T` | `undefined` |
 
 #### Type declaration
 
-▸ (`window`, `data?`): Promise\<any>
+▸ (`window`, `data?`): `any`
 
 ##### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `window` | Window & typeof globalThis | a `Window` object representing the `./index.html` file of the `index.build` page where the function is being run |
-| `data?` | T | data to pass into the function |
+| `window` | `DOMWindow` | a `Window` object representing the `./index.html` file of the `index.build` page where the function is being run |
+| `data?` | `T` | data to pass into the function |
 
 ##### Returns
 
-Promise\<any>
+`any`
 
 #### Defined in
 
-[types/index.ts:72](https://github.com/rossrobino/domco/blob/df45d09/packages/domco/types/index.ts#L72)
+[types/index.ts:72](https://github.com/rossrobino/domco/blob/3ce6921/packages/domco/types/index.ts#L72)
 
 ___
 
 ### Build
 
-Ƭ **Build**: Function
+Ƭ **Build**\<`Params`>: (`window`: `DOMWindow`, `context`: [`BuildContext`](/docs/modules#buildcontext)\<`Params`[`number`]>) => `any`
 
 - utilized in `index.build` or `layout.build` files.
 - export a `build` function from these files to run it at build time
@@ -85,32 +85,32 @@ export const build: Build = async ({ document }) => {
 
 | Name | Type |
 | :------ | :------ |
-| `Params` | extends ReadonlyArray\<Record\<string, string>> = ReadonlyArray\<Record\<string, string>> |
+| `Params` | extends `ReadonlyArray`\<`Record`\<`string`, `string`>> = `ReadonlyArray`\<`Record`\<`string`, `string`>> |
 
 #### Type declaration
 
-▸ (`window`, `context`): Promise\<any>
+▸ (`window`, `context`): `any`
 
 ##### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `window` | Window & typeof globalThis | a `Window` object representing `./index.html` |
-| `context` | BuildContext\<Params[number]> | context about the current route |
+| `window` | `DOMWindow` | a `Window` object representing `./index.html` |
+| `context` | [`BuildContext`](/docs/modules#buildcontext)\<`Params`[`number`]> | context about the current route |
 
 ##### Returns
 
-Promise\<any>
+`any`
 
 #### Defined in
 
-[types/index.ts:23](https://github.com/rossrobino/domco/blob/df45d09/packages/domco/types/index.ts#L23)
+[types/index.ts:25](https://github.com/rossrobino/domco/blob/3ce6921/packages/domco/types/index.ts#L25)
 
 ___
 
 ### BuildContext
 
-Ƭ **BuildContext**: `Object`
+Ƭ **BuildContext**\<`Params`>: `Object`
 
 Context about the current page to utilize during the build
 
@@ -124,18 +124,18 @@ Context about the current page to utilize during the build
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `params` | Params | The current route's parameters, given the file `src/posts/[slug]/index.build.ts`, `params` could be `[{ slug: "my-post" }]` |
-| `route` | string | The route as a string, for example: `/posts/[slug]` |
+| `params` | `Params` | The current route's parameters, given the file `src/posts/[slug]/index.build.ts`, `params` could be `[{ slug: "my-post" }]` |
+| `route` | `string` | The route as a string, for example: `/posts/[slug]` |
 
 #### Defined in
 
-[types/index.ts:33](https://github.com/rossrobino/domco/blob/df45d09/packages/domco/types/index.ts#L33)
+[types/index.ts:32](https://github.com/rossrobino/domco/blob/3ce6921/packages/domco/types/index.ts#L32)
 
 ## Functions
 
 ### addBlocks
 
-▸ **addBlocks**(`window`, `blocks`): Promise\<PromiseSettledResult\<any>[]>
+▸ **addBlocks**(`window`, `blocks`): `Promise`\<`PromiseSettledResult`\<`any`>[]>
 
 A helper function that runs an array of blocks asynchronously
 with `Promise.allSettled`, passing the `window` and optionally
@@ -145,12 +145,12 @@ with `Promise.allSettled`, passing the `window` and optionally
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `window` | Window & typeof globalThis | the `Window` object to be passed into each block |
-| `blocks` | (Block\<any> \| Object)[] | an array of blocks |
+| `window` | `DOMWindow` | the `Window` object to be passed into each block |
+| `blocks` | ([`Block`](/docs/modules#block)\<`any`> \| \{ `block`: [`Block`](/docs/modules#block)\<`any`> ; `data`: `any`  })[] | an array of blocks |
 
 #### Returns
 
-Promise\<PromiseSettledResult\<any>[]>
+`Promise`\<`PromiseSettledResult`\<`any`>[]>
 
 an array containing the results of each block
 
@@ -168,4 +168,4 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[helpers/addBlocks/index.ts:23](https://github.com/rossrobino/domco/blob/df45d09/packages/domco/helpers/addBlocks/index.ts#L23)
+[helpers/addBlocks/index.ts:24](https://github.com/rossrobino/domco/blob/3ce6921/packages/domco/helpers/addBlocks/index.ts#L24)

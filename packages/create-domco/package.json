@@ -1,7 +1,7 @@
 {
 	"name": "create-domco",
 	"description": "Create a new domco project",
-	"version": "0.0.31",
+	"version": "0.0.33",
 	"type": "module",
 	"types": "./index.d.ts",
 	"main": "./index.js",

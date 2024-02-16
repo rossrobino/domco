@@ -14,7 +14,7 @@
 
 In contrast to other static site generators, which often require familiarization with various template file types, **domco** presents an refreshing solution. It enables you to utilize HTML, CSS, and JavaScript, and work undeterred by the shifts in the landscape of server side JavaScript tooling.
 
-One key feature **domco** provides is the use of browser APIs on the server through the usage of [LinkeDOM](https://github.com/WebReflection/linkedom).
+One key feature **domco** provides is the use of browser APIs on the server through the usage of [jsdom](https://github.com/jsdom/jsdom).
 
 Take for instance, fetching data from a CMS and having it rendered on a page. Your website already handles this task smoothly in the browser.
 
@@ -30,7 +30,7 @@ Now, what if you could take this same code, and run it at _build_ time? Move thi
 
 <div class="flex flex-col items-center justify-center gap-4">
     <div
-        class="flex -rotate-2 items-center justify-center border-2 border-destructive px-4 py-3 font-mono rounded"
+        class="flex bg-destructive/5 items-center justify-center border-2 border-destructive px-4 py-3 font-mono rounded"
     >
         ReferenceError: document is not defined
     </div>

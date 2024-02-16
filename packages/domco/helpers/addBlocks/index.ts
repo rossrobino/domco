@@ -1,3 +1,4 @@
+import type { DOMWindow } from "jsdom";
 import type { Block } from "../../types/index.js";
 
 /**
@@ -21,7 +22,7 @@ import type { Block } from "../../types/index.js";
  * ```
  */
 export const addBlocks = async (
-	window: Window & typeof globalThis,
+	window: DOMWindow,
 	blocks: (
 		| { block: Block<any>; data: Parameters<Block<any>>[1] }
 		| Block<any>

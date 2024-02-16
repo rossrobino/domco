@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import { addBlocks } from "./index.js";
 import type { Block } from "../../index.js";
+import type { DOMWindow } from "jsdom";
 
 const block1: Block = async () => {
 	const startTime = Date.now();
@@ -21,7 +22,7 @@ const block3: Block<string> = async (_, data) => {
 };
 
 test("addBlocks should run blocks asynchronously", async () => {
-	const mockWindow = {} as Window & typeof globalThis;
+	const mockWindow = {} as DOMWindow;
 
 	const startTime = Date.now();
 

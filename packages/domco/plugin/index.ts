@@ -7,7 +7,7 @@ import path from "node:path";
 import fs from "node:fs/promises";
 
 // packages
-import { parseHTML } from "linkedom";
+import { JSDOM } from "jsdom";
 
 // util
 import { minifyHtml } from "../util/minifyHtml/index.js";
@@ -19,6 +19,10 @@ import {
 	insertParams,
 	trimDynamic,
 } from "../util/routeUtils/index.js";
+
+const createDom = (html: string) => {
+	return new JSDOM(html);
+};
 
 const info = {
 	paths: {
@@ -216,16 +220,17 @@ export const domco = (): PluginOption => {
 							}>(buildPath);
 
 							if (build) {
+								const dom = createDom(html);
+
 								if (buildMode && params) {
 									for (const currentParams of params) {
-										const parseHtmlResult = parseHTML(html);
-										await build(parseHtmlResult, {
+										await build(dom.window, {
 											route,
 											params: currentParams,
 										});
 										const url = await insertParams(route, currentParams);
 										const fileName = `${url}/index.html`;
-										const source = parseHtmlResult.document.toString();
+										const source = dom.serialize();
 										generated.add.push({
 											fileName,
 											source: await minifyHtml(source),
@@ -234,12 +239,11 @@ export const domco = (): PluginOption => {
 									}
 								} else {
 									const url = ctx.originalUrl || "";
-									const parseHtmlResult = parseHTML(html);
-									await build(parseHtmlResult, {
+									await build(dom.window, {
 										route,
 										params: await getParams(route, url),
 									});
-									html = parseHtmlResult.document.toString();
+									html = dom.serialize();
 								}
 							}
 						}
