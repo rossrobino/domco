@@ -1,30 +1,40 @@
 import path from "node:path";
 import fs from "node:fs/promises";
-import { info } from "../../info/index.js";
 
 export const findAllPaths = async (options: {
 	/** root path to start the search */
 	dirPath: string;
+
 	/** file name to search for */
 	fileName: string;
+
+	/** relative root path -- root dir in vite.config */
+	root: string;
 }) => {
-	const { dirPath, fileName } = options;
-	const input: Record<string, string> = {};
+	const { dirPath, fileName, root } = options;
+
+	const paths: Record<string, string> = {};
+
 	const files = await fs.readdir(dirPath, {
 		withFileTypes: true,
 	});
 
 	for (const file of files) {
 		if (file.isDirectory()) {
+			// recursively run again
 			const subDirPaths = await findAllPaths({
 				dirPath: path.join(dirPath, file.name),
 				fileName,
+				root,
 			});
-			Object.assign(input, subDirPaths);
+
+			Object.assign(paths, subDirPaths);
 		} else if (file.name === fileName) {
-			const relativePath = path.relative(info.paths.root, dirPath);
-			input[relativePath] = path.join(process.cwd(), dirPath, file.name);
+			// if matches the file name arg
+			const relativePath = path.relative(root, dirPath);
+			paths[relativePath] = path.join(process.cwd(), dirPath, file.name);
 		}
 	}
-	return input;
+
+	return paths;
 };

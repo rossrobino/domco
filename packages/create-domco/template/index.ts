@@ -1,4 +1,4 @@
-const domcoVersion = "0.4.0" as const;
+const domcoVersion = "0.4.1" as const;
 
 export const getFiles = (options: {
 	lang: string;

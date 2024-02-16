@@ -54,7 +54,7 @@ Promise\<any>
 
 #### Defined in
 
-[types/index.ts:72](https://github.com/rossrobino/domco/blob/e0bc14d/packages/domco/types/index.ts#L72)
+[types/index.ts:72](https://github.com/rossrobino/domco/blob/df45d09/packages/domco/types/index.ts#L72)
 
 ___
 
@@ -104,7 +104,7 @@ Promise\<any>
 
 #### Defined in
 
-[types/index.ts:23](https://github.com/rossrobino/domco/blob/e0bc14d/packages/domco/types/index.ts#L23)
+[types/index.ts:23](https://github.com/rossrobino/domco/blob/df45d09/packages/domco/types/index.ts#L23)
 
 ___
 
@@ -129,7 +129,7 @@ Context about the current page to utilize during the build
 
 #### Defined in
 
-[types/index.ts:33](https://github.com/rossrobino/domco/blob/e0bc14d/packages/domco/types/index.ts#L33)
+[types/index.ts:33](https://github.com/rossrobino/domco/blob/df45d09/packages/domco/types/index.ts#L33)
 
 ## Functions
 
@@ -168,4 +168,4 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[helpers/addBlocks/index.ts:23](https://github.com/rossrobino/domco/blob/e0bc14d/packages/domco/helpers/addBlocks/index.ts#L23)
+[helpers/addBlocks/index.ts:23](https://github.com/rossrobino/domco/blob/df45d09/packages/domco/helpers/addBlocks/index.ts#L23)
