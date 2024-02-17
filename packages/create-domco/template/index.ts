@@ -1,4 +1,4 @@
-const domcoVersion = "0.4.3" as const;
+const domcoVersion = "0.5.0" as const;
 
 export const getFiles = (options: {
 	lang: string;
@@ -127,16 +127,18 @@ dist
 `,
 		},
 		{
-			name: `src/index.build.${lang}`,
-			contents: `${
+			name: `src/+config.${lang}`,
+			contents: `${layout ? `import fs from "node:fs/promises";\n` : ""}${
 				lang === "ts"
-					? `import { type Build } from "domco";\n`
-					: `/** @type {import("domco").Build} */`
+					? `import type { Config } from "domco";\n`
+					: `/** @type {import("domco").Config} */`
 			}
-export const build${lang === "ts" ? `: Build` : ""} = async ({ document }) => {
-	const h1 = document.createElement("h1");
-	h1.textContent = "Hello world!";
-	document.body.appendChild(h1);
+export const config${lang === "ts" ? `: Config` : ""} = {
+	build: async ({ document }) => {
+		const h1 = document.createElement("h1");
+		h1.textContent = "Hello world!";
+		document.body.appendChild(h1);
+	},${layout ? `\n\n\tlayout: await fs.readFile("src/layout.html", "utf-8"),` : ""}
 };
 `,
 		},
@@ -148,10 +150,6 @@ export const build${lang === "ts" ? `: Build` : ""} = async ({ document }) => {
 @tailwind utilities;
 `
 				: ``,
-		},
-		{
-			name: `src/lib/index.${lang}`,
-			contents: `// place files you want to import through the \`$lib\` alias in this folder.\n`,
 		},
 		{
 			name: "public/favicon.svg",

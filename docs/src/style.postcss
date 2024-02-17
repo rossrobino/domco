@@ -5,21 +5,21 @@
 @layer base {
 	/** https://uico.robino.dev */
 	:root {
-		--background: 99.9% 0.005 257; /* almost white */
-		--foreground: 37% 0.05 257; /* 700 */
-		--muted: 93% 0.015 257; /* 200 */
-		--muted-foreground: 44% 0.05 257; /* 600 */
-		--primary: 28% 0.05 257; /* 800 */
-		--primary-foreground: 97% 0.01 257; /* 100 */
-		--secondary: 87% 0.022 257; /* 300 */
-		--secondary-foreground: 22% 0.05 257; /* 900 */
-		--destructive: 56% 0.19 17; /* rose-700 */
-		--destructive-foreground: 100% 0 0; /* white */
-		--accent: 28% 0.05 257; /* 800 */
-		--accent-foreground: 93% 0.015 257; /* 200 */
-		--card: 100% 0 0; /* white */
-		--card-foreground: 37% 0.05 257; /* 700 */
-		--border: 93% 0.015 257; /* 200 */
+		--background: 22% 0.05 257;
+		--foreground: 97% 0.01 257;
+		--muted: 37% 0.05 257;
+		--muted-foreground: 87% 0.022 257;
+		--primary: 99% 0.005 257;
+		--primary-foreground: 22% 0.05 257;
+		--secondary: 15% 0.05 257;
+		--secondary-foreground: 99% 0.005 257;
+		--destructive: 56% 0.19 17;
+		--destructive-foreground: 100% 0 0;
+		--accent: 87% 0.022 257;
+		--accent-foreground: 15% 0.05 257;
+		--card: 15% 0.05 257;
+		--card-foreground: 97% 0.01 257;
+		--border: 44% 0.05 257;
 		--radius: 0.3rem;
 	}
 	p {
@@ -41,6 +41,21 @@
 	}
 }
 
+@layer components {
+	.prose :where(code:not(pre code))::before {
+		content: "";
+	}
+	.prose :where(code:not(pre code))::after {
+		content: "";
+	}
+	.prose :where(code:not(pre code)) {
+		background-color: theme(backgroundColor.muted.DEFAULT);
+		padding: theme(padding.1) theme(padding.2);
+		border-radius: theme(borderRadius.DEFAULT);
+		font-weight: theme(fontWeight.normal);
+	}
+}
+
 @layer hljs {
 	.hljs-doctag,
 	.hljs-keyword,
@@ -53,7 +68,7 @@
 	.hljs-built_in,
 	.hljs-symbol,
 	.hljs-bullet {
-		color: theme("colors.rose.500");
+		color: theme("colors.teal.200");
 	}
 
 	.hljs-title,
@@ -91,7 +106,7 @@
 	.hljs-selector-tag,
 	.hljs-selector-pseudo,
 	.hljs-addition {
-		color: theme("colors.teal.300");
+		color: theme("colors.teal.400");
 	}
 
 	.hljs-attr,

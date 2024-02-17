@@ -5,7 +5,7 @@ import fs from "fs/promises";
 export const config: Config = {
 	build: async ({ document }, { params }) => {
 		params;
-		const md = await fs.readFile("src/home.md", "utf-8");
+		const md = await fs.readFile("../README.md", "utf-8");
 		const { html } = await process(md);
 		const article = document.querySelector("article");
 		if (article) article.innerHTML = html;

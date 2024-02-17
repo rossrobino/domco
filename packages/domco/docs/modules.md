@@ -4,7 +4,7 @@
 
 ### Block
 
-Ƭ **Block**\<`T`>: (`window`: `DOMWindow`, `data?`: `T`) => `any`
+Ƭ **Block**\<`D`>: (`window`: `DOMWindow`, `data?`: `D`) => `any`
 
 - Import and utilize a block inside of a `Build` function
 - Wrapper function to provide the `window` in other imported modules
@@ -19,23 +19,25 @@ export const myBlock: Block = async ({ document }) => {
     // modify the document
 }
 
-// src/index.build.ts
-import { type Build, addBlocks } from "domco";
+// src/+config.ts
+import { type Config, addBlocks } from "domco";
 import { myBlock } from "$lib/blocks/myBlock";
 
-export const build: Build = async (window) => {
-    await myBlock(window);
+export const config: Config = {
+	build: async (window) => {
+		await myBlock(window);
 
-    // or alternatively if you have many blocks
-    await addBlocks(window, [myBlock, ...]);
-}
+		// or alternatively if you have many blocks
+		await addBlocks(window, [myBlock, ...]);
+	}
+};
 ```
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | `undefined` |
+| `D` | `undefined` |
 
 #### Type declaration
 
@@ -43,10 +45,10 @@ export const build: Build = async (window) => {
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `window` | `DOMWindow` | a `Window` object representing the `./index.html` file of the `index.build` page where the function is being run |
-| `data?` | `T` | data to pass into the function |
+| Name | Type |
+| :------ | :------ |
+| `window` | `DOMWindow` |
+| `data?` | `D` |
 
 ##### Returns
 
@@ -54,38 +56,19 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[types/index.ts:72](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/types/index.ts#L72)
+[types/index.ts:55](https://github.com/rossrobino/domco/blob/38a075c/packages/domco/types/index.ts#L55)
 
 ___
 
 ### Build
 
-Ƭ **Build**\<`Params`>: (`window`: `DOMWindow`, `context`: [`BuildContext`](/docs/modules#buildcontext)\<`Params`[`number`]>) => `any`
-
-- utilized in `index.build` or `layout.build` files.
-- export a `build` function from these files to run it at build time
-on the corresponding `.html` pages.
-
-**`Example`**
-
-```ts
-// src/index.build.ts
-import type { Build } from "domco";
-
-export const build: Build = async ({ document }) => {
-    // modify the contents of `./index.html`
-
-    const p = document.createElement("p");
-	   p.textContent = "A server rendered paragraph.";
-    document.body.appendChild(p);
-}
-```
+Ƭ **Build**\<`P`>: (`window`: `DOMWindow`, `context`: [`BuildContext`](/docs/modules#buildcontext)\<`P`[`number`]>) => `any`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `Params` | extends `ReadonlyArray`\<`Record`\<`string`, `string`>> = `ReadonlyArray`\<`Record`\<`string`, `string`>> |
+| `P` | extends [`Params`](/docs/modules#params) = [`Params`](/docs/modules#params) |
 
 #### Type declaration
 
@@ -93,10 +76,10 @@ export const build: Build = async ({ document }) => {
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `window` | `DOMWindow` | a `Window` object representing `./index.html` |
-| `context` | [`BuildContext`](/docs/modules#buildcontext)\<`Params`[`number`]> | context about the current route |
+| Name | Type |
+| :------ | :------ |
+| `window` | `DOMWindow` |
+| `context` | [`BuildContext`](/docs/modules#buildcontext)\<`P`[`number`]> |
 
 ##### Returns
 
@@ -104,67 +87,67 @@ export const build: Build = async ({ document }) => {
 
 #### Defined in
 
-[types/index.ts:25](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/types/index.ts#L25)
+[types/index.ts:3](https://github.com/rossrobino/domco/blob/38a075c/packages/domco/types/index.ts#L3)
 
 ___
 
 ### BuildContext
 
-Ƭ **BuildContext**\<`Params`>: `Object`
+Ƭ **BuildContext**\<`P`>: `Object`
 
-Context about the current page to utilize during the build
+Context about the current page to utilize during the build.
 
 #### Type parameters
 
 | Name |
 | :------ |
-| `Params` |
+| `P` |
 
 #### Type declaration
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `params` | `Params` | The current route's parameters, given the file `src/posts/[slug]/index.build.ts`, `params` could be `[{ slug: "my-post" }]` |
+| `params` | `P` | The current route's parameters. **`Example`** ```ts { slug: "my-post" } ``` |
 | `route` | `string` | The route as a string, for example: `/posts/[slug]` |
 
 #### Defined in
 
-[types/index.ts:32](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/types/index.ts#L32)
+[types/index.ts:16](https://github.com/rossrobino/domco/blob/38a075c/packages/domco/types/index.ts#L16)
 
 ___
 
 ### Config
 
-Ƭ **Config**\<`T`>: `Object`
+Ƭ **Config**\<`P`>: `Object`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Params`](/docs/modules#params) = [`Params`](/docs/modules#params) |
+| `P` | extends [`Params`](/docs/modules#params) = [`Params`](/docs/modules#params) |
 
 #### Type declaration
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `build?` | [`Build`](/docs/modules#build)\<`T`> | - |
+| `build?` | [`Build`](/docs/modules#build)\<`P`> | - utilized in `+config` files. - This function runs at build time on the corresponding `.html` pages. **`Example`** ```ts // src/+config.ts import type { Config } from "domco"; export const config: Config = { build: async ({ document }) => { // modify the contents of `./index.html` const p = document.createElement("p"); p.textContent = "A server rendered paragraph."; document.body.appendChild(p); } }; ``` |
 | `layout?` | `string` | String of html with a <slot> to render the content into. |
-| `layoutBuild?` | [`Build`](/docs/modules#build)\<`T`> | - |
-| `params?` | `T` | - |
+| `layoutBuild?` | [`Build`](/docs/modules#build)\<`P`> | A `build` function that applies to the current page, and all nested pages. |
+| `params?` | `P` | Provide the possible parameters for the current route. **`Example`** ```ts [{ slug: "my-post" }] ``` |
 
 #### Defined in
 
-[types/index.ts:76](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/types/index.ts#L76)
+[types/index.ts:69](https://github.com/rossrobino/domco/blob/38a075c/packages/domco/types/index.ts#L69)
 
 ___
 
 ### Params
 
-Ƭ **Params**: readonly `Record`\<`string`, `string`>[]
+Ƭ **Params**: `ReadonlyArray`\<`Record`\<`string`, `string`>>
 
 #### Defined in
 
-[types/index.ts:74](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/types/index.ts#L74)
+[types/index.ts:67](https://github.com/rossrobino/domco/blob/38a075c/packages/domco/types/index.ts#L67)
 
 ## Functions
 
@@ -203,4 +186,4 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[helpers/addBlocks/index.ts:24](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/helpers/addBlocks/index.ts#L24)
+[helpers/addBlocks/index.ts:24](https://github.com/rossrobino/domco/blob/38a075c/packages/domco/helpers/addBlocks/index.ts#L24)
