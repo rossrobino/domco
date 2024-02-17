@@ -54,7 +54,7 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[types/index.ts:72](https://github.com/rossrobino/domco/blob/3ce6921/packages/domco/types/index.ts#L72)
+[types/index.ts:72](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/types/index.ts#L72)
 
 ___
 
@@ -104,7 +104,7 @@ export const build: Build = async ({ document }) => {
 
 #### Defined in
 
-[types/index.ts:25](https://github.com/rossrobino/domco/blob/3ce6921/packages/domco/types/index.ts#L25)
+[types/index.ts:25](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/types/index.ts#L25)
 
 ___
 
@@ -129,7 +129,42 @@ Context about the current page to utilize during the build
 
 #### Defined in
 
-[types/index.ts:32](https://github.com/rossrobino/domco/blob/3ce6921/packages/domco/types/index.ts#L32)
+[types/index.ts:32](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/types/index.ts#L32)
+
+___
+
+### Config
+
+Ƭ **Config**\<`T`>: `Object`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`Params`](/docs/modules#params) = [`Params`](/docs/modules#params) |
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `build?` | [`Build`](/docs/modules#build)\<`T`> | - |
+| `layout?` | `string` | String of html with a <slot> to render the content into. |
+| `layoutBuild?` | [`Build`](/docs/modules#build)\<`T`> | - |
+| `params?` | `T` | - |
+
+#### Defined in
+
+[types/index.ts:76](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/types/index.ts#L76)
+
+___
+
+### Params
+
+Ƭ **Params**: readonly `Record`\<`string`, `string`>[]
+
+#### Defined in
+
+[types/index.ts:74](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/types/index.ts#L74)
 
 ## Functions
 
@@ -168,4 +203,4 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[helpers/addBlocks/index.ts:24](https://github.com/rossrobino/domco/blob/3ce6921/packages/domco/helpers/addBlocks/index.ts#L24)
+[helpers/addBlocks/index.ts:24](https://github.com/rossrobino/domco/blob/bc2b5d9/packages/domco/helpers/addBlocks/index.ts#L24)

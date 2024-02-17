@@ -22,14 +22,13 @@ import type { DOMWindow } from "jsdom";
  * }
  * ```
  */
-export type Build<
-	Params extends ReadonlyArray<Record<string, string>> = ReadonlyArray<
-		Record<string, string>
-	>,
-> = (window: DOMWindow, context: BuildContext<Params[number]>) => any;
+export type Build<P extends Params = Params> = (
+	window: DOMWindow,
+	context: BuildContext<P[number]>,
+) => any;
 
 /** Context about the current page to utilize during the build */
-export type BuildContext<Params> = {
+export type BuildContext<P> = {
 	/** The route as a string, for example: `/posts/[slug]` */
 	route: string;
 
@@ -38,7 +37,7 @@ export type BuildContext<Params> = {
 	 * given the file `src/posts/[slug]/index.build.ts`,
 	 * `params` could be `[{ slug: "my-post" }]`
 	 */
-	params: Params;
+	params: P;
 };
 
 /**
@@ -69,4 +68,17 @@ export type BuildContext<Params> = {
  * }
  * ```
  */
-export type Block<T = undefined> = (window: DOMWindow, data?: T) => any;
+export type Block<D = undefined> = (window: DOMWindow, data?: D) => any;
+
+export type Params = ReadonlyArray<Record<string, string>>;
+
+export type Config<P extends Params = Params> = {
+	build?: Build<P>;
+
+	layoutBuild?: Build<P>;
+
+	/** String of html with a <slot> to render the content into. */
+	layout?: string;
+
+	params?: P;
+};

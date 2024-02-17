@@ -1,6 +1,6 @@
 // types
 import type { PluginOption } from "vite";
-import type { Build } from "../types/index.js";
+import type { Config } from "../types/index.js";
 
 // node
 import path from "node:path";
@@ -32,9 +32,7 @@ const info = {
 	},
 	files: {
 		index: "index",
-		layout: "layout",
-		indexBuild: "index.build",
-		layoutBuild: "layout.build",
+		config: "+config",
 	},
 } as const;
 
@@ -79,20 +77,6 @@ export const domco = (): PluginOption => {
 			},
 
 			configureServer(server) {
-				const sendFullReload = () => server.hot.send({ type: "full-reload" });
-
-				server.watcher.add(process.cwd()); // instead of `root`
-
-				server.watcher.on("change", (file) => {
-					const fullReload = /(.*)(\.(build.js|build.ts|md|txt|json))$/;
-					if (fullReload.test(file)) {
-						sendFullReload();
-					}
-				});
-
-				server.watcher.on("add", sendFullReload);
-				server.watcher.on("unlink", sendFullReload);
-
 				server.middlewares.use((req, _, next) => {
 					if (!req.url) return next();
 					// remove the empty strings since `dynPath` will not have those
@@ -128,17 +112,6 @@ export const domco = (): PluginOption => {
 
 					return next();
 				});
-
-				// fixes trailing slash for dev server
-				// https://github.com/vitejs/vite/issues/6596
-				server.middlewares.use((req, _, next) => {
-					if (!req.url) return next();
-					const requestURL = new URL(req.url, `http://${req.headers.host}`);
-					if (/^\/(?:[^@]+\/)*[^@./]+$/g.test(requestURL.pathname)) {
-						req.url += "/";
-					}
-					return next();
-				});
 			},
 		},
 
@@ -157,15 +130,27 @@ export const domco = (): PluginOption => {
 						html: string;
 					}) => {
 						let { routePath, html } = options;
-						const layoutPath = path.resolve(
-							routePath,
-							`${info.files.layout}.html`,
-						);
+						const configPath = path.resolve(routePath, `${info.files.config}`);
 
-						if (await fileExists(layoutPath)) {
-							// If a layout exists, apply it
-							const code = await fs.readFile(layoutPath, "utf-8");
-							html = code.replace(/<slot>(.*?)<\/slot>/, html);
+						const tsPath = `${configPath}.ts`;
+						const jsPath = `${configPath}.js`;
+
+						let layout = "";
+
+						if (await fileExists(tsPath)) {
+							const { config } = await transpileImport<{ config?: Config }>(
+								tsPath,
+							);
+							if (config?.layout) layout = config.layout;
+						} else if (await fileExists(jsPath)) {
+							const { config } = await transpileImport<{ config?: Config }>(
+								jsPath,
+							);
+							if (config?.layout) layout = config.layout;
+						}
+
+						if (layout) {
+							html = layout.replace(/<slot>(.*?)<\/slot>/, html);
 						}
 
 						const parentRoutePath = path.dirname(routePath);
@@ -197,27 +182,36 @@ export const domco = (): PluginOption => {
 					const buildMode = ctx.server?.config.command !== "serve";
 
 					const applyBuild = async (options: {
-						buildFilename: string;
+						layout?: boolean;
 						routePath: string;
 					}) => {
-						let { buildFilename, routePath } = options;
+						let { layout, routePath } = options;
 						const parentRoutePath = path.dirname(routePath);
-						const buildPathTs = path.resolve(routePath, `${buildFilename}.ts`);
-						const buildPathJs = path.resolve(routePath, `${buildFilename}.js`);
+						const configPathTs = path.resolve(
+							routePath,
+							`${info.files.config}.ts`,
+						);
+						const configPathJs = path.resolve(
+							routePath,
+							`${info.files.config}.js`,
+						);
 
-						let buildPath = "";
+						let configPath = "";
 
-						if (await fileExists(buildPathTs)) {
-							buildPath = buildPathTs;
-						} else if (await fileExists(buildPathJs)) {
-							buildPath = buildPathJs;
+						if (await fileExists(configPathTs)) {
+							configPath = configPathTs;
+						} else if (await fileExists(configPathJs)) {
+							configPath = configPathJs;
 						}
 
-						if (buildPath) {
-							const { build, params } = await transpileImport<{
-								build?: Build;
-								params?: Record<string, string>[];
-							}>(buildPath);
+						if (configPath) {
+							const { config } = await transpileImport<{
+								config?: Config;
+							}>(configPath);
+
+							let { build, layoutBuild, params } = config ?? {};
+
+							if (layout && layoutBuild) build = layoutBuild;
 
 							if (build) {
 								const dom = createDom(html);
@@ -249,7 +243,7 @@ export const domco = (): PluginOption => {
 						}
 
 						if (
-							buildFilename === info.files.layoutBuild &&
+							layout &&
 							parentRoutePath.includes(
 								path.join(process.cwd(), info.paths.root),
 							)
@@ -257,7 +251,7 @@ export const domco = (): PluginOption => {
 							// if layout.build, and in a nested dir
 							// run the parent's layout
 							html = await applyBuild({
-								buildFilename,
+								layout,
 								routePath: parentRoutePath,
 							});
 						}
@@ -266,13 +260,12 @@ export const domco = (): PluginOption => {
 					};
 
 					html = await applyBuild({
-						buildFilename: info.files.indexBuild,
 						routePath,
 					});
 
 					html = await applyBuild({
-						buildFilename: info.files.layoutBuild,
 						routePath,
+						layout: true,
 					});
 
 					if (buildMode) html = await minifyHtml(html);

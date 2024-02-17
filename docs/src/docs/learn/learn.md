@@ -1,22 +1,12 @@
 ## Create
 
-After you're familiar with HTML, CSS, JavaScript, and Node, [Vite](https://vitejs.dev/) is a great tool to build a website. It is a build tool that many popular frameworks today use under the hood. At a high level, it provides two key scripts, `dev`---a development server, and `build`---a bundler.
-
-The development server makes it easier to see updates in your website as you make changes, while the build command helps you ship the minimum amount of code that is required for your site to run to users.
-
-**domco** is a plugin that configures Vite in a way that makes it easier to use to create multi-page websites. To get started, run this command in the terminal.
-
-You can utilize JavaScript or TypeScript, examples in this documentation are in TypeScript.
+To get started, run this command in your terminal and follow the instructions.
 
 ```bash
 npm create domco@latest
 ```
 
 This command creates files in your project's directory instead of having to manually set up the plugin with Vite.
-
-Next, follow the instructions to install dependencies and start Vite's development server.
-
-You should see a new browser window open with the text "Hello world!" displayed.
 
 ## HTML
 
@@ -102,7 +92,7 @@ Rendering on the client has some drawbacks, especially if the content that is re
 
 ### index.build
 
-An `index.build` file can be created to modify the contents of the `index.html` file in the same directory at _build_ time. These files must export a [`build`](/docs/modules#build) function that modifies the passed in `window` object created from `./index.html` with [jsdom](https://github.com/jsdom/jsdom).
+An `index.build` file can be created to modify the contents of the `index.html` file in the same directory at _build_ time. These files must export a [`build`](/docs/modules/#build) function that modifies the passed in `window` object created from `./index.html` with [jsdom](https://github.com/jsdom/jsdom).
 
 ```ts
 // src/index.build.ts
@@ -152,7 +142,7 @@ Specify dynamic routes to generate using brackets as directory names.
 			└── index.html
 ```
 
-Then in `index.build` you can provide the possible parameters by exporting a `params` array. `params` can also be calculated programmatically. Pass `typeof params` to `Build` to create a type for the `params` object within [`BuildContext`](/docs/modules#buildcontext).
+Then in `index.build` you can provide the possible parameters by exporting a `params` array. `params` can also be calculated programmatically. Pass `typeof params` to `Build` to create a type for the `params` object within [`BuildContext`](/docs/modules/#buildcontext).
 
 ```ts
 // src/posts/[slug]/index.build.ts
@@ -214,19 +204,7 @@ export const build: Build = async (window) => {
 };
 ```
 
-**domco** also provides a helper function to run multiple blocks asynchronously---[`addBlocks`](/docs/modules#addblocks).
-
-## domco API
-
-**domco** functions can be imported from `"domco"`, [read more about them here](/docs/modules#functions-1).
-
-## public
-
-The [`public` directory](https://vitejs.dev/guide/assets.html#the-public-directory) is for housing static assets that you do not want modified in your final build, these will be copied into the output directory as they are. To reference these files just use `/file`. For example, to reference `public/image.png`, write `/image.png`.
-
-## lib
-
-`src/lib` has been configured with the `$lib` alias for convenience. This is a good place to house shared code that will be imported in other places in your project such as blocks or types.
+**domco** also provides a helper function to run multiple blocks asynchronously---[`addBlocks`](/docs/modules/#addblocks).
 
 ## Building for Production
 
