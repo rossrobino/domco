@@ -215,7 +215,13 @@ export const domco = (options?: {
 
 							let { build, layoutBuild, params } = config ?? {};
 
-							if (layout && layoutBuild) build = layoutBuild;
+							if (layout && layoutBuild) {
+								build = layoutBuild;
+							} else if (layout) {
+								// if layout and no layout build
+								// this prevents it from running `build` twice
+								build = undefined;
+							}
 
 							if (build) {
 								const dom = createDom(html);
@@ -249,20 +255,18 @@ export const domco = (options?: {
 						if (layout && parentRoutePath.includes(config.root)) {
 							// if layout.build, and in a nested dir
 							// run the parent's layout
-							html = await applyBuild({
+							await applyBuild({
 								layout,
 								routePath: parentRoutePath,
 							});
 						}
-
-						return html;
 					};
 
-					html = await applyBuild({
+					await applyBuild({
 						routePath,
 					});
 
-					html = await applyBuild({
+					await applyBuild({
 						routePath,
 						layout: true,
 					});
