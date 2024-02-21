@@ -181,7 +181,11 @@ export const domco = (options?: {
 			transformIndexHtml: {
 				order: "post",
 				handler: async (html, ctx) => {
-					const route = path.dirname(ctx.path);
+					let route = path.dirname(ctx.path);
+
+					// makes it easier to compare with anchor.href since they end with slash
+					if (!route.endsWith("/")) route += "/";
+
 					const routePath = path.resolve(path.join(config.root, route));
 					const buildMode = config.command !== "serve";
 

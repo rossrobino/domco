@@ -14,7 +14,7 @@ export type Build<P extends Params = Params> = (
 
 /** Context about the current page to utilize during the build. */
 export type BuildContext<P> = {
-	/** The route as a string, for example: `/posts/[slug]` */
+	/** The route as a string, for example: `/posts/[slug]/` */
 	route: string;
 
 	/**

@@ -56,7 +56,7 @@ export const config: Config = {
 
 #### Defined in
 
-[types/index.ts:55](https://github.com/rossrobino/domco/blob/e33c830/packages/domco/types/index.ts#L55)
+[types/index.ts:55](https://github.com/rossrobino/domco/blob/a24041e/packages/domco/types/index.ts#L55)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:3](https://github.com/rossrobino/domco/blob/e33c830/packages/domco/types/index.ts#L3)
+[types/index.ts:3](https://github.com/rossrobino/domco/blob/a24041e/packages/domco/types/index.ts#L3)
 
 ___
 
@@ -108,11 +108,11 @@ Context about the current page to utilize during the build.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `params` | `P` | The current route's parameters. **`Example`** ```ts { slug: "my-post" } ``` |
-| `route` | `string` | The route as a string, for example: `/posts/[slug]` |
+| `route` | `string` | The route as a string, for example: `/posts/[slug]/` |
 
 #### Defined in
 
-[types/index.ts:16](https://github.com/rossrobino/domco/blob/e33c830/packages/domco/types/index.ts#L16)
+[types/index.ts:16](https://github.com/rossrobino/domco/blob/a24041e/packages/domco/types/index.ts#L16)
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:69](https://github.com/rossrobino/domco/blob/e33c830/packages/domco/types/index.ts#L69)
+[types/index.ts:69](https://github.com/rossrobino/domco/blob/a24041e/packages/domco/types/index.ts#L69)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:67](https://github.com/rossrobino/domco/blob/e33c830/packages/domco/types/index.ts#L67)
+[types/index.ts:67](https://github.com/rossrobino/domco/blob/a24041e/packages/domco/types/index.ts#L67)
 
 ## Functions
 
@@ -186,4 +186,4 @@ export const build: Build = async (window) => {
 
 #### Defined in
 
-[helpers/addBlocks/index.ts:24](https://github.com/rossrobino/domco/blob/e33c830/packages/domco/helpers/addBlocks/index.ts#L24)
+[helpers/addBlocks/index.ts:24](https://github.com/rossrobino/domco/blob/a24041e/packages/domco/helpers/addBlocks/index.ts#L24)
