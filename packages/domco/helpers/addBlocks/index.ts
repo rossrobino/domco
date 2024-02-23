@@ -13,12 +13,14 @@ import type { Block } from "../../types/index.js";
  * @example
  * ```ts
  * // src/index.build.ts
- * import { type Build, addBlocks } from "domco";
+ * import { type Config, addBlocks } from "domco";
  * import { myBlock, anotherBlock } from "$lib/blocks/myBlocks";
  *
- * export const build: Build = async (window) => {
- *     const results = await addBlocks(window, [myBlock, anotherBlock]);
- * }
+ * export const config: Config = {
+ * 	build: async (window) => {
+ * 		const results = await addBlocks(window, [myBlock, anotherBlock]);
+ * 	},
+ * };
  * ```
  */
 export const addBlocks = async (

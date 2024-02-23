@@ -54,6 +54,12 @@
 		border-radius: theme(borderRadius.DEFAULT);
 		font-weight: theme(fontWeight.normal);
 	}
+	.prose :where(blockquote) {
+		font-style: normal;
+	}
+	.prose :where(blockquote p)::before {
+		content: "";
+	}
 }
 
 @layer hljs {

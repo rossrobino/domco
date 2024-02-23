@@ -7,7 +7,10 @@ import path from "node:path";
 import fs from "node:fs/promises";
 
 // util
-import { minifyHtml } from "../util/minifyHtml/index.js";
+import {
+	minifyHtml,
+	type MinifyHtmlOptions,
+} from "../util/minifyHtml/index.js";
 import { findAllPaths } from "../util/findAllPaths/index.js";
 import { fileExists } from "../util/fileExists/index.js";
 import { transpileImport } from "../util/transpileImport/index.js";
@@ -25,8 +28,12 @@ export const domco = (options?: {
 	 * @default "+config"
 	 */
 	configFileName?: string;
+
+	/** `html-minifier-terser` options. */
+	minifyHtmlOptions?: MinifyHtmlOptions;
 }): PluginOption => {
 	const configFileName = options?.configFileName ?? "+config";
+	const minifyHtmlOptions = options?.minifyHtmlOptions ?? {};
 
 	let config: ResolvedConfig;
 
@@ -241,7 +248,7 @@ export const domco = (options?: {
 										const source = dom.serialize();
 										generated.add.push({
 											fileName,
-											source: await minifyHtml(source),
+											source: await minifyHtml(source, minifyHtmlOptions),
 										});
 										generated.delete.push(await trimDynamic(route));
 									}
@@ -275,7 +282,7 @@ export const domco = (options?: {
 						layout: true,
 					});
 
-					if (buildMode) html = await minifyHtml(html);
+					if (buildMode) html = await minifyHtml(html, minifyHtmlOptions);
 
 					return html;
 				},
@@ -289,6 +296,7 @@ export const domco = (options?: {
 					await fs.writeFile(filePath, source, "utf-8");
 				}
 
+				// remove placeholders - pages with [brackets] used to generate
 				for (const dir of generated.delete) {
 					await fs.rm(`${process.cwd()}/dist${dir}`, {
 						recursive: true,

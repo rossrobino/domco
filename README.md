@@ -1,10 +1,10 @@
 ## Features
 
-**domco** is a static site generator, it is a [Vite](https://vitejs.dev) plugin that adds the following functionality.
+**domco** is a [Vite](https://vitejs.dev) plugin that adds the following functionality.
 
 -   [MPA configuration](https://domco.robino.dev/docs/learn/#html)
 -   [HTML layouts](https://domco.robino.dev/docs/learn/#layout)
--   [Build time rendering](https://domco.robino.dev/docs/learn/#build) using browser APIs
+-   [Static Site Generation](https://domco.robino.dev/docs/learn/#build) using browser APIs
 -   [Dynamic routes](https://domco.robino.dev/docs/learn/#dynamic-routes)
 -   [HTML minification](https://domco.robino.dev/docs/learn/#html-minification)
 
@@ -12,7 +12,7 @@
 
 ## Overview
 
-In contrast to other static site generators, which often require familiarization with various template file types, **domco** presents an refreshing solution. It enables you to utilize HTML, CSS, and JavaScript, and work undeterred by the shifts in the landscape of server side JavaScript tooling.
+In contrast to other static site generators, which often require familiarization with various template file types, **domco** presents a refreshing solution. It enables you to utilize HTML, CSS, and JavaScript, and work undeterred by the shifts in the landscape of server side JavaScript tooling.
 
 One key feature **domco** provides is the use of browser APIs on the server through the usage of [jsdom](https://github.com/jsdom/jsdom).
 
@@ -43,9 +43,7 @@ export default ServerComponent;
 
 These strategies work well, but also create another abstraction on top of what you already know. They also have some limitations, for example, what if you want to modify the result of some markdown after it gets processed into HTML? It quickly becomes difficult without something like `document.querySelector`.
 
-> JavaScript is great at manipulating the DOM.
-
---- [The Primeagen](https://youtu.be/UdCXUVhVSEE?t=3202)
+> _"JavaScript is great at manipulating the DOM."_ --- [The Primeagen](https://youtu.be/UdCXUVhVSEE?t=3202)
 
 With **domco** you do not need learn a new API, UI framework, or even language to update HTML at build time. You can just make updates to the HTML using familiar browser APIs within a build function, ensuring less JavaScript get shipped to each user.
 

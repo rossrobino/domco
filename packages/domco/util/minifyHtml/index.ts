@@ -1,7 +1,10 @@
-import { minify } from "html-minifier-terser";
+import {
+	minify,
+	type Options as MinifyHtmlOptions,
+} from "html-minifier-terser";
 
-export const minifyHtml = async (html: string) => {
-	return await minify(html, {
+const minifyHtml = async (html: string, options: MinifyHtmlOptions = {}) => {
+	const mergedOptions: MinifyHtmlOptions = {
 		removeComments: true,
 		collapseBooleanAttributes: true,
 		removeEmptyAttributes: true,
@@ -11,5 +14,11 @@ export const minifyHtml = async (html: string) => {
 		useShortDoctype: true,
 		html5: true,
 		quoteCharacter: '"',
-	});
+	};
+
+	Object.assign(mergedOptions, options);
+
+	return await minify(html, mergedOptions);
 };
+
+export { type MinifyHtmlOptions, minifyHtml };

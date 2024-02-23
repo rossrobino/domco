@@ -1,6 +1,8 @@
 ## Create
 
-To get started, run this command in your terminal and follow the instructions.
+To get started, you'll need to have [Node.js](https://nodejs.org) or another server side JavaScript runtime installed on your computer.
+
+Run this command in your terminal and follow the instructions provided.
 
 ```bash
 npm create domco@latest
@@ -8,15 +10,21 @@ npm create domco@latest
 
 This command creates files in your project's directory instead of having to manually set up the plugin with Vite.
 
+The following documentation covers the basics of creating a site and all of the features **domco** provides in addition to Vite. See the [Vite documentation](https://vitejs.dev/) for more information and configuration options.
+
 ## HTML
 
 ### index
 
-By default, your project is located in `src`---this serves as the root directory of your Vite project. You can set `root` in your `vite.config` file to a different directory if you prefer. To create another route, add another `index.html` file in another directory within the root directory.
+By default, your project is located in `src`---this serves as the root directory of your Vite project. `src/index.html` can be accessed at `https://website.com/`, while `src/nested/index.html` can be accessed at `https://website.com/nested/`.
+
+> You can set `root` in your `vite.config` file to a different directory if you prefer.
+
+To create another page, add another `index.html` file in another directory within the root directory.
 
 **domco** configures Vite to process each `index.html` page in the root directory as a separate entry point automatically. Everything linked in these pages will be bundled and included in the output upon running `vite build`.
 
-For example, to add the `/nested` route, add `src/nested/index.html`.
+For example, to add the `/nested/` page, add `src/nested/index.html`.
 
 ```
 .
@@ -26,9 +34,19 @@ For example, to add the `/nested` route, add `src/nested/index.html`.
 		└── index.html
 ```
 
+Now you can navigate to nested with an anchor tag.
+
+```html
+<a href="/nested/">Nested</a>
+```
+
+> By default in Vite, _you must use a trailing slash_ `/nested/` to navigate to `src/nested/index.html`.
+
 ## Styling
 
-Styles can be linked to an HTML page using the `link` tag within the `head` tag. If you used the `create` script, this has been configured for you. Notice that the `href` for these links are relative to the root directory.
+Styles can be linked to an HTML page using the `link` tag within the `head` tag. If you used the `create-domco` script, this has been configured for you.
+
+> Notice that the `href` for these links are relative to the root directory---this tag will link `src/style.css`.
 
 ```html
 <!-- index.html -->
@@ -37,34 +55,34 @@ Styles can be linked to an HTML page using the `link` tag within the `head` tag.
 
 ## Client Side JavaScript
 
-**domco** doesn't do anything extra on top of Vite involving client side JavaScript. To include JavaScript in a page that needs to be executed in the browser when a user navigates to the page, add a JavaScript or TypeScript file within your root. This file can be named whatever you want, if the script is only used on one page, you might name it after the page---in this case `index.client`.
+**domco** doesn't do anything extra on top of Vite involving client side JavaScript. To include JavaScript in a page that needs to be executed in the browser when a user navigates to the page, add a JavaScript or TypeScript file within your root. This file can be named whatever you want, in this case `index.ts`.
 
 ```
 .
 └── src/
-	├── index.client.ts
+	├── index.ts
 	├── index.html
 	└── nested/
 		└── index.html
 ```
 
 ```ts
-// src/index.client.ts
+// src/index.ts
 console.log("Hello from the client!");
 ```
 
-Then in the HTML file that you want to utilize the script in, add a `script` tag with a `src` attribute that links to the file.
+Then in the HTML file that you want to utilize the script in, add a `script` tag with a `src` attribute that links to the file relative to the root.
 
 ```html
 <!-- index.html -->
-<script type="module" src="/index.client.ts"></script>
+<script type="module" src="/index.ts"></script>
 ```
 
-Now that this script is included in the entry point `index.html`, the script, and anything that is imported, will be bundled and included in the final build.
+Now that this script is included in an entry point `index.html`, the script, and anything that is imported, will be bundled and included in the final build.
 
 ## Config
 
-**domco** enables you to modify pages at build time in a variety of ways. To do this create a `+config` file (this can be renamed within `options` if you prefer). This file can export a `config` object to run build time modifications.
+The most powerful feature **domco** provides is the ability to modify pages at build time in a variety of ways. To do this create a `+config` file. This file exports a `config` object to run build time modifications.
 
 ```ts
 // src/+config.ts
@@ -72,14 +90,14 @@ import type { Config } from "domco";
 
 export const config: Config = {
 	build: async ({ document }) => {
-		// modifies `./index.html`.
+		// modifies `./index.html` in the same directory.
 	},
 
 	layoutBuild: async ({ document }) => {
-		// modifies `./index.html` and all nested `index.html` pages.
+		// modifies `./index.html` and all nested `./**/index.html` pages.
 	},
 
-	// wraps `./index.html` and all nested `index.html` pages.
+	// wraps `./index.html` and all nested `./**/index.html` pages.
 	layout: await fs.readFile("src/layout.html", "utf-8"),
 
 	// specify parameters for dynamic routes.
@@ -91,7 +109,21 @@ export const config: Config = {
 };
 ```
 
-See the following sections for information on each of these modifications.
+`+config` can be renamed if you prefer within your `vite.config`:
+
+```ts
+// vite.config
+import { defineConfig } from "vite";
+import { domco } from "domco/plugin";
+
+export default defineConfig({
+	plugins: [
+		domco({
+			configFileName: "customConfigFileName",
+		}),
+	],
+});
+```
 
 ### build
 
@@ -118,29 +150,32 @@ export const config: Config = {
 
 Any of the properties on `window` are available through the first argument such as `document` or `HTMLElement`. [Document methods](https://developer.mozilla.org/en-US/docs/Web/API/Document) or other rendering techniques can be utilized to create new content and make updates at build time. You can run the code contained in the `build` function body on the client to have it rendered on the client instead.
 
-_This code is not included in your final bundle, the `build` function only modifies HTML. If you need to have client side interactivity, include a [client side script](#client-side-javascript). For example, running `document.addEventListener` in a `build` function, will not change the resulting HTML._
+> This code is not included in your final bundle, the `build` function only modifies HTML. If you need to have client side interactivity, include a [client side script](#client-side-javascript).
+>
+> For example, running `document.addEventListener` in a `build` function, will not change the resulting HTML. Put this into a client side script.
 
 Since this module runs during build time, server side JavaScript like NodeJS APIs can be utilized here. For example, you can use `fs.readFile` in a `build` function to read a markdown file, convert it to HTML, and then insert the HTML into the page using `window` methods.
 
 ### layoutBuild
 
-A `layoutBuild` function can also be created which modifies the current page and all nested pages.
+A `layoutBuild` function can also be created which modifies the current page and _all nested pages_.
 
-For example, if you want the same `build` function to modify every page, add a `layoutBuild` to `config`. This script would be run on `src/index.html` and `src/nested/index.html`.
+For example, if you want the same `build` function to modify every page, add a `layoutBuild` to the `config` object. This script now runs on `src/index.html` and `src/nested/index.html`.
 
 ### layout
 
-A `layout` is a string of HTML. Layouts can be utilized to create a layout that wraps around the content of other pages. Include a `<slot></slot>` within the layout that designates where `index.html` should be rendered. If you selected to include a layout when creating your project, this is already included for you.
+Layouts can be utilized to create a layout that wraps around the content of other pages. Layouts make it easier to apply markup, styles, and scripts to multiple pages without having to rewrite code. For example, if you have a navigation bar that renders on every page, you could put this HTML within a layout to render it on every page.
 
-Layouts make it easier to apply markup, styles, and scripts to multiple pages without having to rewrite code.
+> `layout` can be set directly to a string. But, it's often easier to create a separate file for your layout and use a file system module like `node:fs` to read the file instead. This provides some flexibility for you to store your layouts where you prefer.
 
-- Layouts wrap _all nested routes_. For example, `src/layout.html` also wraps `src/nested/index.html`.
+Include a `<slot></slot>` within the layout that designates where `./index.html` should be rendered. If you selected to include a layout when creating your project, this is already created for you.
+
+- Layouts wrap _all nested pages_. For example, `src/layout.html` also wraps `src/nested/index.html`.
 - Layouts can be created in any directory within your root, and will apply to all other nested `index.html` files within the directory it is created in.
-- `layout` can be set directly to a string. But, it's often easier to create a separate file for your layout and use `node:fs` to read the file instead.
 
 ## Dynamic Routes
 
-Specify dynamic routes to generate using brackets as directory names.
+Generate pages dynamically using brackets as directory names.
 
 ```
 .
@@ -224,9 +259,11 @@ export const config: Config = {
 
 The [`public` directory](https://vitejs.dev/guide/assets.html#the-public-directory) is for housing static assets that you do not want modified in your final build, these will be copied into the output directory as they are. To reference these files just use `/file`. For example, to reference `public/image.png`, write `/image.png`.
 
+> **domco** has configured `public` to exist outside of `src`, this can be changed to wherever you prefer in your `vite.config`.
+
 ## lib
 
-`src/lib` has been configured with the `$lib` alias for convenience. This is a good place to house shared code that will be imported in other places in your project.
+`src/lib/` has been configured with the `$lib/` alias for convenience. This is a good place to house shared code that will be imported in other places in your project.
 
 ## Building for Production
 
@@ -238,10 +275,28 @@ npm run build
 
 ### HTML Minification
 
-**domco** minifies html during during build using [html-minifier-terser](https://github.com/terser/html-minifier-terser).
+**domco** minifies html during during build using [html-minifier-terser](https://github.com/terser/html-minifier-terser). You can change the default settings in your `vite.config`.
+
+```ts
+// vite.config
+import { defineConfig } from "vite";
+import { domco } from "domco/plugin";
+
+export default defineConfig({
+	plugins: [
+		domco({
+			minifyHtmlOptions: {
+				removeComments: false,
+			},
+		}),
+	],
+});
+```
 
 ### Deploy
 
 **domco** generates a static site, which makes it easy to deploy on a variety of platforms.
 
-Since **domco** is a Vite plugin, it can be deployed on services like [Vercel](https://vercel.com/) with zero configuration. These services will run `vite build` on a remote server for you and deploy your project to a content delivery network.
+Since **domco** is a Vite plugin, it can be deployed on many services with zero configuration. These services will run `vite build` on a remote server for you and deploy your project to a content delivery network. This site is deployed on [Vercel](https://vercel.com).
+
+Check out the Vite's documentation on [deploying a static site](https://vitejs.dev/guide/static-deploy) to learn more.
