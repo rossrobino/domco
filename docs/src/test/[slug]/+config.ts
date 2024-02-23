@@ -9,7 +9,7 @@ const params = [
 
 export const config: Config<typeof params> = {
 	params,
-	build: async ({ document }, { params }) => {
+	build: ({ document }, { params }) => {
 		const h1 = document.querySelector("h1");
 		if (h1) h1.textContent = params.slug; // "first-post" | "second-post" | "third-post"
 	},

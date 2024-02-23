@@ -255,6 +255,40 @@ export const config: Config = {
 
 **domco** also provides a helper function to run multiple blocks asynchronously---[`addBlocks`](/docs/modules/#addblocks).
 
+## Components
+
+One common use case for JavaScript framework components is to reuse chunks of HTML. One way to accomplish this on the server is by using the web platform's [custom elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) within a `Build` or `Block` function.
+
+```ts
+// src/+config.ts
+import type { Config } from "domco";
+
+export const config: Config = {
+	build: ({ customElements, HTMLElement }) => {
+		customElements.define(
+			"my-custom-element",
+			class extends HTMLElement {
+				connectedCallback() {
+					this.innerHTML = /* html */ `
+						<div>My custom div.</div>
+					`;
+				}
+			},
+		);
+	},
+};
+```
+
+Then, in your HTML, you can utilize this custom element declaratively.
+
+```html
+<my-custom-element></my-custom-element>
+```
+
+> These custom elements will not be interactive since they are only running on the server.
+
+If you're using VS Code as your editor, [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html) is a nice extension to get syntax highlighting for HTML within strings.
+
 ## public
 
 The [`public` directory](https://vitejs.dev/guide/assets.html#the-public-directory) is for housing static assets that you do not want modified in your final build, these will be copied into the output directory as they are. To reference these files just use `/file`. For example, to reference `public/image.png`, write `/image.png`.
