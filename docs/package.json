@@ -12,6 +12,7 @@
 	"devDependencies": {
 		"@tailwindcss/typography": "^0.5.10",
 		"@types/node": "^20.11.20",
+		"@vercel/analytics": "^1.2.2",
 		"autoprefixer": "^10.4.17",
 		"domco": "../dist/domco",
 		"drab": "^5.2.3",
