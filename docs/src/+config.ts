@@ -36,10 +36,36 @@ export const config: Config = {
 				}
 
 				connectedCallback() {
-					const details = document.createElement("details");
-					const summary = document.createElement("summary");
-					summary.textContent = "On this page";
-					details.appendChild(summary);
+					this.innerHTML = /* html */ `
+						<drab-details
+							animation-keyframe-from-grid-template-rows="0fr"
+							animation-keyframe-to-grid-template-rows="1fr"
+						>
+							<details class="group overflow-hidden border-b px-4 pb-2 pt-4">
+								<summary
+									data-trigger
+									class="link flex list-none items-center justify-between gap-8 py-2"
+								>
+									<span>On this page</span>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 20 20"
+										fill="currentColor"
+										class="size-4 transition group-[[open]]:rotate-180"
+									>
+										<path
+											fill-rule="evenodd"
+											d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+											clip-rule="evenodd"
+										/>
+									</svg>
+								</summary>
+								<div data-content class="grid">
+									<div class="toc overflow-hidden"></div>
+								</div>
+							</details>
+						</drab-details>
+					`;
 
 					const h2s = document.querySelectorAll("h2");
 
@@ -54,9 +80,7 @@ export const config: Config = {
 						ul.appendChild(li);
 					});
 
-					details.appendChild(ul);
-
-					this.appendChild(details);
+					document.querySelector(".toc")?.appendChild(ul);
 				}
 			},
 		);

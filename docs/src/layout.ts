@@ -1,5 +1,6 @@
 import "drab/share/define";
 import "drab/prefetch/define";
+import "drab/details/define";
 
 import { inject } from "@vercel/analytics";
 
