@@ -19,7 +19,7 @@ import {
 	insertParams,
 	trimDynamic,
 } from "../util/routeUtils/index.js";
-import { createDom } from "../util/createDom/index.js";
+import { createDom, serializeDom } from "../util/createDom/index.js";
 
 export const domco = (options?: {
 	/**
@@ -245,7 +245,7 @@ export const domco = (options?: {
 										});
 										const url = await insertParams(route, currentParams);
 										const fileName = `${url}/index.html`;
-										const source = dom.serialize();
+										const source = serializeDom(dom);
 										generated.add.push({
 											fileName,
 											source: await minifyHtml(source, minifyHtmlOptions),
@@ -258,7 +258,7 @@ export const domco = (options?: {
 										route,
 										params: await getParams(route, url),
 									});
-									html = dom.serialize();
+									html = serializeDom(dom);
 								}
 							}
 						}
