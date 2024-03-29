@@ -56,7 +56,7 @@ export const config: Config = {
 
 #### Defined in
 
-[types/index.ts:55](https://github.com/rossrobino/domco/blob/8e09593/packages/domco/types/index.ts#L55)
+[types/index.ts:55](https://github.com/rossrobino/domco/blob/e31f172/packages/domco/types/index.ts#L55)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:3](https://github.com/rossrobino/domco/blob/8e09593/packages/domco/types/index.ts#L3)
+[types/index.ts:3](https://github.com/rossrobino/domco/blob/e31f172/packages/domco/types/index.ts#L3)
 
 ___
 
@@ -112,7 +112,7 @@ Context about the current page to utilize during the build.
 
 #### Defined in
 
-[types/index.ts:16](https://github.com/rossrobino/domco/blob/8e09593/packages/domco/types/index.ts#L16)
+[types/index.ts:16](https://github.com/rossrobino/domco/blob/e31f172/packages/domco/types/index.ts#L16)
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:69](https://github.com/rossrobino/domco/blob/8e09593/packages/domco/types/index.ts#L69)
+[types/index.ts:69](https://github.com/rossrobino/domco/blob/e31f172/packages/domco/types/index.ts#L69)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:67](https://github.com/rossrobino/domco/blob/8e09593/packages/domco/types/index.ts#L67)
+[types/index.ts:67](https://github.com/rossrobino/domco/blob/e31f172/packages/domco/types/index.ts#L67)
 
 ## Functions
 
@@ -188,4 +188,4 @@ export const config: Config = {
 
 #### Defined in
 
-[helpers/addBlocks/index.ts:26](https://github.com/rossrobino/domco/blob/8e09593/packages/domco/helpers/addBlocks/index.ts#L26)
+[helpers/addBlocks/index.ts:26](https://github.com/rossrobino/domco/blob/e31f172/packages/domco/helpers/addBlocks/index.ts#L26)

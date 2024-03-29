@@ -31,7 +31,16 @@ export const findAllPaths = async (options: {
 			Object.assign(paths, subDirPaths);
 		} else if (file.name === fileName) {
 			// if matches the file name arg
-			const relativePath = path.relative(root, dirPath);
+			let relativePath = path.relative(root, dirPath);
+
+			// fixes issue with "" set as the key,
+			// made css filename hash appear after the extension
+			if (relativePath === "main") {
+				relativePath = "main/";
+			} else if (relativePath === "") {
+				relativePath = "main";
+			}
+
 			paths[relativePath] = path.join(process.cwd(), dirPath, file.name);
 		}
 	}

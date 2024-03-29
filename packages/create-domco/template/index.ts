@@ -1,4 +1,4 @@
-const domcoVersion = "0.5.3";
+const domcoVersion = "0.5.4";
 
 export const getFiles = (options: {
 	lang: string;
@@ -26,18 +26,18 @@ export const getFiles = (options: {
 		}
 	},
 	"devDependencies": {
-		"@types/node": "^20.11.20",
+		"@types/node": "^20.11.30",
 		"domco": "^${domcoVersion}",${prettier ? `\n\t\t"prettier": "^3.2.5",` : ""}${
 			prettier && tailwind
-				? `\n\t\t"prettier-plugin-tailwindcss": "^0.5.11",`
+				? `\n\t\t"prettier-plugin-tailwindcss": "^0.5.13",`
 				: ""
 		}${
 			tailwind
-				? `\n\t\t"tailwindcss": "^3.4.1",\n\t\t"autoprefixer": "^10.4.17",`
+				? `\n\t\t"tailwindcss": "^3.4.3",\n\t\t"autoprefixer": "^10.4.19",`
 				: ""
 		}
 		"typescript": "^5.3.3",
-		"vite": "^5.1.4"
+		"vite": "^5.2.7"
 	}
 }
 `,

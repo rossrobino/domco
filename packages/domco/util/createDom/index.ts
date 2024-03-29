@@ -6,4 +6,4 @@ export const createDom = (html: string) => {
 
 export const serializeDom = (dom: JSDOM) => {
 	return dom.serialize();
-}
+};
