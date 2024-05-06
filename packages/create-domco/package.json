@@ -1,7 +1,7 @@
 {
 	"name": "create-domco",
 	"description": "Create a new domco project",
-	"version": "0.0.39",
+	"version": "0.0.43",
 	"type": "module",
 	"types": "./index.d.ts",
 	"main": "./index.js",
@@ -27,7 +27,8 @@
 		"which-pm-runs": "^1.1.0"
 	},
 	"devDependencies": {
-		"@types/node": "^20.12.7",
+		"@types/bun": "^1.1.1",
+		"@types/node": "^20.12.9",
 		"@types/which-pm-runs": "^1.0.2",
 		"prettier": "^3.2.5",
 		"robino": "^0.2.0",

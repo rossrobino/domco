@@ -1,4 +1,13 @@
-const domcoVersion = "0.5.5";
+const versions = {
+	typesNode: "20.12.9",
+	autoprefixer: "10.4.19",
+	domco: "0.5.9",
+	prettier: "3.2.5",
+	prettierTailwind: "0.5.14",
+	tailwind: "3.4.3",
+	typescript: "5.4.5",
+	vite: "5.2.11",
+} as const;
 
 export const getFiles = (options: {
 	lang: string;
@@ -26,18 +35,18 @@ export const getFiles = (options: {
 		}
 	},
 	"devDependencies": {
-		"@types/node": "^20.12.7",
-		"domco": "^${domcoVersion}",${prettier ? `\n\t\t"prettier": "^3.2.5",` : ""}${
+		"@types/node": "^${versions.typesNode}",
+		"domco": "^${versions.domco}",${prettier ? `\n\t\t"prettier": "^${versions.prettier}",` : ""}${
 			prettier && tailwind
-				? `\n\t\t"prettier-plugin-tailwindcss": "^0.5.14",`
+				? `\n\t\t"prettier-plugin-tailwindcss": "^${versions.prettierTailwind}",`
 				: ""
 		}${
 			tailwind
-				? `\n\t\t"tailwindcss": "^3.4.3",\n\t\t"autoprefixer": "^10.4.19",`
+				? `\n\t\t"tailwindcss": "^${versions.tailwind}",\n\t\t"autoprefixer": "^${versions.autoprefixer}",`
 				: ""
 		}
-		"typescript": "^5.4.5",
-		"vite": "^5.2.9"
+		"typescript": "^${versions.typescript}",
+		"vite": "^${versions.vite}"
 	}
 }
 `,

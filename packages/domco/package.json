@@ -1,7 +1,7 @@
 {
 	"name": "domco",
 	"description": "Build-Time Rendering Without Templates",
-	"version": "0.5.5",
+	"version": "0.5.9",
 	"type": "module",
 	"keywords": [
 		"vite-plugin",
@@ -29,7 +29,7 @@
 		"build": "bun build:clean && bun build:js && bun build:copy && bun doc",
 		"pub:only": "npm publish --access public ../../dist/domco",
 		"pub": "bun i && bun format && bun run build && bun pub:only",
-		"doc": "typedoc --out docs --plugin typedoc-plugin-markdown index.ts --hideBreadcrumbs --hideInPageTOC --githubPages false --publicPath /docs/ && bun scripts/docs/index.ts"
+		"doc": "typedoc --out docs --plugin typedoc-plugin-markdown index.ts --hideBreadcrumbs --githubPages false --outputFileStrategy modules --publicPath /docs/ && bun scripts/docs/index.ts"
 	},
 	"author": {
 		"name": "Ross Robino",
@@ -38,13 +38,14 @@
 	"repository": "github:rossrobino/domco",
 	"license": "MIT",
 	"devDependencies": {
+		"@types/bun": "^1.1.1",
 		"@types/html-minifier-terser": "^7.0.2",
-		"@types/node": "^20.12.7",
+		"@types/node": "^20.12.9",
 		"@types/web": "^0.0.143",
 		"prettier": "^3.2.5",
 		"robino": "^0.2.0",
 		"typedoc": "^0.25.13",
-		"typedoc-plugin-markdown": "^3.17.1",
+		"typedoc-plugin-markdown": "^4.0.0",
 		"typescript": "^5.4.5"
 	},
 	"dependencies": {
@@ -52,7 +53,7 @@
 		"esbuild": "^0.20.2",
 		"html-minifier-terser": "^7.2.0",
 		"jsdom": "^24.0.0",
-		"vite": "^5.2.9"
+		"vite": "^5.2.11"
 	},
 	"prettier": "robino/config/prettier"
 }

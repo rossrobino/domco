@@ -90,6 +90,29 @@ export const domco = (options?: {
 			},
 
 			configureServer(server) {
+				const sendFullReload = () => server.hot.send({ type: "full-reload" });
+
+				server.watcher.on("add", sendFullReload);
+
+				server.watcher.on("unlink", sendFullReload);
+
+				server.watcher.on("change", (file) => {
+					const fileEndings = [
+						`${configFileName}.js`,
+						`${configFileName}.ts`,
+						"md",
+						"txt",
+						"json",
+					];
+
+					for (const ending of fileEndings) {
+						if (file.endsWith(ending)) {
+							sendFullReload();
+							return;
+						}
+					}
+				});
+
 				server.middlewares.use((req, _, next) => {
 					if (!req.url) return next();
 

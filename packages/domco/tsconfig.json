@@ -16,7 +16,7 @@
 		"module": "NodeNext",
 		"declaration": true,
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],
-		"types": ["bun-types", "@types/web"],
+		"types": ["@types/bun", "@types/web"],
 		"rootDir": ".",
 		"outDir": "../../dist/domco"
 	}

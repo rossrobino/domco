@@ -16,7 +16,6 @@
 		"module": "NodeNext",
 		"declaration": true,
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],
-		"types": ["bun-types"],
 		"rootDir": ".",
 		"outDir": "../../dist/create-domco"
 	}

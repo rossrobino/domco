@@ -10,8 +10,8 @@
 		"deploy": "bun run build && vc --prod"
 	},
 	"devDependencies": {
-		"@tailwindcss/typography": "^0.5.12",
-		"@types/node": "^20.12.7",
+		"@tailwindcss/typography": "^0.5.13",
+		"@types/node": "^20.12.9",
 		"@vercel/analytics": "^1.2.2",
 		"autoprefixer": "^10.4.19",
 		"domco": "../dist/domco",
@@ -22,6 +22,6 @@
 		"tailwindcss": "^3.4.3",
 		"typescript": "^5.4.5",
 		"uico": "^0.2.4",
-		"vite": "^5.2.9"
+		"vite": "^5.2.11"
 	}
 }
