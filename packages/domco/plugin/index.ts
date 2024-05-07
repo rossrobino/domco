@@ -124,14 +124,18 @@ export const domco = (options?: {
 					const fileEndings = [
 						`${configFileName}.js`,
 						`${configFileName}.ts`,
-						// nice to also have for these files by default:
+						// nice to also have for these files by default
 						"md",
 						"txt",
 						"json",
 					];
 
 					for (const ending of fileEndings) {
-						if (file.endsWith(ending)) {
+						if (
+							file.endsWith(ending) ||
+							// for layout files
+							(!file.endsWith("index.html") && file.endsWith("html"))
+						) {
 							sendFullReload();
 							return;
 						}
