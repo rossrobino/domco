@@ -1,10 +1,14 @@
-// types
-import { type ResolvedConfig, type Plugin } from "vite";
-import type { Config } from "../types/index.js";
+// Since the plugin uses node APIs it is exported from `/plugin` instead
+// of from the main export. The main export provides the more frequently
+// used APIs that can run in the browser.
 
 // node
 import path from "node:path";
 import fs from "node:fs/promises";
+
+// types
+import { type ResolvedConfig, type Plugin } from "vite";
+import type { Config } from "../types/index.js";
 
 // util
 import {
@@ -21,6 +25,21 @@ import {
 } from "../util/routeUtils/index.js";
 import { createDom, serializeDom } from "../util/createDom/index.js";
 
+/**
+ * Import the plugin and add to your `vite.config` file.
+ *
+ * ```ts
+ * // vite.config.ts
+ * import { defineConfig } from "vite";
+ * import { domco } from "domco/plugin";
+ *
+ * export default defineConfig({
+ *   plugins: [domco()],
+ * });
+ * ```
+ * @param options domco options
+ * @returns the domco vite plugins
+ */
 export const domco = (options?: {
 	/**
 	 * Change the name of the page configuration file.
@@ -29,7 +48,11 @@ export const domco = (options?: {
 	 */
 	configFileName?: string;
 
-	/** `html-minifier-terser` options. */
+	/**
+	 * `html-minifier-terser` options.
+	 *
+	 * @default {}
+	 */
 	minifyHtmlOptions?: MinifyHtmlOptions;
 }): Plugin[] => {
 	const configFileName = options?.configFileName ?? "+config";
@@ -86,6 +109,7 @@ export const domco = (options?: {
 			},
 
 			configResolved(resolvedConfig) {
+				// to have access to the final values in other hooks
 				config = resolvedConfig;
 			},
 
@@ -100,6 +124,7 @@ export const domco = (options?: {
 					const fileEndings = [
 						`${configFileName}.js`,
 						`${configFileName}.ts`,
+						// nice to also have for these files by default:
 						"md",
 						"txt",
 						"json",
@@ -113,25 +138,31 @@ export const domco = (options?: {
 					}
 				});
 
-				server.middlewares.use((req, _, next) => {
-					if (!req.url) return next();
+				server.middlewares.use((request, _, next) => {
+					if (!request.url) return next();
 
-					// remove the empty strings since `dynPath` will not have those
-					const reqSegments = req.url.split("/").filter((v) => v !== "");
+					// remove the empty strings since `dynamicPath` will not have those
+					const reqSegments = request.url
+						.split("/")
+						.filter((segment) => segment !== "");
 
+					/** the possible paths based on the `index.html` files */
 					const actualPaths = Object.keys(entryPoints);
 
 					// ones that have "[" will be dynamic
-					const dynPaths = actualPaths.filter((v) => v.includes("["));
+					const dynamicPaths = actualPaths.filter((actualPath) =>
+						actualPath.includes("["),
+					);
 
-					for (const dynPath of dynPaths) {
-						const dynSegments = dynPath.split(path.sep);
+					for (const dynamicPath of dynamicPaths) {
+						// since using the file names, must use `sep` because of windows
+						const dynamicSegments = dynamicPath.split(path.sep);
 
-						if (dynSegments.length === reqSegments.length) {
+						if (dynamicSegments.length === reqSegments.length) {
 							// the paths are the same length, try to process
 							for (let i = 0; i < reqSegments.length; i++) {
 								const reqSegment = reqSegments[i];
-								const dynSegment = dynSegments[i];
+								const dynSegment = dynamicSegments[i];
 
 								if (reqSegment === dynSegment) {
 									// segments match, go to next
@@ -139,7 +170,7 @@ export const domco = (options?: {
 								} else if (dynSegment?.startsWith("[")) {
 									// segment is dynamic, correct to the actual
 									reqSegments[i] = dynSegment;
-									req.url = `/${reqSegments.join("/")}/`;
+									request.url = `/${reqSegments.join("/")}/`;
 								} else {
 									// segments do not match and are not dynamic, stop checking
 									break;

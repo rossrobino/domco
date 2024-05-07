@@ -33,10 +33,10 @@ Most frameworks require you to learn a new strategy for rendering on the server,
 
 ```jsx
 // ReactServerComponent.jsx
-const ServerComponent = () => {
-    const res = await fetch("https://my-cms...");
-    const data = await res.json();
-    return <article>{data.html}</article>;
+const ServerComponent = async () => {
+	const res = await fetch("https://my-cms...");
+	const data = await res.json();
+	return <article>{data.html}</article>;
 };
 
 export default ServerComponent;
