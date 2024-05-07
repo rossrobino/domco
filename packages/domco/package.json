@@ -1,7 +1,7 @@
 {
 	"name": "domco",
 	"description": "Build-Time Rendering Without Templates",
-	"version": "0.5.9",
+	"version": "0.5.10",
 	"type": "module",
 	"keywords": [
 		"vite-plugin",
@@ -40,17 +40,17 @@
 	"devDependencies": {
 		"@types/bun": "^1.1.1",
 		"@types/html-minifier-terser": "^7.0.2",
-		"@types/node": "^20.12.9",
+		"@types/node": "^20.12.10",
 		"@types/web": "^0.0.143",
 		"prettier": "^3.2.5",
 		"robino": "^0.2.0",
 		"typedoc": "^0.25.13",
-		"typedoc-plugin-markdown": "^4.0.0",
+		"typedoc-plugin-markdown": "^4.0.1",
 		"typescript": "^5.4.5"
 	},
 	"dependencies": {
 		"@types/jsdom": "^21.1.6",
-		"esbuild": "^0.20.2",
+		"esbuild": "^0.21.0",
 		"html-minifier-terser": "^7.2.0",
 		"jsdom": "^24.0.0",
 		"vite": "^5.2.11"

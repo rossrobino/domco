@@ -1,5 +1,5 @@
 // types
-import type { PluginOption, ResolvedConfig } from "vite";
+import { type ResolvedConfig, type Plugin } from "vite";
 import type { Config } from "../types/index.js";
 
 // node
@@ -31,7 +31,7 @@ export const domco = (options?: {
 
 	/** `html-minifier-terser` options. */
 	minifyHtmlOptions?: MinifyHtmlOptions;
-}): PluginOption => {
+}): Plugin[] => {
 	const configFileName = options?.configFileName ?? "+config";
 	const minifyHtmlOptions = options?.minifyHtmlOptions ?? {};
 
