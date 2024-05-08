@@ -2,10 +2,7 @@
 	"name": "domco-monorepo",
 	"private": true,
 	"workspaces": [
-		"dist/*"
-	],
-	"devDependencies": {
-		"create-domco": "workspace:*",
-		"domco": "workspace:*"
-	}
+		"packages/*",
+		"sites/*"
+	]
 }
