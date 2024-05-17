@@ -77,10 +77,6 @@ export const domco = (options?: {
 			name: "domco-config",
 			async config(userConfig) {
 				const root = userConfig.root ?? "src";
-				const publicDir =
-					userConfig.publicDir ?? path.join(process.cwd(), "public");
-				const outDir =
-					userConfig.build?.outDir ?? path.join(process.cwd(), "dist");
 
 				entryPoints = await findAllPaths({
 					dirPath: root,
@@ -90,8 +86,8 @@ export const domco = (options?: {
 
 				return {
 					root,
-					publicDir,
-					appType: "mpa",
+					publicDir: userConfig.publicDir ?? path.join(process.cwd(), "public"),
+					appType: userConfig.appType ?? "mpa",
 					resolve: {
 						alias: [
 							{
@@ -101,8 +97,10 @@ export const domco = (options?: {
 						],
 					},
 					build: {
-						outDir,
-						emptyOutDir: true,
+						target: userConfig.build?.target ?? "esnext",
+						outDir:
+							userConfig.build?.outDir ?? path.join(process.cwd(), "dist"),
+						emptyOutDir: userConfig.build?.emptyOutDir ?? true,
 						rollupOptions: { input: entryPoints },
 					},
 				};

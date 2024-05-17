@@ -1,7 +1,7 @@
 const versions = {
+	domco: "0.5.14",
 	typesNode: "20.12.10",
 	autoprefixer: "10.4.19",
-	domco: "0.5.13",
 	prettier: "3.2.5",
 	prettierTailwind: "0.5.14",
 	tailwind: "3.4.3",

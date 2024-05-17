@@ -50,7 +50,7 @@ export const config: Config = {
 
 #### Source
 
-[types/index.ts:55](https://github.com/rossrobino/domco/blob/84a3b1d68314ee85873d205cbe19d27ec12d80a0/packages/domco/types/index.ts#L55)
+[types/index.ts:55](https://github.com/rossrobino/domco/blob/ce99a7180c10dfb6ce9e5a4f3297d3b679fe03cc/packages/domco/types/index.ts#L55)
 
 ***
 
@@ -74,7 +74,7 @@ export const config: Config = {
 
 #### Source
 
-[types/index.ts:3](https://github.com/rossrobino/domco/blob/84a3b1d68314ee85873d205cbe19d27ec12d80a0/packages/domco/types/index.ts#L3)
+[types/index.ts:3](https://github.com/rossrobino/domco/blob/ce99a7180c10dfb6ce9e5a4f3297d3b679fe03cc/packages/domco/types/index.ts#L3)
 
 ***
 
@@ -110,7 +110,7 @@ The route as a string, for example: `/posts/[slug]/`
 
 #### Source
 
-[types/index.ts:16](https://github.com/rossrobino/domco/blob/84a3b1d68314ee85873d205cbe19d27ec12d80a0/packages/domco/types/index.ts#L16)
+[types/index.ts:16](https://github.com/rossrobino/domco/blob/ce99a7180c10dfb6ce9e5a4f3297d3b679fe03cc/packages/domco/types/index.ts#L16)
 
 ***
 
@@ -175,7 +175,7 @@ Provide the possible parameters for the current route.
 
 #### Source
 
-[types/index.ts:69](https://github.com/rossrobino/domco/blob/84a3b1d68314ee85873d205cbe19d27ec12d80a0/packages/domco/types/index.ts#L69)
+[types/index.ts:69](https://github.com/rossrobino/domco/blob/ce99a7180c10dfb6ce9e5a4f3297d3b679fe03cc/packages/domco/types/index.ts#L69)
 
 ***
 
@@ -185,7 +185,7 @@ Provide the possible parameters for the current route.
 
 #### Source
 
-[types/index.ts:67](https://github.com/rossrobino/domco/blob/84a3b1d68314ee85873d205cbe19d27ec12d80a0/packages/domco/types/index.ts#L67)
+[types/index.ts:67](https://github.com/rossrobino/domco/blob/ce99a7180c10dfb6ce9e5a4f3297d3b679fe03cc/packages/domco/types/index.ts#L67)
 
 ## Functions
 
@@ -229,4 +229,4 @@ export const config: Config = {
 
 #### Source
 
-[helpers/addBlocks/index.ts:26](https://github.com/rossrobino/domco/blob/84a3b1d68314ee85873d205cbe19d27ec12d80a0/packages/domco/helpers/addBlocks/index.ts#L26)
+[helpers/addBlocks/index.ts:26](https://github.com/rossrobino/domco/blob/ce99a7180c10dfb6ce9e5a4f3297d3b679fe03cc/packages/domco/helpers/addBlocks/index.ts#L26)
