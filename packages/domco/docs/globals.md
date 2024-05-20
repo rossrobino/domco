@@ -1,6 +1,3 @@
-
-
-
 ## Type Aliases
 
 ### Block()\<D>
@@ -50,9 +47,9 @@ export const config: Config = {
 
 #### Source
 
-[types/index.ts:55](https://github.com/rossrobino/domco/blob/50b8cb23f645c1f372816477cf5df44c0eec3124/packages/domco/types/index.ts#L55)
+[types/index.ts:55](https://github.com/rossrobino/domco/blob/a654ceb418ae2793b5e0942e538230fff36e5e31/packages/domco/types/index.ts#L55)
 
-***
+---
 
 ### Build()\<P>
 
@@ -60,7 +57,7 @@ export const config: Config = {
 
 #### Type parameters
 
-• **P** *extends* [`Params`](/docs/modules#params-2) = [`Params`](/docs/modules#params-2)
+• **P** _extends_ [`Params`](/docs/modules#params-2) = [`Params`](/docs/modules#params-2)
 
 #### Parameters
 
@@ -74,9 +71,9 @@ export const config: Config = {
 
 #### Source
 
-[types/index.ts:3](https://github.com/rossrobino/domco/blob/50b8cb23f645c1f372816477cf5df44c0eec3124/packages/domco/types/index.ts#L3)
+[types/index.ts:3](https://github.com/rossrobino/domco/blob/a654ceb418ae2793b5e0942e538230fff36e5e31/packages/domco/types/index.ts#L3)
 
-***
+---
 
 ### BuildContext\<P>
 
@@ -99,7 +96,9 @@ The current route's parameters.
 ###### Example
 
 ```ts
-{ slug: "my-post" }
+{
+	slug: "my-post";
+}
 ```
 
 ##### route
@@ -110,9 +109,9 @@ The route as a string, for example: `/posts/[slug]/`
 
 #### Source
 
-[types/index.ts:16](https://github.com/rossrobino/domco/blob/50b8cb23f645c1f372816477cf5df44c0eec3124/packages/domco/types/index.ts#L16)
+[types/index.ts:16](https://github.com/rossrobino/domco/blob/a654ceb418ae2793b5e0942e538230fff36e5e31/packages/domco/types/index.ts#L16)
 
-***
+---
 
 ### Config\<P>
 
@@ -120,7 +119,7 @@ The route as a string, for example: `/posts/[slug]/`
 
 #### Type parameters
 
-• **P** *extends* [`Params`](/docs/modules#params-2) = [`Params`](/docs/modules#params-2)
+• **P** _extends_ [`Params`](/docs/modules#params-2) = [`Params`](/docs/modules#params-2)
 
 #### Type declaration
 
@@ -144,7 +143,7 @@ export const config: Config = {
 		const p = document.createElement("p");
 		p.textContent = "A server rendered paragraph.";
 		document.body.appendChild(p);
-	}
+	},
 };
 ```
 
@@ -170,14 +169,14 @@ Provide the possible parameters for the current route.
 ###### Example
 
 ```ts
-[{ slug: "my-post" }]
+[{ slug: "my-post" }];
 ```
 
 #### Source
 
-[types/index.ts:69](https://github.com/rossrobino/domco/blob/50b8cb23f645c1f372816477cf5df44c0eec3124/packages/domco/types/index.ts#L69)
+[types/index.ts:69](https://github.com/rossrobino/domco/blob/a654ceb418ae2793b5e0942e538230fff36e5e31/packages/domco/types/index.ts#L69)
 
-***
+---
 
 ### Params
 
@@ -185,7 +184,7 @@ Provide the possible parameters for the current route.
 
 #### Source
 
-[types/index.ts:67](https://github.com/rossrobino/domco/blob/50b8cb23f645c1f372816477cf5df44c0eec3124/packages/domco/types/index.ts#L67)
+[types/index.ts:67](https://github.com/rossrobino/domco/blob/a654ceb418ae2793b5e0942e538230fff36e5e31/packages/domco/types/index.ts#L67)
 
 ## Functions
 
@@ -229,4 +228,4 @@ export const config: Config = {
 
 #### Source
 
-[helpers/addBlocks/index.ts:26](https://github.com/rossrobino/domco/blob/50b8cb23f645c1f372816477cf5df44c0eec3124/packages/domco/helpers/addBlocks/index.ts#L26)
+[helpers/addBlocks/index.ts:26](https://github.com/rossrobino/domco/blob/a654ceb418ae2793b5e0942e538230fff36e5e31/packages/domco/helpers/addBlocks/index.ts#L26)

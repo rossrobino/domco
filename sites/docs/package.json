@@ -14,7 +14,7 @@
 		"@types/node": "^20.12.10",
 		"@vercel/analytics": "^1.2.2",
 		"autoprefixer": "^10.4.19",
-		"domco": "workspace:*",
+		"domco": "../../dist/domco",
 		"drab": "^5.4.0",
 		"prettier": "^3.2.5",
 		"prettier-plugin-tailwindcss": "^0.5.14",

@@ -14,6 +14,7 @@ const minifyHtml = async (html: string, options: MinifyHtmlOptions = {}) => {
 		useShortDoctype: true,
 		html5: true,
 		quoteCharacter: '"',
+		removeAttributeQuotes: true,
 	};
 
 	Object.assign(mergedOptions, options);
