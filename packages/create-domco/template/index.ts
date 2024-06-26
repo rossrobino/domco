@@ -1,5 +1,5 @@
 const versions = {
-	domco: "0.5.19",
+	domco: "0.5.21",
 	typesNode: "20.12.10",
 	autoprefixer: "10.4.19",
 	prettier: "3.2.5",

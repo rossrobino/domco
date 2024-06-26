@@ -1,3 +1,6 @@
+
+
+
 ## Type Aliases
 
 ### Block()\<D>
@@ -31,7 +34,7 @@ export const config: Config = {
 };
 ```
 
-#### Type parameters
+#### Type Parameters
 
 • **D** = `undefined`
 
@@ -45,19 +48,19 @@ export const config: Config = {
 
 `any`
 
-#### Source
+#### Defined in
 
-[types/index.ts:55](https://github.com/rossrobino/domco/blob/3def9bbdbe796fae4e9c231eaebe835819282561/packages/domco/types/index.ts#L55)
+[types/index.ts:55](https://github.com/rossrobino/domco/blob/48e7ab7c120108026d8ff0d9aed4f7767640f74d/packages/domco/types/index.ts#L55)
 
----
+***
 
 ### Build()\<P>
 
 > **Build**\<`P`>: (`window`, `context`) => `any`
 
-#### Type parameters
+#### Type Parameters
 
-• **P** _extends_ [`Params`](/docs/modules#params-2) = [`Params`](/docs/modules#params-2)
+• **P** *extends* [`Params`](/docs/modules#params-2) = [`Params`](/docs/modules#params-2)
 
 #### Parameters
 
@@ -69,11 +72,11 @@ export const config: Config = {
 
 `any`
 
-#### Source
+#### Defined in
 
-[types/index.ts:3](https://github.com/rossrobino/domco/blob/3def9bbdbe796fae4e9c231eaebe835819282561/packages/domco/types/index.ts#L3)
+[types/index.ts:3](https://github.com/rossrobino/domco/blob/48e7ab7c120108026d8ff0d9aed4f7767640f74d/packages/domco/types/index.ts#L3)
 
----
+***
 
 ### BuildContext\<P>
 
@@ -81,7 +84,7 @@ export const config: Config = {
 
 Context about the current page to utilize during the build.
 
-#### Type parameters
+#### Type Parameters
 
 • **P**
 
@@ -96,9 +99,7 @@ The current route's parameters.
 ###### Example
 
 ```ts
-{
-	slug: "my-post";
-}
+{ slug: "my-post" }
 ```
 
 ##### route
@@ -107,19 +108,19 @@ The current route's parameters.
 
 The route as a string, for example: `/posts/[slug]/`
 
-#### Source
+#### Defined in
 
-[types/index.ts:16](https://github.com/rossrobino/domco/blob/3def9bbdbe796fae4e9c231eaebe835819282561/packages/domco/types/index.ts#L16)
+[types/index.ts:16](https://github.com/rossrobino/domco/blob/48e7ab7c120108026d8ff0d9aed4f7767640f74d/packages/domco/types/index.ts#L16)
 
----
+***
 
 ### Config\<P>
 
 > **Config**\<`P`>: `object`
 
-#### Type parameters
+#### Type Parameters
 
-• **P** _extends_ [`Params`](/docs/modules#params-2) = [`Params`](/docs/modules#params-2)
+• **P** *extends* [`Params`](/docs/modules#params-2) = [`Params`](/docs/modules#params-2)
 
 #### Type declaration
 
@@ -143,7 +144,7 @@ export const config: Config = {
 		const p = document.createElement("p");
 		p.textContent = "A server rendered paragraph.";
 		document.body.appendChild(p);
-	},
+	}
 };
 ```
 
@@ -169,32 +170,28 @@ Provide the possible parameters for the current route.
 ###### Example
 
 ```ts
-[{ slug: "my-post" }];
+[{ slug: "my-post" }]
 ```
 
-#### Source
+#### Defined in
 
-[types/index.ts:69](https://github.com/rossrobino/domco/blob/3def9bbdbe796fae4e9c231eaebe835819282561/packages/domco/types/index.ts#L69)
+[types/index.ts:69](https://github.com/rossrobino/domco/blob/48e7ab7c120108026d8ff0d9aed4f7767640f74d/packages/domco/types/index.ts#L69)
 
----
+***
 
 ### Params
 
 > **Params**: `ReadonlyArray`\<`Record`\<`string`, `string`>>
 
-#### Source
+#### Defined in
 
-[types/index.ts:67](https://github.com/rossrobino/domco/blob/3def9bbdbe796fae4e9c231eaebe835819282561/packages/domco/types/index.ts#L67)
+[types/index.ts:67](https://github.com/rossrobino/domco/blob/48e7ab7c120108026d8ff0d9aed4f7767640f74d/packages/domco/types/index.ts#L67)
 
 ## Functions
 
 ### addBlocks()
 
 > **addBlocks**(`window`, `blocks`): `Promise`\<`PromiseSettledResult`\<`any`>[]>
-
-A helper function that runs an array of blocks asynchronously
-with `Promise.allSettled`, passing the `window` and optionally
-`data` into each block
 
 #### Parameters
 
@@ -212,20 +209,6 @@ an array of blocks
 
 an array containing the results of each block
 
-#### Example
+#### Defined in
 
-```ts
-// src/index.build.ts
-import { type Config, addBlocks } from "domco";
-import { myBlock, anotherBlock } from "$lib/blocks/myBlocks";
-
-export const config: Config = {
-	build: async (window) => {
-		const results = await addBlocks(window, [myBlock, anotherBlock]);
-	},
-};
-```
-
-#### Source
-
-[helpers/addBlocks/index.ts:26](https://github.com/rossrobino/domco/blob/3def9bbdbe796fae4e9c231eaebe835819282561/packages/domco/helpers/addBlocks/index.ts#L26)
+[helpers/addBlocks/index.ts:26](https://github.com/rossrobino/domco/blob/48e7ab7c120108026d8ff0d9aed4f7767640f74d/packages/domco/helpers/addBlocks/index.ts#L26)
