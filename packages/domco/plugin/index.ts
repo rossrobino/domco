@@ -51,7 +51,22 @@ export const domco = (options?: {
 	/**
 	 * `html-minifier-terser` options.
 	 *
-	 * @default {}
+	 * @default
+	 *
+	 * {
+	 *  	collapseBooleanAttributes: true,
+	 *  	collapseWhitespace: true,
+	 *  	html5: true,
+	 *  	minifyCSS: true,
+	 *  	minifyJS: true,
+	 *  	quoteCharacter: '"',
+	 *  	removeComments: true,
+	 *  	removeEmptyAttributes: true,
+	 *  	removeAttributeQuotes: true,
+	 *  	sortAttributes: true,
+	 *  	sortClassName: true,
+	 *  	useShortDoctype: true,
+	 *  }
 	 */
 	minifyHtmlOptions?: MinifyHtmlOptions;
 }): Plugin[] => {
