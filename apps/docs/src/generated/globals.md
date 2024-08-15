@@ -48,7 +48,7 @@ The script to run after Vite build is complete.
 
 [types/public/index.ts:12](https://github.com/rossrobino/domco/blob/d09c8436f2daa196a0f9a8c20e2ba93fb4911694/packages/domco/src/types/public/index.ts#L12)
 
-***
+---
 
 <a id="adapterbuilderadapteroptions" name="adapterbuilderadapteroptions"></a>
 
@@ -72,7 +72,7 @@ The script to run after Vite build is complete.
 
 [types/public/index.ts:32](https://github.com/rossrobino/domco/blob/d09c8436f2daa196a0f9a8c20e2ba93fb4911694/packages/domco/src/types/public/index.ts#L32)
 
-***
+---
 
 <a id="adapterentry" name="adapterentry"></a>
 
@@ -100,7 +100,7 @@ domco config port.
 
 [types/public/index.ts:4](https://github.com/rossrobino/domco/blob/d09c8436f2daa196a0f9a8c20e2ba93fb4911694/packages/domco/src/types/public/index.ts#L4)
 
-***
+---
 
 <a id="client" name="client"></a>
 
@@ -120,7 +120,7 @@ domco config port.
 
 [types/public/index.ts:102](https://github.com/rossrobino/domco/blob/d09c8436f2daa196a0f9a8c20e2ba93fb4911694/packages/domco/src/types/public/index.ts#L102)
 
-***
+---
 
 <a id="domcoconfig" name="domcoconfig"></a>
 
@@ -150,7 +150,7 @@ Defaults to `undefined` - creates a NodeJS build only.
 ###### Default
 
 ```ts
-undefined
+undefined;
 ```
 
 <a id="port" name="port"></a>
@@ -170,7 +170,7 @@ port numbers.
 ###### Default
 
 ```ts
-5173
+5173;
 ```
 
 <a id="prod" name="prod"></a>
@@ -182,15 +182,15 @@ port numbers.
 ###### Default
 
 ```ts
-5173
+5173;
 ```
 
 #### Example
 
 ```ts
 // vite.config.ts
-import { defineConfig } from "vite";
 import { domco, type DomcoConfig } from "domco";
+import { defineConfig } from "vite";
 
 const config: DomcoConfig = {
 	// options...
@@ -205,7 +205,7 @@ export default defineConfig({
 
 [types/public/index.ts:58](https://github.com/rossrobino/domco/blob/d09c8436f2daa196a0f9a8c20e2ba93fb4911694/packages/domco/src/types/public/index.ts#L58)
 
-***
+---
 
 <a id="domcocontextvariablemap" name="domcocontextvariablemap"></a>
 
@@ -306,7 +306,7 @@ app.get("/", (c) => {
 	const page = c.var.page();
 
 	// gets `src/route/path/+page.html`
-	const differentPage = c.var.page("/route/path")
+	const differentPage = c.var.page("/route/path");
 
 	return c.html(page);
 });
@@ -366,7 +366,7 @@ declare module "hono" {
 
 [types/public/index.ts:127](https://github.com/rossrobino/domco/blob/d09c8436f2daa196a0f9a8c20e2ba93fb4911694/packages/domco/src/types/public/index.ts#L127)
 
-***
+---
 
 <a id="page-1" name="page-1"></a>
 
@@ -386,7 +386,7 @@ declare module "hono" {
 
 [types/public/index.ts:100](https://github.com/rossrobino/domco/blob/d09c8436f2daa196a0f9a8c20e2ba93fb4911694/packages/domco/src/types/public/index.ts#L100)
 
-***
+---
 
 <a id="prerender" name="prerender"></a>
 
@@ -413,7 +413,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 [types/public/index.ts:98](https://github.com/rossrobino/domco/blob/d09c8436f2daa196a0f9a8c20e2ba93fb4911694/packages/domco/src/types/public/index.ts#L98)
 
-***
+---
 
 <a id="server-1" name="server-1"></a>
 
@@ -462,8 +462,8 @@ The domco Vite plugin.
 
 ```ts
 // vite.config.ts
-import { defineConfig } from "vite";
 import { domco } from "domco";
+import { defineConfig } from "vite";
 
 export default defineConfig({
 	plugins: [domco()],

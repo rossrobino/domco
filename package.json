@@ -11,11 +11,9 @@
 		"turbo": "^2.0.14"
 	},
 	"scripts": {
-		"dev": "turbo dev",
 		"check": "turbo check",
 		"format": "prettier --write .",
-		"build": "turbo build",
-		"preview": "turbo preview"
+		"build": "turbo build"
 	},
 	"devDependencies": {
 		"@trivago/prettier-plugin-sort-imports": "^4.3.0",
