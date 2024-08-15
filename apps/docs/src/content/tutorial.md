@@ -135,6 +135,21 @@ app.get("/", (c) => {
 const res = await c.var.server("/route/path");
 ```
 
+#### Prerender
+
+You can export a `prerender` variable to prerender pages.
+
+```ts
+// src/posts/+server.ts
+import type { Prerender } from "domco";
+
+// prerender current route
+export const prerender: Prerender = true;
+
+// prerender multiple paths relative to the current route.
+export const prerender: Prerender = ["/", "/post-1", "/post-2"];
+```
+
 #### Route ordering
 
 Routes are sorted and applied from most specific to least.
@@ -227,8 +242,6 @@ export default app;
 
 ## Deploy
 
-By default **domco** will generate a NodeJS server and static assets for your application. You can also use an adapter or export your app to configure it to use in [another environment](https://hono.dev/docs/getting-started/basic). No NodeJS specific APIs are used in the `app.js` export.
-
 Run `vite build` to build your application into `dist/`.
 
 ```
@@ -243,17 +256,15 @@ Run `vite build` to build your application into `dist/`.
 		└── node.js
 ```
 
+By default **domco** will generate a NodeJS server and static assets for your application. You can also use an [adapter](#adapters) or export your app to configure it to use in [another environment](https://hono.dev/docs/getting-started/basic).
+
 The `client/` directory holds client assets. JS and CSS assets with hashed file names will automatically be served with immutable cache headers from `dist/client/_immutable`. Other assets are processed and included in `dist/client` directly.
 
 The `server/` directory has three entry points:
 
-- `app.js` exports your Hono server. You can import it in another file and deploy your app to a variety of [platforms](https://hono.dev/docs/getting-started/basic) manually.
+- `app.js` exports your Hono server. You can import it in another file and deploy your app to a variety of [platforms](https://hono.dev/docs/getting-started/basic) manually. No NodeJS specific APIs are used in the `app.js` export.
 - `main.js` is the main entry point for your application if you used an adapter, configured to the target environment.
 - `node.js` is a NodeJS build of your application. You can run `dist/server/node.js` to run your application or preview it if you are using an adapter.
-
-### Serving static assets
-
-**domco** automatically will serve any public pages from `dist/client/` and any client assets from `dist/client/_immutable/`.
 
 ### Adapters
 

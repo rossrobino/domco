@@ -85,7 +85,7 @@ export type DomcoConfig = {
  * @example
  *
  * ```ts
- * // src/routes/posts/+server.ts
+ * // src/posts/+server.ts
  * import type { Prerender } from "domco";
  *
  * // prerender current route
