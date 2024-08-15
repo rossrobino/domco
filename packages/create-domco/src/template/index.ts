@@ -30,7 +30,7 @@ export const getFiles = (options: {
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
-		"preview": "vite preview"${
+		"preview": "node dist/server/node.js"${
 			prettier ? `,\n\t\t"format": "prettier --write ."` : ``
 		}
 	},
