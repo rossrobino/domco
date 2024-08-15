@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>htmx</title>
+		<script
+			src="https://unpkg.com/htmx.org@2.0.1"
+			integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/"
+			crossorigin="anonymous"
+		></script>
+	</head>
+	<body>
+		<h1>htmx</h1>
+		<button hx-get="/htmx/partials/rendered-at" hx-target="#dynamic">
+			Get Dynamic
+		</button>
+		<p id="dynamic"></p>
+		<button hx-get="/htmx/static-partial" hx-target="#static">Add Style</button>
+		<p id="static"></p>
+	</body>
+</html>

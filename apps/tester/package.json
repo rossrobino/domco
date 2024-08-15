@@ -1,0 +1,25 @@
+{
+	"name": "domco-tester",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"check": "tsc --noEmit",
+		"build": "vite build",
+		"preview": "node dist/server/node.js"
+	},
+	"devDependencies": {
+		"@sveltejs/vite-plugin-svelte": "^3.1.1",
+		"@types/node": "^22.2.0",
+		"@types/react": "^18.3.3",
+		"@types/react-dom": "^18.3.0",
+		"@vitejs/plugin-react": "^4.3.1",
+		"domco": "*",
+		"hono": "^4.5.5",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"svelte": "4.2.18",
+		"vite": "^5.4.0"
+	}
+}

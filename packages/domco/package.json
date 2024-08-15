@@ -1,59 +1,74 @@
 {
 	"name": "domco",
-	"description": "Build-Time Rendering Without Templates",
-	"version": "0.5.21",
-	"type": "module",
-	"keywords": [
-		"vite-plugin",
-		"static site generator",
-		"SSG"
-	],
-	"types": "./index.d.ts",
-	"main": "./index.js",
-	"exports": {
-		".": {
-			"types": "./index.d.ts",
-			"default": "./index.js"
-		},
-		"./plugin": {
-			"types": "./plugin/index.d.ts",
-			"default": "./plugin/index.js"
-		}
-	},
-	"scripts": {
-		"dev": "tsc --project tsconfig.build.json --watch",
-		"format": "prettier --write .",
-		"build:clean": "rm -rf ../../dist/domco",
-		"build:js": "tsc --project tsconfig.build.json",
-		"build:copy": "cp package.json ../../dist/domco",
-		"build": "bun build:clean && bun build:js && bun build:copy && bun doc",
-		"pub:only": "npm publish --access public ../../dist/domco",
-		"pub": "bun i && bun format && bun run build && bun pub:only",
-		"doc": "typedoc --out docs --plugin typedoc-plugin-markdown index.ts --hideBreadcrumbs --githubPages false --outputFileStrategy modules --publicPath /docs/ && bun scripts/docs/index.ts"
-	},
+	"description": "Construct Web Applications with Vite and Hono",
+	"version": "0.6.0-next.44",
 	"author": {
 		"name": "Ross Robino",
 		"url": "https://robino.dev"
 	},
 	"repository": "github:rossrobino/domco",
+	"homepage": "https://domco.robino.dev",
 	"license": "MIT",
+	"keywords": [
+		"hono",
+		"vite",
+		"vite-plugin"
+	],
+	"type": "module",
+	"sideEffects": false,
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./adapter/vercel": {
+			"types": "./dist/adapter/vercel/index.d.ts",
+			"default": "./dist/adapter/vercel/index.js"
+		},
+		"./app": {
+			"types": "./dist/app/index.d.ts",
+			"default": "./dist/app/index.js"
+		},
+		"./injector": {
+			"types": "./dist/injector/index.d.ts",
+			"default": "./dist/injector/index.js"
+		},
+		"./version": {
+			"types": "./dist/version/index.d.ts",
+			"default": "./dist/version/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE.md"
+	],
+	"scripts": {
+		"dev": "tsc --project tsconfig.build.json --watch",
+		"test": "vitest",
+		"test:run": "vitest run",
+		"build:clean": "rm -rf ./dist",
+		"build:js": "tsc --project tsconfig.build.json",
+		"build": "node scripts/version && npm run build:clean && npm run build:js",
+		"pub": "npm run build && npm publish --tag next",
+		"doc": "typedoc src/index.ts --out ../../apps/docs/src/generated --plugin typedoc-plugin-markdown --outputFileStrategy modules --hidePageHeader --hidePageTitle --useHTMLAnchors"
+	},
 	"devDependencies": {
-		"@types/bun": "^1.1.1",
-		"@types/node": "^20.12.10",
-		"@types/web": "^0.0.143",
-		"prettier": "^3.2.5",
-		"robino": "^0.2.0",
-		"typedoc": "^0.25.13",
-		"typedoc-plugin-markdown": "^4.0.1",
-		"typescript": "^5.4.5"
+		"@types/node": "^22.2.0",
+		"typedoc": "^0.26.5",
+		"typedoc-plugin-markdown": "^4.2.4",
+		"vitest": "^2.0.5"
+	},
+	"peerDependencies": {
+		"hono": "^4.5.0",
+		"vite": "^5.4.0"
 	},
 	"dependencies": {
-		"@types/html-minifier-terser": "^7.0.2",
-		"@types/jsdom": "^21.1.6",
-		"esbuild": "^0.21.0",
-		"html-minifier-terser": "^7.2.0",
-		"jsdom": "^24.0.0",
-		"vite": "^5.2.11"
-	},
-	"prettier": "robino/config/prettier"
+		"@hono/node-server": "^1.12.0",
+		"defu": "^6.1.4",
+		"esbuild": "^0.23.0",
+		"picocolors": "^1.0.1"
+	}
 }

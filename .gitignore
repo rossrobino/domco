@@ -2,17 +2,15 @@
 logs
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
 node_modules
 dist
-build
 .vercel
+.netlify
+build
 dist-ssr
 *.local
+.turbo
 
 # Editor directories and files
 .vscode/*

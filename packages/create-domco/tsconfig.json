@@ -1,22 +1,30 @@
 {
 	"compilerOptions": {
+		/* Base Options: */
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"target": "ESNext",
-		"verbatimModuleSyntax": true,
 		"allowJs": true,
 		"checkJs": true,
 		"resolveJsonModule": true,
 		"moduleDetection": "force",
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+		"moduleResolution": "NodeNext",
+
+		/* Strictness */
 		"strict": true,
 		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"moduleResolution": "NodeNext",
+
 		"module": "NodeNext",
+		"rootDir": "src",
+		"outDir": "dist",
 		"declaration": true,
-		"lib": ["ESNext", "DOM", "DOM.Iterable"],
-		"rootDir": ".",
-		"outDir": "../../dist/create-domco"
-	}
+
+		"lib": ["ESNext"]
+	},
+	"include": ["src/**/*"]
 }

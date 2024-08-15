@@ -1,8 +1,27 @@
 {
 	"name": "domco-monorepo",
 	"private": true,
+	"type": "module",
+	"packageManager": "npm@10.8.2",
 	"workspaces": [
 		"packages/*",
-		"sites/*"
-	]
+		"apps/*"
+	],
+	"dependencies": {
+		"turbo": "^2.0.14"
+	},
+	"scripts": {
+		"dev": "turbo dev",
+		"check": "turbo check",
+		"format": "prettier --write .",
+		"build": "turbo build",
+		"preview": "turbo preview"
+	},
+	"devDependencies": {
+		"@trivago/prettier-plugin-sort-imports": "^4.3.0",
+		"prettier": "^3.3.3",
+		"prettier-plugin-tailwindcss": "^0.6.6",
+		"robino": "^0.2.0",
+		"typescript": "^5.5.4"
+	}
 }

@@ -1,0 +1,10 @@
+body {
+	font-family: system-ui, sans-serif;
+}
+
+a {
+	color: blue;
+	&:visited {
+		color: blueviolet;
+	}
+}
