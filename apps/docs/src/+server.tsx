@@ -9,7 +9,7 @@ import {
 } from "./components/svg";
 import preview from "@/content/preview.md?raw";
 import tutorial from "@/content/tutorial.md?raw";
-import apiReference from "@/generated/README.md?raw";
+import apiReference from "@/generated/globals.md?raw";
 import { Hono } from "hono";
 import { raw } from "hono/html";
 import type { FC } from "hono/jsx";

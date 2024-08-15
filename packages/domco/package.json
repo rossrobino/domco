@@ -51,7 +51,7 @@
 		"test:run": "vitest run",
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc --project tsconfig.build.json",
-		"build": "node scripts/version && npm run build:clean && npm run build:js",
+		"build": "node scripts/version && npm run build:clean && npm run build:js && npm run doc",
 		"pub": "npm run build && npm publish --tag next",
 		"doc": "typedoc src/index.ts --out ../../apps/docs/src/generated --plugin typedoc-plugin-markdown --outputFileStrategy modules --hidePageHeader --hidePageTitle --useHTMLAnchors"
 	},
