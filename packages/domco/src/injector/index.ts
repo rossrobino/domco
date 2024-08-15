@@ -21,8 +21,10 @@ const serializeAttrs = (attrs: TagDescriptor["attrs"]) => {
 	return res;
 };
 
+const unaryTags = new Set(["link", "meta", "base"]);
+
 export const serializeTag = ({ tag, attrs, children }: TagDescriptor) => {
-	if (["link", "meta", "base"].includes(tag)) {
+	if (unaryTags.has(tag)) {
 		return `<${tag}${serializeAttrs(attrs)}>`;
 	} else {
 		return `<${tag}${serializeAttrs(attrs)}>${serializeTags(

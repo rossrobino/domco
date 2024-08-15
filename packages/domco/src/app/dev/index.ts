@@ -4,6 +4,8 @@ import { addRoutes, applySetup, setServer } from "../util/index.js";
 import { defu } from "defu";
 import { Hono } from "hono";
 import type { HonoOptions } from "hono/hono-base";
+import { html } from "hono/html";
+import type { HTTPResponseError } from "hono/types";
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { ViteDevServer } from "vite";
@@ -32,6 +34,22 @@ export const createAppDev = <Env extends {} = any>(options?: {
 
 		// start fresh each time for dev for HMR
 		const app = new Hono();
+
+		app.onError((err, c) => {
+			console.log();
+			console.error(err);
+			return c.html(errorTemplate(err));
+		});
+
+		app.notFound((c) => {
+			return c.html(
+				errorTemplate({
+					message: "404 - Not Found",
+					stack: `No route matched for ${c.req.url}\n\nMake sure there is a route registered for this path.`,
+					name: "404 - Not Found",
+				}),
+			);
+		});
 
 		app.use(setServer);
 
@@ -94,3 +112,33 @@ const getRoutesDev = async (options: { devServer?: ViteDevServer }) => {
 
 	return loadedRoutes;
 };
+
+const errorTemplate = (err: Error) => html`
+	<!doctype html>
+	<html>
+		<head>
+			<script type="module" src="@vite/client"></script>
+			<title>${err.name}</title>
+			<style>
+				body {
+					font-family: system-ui, sans-serif;
+					margin-inline: auto;
+					max-width: 768px;
+					padding-inline: 1rem;
+				}
+				pre {
+					color: white;
+					background-color: black;
+					border-radius: 0.25rem;
+					padding: 1rem;
+					overflow-x: scroll;
+					line-height: 1.5;
+				}
+			</style>
+		</head>
+		<body>
+			<h1>${err.name}</h1>
+			<pre><code>${err.stack}</code></pre>
+		</body>
+	</html>
+`;

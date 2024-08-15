@@ -11,7 +11,7 @@ import preview from "@/content/preview.md?raw";
 import tutorial from "@/content/tutorial.md?raw";
 import apiReference from "@/generated/globals.md?raw";
 import { Hono } from "hono";
-import { raw } from "hono/html";
+import { html, raw } from "hono/html";
 import type { FC } from "hono/jsx";
 import { processMarkdown } from "robino/util/md";
 
@@ -19,23 +19,33 @@ export const prerender = true;
 
 const app = new Hono();
 
-app.get("/*", async (c, next) => {
+const HtmlLayout: FC = (props) => html`
+	<!doctype html>
+	${props.children}
+`;
+
+app.get("/", async (c, next) => {
 	c.setRenderer(({ title }, content) => {
 		return c.html(
-			<html class="tabular-nums motion-safe:scroll-smooth">
-				<head>
-					<meta charset="UTF-8" />
-					<meta
-						name="viewport"
-						content="width=device-width, initial-scale=1.0"
-					/>
-					<link rel="icon" type="image/svg+xml" href="/vite.svg" />
-					<meta name="description" content="hello" />
-					<title>{title}</title>
-					{c.var.client()}
-				</head>
-				<body>{content}</body>
-			</html>,
+			<HtmlLayout>
+				<html lang="en" class="tabular-nums motion-safe:scroll-smooth">
+					<head>
+						<meta charset="UTF-8" />
+						<meta
+							name="viewport"
+							content="width=device-width, initial-scale=1.0"
+						/>
+						{c.var.client()}
+						<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+						<meta
+							name="description"
+							content="Construct Web Applications with Vite and Hono."
+						/>
+						<title>{title}</title>
+					</head>
+					<body>{content}</body>
+				</html>
+			</HtmlLayout>,
 		);
 	});
 	await next();
@@ -52,7 +62,9 @@ app.get("/", async (c) => {
 		<>
 			<header class="m-6 mb-48">
 				<div class="flex items-center justify-between">
-					<h1 class="m-0">domco</h1>
+					<h1 class="m-0">
+						<a href="/">domco</a>{" "}
+					</h1>
 					<div class="flex items-center gap-1">
 						<RepoSvg />
 						<NpmSvg />
@@ -61,59 +73,46 @@ app.get("/", async (c) => {
 				<section class="flex h-[70dvh] flex-col justify-center">
 					<h2 class="text-balance text-4xl">
 						Construct Web Applications with{" "}
-						<a href="https://vitejs.dev">Vite</a> and{" "}
-						<a href="https://hono.dev/">Hono</a>
+						<a
+							href="https://vitejs.dev"
+							class="bg-gradient-to-r from-sky-400 to-violet-400 bg-clip-text text-transparent"
+						>
+							Vite
+						</a>{" "}
+						and{" "}
+						<a
+							href="https://hono.dev/"
+							class="bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent"
+						>
+							Hono
+						</a>
 					</h2>
 					<div class="flex flex-col gap-4 sm:flex-row sm:items-center">
 						<Npm />
 						<BundleSize />
 					</div>
 				</section>
-				<section class="font-bold">{previewHtml}</section>
+				<section>{previewHtml}</section>
 			</header>
 			<main class="m-6">
-				<section class="mb-48">
-					<h2>TL;DR</h2>
-					<p>
-						<strong>domco</strong> is a minimal library that turns your{" "}
-						<a href="https://vitejs.dev">Vite</a> project into a{" "}
-						<a href="https://hono.dev/">Hono</a> application. You can take
-						advantage of Vite's build pipeline, plugins, and HMR in a full-stack
-						context with Hono.
-					</p>
-					<ul>
-						<li>
-							Create a new <code>+page.html</code> within <code>src</code>, you
-							have a public page.
-						</li>
-						<li>
-							Add a <code>+server</code> file within <code>src</code> and export
-							a Hono app, you have an endpoint.
-						</li>
-						<li>
-							Use a <code>+client</code> file to add a client side script. These
-							tags be accessed from a page, or directly from an endpoint.
-						</li>
-					</ul>
-				</section>
 				<section class="mb-48 grid gap-6 sm:grid-cols-2">
 					<NavLink
 						Icon={BookSvg}
 						title="Tutorial"
-						text="Get started or add domco to an existing Vite application."
+						text="Get started with domco"
 					/>
 					<NavLink
 						Icon={PlugSvg}
 						title="Migrate"
-						text="Add Hono to an Existing Vite Project."
+						text="Add Hono to an existing Vite project"
 					/>
 					<NavLink
 						Icon={EarthSvg}
 						title="Deploy"
-						text="Learn how to deploy your application."
+						text="Deploy your application"
 					/>
-					<NavLink Icon={TypeSvg} title="Type Aliases" text="API Reference." />
-					<NavLink Icon={FuncSvg} title="Functions" text="API Reference." />
+					<NavLink Icon={TypeSvg} title="Type Aliases" text="API reference" />
+					<NavLink Icon={FuncSvg} title="Functions" text="API reference" />
 				</section>
 
 				<section>{tutorialHtml}</section>
