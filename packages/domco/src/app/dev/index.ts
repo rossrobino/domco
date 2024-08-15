@@ -5,7 +5,6 @@ import { defu } from "defu";
 import { Hono } from "hono";
 import type { HonoOptions } from "hono/hono-base";
 import { html } from "hono/html";
-import type { HTTPResponseError } from "hono/types";
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { ViteDevServer } from "vite";
