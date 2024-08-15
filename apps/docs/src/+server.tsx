@@ -22,7 +22,7 @@ const app = new Hono();
 app.get("/*", async (c, next) => {
 	c.setRenderer(({ title }, content) => {
 		return c.html(
-			<html class="motion-safe:scroll-smooth tabular-nums">
+			<html class="tabular-nums motion-safe:scroll-smooth">
 				<head>
 					<meta charset="UTF-8" />
 					<meta
@@ -32,6 +32,7 @@ app.get("/*", async (c, next) => {
 					<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 					<meta name="description" content="hello" />
 					<title>{title}</title>
+					{c.var.client()}
 				</head>
 				<body>{content}</body>
 			</html>,
@@ -50,20 +51,20 @@ app.get("/", async (c) => {
 		{ title: "domco" },
 		<>
 			<header class="m-6 mb-48">
-				<div class="flex justify-between items-center">
+				<div class="flex items-center justify-between">
 					<h1 class="m-0">domco</h1>
-					<div class="flex gap-1 items-center">
+					<div class="flex items-center gap-1">
 						<RepoSvg />
 						<NpmSvg />
 					</div>
 				</div>
-				<section class="flex justify-center flex-col h-[70dvh]">
+				<section class="flex h-[70dvh] flex-col justify-center">
 					<h2 class="text-balance text-4xl">
 						Construct Web Applications with{" "}
 						<a href="https://vitejs.dev">Vite</a> and{" "}
 						<a href="https://hono.dev/">Hono</a>
 					</h2>
-					<div class="flex gap-4 flex-col sm:flex-row sm:items-center">
+					<div class="flex flex-col gap-4 sm:flex-row sm:items-center">
 						<Npm />
 						<BundleSize />
 					</div>
@@ -95,7 +96,7 @@ app.get("/", async (c) => {
 						</li>
 					</ul>
 				</section>
-				<section class="grid sm:grid-cols-2 gap-6 mb-48">
+				<section class="mb-48 grid gap-6 sm:grid-cols-2">
 					<NavLink
 						Icon={BookSvg}
 						title="Tutorial"
@@ -118,7 +119,6 @@ app.get("/", async (c) => {
 				<section>{tutorialHtml}</section>
 				<section>{apiReferenceHtml}</section>
 			</main>
-			{c.var.client()}
 		</>,
 	);
 });
@@ -129,7 +129,7 @@ const Npm: FC = () => {
 	const words = "npm create domco@latest".split(" ");
 	const chars = words.map((w) => w.split(""));
 	return (
-		<div id="npm" class="font-mono copy-text">
+		<div id="npm" class="copy-text font-mono">
 			{chars.map((char, i) => {
 				return (
 					<>
@@ -159,10 +159,10 @@ interface NavLinkProps {
 const NavLink: FC<NavLinkProps> = ({ title, text, Icon }: NavLinkProps) => {
 	return (
 		<a
-			class="bg-white opacity-90 rounded-lg text-background p-4 no-underline transition-transform hover:scale-[101%]"
+			class="text-background rounded-lg bg-white p-4 no-underline opacity-90 transition-transform hover:scale-[101%]"
 			href={`#${title.split(" ").join("-").toLowerCase()}`}
 		>
-			<div class="font-bold text-lg mb-2 flex gap-2 items-center">
+			<div class="mb-2 flex items-center gap-2 text-lg font-bold">
 				<Icon />
 				{title}
 			</div>
@@ -183,7 +183,7 @@ const BundleSize: FC = async () => {
 	return (
 		<a
 			href="https://bundlephobia.com/package/domco"
-			class="flex gap-3 text-sm items-center sm:border-l border-muted-foreground sm:pl-4 no-underline"
+			class="border-muted-foreground flex items-center gap-3 text-sm no-underline sm:border-l sm:pl-4"
 		>
 			<div class="text-muted-foreground">{kB}kB</div>
 			<div class="text-muted-foreground">gzip: {gzip}kB</div>
