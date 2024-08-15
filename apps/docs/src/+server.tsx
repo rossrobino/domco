@@ -63,7 +63,7 @@ app.get("/", async (c) => {
 			<header class="m-6 mb-48">
 				<div class="flex items-center justify-between">
 					<h1 class="m-0">
-						<a href="/">domco</a>{" "}
+						<a href="#">domco</a>
 					</h1>
 					<div class="flex items-center gap-1">
 						<RepoSvg />
@@ -175,17 +175,15 @@ const BundleSize: FC = async () => {
 		"https://bundlephobia.com/api/size?package=domco@next",
 	);
 	const json = (await res.json()) as {
-		assets?: [{ size: number; gzip: number }];
+		assets?: [{ size: number }];
 	};
 	const kB = ((json.assets?.at(0)?.size ?? 0) / 1000).toFixed(1);
-	const gzip = ((json.assets?.at(0)?.gzip ?? 0) / 1000).toFixed(1);
 	return (
 		<a
 			href="https://bundlephobia.com/package/domco"
 			class="border-muted-foreground flex items-center gap-3 text-sm no-underline sm:border-l sm:pl-4"
 		>
 			<div class="text-muted-foreground">{kB}kB</div>
-			<div class="text-muted-foreground">gzip: {gzip}kB</div>
 		</a>
 	);
 };
