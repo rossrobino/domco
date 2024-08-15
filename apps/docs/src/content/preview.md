@@ -5,8 +5,7 @@ const app = new Hono();
 
 app.get("/", (c) =>
 	c.html(
-		// your Vite app
-		c.var.page(),
+		c.var.page(), // your Vite app
 	),
 );
 
