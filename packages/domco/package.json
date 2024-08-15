@@ -1,7 +1,7 @@
 {
 	"name": "domco",
 	"description": "Construct Web Applications with Vite and Hono",
-	"version": "0.6.0-next.45",
+	"version": "0.6.0",
 	"author": {
 		"name": "Ross Robino",
 		"url": "https://robino.dev"
@@ -52,7 +52,7 @@
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc --project tsconfig.build.json",
 		"build": "node scripts/version && npm run build:clean && npm run build:js && npm run doc",
-		"pub": "npm run build && npm publish --tag next",
+		"pub": "npm run build && npm publish",
 		"doc": "typedoc src/index.ts --out ../../apps/docs/src/generated --plugin typedoc-plugin-markdown --outputFileStrategy modules --hidePageHeader --hidePageTitle --useHTMLAnchors"
 	},
 	"devDependencies": {

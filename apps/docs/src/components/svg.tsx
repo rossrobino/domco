@@ -57,6 +57,7 @@ export const BookSvg: FC = () => {
 			stroke-width="2"
 			stroke-linecap="round"
 			stroke-linejoin="round"
+			class="text-violet-700"
 		>
 			<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
 			<path d="m8 13 4-7 4 7" />
@@ -77,6 +78,7 @@ export const PlugSvg: FC = () => {
 			stroke-width="2"
 			stroke-linecap="round"
 			stroke-linejoin="round"
+			class="text-orange-700"
 		>
 			<path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z" />
 			<path d="m2 22 3-3" />
@@ -99,6 +101,7 @@ export const EarthSvg: FC = () => {
 			stroke-width="2"
 			stroke-linecap="round"
 			stroke-linejoin="round"
+			class="text-teal-700"
 		>
 			<path d="M21.54 15H17a2 2 0 0 0-2 2v4.54" />
 			<path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17" />
@@ -120,6 +123,7 @@ export const TypeSvg: FC = () => {
 			stroke-width="2"
 			stroke-linecap="round"
 			stroke-linejoin="round"
+			class="text-sky-700"
 		>
 			<path d="M14 16.5a.5.5 0 0 0 .5.5h.5a2 2 0 0 1 0 4H9a2 2 0 0 1 0-4h.5a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5V8a2 2 0 0 1-4 0V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-4 0v-.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5Z" />
 		</svg>
@@ -138,6 +142,7 @@ export const FuncSvg: FC = () => {
 			stroke-width="2"
 			stroke-linecap="round"
 			stroke-linejoin="round"
+			class="text-red-700"
 		>
 			<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
 			<path d="M9 17c2 0 2.8-1 2.8-2.8V10c0-2 1-3.3 3.2-3" />

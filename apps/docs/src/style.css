@@ -105,10 +105,6 @@
 		overflow-x: auto;
 		scrollbar-width: none;
 		margin-block: theme(margin.6);
-	}
-	pre,
-	blockquote {
-		border-radius: 0;
 		margin-inline: -1.5rem;
 	}
 	@media (min-width: 640px) {
@@ -196,14 +192,14 @@
 	.hljs-built_in,
 	.hljs-symbol,
 	.hljs-bullet {
-		color: theme("colors.teal.200");
+		color: theme(colors.teal.200);
 	}
 
 	.hljs-title,
 	.hljs-title.class_,
 	.hljs-title.class_.inherited__,
 	.hljs-title.function_ {
-		color: theme("colors.violet.300");
+		color: theme(colors.violet.300);
 	}
 
 	.hljs-literal,
@@ -214,19 +210,19 @@
 	.hljs-selector-attr,
 	.hljs-selector-class,
 	.hljs-selector-id {
-		color: theme("colors.sky.300");
+		color: theme(colors.sky.300);
 	}
 
 	.hljs-regexp,
 	.hljs-string,
 	.hljs-meta .hljs-string {
-		color: theme("colors.sky.200");
+		color: theme(colors.sky.200);
 	}
 
 	.hljs-comment,
 	.hljs-code,
 	.hljs-formula {
-		color: theme("colors.slate.400");
+		color: theme(colors.slate.400);
 	}
 
 	.hljs-name,
@@ -234,17 +230,17 @@
 	.hljs-selector-tag,
 	.hljs-selector-pseudo,
 	.hljs-addition {
-		color: theme("colors.teal.400");
+		color: theme(colors.teal.400);
 	}
 
 	.hljs-attr,
 	.hljs-attribute,
 	.hljs-subst {
-		color: theme("colors.slate.100");
+		color: theme(colors.slate.100);
 	}
 
 	.hljs-section {
-		color: theme("colors.sky.300");
+		color: theme(colors.sky.300);
 	}
 
 	.hljs-emphasis {
@@ -252,6 +248,6 @@
 	}
 
 	.hljs-strong {
-		font-weight: theme("fontWeight.bold");
+		font-weight: theme(fontWeight.bold);
 	}
 }

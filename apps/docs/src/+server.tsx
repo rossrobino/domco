@@ -43,7 +43,9 @@ app.get("/", async (c, next) => {
 						/>
 						<title>{title}</title>
 					</head>
-					<body class="tabular-nums">{content}</body>
+					<body class="font-humanist-geometric selection:text-foreground tabular-nums selection:bg-sky-900">
+						{content}
+					</body>
 				</html>
 			</HtmlLayout>,
 		);
@@ -172,15 +174,16 @@ const NavLink: FC<NavLinkProps> = ({ title, text, Icon }: NavLinkProps) => {
 
 const BundleSize: FC = async () => {
 	const res = await fetch(
-		"https://bundlephobia.com/api/size?package=domco@next",
+		"https://bundlephobia.com/api/size?package=domco@latest",
 	);
 	const json = (await res.json()) as {
 		assets?: [{ size: number }];
 	};
 	const kB = ((json.assets?.at(0)?.size ?? 0) / 1000).toFixed(1);
+
 	return (
 		<a
-			href="https://bundlephobia.com/package/domco"
+			href="https://bundlephobia.com/package/domco@latest"
 			class="border-muted-foreground flex items-center gap-3 text-sm no-underline sm:border-l sm:pl-4"
 		>
 			<div class="text-muted-foreground">{kB}kB</div>
