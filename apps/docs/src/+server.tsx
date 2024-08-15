@@ -28,7 +28,7 @@ app.get("/", async (c, next) => {
 	c.setRenderer(({ title }, content) => {
 		return c.html(
 			<HtmlLayout>
-				<html lang="en" class="tabular-nums motion-safe:scroll-smooth">
+				<html lang="en" class="motion-safe:scroll-smooth">
 					<head>
 						<meta charset="UTF-8" />
 						<meta
@@ -43,7 +43,7 @@ app.get("/", async (c, next) => {
 						/>
 						<title>{title}</title>
 					</head>
-					<body>{content}</body>
+					<body class="tabular-nums">{content}</body>
 				</html>
 			</HtmlLayout>,
 		);
@@ -70,7 +70,7 @@ app.get("/", async (c) => {
 						<NpmSvg />
 					</div>
 				</div>
-				<section class="flex h-[70dvh] flex-col justify-center">
+				<section class="flex h-[70vh] flex-col justify-center">
 					<h2 class="text-balance text-4xl">
 						Construct Web Applications with{" "}
 						<a
