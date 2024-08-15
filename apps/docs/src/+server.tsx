@@ -149,11 +149,11 @@ const Npm: FC = () => {
 	);
 };
 
-interface NavLinkProps {
+type NavLinkProps = {
 	title: string;
 	text: string;
 	Icon: FC;
-}
+};
 
 const NavLink: FC<NavLinkProps> = ({ title, text, Icon }: NavLinkProps) => {
 	return (
