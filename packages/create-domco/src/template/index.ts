@@ -1,7 +1,6 @@
 const versions = {
 	domco: "0.6.0",
 	hono: "4.5.5",
-	typesNode: "22.3.0",
 	autoprefixer: "10.4.20",
 	prettier: "3.3.3",
 	prettierTailwind: "0.5.14",
@@ -35,7 +34,6 @@ export const getFiles = (options: {
 		}
 	},
 	"devDependencies": {
-		"@types/node": "^${versions.typesNode}",
 		"domco": "^${versions.domco}",
 		"hono": "^${versions.hono}",${prettier ? `\n\t\t"prettier": "^${versions.prettier}",` : ""}${
 			prettier && tailwind

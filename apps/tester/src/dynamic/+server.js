@@ -2,7 +2,7 @@ import { Hono } from "hono";
 
 const app = new Hono();
 
-app.get("/:param", async (c) => {
+app.get("/:param", (c) => {
 	return c.html(
 		c.var
 			.page()

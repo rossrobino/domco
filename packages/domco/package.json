@@ -56,7 +56,6 @@
 		"doc": "typedoc src/index.ts --out ../../apps/docs/src/generated --plugin typedoc-plugin-markdown --outputFileStrategy modules --hidePageHeader --hidePageTitle --useHTMLAnchors"
 	},
 	"devDependencies": {
-		"@types/node": "^22.2.0",
 		"typedoc": "^0.26.5",
 		"typedoc-plugin-markdown": "^4.2.4",
 		"vitest": "^2.0.5"
