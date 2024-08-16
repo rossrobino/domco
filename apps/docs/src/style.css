@@ -106,6 +106,7 @@
 		scrollbar-width: none;
 		margin-block: theme(margin.6);
 		margin-inline: -1.5rem;
+		border: theme(borderWidth.2) solid theme(borderColor.slate.800);
 	}
 	@media (min-width: 640px) {
 		pre,

@@ -19,36 +19,32 @@ export const prerender = true;
 
 const app = new Hono();
 
-const HtmlLayout: FC = (props) => html`
-	<!doctype html>
-	${props.children}
-`;
-
 app.get("/", async (c, next) => {
 	c.setRenderer(({ title }, content) => {
-		return c.html(
-			<HtmlLayout>
-				<html lang="en" class="motion-safe:scroll-smooth">
-					<head>
-						<meta charset="UTF-8" />
-						<meta
-							name="viewport"
-							content="width=device-width, initial-scale=1.0"
-						/>
-						{c.var.client()}
-						<link rel="icon" type="image/svg+xml" href="/vite.svg" />
-						<meta
-							name="description"
-							content="Construct Web Applications with Vite and Hono."
-						/>
-						<title>{title}</title>
-					</head>
-					<body class="font-humanist-geometric selection:text-foreground tabular-nums selection:bg-sky-900">
-						{content}
-					</body>
-				</html>
-			</HtmlLayout>,
-		);
+		return c.html(html`
+			<!doctype html>
+			<html lang="en" class="motion-safe:scroll-smooth">
+				<head>
+					<meta charset="UTF-8" />
+					<meta
+						name="viewport"
+						content="width=device-width, initial-scale=1.0"
+					/>
+					${c.var.client()}
+					<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+					<meta
+						name="description"
+						content="Construct Web Applications with Vite and Hono."
+					/>
+					<title>${title}</title>
+				</head>
+				<body
+					class="font-humanist-geometric selection:text-foreground tabular-nums selection:bg-sky-900"
+				>
+					${content}
+				</body>
+			</html>
+		`);
 	});
 	await next();
 });
