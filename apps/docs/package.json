@@ -12,9 +12,7 @@
 	"devDependencies": {
 		"autoprefixer": "^10.4.20",
 		"domco": "*",
-		"drab": "^5.4.2",
 		"hono": "^4.5.5",
-		"robino": "^0.2.0",
 		"tailwindcss": "^3.4.10",
 		"uico": "^0.2.4",
 		"vite": "^5.4.0"
