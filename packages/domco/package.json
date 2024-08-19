@@ -1,12 +1,15 @@
 {
 	"name": "domco",
 	"description": "Construct Web Applications with Vite and Hono",
-	"version": "0.6.0",
+	"version": "0.6.1",
 	"author": {
 		"name": "Ross Robino",
 		"url": "https://robino.dev"
 	},
-	"repository": "github:rossrobino/domco",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/rossrobino/domco.git"
+	},
 	"homepage": "https://domco.robino.dev",
 	"license": "MIT",
 	"keywords": [
@@ -52,7 +55,6 @@
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc --project tsconfig.build.json",
 		"build": "node scripts/version && npm run build:clean && npm run build:js",
-		"pub": "npm run build && npm publish",
 		"doc": "typedoc src/index.ts --out ../../apps/docs/src/generated --plugin typedoc-plugin-markdown --outputFileStrategy modules --hidePageHeader --hidePageTitle --useHTMLAnchors"
 	},
 	"devDependencies": {

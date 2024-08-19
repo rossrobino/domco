@@ -16,8 +16,7 @@
 		"dev": "tsc --project tsconfig.build.json --watch",
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc --project tsconfig.build.json",
-		"build": "npm run build:clean && npm run build:js",
-		"pub": "npm run build && npm publish"
+		"build": "npm run build:clean && npm run build:js"
 	},
 	"author": {
 		"name": "Ross Robino",

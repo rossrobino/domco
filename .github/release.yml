@@ -1,0 +1,13 @@
+# .github/release.yml
+
+changelog:
+  categories:
+    - title: Breaking Changes
+      labels:
+        - Semver-Major
+    - title: New Features
+      labels:
+        - Semver-Minor
+    - title: Other Changes
+      labels:
+        - "*"
