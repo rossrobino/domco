@@ -17,8 +17,6 @@ export default app;
 <br>
 <br>
 
-## TL;DR
-
 **domco** is a library that turns your [Vite](https://vitejs.dev) project into a [Hono](https://hono.dev) application. You can take
 advantage of Vite's build pipeline, plugins, and HMR in a full-stack
 context using Hono as your web server.

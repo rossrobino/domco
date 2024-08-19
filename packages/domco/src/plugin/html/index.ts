@@ -204,7 +204,7 @@ const generateStatic = async () => {
 
 	const staticFiles: StaticFile[] = [];
 
-	for (const [routePath, { server: mod }] of Object.entries(routes)) {
+	for (let [routePath, { server: mod }] of Object.entries(routes)) {
 		if (mod && routePath !== setup) {
 			const { prerender } = mod;
 			if (prerender) {
@@ -235,7 +235,12 @@ const generateStatic = async () => {
 					await generate(routePath);
 				} else {
 					for (let staticPath of prerender) {
-						if (staticPath === "/") staticPath = "";
+						if (!staticPath.startsWith("/")) {
+							throw Error(
+								`Prerender path \`${staticPath}\` does not start with \`"/"\`.`,
+							);
+						}
+						if (routePath === "/") routePath = "";
 						await generate(`${routePath}${staticPath}`);
 					}
 				}
