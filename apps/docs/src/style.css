@@ -26,12 +26,12 @@
 			--shiki-foreground: theme(colors.slate.200);
 			--shiki-background: theme(colors.slate.950);
 			--shiki-token-constant: theme(colors.slate.50);
-			--shiki-token-string: theme(colors.sky.400);
+			--shiki-token-string: theme(colors.sky.200);
 			--shiki-token-comment: theme(colors.slate.500);
-			--shiki-token-keyword: theme(colors.teal.300);
+			--shiki-token-keyword: theme(colors.teal.200);
 			--shiki-token-parameter: theme(colors.slate.300);
 			--shiki-token-function: theme(colors.violet.300);
-			--shiki-token-string-expression: theme(colors.sky.300);
+			--shiki-token-string-expression: theme(colors.sky.200);
 			--shiki-token-punctuation: theme(colors.slate.300);
 			--shiki-token-link: theme(colors.slate.300);
 
