@@ -1,4 +1,4 @@
-```ts
+```ts {7}
 import { Hono } from "hono";
 
 const app = new Hono();

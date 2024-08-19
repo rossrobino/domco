@@ -6,7 +6,7 @@
 	:root {
 		--background: 4% 0.05 257;
 		--foreground: 97% 0.01 257;
-		--muted: 20% 0.05 257;
+		--muted: 10% 0.05 257;
 		--muted-foreground: 87% 0.022 257;
 		--primary: 99% 0.005 257;
 		--primary-foreground: 22% 0.05 257;
@@ -20,16 +20,77 @@
 		--card-foreground: 97% 0.01 257;
 		--border: 44% 0.05 257;
 		--radius: 0.3rem;
+
+		pre,
+		blockquote {
+			--shiki-foreground: theme(colors.slate.200);
+			--shiki-background: theme(colors.slate.950);
+			--shiki-token-constant: theme(colors.slate.50);
+			--shiki-token-string: theme(colors.sky.400);
+			--shiki-token-comment: theme(colors.slate.500);
+			--shiki-token-keyword: theme(colors.teal.300);
+			--shiki-token-parameter: theme(colors.slate.300);
+			--shiki-token-function: theme(colors.violet.300);
+			--shiki-token-string-expression: theme(colors.sky.300);
+			--shiki-token-punctuation: theme(colors.slate.300);
+			--shiki-token-link: theme(colors.slate.300);
+
+			background-color: theme(backgroundColor.slate.950);
+			font-family: theme(fontFamily.mono);
+			padding-block: theme(padding.5);
+			color: theme(colors.slate.50);
+			overflow-x: auto;
+			scrollbar-width: none;
+			margin-block: theme(margin.6);
+			margin-inline: -1.5rem;
+
+			@media (min-width: 640px) {
+				border-radius: theme(borderRadius.lg);
+				margin-inline: 0;
+			}
+
+			& > code {
+				/* wrapping codeblock */
+				display: flex;
+				flex-direction: column;
+				min-width: 100%;
+				width: fit-content;
+			}
+
+			& .line,
+			& p {
+				padding-inline: theme(padding.5);
+				height: 2.5ch;
+				&.highlighted {
+					background-color: theme(colors.slate.800);
+				}
+			}
+		}
+
+		/* --shiki-foreground: theme(colors.slate.100);
+		--shiki-background: theme(colors.slate.950);
+		--shiki-token-constant: theme(colors.slate.50);
+		--shiki-token-string: theme(colors.slate.300);
+		--shiki-token-comment: theme(colors.slate.500);
+		--shiki-token-keyword: theme(colors.slate.400);
+		--shiki-token-parameter: theme(colors.slate.300);
+		--shiki-token-function: theme(colors.slate.200);
+		--shiki-token-string-expression: theme(colors.slate.200);
+		--shiki-token-punctuation: theme(colors.slate.500);
+		--shiki-token-link: theme(colors.slate.300); */
 	}
+
 	body {
 		background-color: theme(backgroundColor.background);
 		color: theme(colors.foreground);
 		margin-inline: auto;
 		max-width: 640px;
 	}
+
 	a {
 		@apply link;
 	}
+
 	h1,
 	h2,
 	h3,
@@ -96,25 +157,7 @@
 		font-weight: theme(fontWeight.normal);
 		font-size: theme(fontSize.sm);
 	}
-	pre,
-	blockquote {
-		background-color: theme(backgroundColor.slate.950);
-		font-family: theme(fontFamily.mono);
-		padding: theme(padding.5);
-		color: theme(colors.slate.50);
-		overflow-x: auto;
-		scrollbar-width: none;
-		margin-block: theme(margin.6);
-		margin-inline: -1.5rem;
-		border: theme(borderWidth.2) solid theme(borderColor.slate.800);
-	}
-	@media (min-width: 640px) {
-		pre,
-		blockquote {
-			border-radius: theme(borderRadius.lg);
-			margin-inline: 0;
-		}
-	}
+
 	pre,
 	blockquote,
 	.copy-text {

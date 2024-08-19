@@ -50,9 +50,9 @@ app.get("/", async (c, next) => {
 });
 
 app.get("/", async (c) => {
-	const tutorialHtml = raw((await processMarkdown(tutorial)).html);
-	const previewHtml = raw((await processMarkdown(preview)).html);
-	let apiReferenceHtml = (await processMarkdown(apiReference)).html;
+	const tutorialHtml = raw((await processMarkdown({ md: tutorial })).html);
+	const previewHtml = raw((await processMarkdown({ md: preview })).html);
+	let apiReferenceHtml = (await processMarkdown({ md: apiReference })).html;
 	apiReferenceHtml = raw(apiReferenceHtml.replaceAll("README.md#", "#"));
 
 	return c.render(
@@ -180,7 +180,7 @@ const BundleSize: FC = async () => {
 	return (
 		<a
 			href="https://bundlephobia.com/package/domco@latest"
-			class="border-muted-foreground flex items-center gap-3 text-sm no-underline sm:border-l sm:pl-4"
+			class="border-muted-foreground flex items-center gap-3 font-mono text-sm no-underline sm:border-l sm:pl-4"
 		>
 			<div class="text-muted-foreground">{kB}kB</div>
 		</a>

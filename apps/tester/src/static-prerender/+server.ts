@@ -1,7 +1,7 @@
 import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { createMiddleware } from "hono/factory";
-import { parse } from "marked";
+import { processMarkdown } from "robino/util/md";
 
 const content = import.meta.glob("./content/*.md", {
 	query: "?raw",
@@ -37,7 +37,11 @@ app.get("/:slug", ssr, async (c) => {
 	const md = content[`./content/${slug}.md`];
 
 	if (typeof md === "string") {
-		return c.html(c.var.page().replace("<!-- post -->", await parse(md)));
+		return c.html(
+			c.var
+				.page()
+				.replace("<!-- post -->", (await processMarkdown({ md })).html),
+		);
 	}
 
 	return c.notFound();

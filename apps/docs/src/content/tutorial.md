@@ -24,12 +24,12 @@ To create another page, add another `+page.html` file in another directory withi
 
 For example, to add the `/nested` page, add `src/nested/+page.html`.
 
-```diff
+```txt {5}
 .
 └── src/
 	├── +page.html
 	└── nested/
-+		└── +page.html
+		└── +page.html
 ```
 
 Now you can navigate to `/nested` with an anchor tag.
@@ -44,10 +44,10 @@ Each `+client.(js,ts,jsx,tsx)` file within `src/` will be processed as an entry 
 
 **domco** will automatically inject a tag for any `+client` file that is located next to a `+page.html` into the page so you don't need to link it.
 
-```diff
+```txt {3}
 .
 └── src/
-+	├── +client.ts - linked automatically
+	├── +client.ts
 	└── +page.html
 ```
 
@@ -64,11 +64,11 @@ Now that this script is included in an entry point `+page.html`, the script, and
 
 Turn any path in `src` into a Hono app by adding a `+server.(js,ts,jsx,tsx)` file.
 
-```diff
+```txt {4}
 .
 └── src/
 	├── +page.html
-+	└── +server.ts
+	└── +server.ts
 ```
 
 You have now converted this route path from a static page into a Hono application based at that path.
@@ -79,11 +79,11 @@ import { Hono } from "hono";
 
 const app = new Hono();
 
-app.get("/", (c) => c.html("hello world");
+app.get("/", (c) => c.html("hello world"));
 
 // you can also create another route from here
 // this route can be accessed at https://example.com/another-route
-app.get("/another-route", (c) => c.html("another route");
+app.get("/another-route", (c) => c.html("another route"));
 
 export default app;
 ```
@@ -108,7 +108,7 @@ app.get("/", (c) => {
 
 You can also easily get the tags for any `+client` file on the server as well. These script tags (including all imports) can be accessed using the `client` context variable within your Hono application. They can be included in an HTML string, or inside of JSX.
 
-```ts
+```ts {3,9}
 app.get("/", (c) => {
 	// gets `./+client.(js,ts,jsx,tsx)`
 	const tags = c.var.client();
@@ -195,7 +195,9 @@ This section will show you how to migrate an existing Vite single page applicati
 - Run `npm i -D hono domco` in your terminal to install hono and domco as dependencies.
 - Add `domco` to your `plugins` array in your `vite.config`.
 
-```ts
+<!-- // prettier-ignore -->
+
+```ts {3,9}
 // vite.config.ts
 import react from "@vitejs/plugin-react";
 import { domco } from "domco";
@@ -203,13 +205,19 @@ import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [domco(), react()],
+	plugins: [
+		domco(), // add to plugins
+		react(),
+	],
 });
 ```
 
-- Add types to `/src/vite.env.d.ts`
+- Move `index.html` into `src/` and rename it to `+page.html`.
+- Change the `src` attribute of the `script` tag linking to `/src/main.tsx` to `/main.tsx` (alternatively remove the tag entirely and rename `main.tsx` to `+client.tsx`).
+- Run `npm run dev` to serve your application - done!
+- Now, to add an API route, add types to `/src/vite.env.d.ts`
 
-```ts
+```ts {3-8}
 // /src/vite.env.d.ts
 /// <reference types="vite/client" />
 import type { DomcoContextVariableMap } from "domco";
@@ -220,10 +228,7 @@ declare module "hono" {
 }
 ```
 
-- Move `index.html` into `src/` and rename it to `+page.html`.
-- Change the `src` attribute of the `script` tag linking to `/src/main.tsx` to `/main.tsx` (alternatively remove the tag entirely and rename `main.tsx` to `+client.tsx`).
-- Run `npm run dev` to serve your application - done!
-- Now, to add an API route, create a `+server.ts` file anywhere within `src/`. In this example, we can make `/src/+server.ts` and serve the app from an endpoint.
+- Create a `+server.ts` file anywhere within `src/`. In this example, we can make `/src/+server.ts` and serve the app from an endpoint.
 
 ```ts
 // /src/+server.ts
@@ -231,8 +236,9 @@ import { Hono } from "hono";
 
 const app = new Hono();
 
-app.get("/", (c) => c.html(c.var.page());
-app.get("/api", (c) => c.html("hello world");
+app.get("/", (c) => c.html(c.var.page()));
+
+app.get("/api", (c) => c.html("hello world"));
 
 export default app;
 ```
@@ -270,7 +276,7 @@ The `server/` directory has three entry points:
 
 If you need to deploy to a different environment than static/NodeJs, you can add a deployment adapter within your Vite config to output your app to a different target with no additional configuration.
 
-```ts diff
+```ts {4,11-13}
 // vite.config
 import { domco } from "domco";
 // import adapter
