@@ -11,9 +11,10 @@
 		"check": "turbo check",
 		"format": "prettier --write .",
 		"build": "turbo build",
-		"cs:add": "changeset",
-		"cs:version": "changeset version",
-		"cs:publish": "npm run build && changeset publish"
+		"build:packages": "turbo build --filter='./packages/*'",
+		"changeset": "changeset",
+		"version": "changeset version",
+		"release": "npm run build:packages && changeset publish"
 	},
 	"devDependencies": {
 		"@changesets/cli": "^2.27.7",

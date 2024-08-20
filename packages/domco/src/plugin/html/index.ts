@@ -211,7 +211,13 @@ const generateStatic = async () => {
 				const generate = async (routePath: string) => {
 					const res = await app.request(toPosix(routePath));
 
-					let code = await res.text();
+					if (res.status === 404) {
+						throw new Error(
+							`Prerendering failed for path \`${routePath}\` | 404 - not found.`,
+						);
+					}
+
+					const code = await res.text();
 
 					const outDir = path.join(dirNames.out.base, dirNames.out.client.base);
 
@@ -224,7 +230,11 @@ const generateStatic = async () => {
 
 					staticFiles.push({
 						path: toPosix(
-							`${pc.dim(outDir + "/")}${pc.green(routePath.slice(1) + (routePath === "/" ? "" : "/") + "index.html")}`,
+							`${pc.dim(outDir + "/")}${pc.green(
+								routePath.slice(1) +
+									(routePath === "/" || routePath === "" ? "" : "/") +
+									"index.html",
+							)}`,
 						),
 						kB,
 						gzip,
@@ -240,7 +250,15 @@ const generateStatic = async () => {
 								`Prerender path \`${staticPath}\` does not start with \`"/"\`.`,
 							);
 						}
-						if (routePath === "/") routePath = "";
+
+						if (routePath === "/") {
+							routePath = "";
+						}
+
+						if (staticPath === "/") {
+							staticPath = "";
+						}
+
 						await generate(`${routePath}${staticPath}`);
 					}
 				}
