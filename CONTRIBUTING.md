@@ -21,4 +21,4 @@ domco is open to contributions and is licensed under the MIT license. If you fin
 ## build
 
 - Run `npm run build` in the root directory to build all projects and verify changes are working correctly
-- If you made a change that requires a new version of a package, run `npm run cs:add` from the root directory and create a changeset
+- If you made a change that requires a new version of a package, run `npm run changeset` from the root directory and create a changeset
