@@ -1,7 +1,7 @@
+import { processMarkdown } from "@robino/md";
 import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { createMiddleware } from "hono/factory";
-import { processMarkdown } from "robino/util/md";
 
 const content = import.meta.glob("./content/*.md", {
 	query: "?raw",

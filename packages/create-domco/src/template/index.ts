@@ -1,5 +1,5 @@
 const versions = {
-	domco: "0.6.0",
+	domco: "0.6.2",
 	hono: "4.5.5",
 	autoprefixer: "10.4.20",
 	prettier: "3.3.3",
@@ -54,30 +54,27 @@ export const getFiles = (options: {
 			name: "tsconfig.json",
 			contents: `{
 	"compilerOptions": {
-		"target": "ES2022",
-		"useDefineForClassFields": true,
-		"module": "ESNext",
-		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+		"target": "ESNext",
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"skipLibCheck": true,
-
-		/* Bundler mode */
-		"moduleResolution": "bundler",
+		"allowJs": true,
+		"checkJs": true,
+		"module": "Preserve",
+		"moduleResolution": "Bundler",
+		"verbatimModuleSyntax": true,
 		"allowImportingTsExtensions": true,
 		"resolveJsonModule": true,
-		"isolatedModules": true,
+		"moduleDetection": "force",
 		"noEmit": true,
-    	"jsx": "react-jsx",
+		"jsx": "react-jsx",
+		"jsxImportSource": "hono/jsx",
 
 		/* Linting */
 		"strict": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"noUncheckedIndexedAccess": true,
 		"noFallthroughCasesInSwitch": true,
-
-		/* Type check JS files */
-		"allowJs": true,
-		"checkJs": true,
+		"noUncheckedIndexedAccess": true,
 
 		/* Aliases */
 		"paths": {

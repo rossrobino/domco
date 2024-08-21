@@ -49,11 +49,11 @@
 		"LICENSE.md"
 	],
 	"scripts": {
-		"dev": "tsc --project tsconfig.build.json --watch",
-		"test": "vitest",
-		"test:run": "vitest run",
+		"dev": "tsc --watch",
+		"test": "vitest run",
+		"test:dev": "vitest",
 		"build:clean": "rm -rf ./dist",
-		"build:js": "tsc --project tsconfig.build.json",
+		"build:js": "tsc",
 		"build": "node scripts/version && npm run build:clean && npm run build:js",
 		"doc": "typedoc src/index.ts --out ../../apps/docs/src/generated --plugin typedoc-plugin-markdown --outputFileStrategy modules --hidePageHeader --hidePageTitle --useHTMLAnchors"
 	},

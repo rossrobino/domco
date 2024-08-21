@@ -1,10 +1,7 @@
-import config from "robino/config/prettier";
+import config from "@robino/prettier";
 
 /** @type {import("prettier").Config} */
 export default {
 	...config,
-	plugins: [
-		"@trivago/prettier-plugin-sort-imports",
-		"prettier-plugin-tailwindcss",
-	],
+	plugins: ["prettier-plugin-tailwindcss"],
 };

@@ -1,5 +1,5 @@
 import { BookSvg, EarthSvg, FuncSvg, PlugSvg } from "./svg";
-import { FC } from "hono/jsx";
+import type { FC } from "hono/jsx";
 
 export const Nav: FC = () => {
 	return (
@@ -17,7 +17,7 @@ type NavLinkProps = {
 
 const SideBar: FC = () => {
 	return (
-		<nav class="bg-muted sticky top-0 hidden h-screen min-w-52 overflow-y-auto lg:block">
+		<nav class="bg-muted sticky top-0 hidden h-screen overflow-y-auto lg:block">
 			<div class="p-6">
 				<HomeLink />
 			</div>
@@ -34,7 +34,7 @@ const HomeLink = () => (
 
 const NavContents: FC = () => {
 	return (
-		<div class="flex h-[90%] flex-col justify-between">
+		<div class="flex h-[90%] min-w-64 flex-col justify-between">
 			<ul class="m-0 list-none px-6">
 				<NavListItems />
 			</ul>
@@ -81,7 +81,7 @@ const Dialog: FC = () => {
 
 			<dialog
 				data-content
-				class="bg-muted my-0 ml-0 h-full max-h-dvh w-full max-w-[100vw] backdrop:backdrop-blur sm:max-w-96"
+				class="bg-muted my-0 ml-0 h-full max-h-dvh max-w-[100vw] backdrop:backdrop-blur"
 			>
 				<nav class="flex items-center justify-between p-3 pl-6">
 					<HomeLink />
@@ -118,7 +118,7 @@ const NavLink: FC<NavLinkProps> = ({ title, Icon }: NavLinkProps) => {
 	return (
 		<li>
 			<a
-				class="flex items-center gap-3 font-bold no-underline"
+				class="flex items-center gap-3 py-1 font-bold no-underline"
 				href={`/${title.split(" ").join("-").toLowerCase()}`}
 			>
 				<Icon />

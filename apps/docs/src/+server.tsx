@@ -1,10 +1,10 @@
-import { Hero } from "./components/Hero";
+import { Hero } from "@/components/Hero";
 import preview from "@/content/_preview.md?raw";
 import apiReference from "@/generated/globals.md?raw";
-import { Prerender } from "domco";
+import { processMarkdown } from "@robino/md";
+import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { raw } from "hono/html";
-import { processMarkdown } from "robino/util/md";
 
 export const prerender: Prerender = ["/", "/api-reference"];
 
@@ -21,7 +21,7 @@ app.get("/", async (c) => {
 			<div class="mb-24 flex justify-center">
 				<a
 					href="/tutorial"
-					class="button button-primary shadow-foreground/10 p-6 text-lg no-underline shadow-xl"
+					class="button button-primary p-6 text-lg no-underline"
 				>
 					Get Started
 				</a>
@@ -55,8 +55,9 @@ for (const [fileName, md] of Object.entries(content)) {
 }
 
 app.get("/api-reference", async (c) => {
-	const apiReferenceHtml = raw(
-		(await processMarkdown({ md: apiReference })).html,
+	let apiReferenceHtml = raw(
+		(await processMarkdown({ md: apiReference.replaceAll("globals.md#", "#") }))
+			.html,
 	);
 
 	return c.render(

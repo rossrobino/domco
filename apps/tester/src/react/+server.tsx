@@ -1,5 +1,5 @@
 import App from "./App";
-import { Prerender } from "domco";
+import type { Prerender } from "domco";
 import { Hono } from "hono";
 import React from "react";
 import { renderToString } from "react-dom/server";

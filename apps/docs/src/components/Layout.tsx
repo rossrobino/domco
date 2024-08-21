@@ -1,7 +1,7 @@
 import { Nav } from "./Nav";
 import { html } from "hono/html";
-import { FC, PropsWithChildren } from "hono/jsx";
-import { HtmlEscapedString } from "hono/utils/html";
+import type { FC, PropsWithChildren } from "hono/jsx";
+import type { HtmlEscapedString } from "hono/utils/html";
 
 const HtmlLayout: FC = ({ children }) => html`
 	<!doctype html>
