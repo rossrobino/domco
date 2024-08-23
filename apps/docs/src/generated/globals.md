@@ -46,9 +46,9 @@ The script to run after Vite build is complete.
 
 #### Defined in
 
-[types/public/index.ts:12](https://github.com/rossrobino/domco/blob/bd7048f2af8df6ac812f4b90db9649f78cea9b4d/packages/domco/src/types/public/index.ts#L12)
+[types/public/index.ts:12](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L12)
 
----
+***
 
 <a id="adapterbuilderadapteroptions" name="adapterbuilderadapteroptions"></a>
 
@@ -70,9 +70,9 @@ The script to run after Vite build is complete.
 
 #### Defined in
 
-[types/public/index.ts:32](https://github.com/rossrobino/domco/blob/bd7048f2af8df6ac812f4b90db9649f78cea9b4d/packages/domco/src/types/public/index.ts#L32)
+[types/public/index.ts:32](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L32)
 
----
+***
 
 <a id="adapterentry" name="adapterentry"></a>
 
@@ -98,9 +98,9 @@ domco config port.
 
 #### Defined in
 
-[types/public/index.ts:4](https://github.com/rossrobino/domco/blob/bd7048f2af8df6ac812f4b90db9649f78cea9b4d/packages/domco/src/types/public/index.ts#L4)
+[types/public/index.ts:4](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L4)
 
----
+***
 
 <a id="client" name="client"></a>
 
@@ -118,9 +118,9 @@ domco config port.
 
 #### Defined in
 
-[types/public/index.ts:102](https://github.com/rossrobino/domco/blob/bd7048f2af8df6ac812f4b90db9649f78cea9b4d/packages/domco/src/types/public/index.ts#L102)
+[types/public/index.ts:102](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L102)
 
----
+***
 
 <a id="domcoconfig" name="domcoconfig"></a>
 
@@ -150,7 +150,7 @@ Defaults to `undefined` - creates a NodeJS build only.
 ###### Default
 
 ```ts
-undefined;
+undefined
 ```
 
 <a id="port" name="port"></a>
@@ -170,7 +170,7 @@ port numbers.
 ###### Default
 
 ```ts
-5173;
+5173
 ```
 
 <a id="prod" name="prod"></a>
@@ -182,7 +182,7 @@ port numbers.
 ###### Default
 
 ```ts
-5173;
+5173
 ```
 
 #### Example
@@ -203,9 +203,9 @@ export default defineConfig({
 
 #### Defined in
 
-[types/public/index.ts:58](https://github.com/rossrobino/domco/blob/bd7048f2af8df6ac812f4b90db9649f78cea9b4d/packages/domco/src/types/public/index.ts#L58)
+[types/public/index.ts:58](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L58)
 
----
+***
 
 <a id="domcocontextvariablemap" name="domcocontextvariablemap"></a>
 
@@ -306,7 +306,7 @@ app.get("/", (c) => {
 	const page = c.var.page();
 
 	// gets `src/route/path/+page.html`
-	const differentPage = c.var.page("/route/path");
+	const differentPage = c.var.page("/route/path")
 
 	return c.html(page);
 });
@@ -341,7 +341,7 @@ const app = new Hono();
 app.get("/", (c) => {
 	// dev: fetch("http://localhost:5173/route/path")
 	// prod: fetch("https://example.com/route/path")
-	const res = await c.var.server("/route/path");
+	const res = await c.var.server("/route/path")
 
 	// ...
 });
@@ -364,9 +364,9 @@ declare module "hono" {
 
 #### Defined in
 
-[types/public/index.ts:127](https://github.com/rossrobino/domco/blob/bd7048f2af8df6ac812f4b90db9649f78cea9b4d/packages/domco/src/types/public/index.ts#L127)
+[types/public/index.ts:127](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L127)
 
----
+***
 
 <a id="page-1" name="page-1"></a>
 
@@ -384,9 +384,9 @@ declare module "hono" {
 
 #### Defined in
 
-[types/public/index.ts:100](https://github.com/rossrobino/domco/blob/bd7048f2af8df6ac812f4b90db9649f78cea9b4d/packages/domco/src/types/public/index.ts#L100)
+[types/public/index.ts:100](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L100)
 
----
+***
 
 <a id="prerender" name="prerender"></a>
 
@@ -411,9 +411,9 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/public/index.ts:98](https://github.com/rossrobino/domco/blob/bd7048f2af8df6ac812f4b90db9649f78cea9b4d/packages/domco/src/types/public/index.ts#L98)
+[types/public/index.ts:98](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L98)
 
----
+***
 
 <a id="server-1" name="server-1"></a>
 
@@ -433,7 +433,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/public/index.ts:104](https://github.com/rossrobino/domco/blob/bd7048f2af8df6ac812f4b90db9649f78cea9b4d/packages/domco/src/types/public/index.ts#L104)
+[types/public/index.ts:104](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L104)
 
 ## Functions
 
@@ -472,4 +472,4 @@ export default defineConfig({
 
 #### Defined in
 
-[plugin/index.ts:32](https://github.com/rossrobino/domco/blob/bd7048f2af8df6ac812f4b90db9649f78cea9b4d/packages/domco/src/plugin/index.ts#L32)
+[plugin/index.ts:32](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/plugin/index.ts#L32)

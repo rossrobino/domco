@@ -5,10 +5,22 @@ import { processMarkdown } from "@robino/md";
 import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { raw } from "hono/html";
+import { Layout } from "./components/Layout";
 
 export const prerender: Prerender = ["/", "/api-reference"];
 
 const app = new Hono();
+
+app.use(async (c, next) => {
+	c.setRenderer(({ title }, content) => {
+		return c.html(
+			<Layout title={title} client={c.var.client()}>
+				{content}
+			</Layout>,
+		);
+	});
+	await next();
+});
 
 app.get("/", async (c) => {
 	const previewHtml = raw((await processMarkdown({ md: preview })).html);
@@ -38,6 +50,7 @@ const content = import.meta.glob("/content/*.md", {
 
 for (const [fileName, md] of Object.entries(content)) {
 	const slug = fileName.split("/").at(-1)?.split(".").at(0);
+
 	if (slug && !slug.startsWith("_")) {
 		const html = raw((await processMarkdown({ md })).html);
 
@@ -64,7 +77,7 @@ app.get("/api-reference", async (c) => {
 		{ title: "API Reference" },
 		<>
 			<h1>API Reference</h1>
-			<section>{apiReferenceHtml}</section>,
+			<section>{apiReferenceHtml}</section>
 		</>,
 	);
 });

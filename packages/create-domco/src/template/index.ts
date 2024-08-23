@@ -1,12 +1,12 @@
 const versions = {
 	domco: "0.6.2",
-	hono: "4.5.5",
+	hono: "4.5.8",
 	autoprefixer: "10.4.20",
 	prettier: "3.3.3",
 	prettierTailwind: "0.5.14",
 	tailwind: "3.4.10",
 	typescript: "5.5.4",
-	vite: "5.4.0",
+	vite: "5.4.2",
 } as const;
 
 export const getFiles = (options: {
