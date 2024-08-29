@@ -1,10 +1,6 @@
 {
-	"extends": "@robino/tsconfig/tsconfig.json",
+	"extends": "@robino/tsconfig/bundler.json",
 	"compilerOptions": {
-		"moduleResolution": "Bundler",
-		"module": "Preserve",
-		"noEmit": true,
-
 		"jsx": "react-jsx",
 		"jsxImportSource": "hono/jsx",
 

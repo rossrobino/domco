@@ -1,6 +1,6 @@
 const versions = {
 	domco: "0.6.2",
-	hono: "4.5.8",
+	hono: "4.5.9",
 	autoprefixer: "10.4.20",
 	prettier: "3.3.3",
 	prettierTailwind: "0.5.14",

@@ -56,9 +56,19 @@ const BundleSize: FC = async () => {
 	const res = await fetch(
 		"https://bundlephobia.com/api/size?package=domco@latest",
 	);
-	const json = (await res.json()) as {
+
+	let json: {
 		assets?: [{ size: number }];
 	};
+
+	try {
+		json = await res.json();
+	} catch (error) {
+		console.log(error);
+
+		json = { assets: [{ size: 0 }] };
+	}
+
 	const kB = ((json.assets?.at(0)?.size ?? 0) / 1000).toFixed(1);
 
 	return (

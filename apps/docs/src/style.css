@@ -66,18 +66,6 @@
 				}
 			}
 		}
-
-		/* --shiki-foreground: theme(colors.slate.100);
-		--shiki-background: theme(colors.slate.950);
-		--shiki-token-constant: theme(colors.slate.50);
-		--shiki-token-string: theme(colors.slate.300);
-		--shiki-token-comment: theme(colors.slate.500);
-		--shiki-token-keyword: theme(colors.slate.400);
-		--shiki-token-parameter: theme(colors.slate.300);
-		--shiki-token-function: theme(colors.slate.200);
-		--shiki-token-string-expression: theme(colors.slate.200);
-		--shiki-token-punctuation: theme(colors.slate.500);
-		--shiki-token-link: theme(colors.slate.300); */
 	}
 
 	a {
