@@ -1,5 +1,12 @@
 # create-domco
 
+## 0.1.5
+
+### Patch Changes
+
+- 41af98a: Bump dependencies
+- 5a4e83e: adds `check` script to template
+
 ## 0.1.4
 
 ### Patch Changes

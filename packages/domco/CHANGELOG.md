@@ -1,5 +1,11 @@
 # domco
 
+## 0.6.3
+
+### Patch Changes
+
+- 41af98a: Bump dependencies
+
 ## 0.6.2
 
 ### Patch Changes
