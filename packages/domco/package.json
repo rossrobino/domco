@@ -1,7 +1,7 @@
 {
 	"name": "domco",
 	"description": "Construct Web Applications with Vite and Hono",
-	"version": "0.6.3",
+	"version": "0.7.0",
 	"author": {
 		"name": "Ross Robino",
 		"url": "https://robino.dev"

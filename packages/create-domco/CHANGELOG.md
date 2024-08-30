@@ -1,5 +1,13 @@
 # create-domco
 
+## 0.1.6
+
+### Patch Changes
+
+- da8740b: Use `configureServer` and add `vite preview` script instead of running node.
+- a84c848: bump domco in template
+- 7370e01: import `process` from "node:process" instead of global
+
 ## 0.1.5
 
 ### Patch Changes
