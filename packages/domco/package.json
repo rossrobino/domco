@@ -26,6 +26,10 @@
 			"types": "./dist/index.d.ts",
 			"default": "./dist/index.js"
 		},
+		"./adapter/node": {
+			"types": "./dist/adapter/node/index.d.ts",
+			"default": "./dist/adapter/node/index.js"
+		},
 		"./adapter/vercel": {
 			"types": "./dist/adapter/vercel/index.d.ts",
 			"default": "./dist/adapter/vercel/index.js"
@@ -34,7 +38,7 @@
 			"types": "./dist/app/index.d.ts",
 			"default": "./dist/app/index.js"
 		},
-		"./dev": {
+		"./app/dev": {
 			"types": "./dist/app/dev/index.d.ts",
 			"default": "./dist/app/dev/index.js"
 		},

@@ -42,7 +42,7 @@ export const domco = async (config?: DomcoConfig): Promise<Plugin[]> => {
 		htmlPlugin(),
 		await routesPlugin(),
 		manifestPlugin(),
-		entryPlugin(domcoConfig),
+		entryPlugin(),
 		await adapterPlugin(domcoConfig),
 		lifecyclePlugin(),
 	];

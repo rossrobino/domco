@@ -66,6 +66,7 @@ type VercelAdapterOptions =
 
 const fnName = "fn";
 
+/** use when runtime is set to node */
 const nodeEntry: AdapterEntry = ({ appId }) => {
 	const getPath: HonoOptions<{}>["getPath"] = (req) => {
 		const url = new URL(req.url);
@@ -96,6 +97,7 @@ export default handle(app);
 `;
 };
 
+/** use when runtime is edge */
 const edgeEntry: AdapterEntry = ({ appId }) => {
 	return `
 import { createApp } from "${appId}";

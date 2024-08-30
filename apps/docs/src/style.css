@@ -68,6 +68,10 @@
 		}
 	}
 
+	* {
+		scroll-padding-block-start: theme(padding.16);
+	}
+
 	a {
 		@apply link;
 	}

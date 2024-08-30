@@ -43,7 +43,10 @@ export const adapterPlugin = async (
 		async closeBundle() {
 			if (viteConfig.build.ssr) {
 				if (adapter) {
-					await adapter.run();
+					if (adapter.run) {
+						await adapter.run();
+					}
+
 					console.log(pc.bold(`adapter - ${adapter.name}`));
 					console.log(pc.dim(pc.italic(adapter.message)));
 					console.log();
@@ -52,7 +55,7 @@ export const adapterPlugin = async (
 				console.log(pc.bold("✓ build complete"));
 
 				console.log(
-					pc.dim(pc.italic("preview your server by running `vite preview`")),
+					pc.dim(pc.italic("run `vite preview` to preview your app with Vite")),
 				);
 
 				console.log();

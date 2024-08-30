@@ -2,7 +2,7 @@ import { dirNames, fileNames } from "../../constants/index.js";
 import type { DomcoConfig } from "../../types/public/index.js";
 import { findFiles, toAllScriptEndings } from "../../util/fs/index.js";
 import { ssrId } from "../adapter/index.js";
-import { appId, nodeId } from "../entry/index.js";
+import { appId } from "../entry/index.js";
 import { routesId } from "../routes/index.js";
 import path from "node:path";
 import process from "node:process";
@@ -72,9 +72,11 @@ const serverEntry = (adapter: DomcoConfig["adapter"]) => {
 	const entry: Record<string, string> = {
 		app: appId,
 		routes: routesId,
-		node: nodeId,
 	};
+
+	// only create `main` if there's an adapter
 	if (adapter) entry.main = ssrId;
+
 	return entry;
 };
 

@@ -16,7 +16,7 @@ export type Adapter = {
 	/**
 	 * The script to run after Vite build is complete.
 	 */
-	run: () => any;
+	run?: () => any;
 
 	/**
 	 * Message to log when the build is complete.
@@ -58,12 +58,16 @@ export type AdapterBuilder<AdapterOptions = {}> = (
 export type DomcoConfig = {
 	/**
 	 * domco adapter.
-	 *
-	 * Import from `"domco/adapter/..."`
-	 *
-	 * Defaults to `undefined` - creates a NodeJS build only.
+	 * 
+	 * Defaults to `undefined` - creates a `app` build only.
 	 *
 	 * @default undefined
+	 *
+	 * @example
+	 * 
+	 * ```js
+	 * import { adapter } from `"domco/adapter/...";`
+	 * ```
 	 */
 	adapter?: ReturnType<AdapterBuilder>;
 

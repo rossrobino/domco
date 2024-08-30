@@ -64,7 +64,7 @@ const BundleSize: FC = async () => {
 	try {
 		json = await res.json();
 	} catch (error) {
-		console.log(error);
+		console.log("unable to parse bundle size");
 
 		return <></>;
 	}

@@ -2,4 +2,4 @@
 "domco": patch
 ---
 
-export `createAppDev` from "domco/dev"
+exports `createAppDev` from "domco/app/dev"
