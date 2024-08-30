@@ -1,5 +1,23 @@
 # domco
 
+## 0.7.0
+
+### Minor Changes
+
+- dea2596: Removes node default build, adds node adapter instead.
+
+  ```js
+  import { adapter } from "domco/adapter/node";
+  ```
+
+- 66bd2f8: Adds bun adapter
+
+### Patch Changes
+
+- da8740b: Use `configureServer` and add `vite preview` script instead of running node.
+- 7370e01: import `process` from "node:process" instead of global
+- 7370e01: exports `createAppDev` from "domco/app/dev"
+
 ## 0.6.3
 
 ### Patch Changes
