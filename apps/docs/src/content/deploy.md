@@ -42,9 +42,13 @@ export default defineConfig({
 });
 ```
 
+### Bun
+
+The [Bun](https://bun.sh/) adapter runs your app using Bun's [HTTP server](https://bun.sh/docs/api/http).
+
 ### Node
 
-The NodeJs adapter outputs your app using `@hono/node-server`.
+The [NodeJs](https://nodejs.org/) adapter runs your app using `@hono/node-server`.
 
 ### Vercel
 

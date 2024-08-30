@@ -26,6 +26,10 @@
 			"types": "./dist/index.d.ts",
 			"default": "./dist/index.js"
 		},
+		"./adapter/bun": {
+			"types": "./dist/adapter/bun/index.d.ts",
+			"default": "./dist/adapter/bun/index.js"
+		},
 		"./adapter/node": {
 			"types": "./dist/adapter/node/index.d.ts",
 			"default": "./dist/adapter/node/index.js"
