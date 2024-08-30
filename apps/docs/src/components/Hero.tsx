@@ -66,7 +66,7 @@ const BundleSize: FC = async () => {
 	} catch (error) {
 		console.log(error);
 
-		json = { assets: [{ size: 0 }] };
+		return <></>;
 	}
 
 	const kB = ((json.assets?.at(0)?.size ?? 0) / 1000).toFixed(1);
