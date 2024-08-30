@@ -46,7 +46,7 @@ The script to run after Vite build is complete.
 
 #### Defined in
 
-[types/public/index.ts:12](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L12)
+[types/public/index.ts:12](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L12)
 
 ***
 
@@ -70,7 +70,7 @@ The script to run after Vite build is complete.
 
 #### Defined in
 
-[types/public/index.ts:32](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L32)
+[types/public/index.ts:32](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L32)
 
 ***
 
@@ -98,7 +98,7 @@ domco config port.
 
 #### Defined in
 
-[types/public/index.ts:4](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L4)
+[types/public/index.ts:4](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L4)
 
 ***
 
@@ -118,7 +118,7 @@ domco config port.
 
 #### Defined in
 
-[types/public/index.ts:102](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L102)
+[types/public/index.ts:102](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L102)
 
 ***
 
@@ -203,7 +203,7 @@ export default defineConfig({
 
 #### Defined in
 
-[types/public/index.ts:58](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L58)
+[types/public/index.ts:58](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L58)
 
 ***
 
@@ -364,7 +364,7 @@ declare module "hono" {
 
 #### Defined in
 
-[types/public/index.ts:127](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L127)
+[types/public/index.ts:127](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L127)
 
 ***
 
@@ -384,7 +384,7 @@ declare module "hono" {
 
 #### Defined in
 
-[types/public/index.ts:100](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L100)
+[types/public/index.ts:100](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L100)
 
 ***
 
@@ -411,7 +411,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/public/index.ts:98](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L98)
+[types/public/index.ts:98](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L98)
 
 ***
 
@@ -433,7 +433,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/public/index.ts:104](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/types/public/index.ts#L104)
+[types/public/index.ts:104](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L104)
 
 ## Functions
 
@@ -472,4 +472,4 @@ export default defineConfig({
 
 #### Defined in
 
-[plugin/index.ts:32](https://github.com/rossrobino/domco/blob/2ac2c168821b39b41488675ef7deec1811e92b87/packages/domco/src/plugin/index.ts#L32)
+[plugin/index.ts:32](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/plugin/index.ts#L32)

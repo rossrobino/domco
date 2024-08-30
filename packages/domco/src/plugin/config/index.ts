@@ -5,6 +5,7 @@ import { ssrId } from "../adapter/index.js";
 import { appId, nodeId } from "../entry/index.js";
 import { routesId } from "../routes/index.js";
 import path from "node:path";
+import process from "node:process";
 import type { Plugin } from "vite";
 
 export const configPlugin = async (

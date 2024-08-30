@@ -1,6 +1,7 @@
 import { dirNames } from "../../constants/index.js";
 import fs from "node:fs/promises";
 import path from "node:path";
+import process from "node:process";
 import type { Plugin } from "vite";
 
 export const manifestPlugin = (): Plugin => {

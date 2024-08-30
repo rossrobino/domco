@@ -34,6 +34,7 @@ export const entryPlugin = (domcoConfig: DomcoConfig): Plugin => {
 				return `import { createApp } from "${appId}";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
+import process from "node:process";
 
 const app = createApp({ serveStatic });
 

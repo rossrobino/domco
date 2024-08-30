@@ -4,6 +4,7 @@ import * as p from "@clack/prompts";
 import { writeFile, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import whichPmRuns from "which-pm-runs";
+import process from "node:process";
 
 /**
  * Writes an array of files to the specified directory.

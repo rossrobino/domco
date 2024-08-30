@@ -6,6 +6,7 @@ import {
 	toPosix,
 } from "../fs/index.js";
 import path from "node:path";
+import process from "node:process";
 
 /**
  * @returns keys are routes and values are RouteModules

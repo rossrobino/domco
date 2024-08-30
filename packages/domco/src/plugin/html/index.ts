@@ -14,6 +14,7 @@ import path from "node:path";
 import url from "node:url";
 import pc from "picocolors";
 import type { HtmlTagDescriptor, Plugin } from "vite";
+import process from "node:process";
 
 type StaticFile = { path: string; kB: string; gzip: string };
 
