@@ -7,7 +7,7 @@
 		"dev": "vite",
 		"check": "tsc --noEmit",
 		"build": "vite build",
-		"preview": "node dist/server/node.js"
+		"preview": "vite preview"
 	},
 	"devDependencies": {
 		"@sveltejs/vite-plugin-svelte": "^3.1.2",

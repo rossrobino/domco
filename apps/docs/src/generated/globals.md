@@ -48,7 +48,7 @@ The script to run after Vite build is complete.
 
 [types/public/index.ts:12](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L12)
 
-***
+---
 
 <a id="adapterbuilderadapteroptions" name="adapterbuilderadapteroptions"></a>
 
@@ -72,7 +72,7 @@ The script to run after Vite build is complete.
 
 [types/public/index.ts:32](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L32)
 
-***
+---
 
 <a id="adapterentry" name="adapterentry"></a>
 
@@ -100,7 +100,7 @@ domco config port.
 
 [types/public/index.ts:4](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L4)
 
-***
+---
 
 <a id="client" name="client"></a>
 
@@ -120,7 +120,7 @@ domco config port.
 
 [types/public/index.ts:102](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L102)
 
-***
+---
 
 <a id="domcoconfig" name="domcoconfig"></a>
 
@@ -150,7 +150,7 @@ Defaults to `undefined` - creates a NodeJS build only.
 ###### Default
 
 ```ts
-undefined
+undefined;
 ```
 
 <a id="port" name="port"></a>
@@ -170,7 +170,7 @@ port numbers.
 ###### Default
 
 ```ts
-5173
+5173;
 ```
 
 <a id="prod" name="prod"></a>
@@ -182,7 +182,7 @@ port numbers.
 ###### Default
 
 ```ts
-5173
+5173;
 ```
 
 #### Example
@@ -205,7 +205,7 @@ export default defineConfig({
 
 [types/public/index.ts:58](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L58)
 
-***
+---
 
 <a id="domcocontextvariablemap" name="domcocontextvariablemap"></a>
 
@@ -306,7 +306,7 @@ app.get("/", (c) => {
 	const page = c.var.page();
 
 	// gets `src/route/path/+page.html`
-	const differentPage = c.var.page("/route/path")
+	const differentPage = c.var.page("/route/path");
 
 	return c.html(page);
 });
@@ -341,7 +341,7 @@ const app = new Hono();
 app.get("/", (c) => {
 	// dev: fetch("http://localhost:5173/route/path")
 	// prod: fetch("https://example.com/route/path")
-	const res = await c.var.server("/route/path")
+	const res = await c.var.server("/route/path");
 
 	// ...
 });
@@ -366,7 +366,7 @@ declare module "hono" {
 
 [types/public/index.ts:127](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L127)
 
-***
+---
 
 <a id="page-1" name="page-1"></a>
 
@@ -386,7 +386,7 @@ declare module "hono" {
 
 [types/public/index.ts:100](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L100)
 
-***
+---
 
 <a id="prerender" name="prerender"></a>
 
@@ -413,7 +413,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 [types/public/index.ts:98](https://github.com/rossrobino/domco/blob/ace4964b2e7e61fe17c6d21d874e42d9ef510772/packages/domco/src/types/public/index.ts#L98)
 
-***
+---
 
 <a id="server-1" name="server-1"></a>
 

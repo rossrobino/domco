@@ -1,4 +1,3 @@
-import { dirNames, fileNames } from "../../constants/index.js";
 import type { DomcoConfig } from "../../types/public/index.js";
 import { appId } from "../entry/index.js";
 import pc from "picocolors";
@@ -49,14 +48,13 @@ export const adapterPlugin = async (
 					console.log(pc.dim(pc.italic(adapter.message)));
 					console.log();
 				}
+
 				console.log(pc.bold("✓ build complete"));
+
 				console.log(
-					pc.dim(
-						pc.italic(
-							`${adapter ? "preview a node version of" : "start"} your server by running \`node ${dirNames.out.base}/${dirNames.out.ssr}/${fileNames.out.entry.node}\``,
-						),
-					),
+					pc.dim(pc.italic("preview your server by running `vite preview`")),
 				);
+
 				console.log();
 				console.log();
 			}

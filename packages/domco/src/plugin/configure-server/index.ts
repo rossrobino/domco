@@ -1,12 +1,17 @@
 import { createAppDev } from "../../app/dev/index.js";
-import { fileNames } from "../../constants/index.js";
+import { dirNames, fileNames } from "../../constants/index.js";
 import { getRequestListener } from "@hono/node-server";
+import { serveStatic } from "@hono/node-server/serve-static";
 import type { Plugin } from "vite";
+import path from "node:path";
+import process from "node:process";
+import url from "node:url";
 
 export const configureServerPlugin = (): Plugin => {
 	return {
 		name: "domco:configure-server",
 		apply: "serve",
+
 		// only apply in dev
 		transform(code, id) {
 			// inject vite client to client entries, in case the script is added
@@ -19,6 +24,7 @@ export const configureServerPlugin = (): Plugin => {
 				};
 			}
 		},
+
 		async configureServer(devServer) {
 			const sendFullReload = () => devServer.hot.send({ type: "full-reload" });
 
@@ -69,6 +75,35 @@ export const configureServerPlugin = (): Plugin => {
 					)(req, res);
 				});
 			};
+		},
+
+		async configurePreviewServer(previewServer) {
+			// import built app from dist
+			const createApp = (
+				await import(
+					url.pathToFileURL(
+						path.join(
+							process.cwd(),
+							dirNames.out.base,
+							dirNames.out.ssr,
+							fileNames.out.entry.app,
+						),
+					).href
+				)
+			).createApp;
+
+			// use node serve static since the preview server is a node server
+			const app = createApp({ serveStatic });
+
+			previewServer.middlewares.use(async (req, res) => {
+				getRequestListener(async (request) => {
+					const response = await app.fetch(request);
+
+					if (!(response instanceof Response)) throw response;
+
+					return response;
+				})(req, res);
+			});
 		},
 	};
 };

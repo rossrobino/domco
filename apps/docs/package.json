@@ -7,7 +7,7 @@
 		"dev": "vite --host",
 		"check": "tsc --noEmit",
 		"build": "vite build",
-		"preview": "node dist/server/node.js"
+		"preview": "vite preview"
 	},
 	"devDependencies": {
 		"autoprefixer": "^10.4.20",
