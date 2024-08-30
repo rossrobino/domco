@@ -1,4 +1,4 @@
-import { createAppDev } from "../../dev/index.js";
+import { createAppDev } from "../../app/dev/index.js";
 import { fileNames } from "../../constants/index.js";
 import { getRequestListener } from "@hono/node-server";
 import type { Plugin } from "vite";

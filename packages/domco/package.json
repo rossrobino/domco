@@ -35,8 +35,8 @@
 			"default": "./dist/app/index.js"
 		},
 		"./dev": {
-			"types": "./dist/dev/index.d.ts",
-			"default": "./dist/dev/index.js"
+			"types": "./dist/app/dev/index.d.ts",
+			"default": "./dist/app/dev/index.js"
 		},
 		"./injector": {
 			"types": "./dist/injector/index.d.ts",

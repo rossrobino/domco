@@ -1,6 +1,6 @@
-import type { Routes } from "../types/private/index.js";
-import { createRoutes } from "../util/create-routes/index.js";
-import { addRoutes, applySetup, setServer } from "../app/util/index.js";
+import type { Routes } from "../../types/private/index.js";
+import { createRoutes } from "../../util/create-routes/index.js";
+import { addRoutes, applySetup, setServer } from "../util/index.js";
 import { defu } from "defu";
 import { Hono } from "hono";
 import type { HonoOptions } from "hono/hono-base";
