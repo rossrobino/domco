@@ -11,8 +11,8 @@ import { getMaxLengths } from "../../util/get-max-lengths/index.js";
 import type { Hono } from "hono";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { styleText } from "node:util";
 import url from "node:url";
-import pc from "picocolors";
 import type { HtmlTagDescriptor, Plugin } from "vite";
 import process from "node:process";
 
@@ -96,7 +96,7 @@ export const htmlPlugin = (): Plugin => {
 				staticFiles.sort((a, b) => a.path.localeCompare(b.path));
 
 				if (staticFiles.length) {
-					console.log(pc.bold("static"));
+					console.log(styleText("bold", "static"));
 
 					const maxLengths = getMaxLengths(staticFiles);
 
@@ -105,7 +105,7 @@ export const htmlPlugin = (): Plugin => {
 						const kB = file.kB.padStart(maxLengths.kB ?? 0) + " kB";
 						const gzip = ` │ gzip: ${file.gzip.padStart(maxLengths.gzip ?? 0)} kB`;
 
-						console.log(`${filePath}${pc.dim(kB + gzip)}`);
+						console.log(`${filePath}${styleText("dim", kB + gzip)}`);
 					}
 
 					console.log();
@@ -152,7 +152,7 @@ const renameAndRemoveHtml = async () => {
 
 			staticFiles.push({
 				path: toPosix(
-					`${pc.dim(outDir + "/")}${pc.green(path.join(pagePath, "index.html").slice(1))}`,
+					`${styleText("dim", outDir + "/")}${styleText("green", path.join(pagePath, "index.html").slice(1))}`,
 				),
 				kB,
 				gzip,
@@ -231,7 +231,8 @@ const generateStatic = async () => {
 
 					staticFiles.push({
 						path: toPosix(
-							`${pc.dim(outDir + "/")}${pc.green(
+							`${styleText("dim", outDir + "/")}${styleText(
+								"green",
 								routePath.slice(1) +
 									(routePath === "/" || routePath === "" ? "" : "/") +
 									"index.html",

@@ -1,6 +1,6 @@
 import type { DomcoConfig } from "../../types/public/index.js";
 import { appId } from "../entry/index.js";
-import pc from "picocolors";
+import { styleText } from "node:util";
 import type { Plugin, ResolvedConfig } from "vite";
 
 /** SSR entry ID for the entrypoint provided by the adapter. */
@@ -47,15 +47,18 @@ export const adapterPlugin = async (
 						await adapter.run();
 					}
 
-					console.log(pc.bold(`adapter - ${adapter.name}`));
-					console.log(pc.dim(pc.italic(adapter.message)));
+					console.log(styleText("bold", `adapter - ${adapter.name}`));
+					console.log(styleText(["dim", "italic"], adapter.message));
 					console.log();
 				}
 
-				console.log(pc.bold("✓ build complete"));
+				console.log(styleText("bold", "✓ build complete"));
 
 				console.log(
-					pc.dim(pc.italic("run `vite preview` to preview your app with Vite")),
+					styleText(
+						["dim", "italic"],
+						"run `vite preview` to preview your app with Vite",
+					),
 				);
 
 				console.log();
