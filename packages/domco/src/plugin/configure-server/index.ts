@@ -2,10 +2,10 @@ import { createAppDev } from "../../app/dev/index.js";
 import { dirNames, fileNames } from "../../constants/index.js";
 import { getRequestListener } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
-import type { Plugin } from "vite";
 import path from "node:path";
 import process from "node:process";
 import url from "node:url";
+import type { Plugin } from "vite";
 
 export const configureServerPlugin = (): Plugin => {
 	return {

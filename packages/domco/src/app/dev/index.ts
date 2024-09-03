@@ -6,8 +6,8 @@ import type { HonoOptions } from "hono/hono-base";
 import { html } from "hono/html";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { ViteDevServer } from "vite";
 import process from "node:process";
+import type { ViteDevServer } from "vite";
 
 /**
  * Creates a app for development use in the `configureServer` Vite hook.
@@ -118,17 +118,17 @@ const errorTemplate = (err: Error) => html`
 			<title>${err.name}</title>
 			<style>
 				body {
-					font-family: system-ui, sans-serif;
 					margin-inline: auto;
-					max-width: 768px;
 					padding-inline: 1rem;
+					max-width: 768px;
+					font-family: system-ui, sans-serif;
 				}
 				pre {
-					color: white;
-					background-color: black;
 					border-radius: 0.25rem;
+					background-color: black;
 					padding: 1rem;
 					overflow-x: scroll;
+					color: white;
 					line-height: 1.5;
 				}
 			</style>

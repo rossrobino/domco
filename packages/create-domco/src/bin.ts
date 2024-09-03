@@ -3,8 +3,8 @@ import { getFiles } from "./template/index.js";
 import * as p from "@clack/prompts";
 import { writeFile, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import whichPmRuns from "which-pm-runs";
 import process from "node:process";
+import whichPmRuns from "which-pm-runs";
 
 /**
  * Writes an array of files to the specified directory.

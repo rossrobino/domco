@@ -1,11 +1,11 @@
 import { Hero } from "@/components/Hero";
+import { Layout } from "@/components/Layout";
 import preview from "@/content/_preview.md?raw";
 import apiReference from "@/generated/globals.md?raw";
 import { processMarkdown } from "@robino/md";
 import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { raw } from "hono/html";
-import { Layout } from "./components/Layout";
 
 export const prerender: Prerender = ["/", "/api-reference"];
 

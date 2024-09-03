@@ -25,10 +25,10 @@ Here's an example of how to serve your app using the result of your build with `
 
 ```ts
 // node.js
-import { serveStatic } from "@hono/node-server/serve-static";
-import { serve } from "@hono/node-server";
 // import from build output
 import { createApp } from "./dist/server/app.js";
+import { serve } from "@hono/node-server";
+import { serveStatic } from "@hono/node-server/serve-static";
 
 const app = createApp({ serveStatic });
 

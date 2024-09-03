@@ -157,8 +157,8 @@ import { adapter } from `"domco/adapter/...";`
 
 ```ts
 // vite.config.ts
-import { defineConfig } from "vite";
 import { domco, type DomcoConfig } from "domco";
+import { defineConfig } from "vite";
 
 const config: DomcoConfig = {
 	// options...
@@ -428,8 +428,8 @@ The domco Vite plugin.
 
 ```ts
 // vite.config.ts
-import { defineConfig } from "vite";
 import { domco } from "domco";
+import { defineConfig } from "vite";
 
 export default defineConfig({
 	plugins: [domco()],

@@ -11,10 +11,10 @@ import { getMaxLengths } from "../../util/get-max-lengths/index.js";
 import type { Hono } from "hono";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { styleText } from "node:util";
-import url from "node:url";
-import type { HtmlTagDescriptor, Plugin } from "vite";
 import process from "node:process";
+import url from "node:url";
+import { styleText } from "node:util";
+import type { HtmlTagDescriptor, Plugin } from "vite";
 
 type StaticFile = { path: string; kB: string; gzip: string };
 

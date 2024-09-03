@@ -16,6 +16,9 @@ export const configPlugin = async (
 	return {
 		name: "domco:config",
 		async config(_, { isSsrBuild, command }) {
+			/** If Vite is building. */
+			const build = command === "build";
+
 			return {
 				resolve: {
 					alias: [
@@ -33,7 +36,7 @@ export const configPlugin = async (
 				ssr: {
 					noExternal: ["domco"],
 				},
-				logLevel: command === "build" ? "warn" : "info",
+				logLevel: build ? "warn" : "info",
 				build: {
 					manifest: !isSsrBuild,
 					target: "es2022",
