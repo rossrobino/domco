@@ -9,11 +9,16 @@ import type {
 } from "./types/index.js";
 import type { HonoOptions } from "hono/hono-base";
 import fs from "node:fs/promises";
-import process from "node:process";
 import path from "path";
 
 const copyStatic = async (outDir: string) => {
 	await fs.cp(path.join(dirNames.out.base, dirNames.out.client.base), outDir, {
+		recursive: true,
+	});
+};
+
+const copyServer = async (outDir: string) => {
+	await fs.cp(path.join(dirNames.out.base, dirNames.out.ssr), outDir, {
 		recursive: true,
 	});
 };
@@ -117,16 +122,16 @@ const outDir = path.join(".vercel", "output");
 const fnName = "fn";
 const fnDir = path.join(outDir, "functions", `${fnName}.func`);
 
-/** Path to `main.js` relative to the function directory. */
-const entryPath = path.relative(
-	path.join(process.cwd(), fnDir, fileNames.out.entry.main),
-	path.join(
-		process.cwd(),
-		dirNames.out.base,
-		dirNames.out.ssr,
-		fileNames.out.entry.main,
-	),
-);
+// /** Path to `main.js` relative to the function directory. */
+// const entryPath = path.relative(
+// 	path.join(process.cwd(), fnDir),
+// 	path.join(
+// 		process.cwd(),
+// 		dirNames.out.base,
+// 		dirNames.out.ssr,
+// 		fileNames.out.entry.main,
+// 	),
+// );
 
 /**
  * Creates a [Vercel](https://vercel.com) build according to the build output API spec.
@@ -162,7 +167,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	if (isEdge) {
 		resolvedOptions = {
 			config: {
-				entrypoint: entryPath,
+				entrypoint: fileNames.out.entry.main,
 				runtime: "edge",
 			},
 		};
@@ -170,7 +175,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		// node default
 		resolvedOptions = {
 			config: {
-				handler: entryPath,
+				handler: fileNames.out.entry.main,
 				runtime: "nodejs20.x",
 				launcherType: "Nodejs",
 			},
@@ -195,6 +200,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 			await fs.mkdir(fnDir, { recursive: true });
 
 			await copyStatic(path.join(outDir, "static"));
+			await copyServer(fnDir);
 
 			const outputConfig: OutputConfig = {
 				version: 3,
