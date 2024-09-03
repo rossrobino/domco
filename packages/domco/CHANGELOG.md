@@ -1,5 +1,17 @@
 # domco
 
+## 0.8.0
+
+### Minor Changes
+
+- 418af75: remove node/bun adapter, better to let user configure.
+- f9e5cd4: add supported node versions `>= 20.12.0`
+
+### Patch Changes
+
+- 418af75: Remove defu dependency, only used in a couple places where Object.assign works instead
+- f9e5cd4: Replace picocolors with built in node `styleText`
+
 ## 0.7.0
 
 ### Minor Changes

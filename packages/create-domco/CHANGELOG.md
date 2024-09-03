@@ -1,5 +1,11 @@
 # create-domco
 
+## 0.1.7
+
+### Patch Changes
+
+- 418af75: Bump dependency versions
+
 ## 0.1.6
 
 ### Patch Changes
