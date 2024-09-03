@@ -48,7 +48,7 @@ The script to run after Vite build is complete.
 
 [types/public/index.ts:9](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L9)
 
-***
+---
 
 <a id="adapterbuilderadapteroptions" name="adapterbuilderadapteroptions"></a>
 
@@ -72,7 +72,7 @@ The script to run after Vite build is complete.
 
 [types/public/index.ts:29](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L29)
 
-***
+---
 
 <a id="adapterentry" name="adapterentry"></a>
 
@@ -96,7 +96,7 @@ The app entrypoint to import `createApp` from.
 
 [types/public/index.ts:4](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L4)
 
-***
+---
 
 <a id="client" name="client"></a>
 
@@ -116,7 +116,7 @@ The app entrypoint to import `createApp` from.
 
 [types/public/index.ts:92](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L92)
 
-***
+---
 
 <a id="domcoconfig" name="domcoconfig"></a>
 
@@ -144,7 +144,7 @@ Defaults to `undefined` - creates a `app` build only.
 ###### Default
 
 ```ts
-undefined
+undefined;
 ```
 
 ###### Example
@@ -173,7 +173,7 @@ export default defineConfig({
 
 [types/public/index.ts:55](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L55)
 
-***
+---
 
 <a id="domcocontextvariablemap" name="domcocontextvariablemap"></a>
 
@@ -274,7 +274,7 @@ app.get("/", (c) => {
 	const page = c.var.page();
 
 	// gets `src/route/path/+page.html`
-	const differentPage = c.var.page("/route/path")
+	const differentPage = c.var.page("/route/path");
 
 	return c.html(page);
 });
@@ -309,7 +309,7 @@ const app = new Hono();
 app.get("/", (c) => {
 	// dev: fetch("http://localhost:5173/route/path")
 	// prod: fetch("https://example.com/route/path")
-	const res = await c.var.server("/route/path")
+	const res = await c.var.server("/route/path");
 
 	// ...
 });
@@ -334,7 +334,7 @@ declare module "hono" {
 
 [types/public/index.ts:117](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L117)
 
-***
+---
 
 <a id="page-1" name="page-1"></a>
 
@@ -354,7 +354,7 @@ declare module "hono" {
 
 [types/public/index.ts:90](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L90)
 
-***
+---
 
 <a id="prerender" name="prerender"></a>
 
@@ -381,7 +381,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 [types/public/index.ts:88](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L88)
 
-***
+---
 
 <a id="server-1" name="server-1"></a>
 
