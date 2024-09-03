@@ -19,6 +19,22 @@ The `client/` directory holds client assets. JS and CSS assets with hashed file 
 
 `main.js` is the main entry point for your application if you used an adapter, configured to the target environment.
 
+## Example
+
+Here's an example of how to serve your app using the result of your build with `@hono/node-server`.
+
+```ts
+// node.js
+import { serveStatic } from "@hono/node-server/serve-static";
+import { serve } from "@hono/node-server";
+// import from build output
+import { createApp } from "./dist/server/app.js";
+
+const app = createApp({ serveStatic });
+
+serve(app);
+```
+
 ## Adapters
 
 Add a deployment adapter within your Vite config to output your app to a different target with no additional configuration.
