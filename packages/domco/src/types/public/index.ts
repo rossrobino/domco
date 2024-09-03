@@ -2,9 +2,6 @@ import type { MaybePromise } from "../helper/index.js";
 import type { HtmlEscapedString } from "hono/utils/html";
 
 export type AdapterEntry = (AdapterEntryOptions: {
-	/** domco config port. */
-	port: number;
-
 	/** The app entrypoint to import `createApp` from. */
 	appId: string;
 }) => Promise<string> | string;
@@ -58,29 +55,18 @@ export type AdapterBuilder<AdapterOptions = {}> = (
 export type DomcoConfig = {
 	/**
 	 * domco adapter.
-	 * 
+	 *
 	 * Defaults to `undefined` - creates a `app` build only.
 	 *
 	 * @default undefined
 	 *
 	 * @example
-	 * 
+	 *
 	 * ```js
 	 * import { adapter } from `"domco/adapter/...";`
 	 * ```
 	 */
 	adapter?: ReturnType<AdapterBuilder>;
-
-	/**
-	 * port numbers.
-	 */
-	port?: {
-		/** @default 5173 */
-		dev?: number;
-
-		/** @default 5173 */
-		prod?: number;
-	};
 };
 
 /**

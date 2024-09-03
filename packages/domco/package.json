@@ -29,14 +29,6 @@
 			"types": "./dist/index.d.ts",
 			"default": "./dist/index.js"
 		},
-		"./adapter/bun": {
-			"types": "./dist/adapter/bun/index.d.ts",
-			"default": "./dist/adapter/bun/index.js"
-		},
-		"./adapter/node": {
-			"types": "./dist/adapter/node/index.d.ts",
-			"default": "./dist/adapter/node/index.js"
-		},
 		"./adapter/vercel": {
 			"types": "./dist/adapter/vercel/index.d.ts",
 			"default": "./dist/adapter/vercel/index.js"
@@ -83,7 +75,6 @@
 	},
 	"dependencies": {
 		"@hono/node-server": "^1.12.2",
-		"defu": "^6.1.4",
 		"esbuild": "^0.23.1"
 	}
 }

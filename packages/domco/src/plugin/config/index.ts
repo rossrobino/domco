@@ -17,9 +17,6 @@ export const configPlugin = async (
 		name: "domco:config",
 		async config(_, { isSsrBuild, command }) {
 			return {
-				server: {
-					port: domcoConfig.port?.dev,
-				},
 				resolve: {
 					alias: [
 						{

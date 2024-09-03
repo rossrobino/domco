@@ -42,14 +42,6 @@ export default defineConfig({
 });
 ```
 
-### Bun
-
-The [Bun](https://bun.sh/) adapter runs your app using Bun's [HTTP server](https://bun.sh/docs/api/http).
-
-### Node
-
-The [NodeJs](https://nodejs.org/) adapter runs your app using `@hono/node-server`.
-
 ### Vercel
 
 The Vercel adapter outputs your app to Vercel's [Build Output API](https://vercel.com/docs/build-output-api/v3) specification.

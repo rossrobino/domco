@@ -33,8 +33,6 @@ export const adapterPlugin = async (
 				// adapter provided entry point that imports the final app
 				// and makes it usable in the target environment.
 				return adapter.entry({
-					// @ts-expect-error - this will always be defined due to df merge at plugin start
-					port: domcoConfig.port?.prod,
 					appId,
 				});
 			}

@@ -1,7 +1,6 @@
 import type { Routes } from "../../types/private/index.js";
 import { createRoutes } from "../../util/create-routes/index.js";
 import { addRoutes, applySetup, setServer } from "../util/index.js";
-import { defu } from "defu";
 import { Hono } from "hono";
 import type { HonoOptions } from "hono/hono-base";
 import { html } from "hono/html";
@@ -20,9 +19,7 @@ export const createAppDev = <Env extends {} = any>(options?: {
 	devServer?: ViteDevServer;
 	honoOptions?: HonoOptions<Env>;
 }) => {
-	const { devServer, honoOptions } = defu(options, {
-		honoOptions: {} as HonoOptions<Env>,
-	});
+	const { devServer, honoOptions } = options ?? {};
 
 	const rootApp = new Hono<Env>(honoOptions);
 
@@ -33,7 +30,7 @@ export const createAppDev = <Env extends {} = any>(options?: {
 		});
 
 		// start fresh each time for dev for HMR
-		const app = new Hono();
+		const app = new Hono(honoOptions);
 
 		app.onError((err, c) => {
 			console.log();

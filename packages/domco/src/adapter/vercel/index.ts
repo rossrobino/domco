@@ -7,7 +7,6 @@ import type {
 	OutputConfig,
 	EdgeFunctionConfig,
 } from "./types/index.js";
-import { defu } from "defu";
 import type { HonoOptions } from "hono/hono-base";
 import fs from "node:fs/promises";
 import path from "path";
@@ -137,10 +136,11 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	options,
 ) => {
 	const isEdge = options?.config?.runtime === "edge";
-	let df: RequiredOptions;
+
+	let resolvedOptions: RequiredOptions;
 
 	if (isEdge) {
-		df = {
+		resolvedOptions = {
 			config: {
 				entrypoint: fileNames.out.entry.main,
 				runtime: "edge",
@@ -148,7 +148,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		};
 	} else {
 		// node default
-		df = {
+		resolvedOptions = {
 			config: {
 				handler: fileNames.out.entry.main,
 				runtime: "nodejs20.x",
@@ -157,7 +157,10 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		};
 	}
 
-	const resolvedOptions = defu(options, df) as RequiredOptions;
+	Object.assign(resolvedOptions.config, options?.config);
+
+	// `isr` could be undefined
+	resolvedOptions.isr = options?.isr;
 
 	return {
 		name: "vercel",
@@ -232,7 +235,11 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 				// write prerender-config
 				await fs.writeFile(
 					path.join(outDir, "functions", `${fnName}.prerender-config.json`),
-					JSON.stringify(defu(resolvedOptions.isr, defaultIsr), null, "\t"),
+					JSON.stringify(
+						Object.assign(defaultIsr, resolvedOptions.isr),
+						null,
+						"\t",
+					),
 				);
 			}
 		},

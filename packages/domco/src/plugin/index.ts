@@ -7,7 +7,6 @@ import { htmlPlugin } from "./html/index.js";
 import { lifecyclePlugin } from "./lifecycle/index.js";
 import { manifestPlugin } from "./manifest/index.js";
 import { routesPlugin } from "./routes/index.js";
-import { defu } from "defu";
 import type { Plugin } from "vite";
 
 /**
@@ -29,13 +28,9 @@ import type { Plugin } from "vite";
  * });
  * ```
  */
-export const domco = async (config?: DomcoConfig): Promise<Plugin[]> => {
-	const df = {
-		port: { dev: 5173, prod: 5173 },
-	};
-
-	const domcoConfig = defu(config, df);
-
+export const domco = async (
+	domcoConfig: DomcoConfig = {},
+): Promise<Plugin[]> => {
 	return [
 		await configPlugin(domcoConfig),
 		configureServerPlugin(),
