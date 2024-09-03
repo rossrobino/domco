@@ -1,6 +1,6 @@
 import { dirNames, fileNames, headers } from "../../constants/index.js";
 import type { AdapterBuilder, AdapterEntry } from "../../types/public/index.js";
-import { bundle, clearDir, copyStatic } from "../util/index.js";
+import { clearDir, copyStatic } from "../util/index.js";
 import type {
 	PrerenderFunctionConfig,
 	NodejsServerlessFunctionConfig,
@@ -190,10 +190,13 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 			await clearDir(outDir);
 
-			await bundle({
-				outFile: `.vercel/output/functions/${fnName}.func/${fileNames.out.entry.main}`,
-				platform: isEdge ? "browser" : "node",
-			});
+			const fnDir = `.vercel/output/functions/${fnName}.func`;
+			await fs.mkdir(fnDir, { recursive: true });
+
+			// await bundle({
+			// 	outFile: `.vercel/output/functions/${fnName}.func/${fileNames.out.entry.main}`,
+			// 	platform: isEdge ? "browser" : "node",
+			// });
 
 			await copyStatic(path.join(outDir, "static"));
 
