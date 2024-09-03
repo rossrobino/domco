@@ -9,6 +9,7 @@ import type {
 } from "./types/index.js";
 import type { HonoOptions } from "hono/hono-base";
 import fs from "node:fs/promises";
+import process from "node:process";
 import path from "path";
 
 // two separate types are required because we do not want the user to
@@ -150,7 +151,22 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		// node default
 		resolvedOptions = {
 			config: {
-				handler: fileNames.out.entry.main,
+				handler: path.relative(
+					path.join(
+						process.cwd(),
+						".vercel",
+						"output",
+						"functions",
+						"fn.func",
+						fileNames.out.entry.main,
+					),
+					path.join(
+						process.cwd(),
+						dirNames.out.base,
+						dirNames.out.ssr,
+						fileNames.out.entry.main,
+					),
+				),
 				runtime: "nodejs20.x",
 				launcherType: "Nodejs",
 			},
