@@ -8,7 +8,7 @@ import type { ServeStaticOptions } from "hono/serve-static";
 
 /**
  * Creates your production Hono app instance. You can import `createApp` from
- * `dist/server/app.js` after your build is complete.
+ * `./dist/server/app.js` after your build is complete.
  *
  * This export must be used within a Vite build context. It will not work to
  * directly import from `"domco/app"`, instead import from your build.
@@ -16,25 +16,20 @@ import type { ServeStaticOptions } from "hono/serve-static";
  * Below is an example of how to import your app after build is complete to make a
  * Node server. You can adapt this to different [environments of your choice](https://hono.dev/docs/getting-started/basic).
  *
- * The NodeJS build and adapters take care of this step for you.
- *
  * @param options createApp options
  * @returns Hono app instance.
  *
  * @example
  *
  * ```js
- * // index.js - example of the NodeJS build that is output to `dist/server/node.js`
- * import { createApp } from "./dist/server/app.js";
+ * // example of the NodeJS build that is output to `./dist/server/node.js`
  * import { serve } from "@hono/node-server";
  * import { serveStatic } from "@hono/node-server/serve-static";
+ * import { createApp } from "./dist/server/app.js";
  *
  * const app = createApp({ serveStatic });
  *
- * serve({
- * 	fetch: app.fetch,
- * 	port: process.env.PORT || 5173
- * });
+ * serve(app);
  * ```
  */
 export const createApp = <Env extends {} = any>(options?: {

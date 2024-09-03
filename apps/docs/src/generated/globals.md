@@ -46,7 +46,7 @@ The script to run after Vite build is complete.
 
 #### Defined in
 
-[types/public/index.ts:9](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L9)
+[types/public/index.ts:9](https://github.com/rossrobino/domco/blob/ed55dafa3637ee34bdad999cd161f3ad66d18d91/packages/domco/src/types/public/index.ts#L9)
 
 ---
 
@@ -70,7 +70,7 @@ The script to run after Vite build is complete.
 
 #### Defined in
 
-[types/public/index.ts:29](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L29)
+[types/public/index.ts:29](https://github.com/rossrobino/domco/blob/ed55dafa3637ee34bdad999cd161f3ad66d18d91/packages/domco/src/types/public/index.ts#L29)
 
 ---
 
@@ -94,7 +94,7 @@ The app entrypoint to import `createApp` from.
 
 #### Defined in
 
-[types/public/index.ts:4](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L4)
+[types/public/index.ts:4](https://github.com/rossrobino/domco/blob/ed55dafa3637ee34bdad999cd161f3ad66d18d91/packages/domco/src/types/public/index.ts#L4)
 
 ---
 
@@ -114,7 +114,7 @@ The app entrypoint to import `createApp` from.
 
 #### Defined in
 
-[types/public/index.ts:92](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L92)
+[types/public/index.ts:92](https://github.com/rossrobino/domco/blob/ed55dafa3637ee34bdad999cd161f3ad66d18d91/packages/domco/src/types/public/index.ts#L92)
 
 ---
 
@@ -171,7 +171,7 @@ export default defineConfig({
 
 #### Defined in
 
-[types/public/index.ts:55](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L55)
+[types/public/index.ts:55](https://github.com/rossrobino/domco/blob/ed55dafa3637ee34bdad999cd161f3ad66d18d91/packages/domco/src/types/public/index.ts#L55)
 
 ---
 
@@ -332,7 +332,7 @@ declare module "hono" {
 
 #### Defined in
 
-[types/public/index.ts:117](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L117)
+[types/public/index.ts:117](https://github.com/rossrobino/domco/blob/ed55dafa3637ee34bdad999cd161f3ad66d18d91/packages/domco/src/types/public/index.ts#L117)
 
 ---
 
@@ -352,7 +352,7 @@ declare module "hono" {
 
 #### Defined in
 
-[types/public/index.ts:90](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L90)
+[types/public/index.ts:90](https://github.com/rossrobino/domco/blob/ed55dafa3637ee34bdad999cd161f3ad66d18d91/packages/domco/src/types/public/index.ts#L90)
 
 ---
 
@@ -379,7 +379,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/public/index.ts:88](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L88)
+[types/public/index.ts:88](https://github.com/rossrobino/domco/blob/ed55dafa3637ee34bdad999cd161f3ad66d18d91/packages/domco/src/types/public/index.ts#L88)
 
 ---
 
@@ -401,7 +401,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/public/index.ts:94](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/types/public/index.ts#L94)
+[types/public/index.ts:94](https://github.com/rossrobino/domco/blob/ed55dafa3637ee34bdad999cd161f3ad66d18d91/packages/domco/src/types/public/index.ts#L94)
 
 ## Functions
 
@@ -438,4 +438,4 @@ export default defineConfig({
 
 #### Defined in
 
-[plugin/index.ts:31](https://github.com/rossrobino/domco/blob/f9e5cd41cb34d2d4fa365d888bc01525b2cd5e89/packages/domco/src/plugin/index.ts#L31)
+[plugin/index.ts:31](https://github.com/rossrobino/domco/blob/ed55dafa3637ee34bdad999cd161f3ad66d18d91/packages/domco/src/plugin/index.ts#L31)
