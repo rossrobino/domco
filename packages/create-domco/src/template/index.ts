@@ -145,7 +145,18 @@ dist-ssr
 		<title>Title</title>
 		<meta name="description" content="Description" />
 	</head>
-	<body>hello world</body>
+	<body>
+		<header></header>
+		<main>
+			<h1>Hello World</h1>
+			<ul>
+				<li><a href="https://vitejs.dev">Vite</a></li>
+				<li><a href="https://hono.dev">Hono</a></li>
+				<li><a href="https://domco.robino.dev">domco</a></li>
+			</ul>
+		</main>
+		<footer></footer>
+	</body>
 </html>
 `,
 		},
