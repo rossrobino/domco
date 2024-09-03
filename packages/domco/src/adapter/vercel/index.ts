@@ -1,6 +1,6 @@
 import { dirNames, fileNames, headers } from "../../constants/index.js";
 import type { AdapterBuilder, AdapterEntry } from "../../types/public/index.js";
-import { clearDir, copyStatic } from "../util/index.js";
+import { clearDir } from "../../util/fs/index.js";
 import type {
 	PrerenderFunctionConfig,
 	NodejsServerlessFunctionConfig,
@@ -11,6 +11,12 @@ import type { HonoOptions } from "hono/hono-base";
 import fs from "node:fs/promises";
 import process from "node:process";
 import path from "path";
+
+const copyStatic = async (outDir: string) => {
+	await fs.cp(path.join(dirNames.out.base, dirNames.out.client.base), outDir, {
+		recursive: true,
+	});
+};
 
 // two separate types are required because we do not want the user to
 // be able to set some of the values that are required.
@@ -64,8 +70,6 @@ type VercelAdapterOptions =
 			isr?: never;
 	  };
 
-const fnName = "fn";
-
 /** use when runtime is set to node */
 const nodeEntry: AdapterEntry = ({ appId }) => {
 	const getPath: HonoOptions<{}>["getPath"] = (req) => {
@@ -109,6 +113,21 @@ export default handle(app);
 `;
 };
 
+const outDir = path.join(".vercel", "output");
+const fnName = "fn";
+const fnDir = path.join(outDir, "functions", `${fnName}.func`);
+
+/** Path to `main.js` relative to the function directory. */
+const entryPath = path.relative(
+	path.join(process.cwd(), fnDir, fileNames.out.entry.main),
+	path.join(
+		process.cwd(),
+		dirNames.out.base,
+		dirNames.out.ssr,
+		fileNames.out.entry.main,
+	),
+);
+
 /**
  * Creates a [Vercel](https://vercel.com) build according to the build output API spec.
  *
@@ -143,7 +162,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	if (isEdge) {
 		resolvedOptions = {
 			config: {
-				entrypoint: fileNames.out.entry.main,
+				entrypoint: entryPath,
 				runtime: "edge",
 			},
 		};
@@ -151,22 +170,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		// node default
 		resolvedOptions = {
 			config: {
-				handler: path.relative(
-					path.join(
-						process.cwd(),
-						".vercel",
-						"output",
-						"functions",
-						"fn.func",
-						fileNames.out.entry.main,
-					),
-					path.join(
-						process.cwd(),
-						dirNames.out.base,
-						dirNames.out.ssr,
-						fileNames.out.entry.main,
-					),
-				),
+				handler: entryPath,
 				runtime: "nodejs20.x",
 				launcherType: "Nodejs",
 			},
@@ -186,17 +190,9 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		entry: isEdge ? edgeEntry : nodeEntry,
 
 		run: async () => {
-			const outDir = path.join(".vercel", "output");
-
 			await clearDir(outDir);
 
-			const fnDir = `.vercel/output/functions/${fnName}.func`;
 			await fs.mkdir(fnDir, { recursive: true });
-
-			// await bundle({
-			// 	outFile: `.vercel/output/functions/${fnName}.func/${fileNames.out.entry.main}`,
-			// 	platform: isEdge ? "browser" : "node",
-			// });
 
 			await copyStatic(path.join(outDir, "static"));
 

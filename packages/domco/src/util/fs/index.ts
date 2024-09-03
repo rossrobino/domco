@@ -98,3 +98,16 @@ export const toAllScriptEndings = (s: string) => {
 	const endings = ["js", "ts", "jsx", "tsx"];
 	return endings.map((ending) => `${s}.${ending}`);
 };
+
+/**
+ * Removes a directory and all of its contents,
+ * then makes an empty dir with the same name.
+ *
+ * @param dir
+ */
+export const clearDir = async (dir: string) => {
+	if (await fileExists(dir)) {
+		await fs.rm(dir, { recursive: true });
+		await fs.mkdir(dir, { recursive: true });
+	}
+};
