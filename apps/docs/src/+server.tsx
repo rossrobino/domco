@@ -57,7 +57,7 @@ for (const [fileName, md] of Object.entries(content)) {
 
 			const pathName = `/${slug}`;
 
-			prerender.push(pathName);
+			// prerender.push(pathName);
 
 			app.get(pathName, (c) => {
 				return c.render(
