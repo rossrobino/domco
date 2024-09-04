@@ -173,35 +173,19 @@ const renameAndRemoveHtml = async () => {
  * This server is only used at build time.
  */
 const generateStatic = async () => {
-	const createApp = (
-		await import(
-			/* @vite-ignore */
-			url.pathToFileURL(
-				path.join(
-					process.cwd(),
-					dirNames.out.base,
-					dirNames.out.ssr,
-					fileNames.out.entry.app,
-				),
-			).href
-		)
-	).createApp;
+	const { createApp, routes } = (await import(
+		/* @vite-ignore */
+		url.pathToFileURL(
+			path.join(
+				process.cwd(),
+				dirNames.out.base,
+				dirNames.out.ssr,
+				fileNames.out.entry.app,
+			),
+		).href
+	)) as { createApp: () => Hono; routes: Routes };
 
-	const app = (await createApp()) as Hono;
-
-	const routes = (
-		await import(
-			/* @vite-ignore */
-			url.pathToFileURL(
-				path.join(
-					process.cwd(),
-					dirNames.out.base,
-					dirNames.out.ssr,
-					fileNames.out.entry.routes,
-				),
-			).href
-		)
-	).routes as Routes;
+	const app = createApp();
 
 	const staticFiles: StaticFile[] = [];
 

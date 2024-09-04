@@ -74,7 +74,6 @@
 		"vite": "^5.4.0"
 	},
 	"dependencies": {
-		"@hono/node-server": "^1.12.2",
-		"esbuild": "^0.23.1"
+		"@hono/node-server": "^1.12.2"
 	}
 }

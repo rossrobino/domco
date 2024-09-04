@@ -1,3 +1,4 @@
+import { dirNames } from "../../constants/index.js";
 import type { PathLike } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -110,4 +111,24 @@ export const clearDir = async (dir: string) => {
 		await fs.rm(dir, { recursive: true });
 		await fs.mkdir(dir, { recursive: true });
 	}
+};
+
+/**
+ * Copies all client files into a directory.
+ * @param outDir target directory
+ */
+export const copyClient = async (outDir: string) => {
+	await fs.cp(path.join(dirNames.out.base, dirNames.out.client.base), outDir, {
+		recursive: true,
+	});
+};
+
+/**
+ * Copies all server files into a directory.
+ * @param outDir target directory
+ */
+export const copyServer = async (outDir: string) => {
+	await fs.cp(path.join(dirNames.out.base, dirNames.out.ssr), outDir, {
+		recursive: true,
+	});
 };

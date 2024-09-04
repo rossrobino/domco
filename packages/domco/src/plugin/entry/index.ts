@@ -1,3 +1,4 @@
+import { routesId } from "../routes/index.js";
 import type { Plugin } from "vite";
 
 /** ID of the entry point that exports `createApp`. */
@@ -20,7 +21,10 @@ export const entryPlugin = (): Plugin => {
 				// this entry provides an export of the built app
 				// user can create a separate module and import createApp
 				// to build their app if adapters do not suit their needs
-				return `export { createApp } from "domco/app";`;
+				return `
+					export { createApp } from "domco/app";
+					export { routes } from "${routesId}";
+				`;
 			}
 		},
 	};

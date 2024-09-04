@@ -38,9 +38,7 @@ app.get("/:slug", ssr, async (c) => {
 
 	if (typeof md === "string") {
 		return c.html(
-			c.var
-				.page()
-				.replace("<!-- post -->", (await processMarkdown({ md })).html),
+			c.var.page().replace("<!-- post -->", processMarkdown({ md }).html),
 		);
 	}
 

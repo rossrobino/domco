@@ -3,7 +3,6 @@ import type { DomcoConfig } from "../../types/public/index.js";
 import { findFiles, toAllScriptEndings } from "../../util/fs/index.js";
 import { ssrId } from "../adapter/index.js";
 import { appId } from "../entry/index.js";
-import { routesId } from "../routes/index.js";
 import path from "node:path";
 import process from "node:process";
 import type { Plugin } from "vite";
@@ -35,7 +34,7 @@ export const configPlugin = async (
 				appType: "custom",
 				ssr: {
 					target: adapter?.ssrTarget,
-					noExternal: build ? true : ["domco"],
+					noExternal: ["domco"],
 				},
 				logLevel: build ? "warn" : "info",
 				build: {
@@ -72,7 +71,6 @@ export const configPlugin = async (
 const serverEntry = (adapter: DomcoConfig["adapter"]) => {
 	const entry: Record<string, string> = {
 		app: appId,
-		routes: routesId,
 	};
 
 	// only create `main` if there's an adapter
