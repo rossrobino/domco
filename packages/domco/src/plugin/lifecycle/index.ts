@@ -1,8 +1,8 @@
 import { dirNames, fileNames } from "../../constants/index.js";
 import { codeSize } from "../../util/code-size/index.js";
 import { getMaxLengths } from "../../util/get-max-lengths/index.js";
+import { style } from "../../util/style/index.js";
 import { version } from "../../version/index.js";
-import { styleText } from "node:util";
 import { build, type Plugin } from "vite";
 
 export const lifecyclePlugin = (): Plugin => {
@@ -14,7 +14,7 @@ export const lifecyclePlugin = (): Plugin => {
 			ssr = isSsrBuild;
 			if (command === "build" && !ssr) {
 				console.log();
-				console.log(styleText("bold", `domco@${version}`));
+				console.log(style.bold(`domco@${version}`));
 				console.log();
 			}
 		},
@@ -36,15 +36,14 @@ export const lifecyclePlugin = (): Plugin => {
 
 				const { kB, gzip } = codeSize(code ?? source);
 
-				const outDirStr = styleText("dim", outDir + "/");
+				const outDirStr = style.dim(outDir + "/");
 
 				let fileNameStr: string;
-				if (fileName.endsWith("js")) fileNameStr = styleText("cyan", fileName);
+				if (fileName.endsWith("js")) fileNameStr = style.cyan(fileName);
 				else if (fileName.endsWith("css"))
-					fileNameStr = styleText("magenta", fileName);
-				else if (fileName.endsWith("html"))
-					fileNameStr = styleText("green", fileName);
-				else fileNameStr = styleText("red", fileName);
+					fileNameStr = style.magenta(fileName);
+				else if (fileName.endsWith("html")) fileNameStr = style.green(fileName);
+				else fileNameStr = style.red(fileName);
 
 				return {
 					path: `${outDirStr}${fileNameStr}`,
@@ -60,7 +59,7 @@ export const lifecyclePlugin = (): Plugin => {
 				info.sort((a, b) => a.path.localeCompare(b.path));
 
 				console.log(
-					styleText("bold", ssr ? dirNames.out.ssr : dirNames.out.client.base),
+					style.bold(ssr ? dirNames.out.ssr : dirNames.out.client.base),
 				);
 
 				const maxLengths = getMaxLengths(info);
@@ -71,7 +70,7 @@ export const lifecyclePlugin = (): Plugin => {
 					const gzip = ssr
 						? ""
 						: ` │ gzip: ${file.gzip.padStart(maxLengths.gzip ?? 0)} kB`;
-					console.log(`${filePath}${styleText("dim", kB + gzip)}`);
+					console.log(`${filePath}${style.dim(kB + gzip)}`);
 				}
 
 				console.log();

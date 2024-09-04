@@ -1,6 +1,7 @@
 import { dirNames, fileNames, headers } from "../../constants/index.js";
 import type { AdapterBuilder, AdapterEntry } from "../../types/public/index.js";
-import { bundle, clearDir, copyStatic } from "../util/index.js";
+import { clearDir, copyClient, copyServer } from "../../util/fs/index.js";
+import { version } from "../../version/index.js";
 import type {
 	PrerenderFunctionConfig,
 	NodejsServerlessFunctionConfig,
@@ -9,7 +10,7 @@ import type {
 } from "./types/index.js";
 import type { HonoOptions } from "hono/hono-base";
 import fs from "node:fs/promises";
-import path from "path";
+import path from "node:path";
 
 // two separate types are required because we do not want the user to
 // be able to set some of the values that are required.
@@ -36,6 +37,7 @@ type VercelAdapterOptions =
 			config?: Partial<
 				Omit<NodejsServerlessFunctionConfig, "handler" | "launcherType">
 			>;
+
 			/**
 			 * ISR config.
 			 *
@@ -57,13 +59,12 @@ type VercelAdapterOptions =
 			 * Edge function config.
 			 */
 			config?: Omit<EdgeFunctionConfig, "entrypoint">;
+
 			/**
 			 * ISR is not available for edge functions. Change `config.runtime` to "nodejs20.x" to use ISR.
 			 */
 			isr?: never;
 	  };
-
-const fnName = "fn";
 
 /** use when runtime is set to node */
 const nodeEntry: AdapterEntry = ({ appId }) => {
@@ -169,23 +170,24 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 		entry: isEdge ? edgeEntry : nodeEntry,
 
+		ssrTarget: isEdge ? "webworker" : "node",
+
 		run: async () => {
 			const outDir = path.join(".vercel", "output");
+			const fnName = "fn";
+			const fnDir = path.join(outDir, "functions", `${fnName}.func`);
 
-			await clearDir(outDir);
-
-			await bundle({
-				outFile: `.vercel/output/functions/${fnName}.func/${fileNames.out.entry.main}`,
-				platform: isEdge ? "browser" : "node",
-			});
-
-			await copyStatic(path.join(outDir, "static"));
+			const defaultIsr: Partial<PrerenderFunctionConfig> = {
+				allowQuery: ["__pathname"],
+				group: 1,
+				passQuery: true,
+			};
 
 			const outputConfig: OutputConfig = {
 				version: 3,
 				framework: {
 					slug: "domco",
-					version: "next",
+					version,
 				},
 				routes: [
 					{
@@ -199,7 +201,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 						methods: ["GET"],
 						handle: "filesystem",
 					},
-					// falls back to function, this reroutes everything to /index
+					// falls back to function, this reroutes everything
 					{
 						src: "^/(.*)$",
 						dest: `/${fnName}?__pathname=$1`,
@@ -207,30 +209,35 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 				],
 			};
 
-			await fs.writeFile(
-				path.join(outDir, "config.json"),
-				JSON.stringify(outputConfig, null, "\t"),
-			);
+			await clearDir(outDir);
 
-			// write vc.config
-			await fs.writeFile(
-				path.join(outDir, "functions", `${fnName}.func`, ".vc-config.json"),
-				JSON.stringify(resolvedOptions.config, null, "\t"),
-			);
+			await fs.mkdir(fnDir, { recursive: true });
 
-			// write package.json
-			// otherwise have to output mjs, either way works
-			await fs.writeFile(
-				path.join(outDir, "functions", `${fnName}.func`, "package.json"),
-				JSON.stringify({ type: "module" }, null, "\t"),
-			);
+			await Promise.all([
+				copyClient(path.join(outDir, "static")),
+
+				copyServer(fnDir),
+
+				fs.writeFile(
+					path.join(outDir, "config.json"),
+					JSON.stringify(outputConfig, null, "\t"),
+				),
+
+				// write vc.config
+				fs.writeFile(
+					path.join(outDir, "functions", `${fnName}.func`, ".vc-config.json"),
+					JSON.stringify(resolvedOptions.config, null, "\t"),
+				),
+
+				// write package.json
+				// otherwise have to output mjs, either way works
+				fs.writeFile(
+					path.join(outDir, "functions", `${fnName}.func`, "package.json"),
+					JSON.stringify({ type: "module" }, null, "\t"),
+				),
+			]);
 
 			if (resolvedOptions.isr) {
-				const defaultIsr: Partial<PrerenderFunctionConfig> = {
-					allowQuery: ["__pathname"],
-					group: 1,
-					passQuery: true,
-				};
 				// TODO add prerender fallback
 				// write prerender-config
 				await fs.writeFile(

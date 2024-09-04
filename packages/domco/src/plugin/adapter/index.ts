@@ -1,6 +1,6 @@
 import type { DomcoConfig } from "../../types/public/index.js";
+import { style } from "../../util/style/index.js";
 import { appId } from "../entry/index.js";
-import { styleText } from "node:util";
 import type { Plugin, ResolvedConfig } from "vite";
 
 /** SSR entry ID for the entrypoint provided by the adapter. */
@@ -45,17 +45,16 @@ export const adapterPlugin = async (
 						await adapter.run();
 					}
 
-					console.log(styleText("bold", `adapter - ${adapter.name}`));
-					console.log(styleText(["dim", "italic"], adapter.message));
+					console.log(style.bold(`adapter - ${adapter.name}`));
+					console.log(style.dim(style.italic(adapter.message)));
 					console.log();
 				}
 
-				console.log(styleText("bold", "✓ build complete"));
+				console.log(style.bold("✓ build complete"));
 
 				console.log(
-					styleText(
-						["dim", "italic"],
-						"run `vite preview` to preview your app with Vite",
+					style.dim(
+						style.italic("run `vite preview` to preview your app with Vite"),
 					),
 				);
 

@@ -8,12 +8,12 @@ import {
 	toPosix,
 } from "../../util/fs/index.js";
 import { getMaxLengths } from "../../util/get-max-lengths/index.js";
+import { style } from "../../util/style/index.js";
 import type { Hono } from "hono";
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import url from "node:url";
-import { styleText } from "node:util";
 import type { HtmlTagDescriptor, Plugin } from "vite";
 
 type StaticFile = { path: string; kB: string; gzip: string };
@@ -96,7 +96,7 @@ export const htmlPlugin = (): Plugin => {
 				staticFiles.sort((a, b) => a.path.localeCompare(b.path));
 
 				if (staticFiles.length) {
-					console.log(styleText("bold", "static"));
+					console.log(style.bold("static"));
 
 					const maxLengths = getMaxLengths(staticFiles);
 
@@ -105,7 +105,7 @@ export const htmlPlugin = (): Plugin => {
 						const kB = file.kB.padStart(maxLengths.kB ?? 0) + " kB";
 						const gzip = ` │ gzip: ${file.gzip.padStart(maxLengths.gzip ?? 0)} kB`;
 
-						console.log(`${filePath}${styleText("dim", kB + gzip)}`);
+						console.log(`${filePath}${style.dim(kB + gzip)}`);
 					}
 
 					console.log();
@@ -152,7 +152,7 @@ const renameAndRemoveHtml = async () => {
 
 			staticFiles.push({
 				path: toPosix(
-					`${styleText("dim", outDir + "/")}${styleText("green", path.join(pagePath, "index.html").slice(1))}`,
+					`${style.dim(outDir + "/")}${style.green(path.join(pagePath, "index.html").slice(1))}`,
 				),
 				kB,
 				gzip,
@@ -173,35 +173,19 @@ const renameAndRemoveHtml = async () => {
  * This server is only used at build time.
  */
 const generateStatic = async () => {
-	const createApp = (
-		await import(
-			/* @vite-ignore */
-			url.pathToFileURL(
-				path.join(
-					process.cwd(),
-					dirNames.out.base,
-					dirNames.out.ssr,
-					fileNames.out.entry.app,
-				),
-			).href
-		)
-	).createApp;
+	const { createApp, routes } = (await import(
+		/* @vite-ignore */
+		url.pathToFileURL(
+			path.join(
+				process.cwd(),
+				dirNames.out.base,
+				dirNames.out.ssr,
+				fileNames.out.entry.app,
+			),
+		).href
+	)) as { createApp: () => Hono; routes: Routes };
 
-	const app = (await createApp()) as Hono;
-
-	const routes = (
-		await import(
-			/* @vite-ignore */
-			url.pathToFileURL(
-				path.join(
-					process.cwd(),
-					dirNames.out.base,
-					dirNames.out.ssr,
-					fileNames.out.entry.routes,
-				),
-			).href
-		)
-	).routes as Routes;
+	const app = createApp();
 
 	const staticFiles: StaticFile[] = [];
 
@@ -231,8 +215,7 @@ const generateStatic = async () => {
 
 					staticFiles.push({
 						path: toPosix(
-							`${styleText("dim", outDir + "/")}${styleText(
-								"green",
+							`${style.dim(outDir + "/")}${style.green(
 								routePath.slice(1) +
 									(routePath === "/" || routePath === "" ? "" : "/") +
 									"index.html",

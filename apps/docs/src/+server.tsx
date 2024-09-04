@@ -23,7 +23,7 @@ app.use(async (c, next) => {
 });
 
 app.get("/", async (c) => {
-	const previewHtml = raw((await processMarkdown({ md: preview })).html);
+	const previewHtml = raw(processMarkdown({ md: preview }).html);
 
 	return c.render(
 		{ title: "domco" },
@@ -52,7 +52,7 @@ for (const [fileName, md] of Object.entries(content)) {
 	const slug = fileName.split("/").at(-1)?.split(".").at(0);
 
 	if (slug && !slug.startsWith("_")) {
-		const html = raw((await processMarkdown({ md })).html);
+		const html = raw(processMarkdown({ md }).html);
 
 		const pathName = `/${slug}`;
 
@@ -68,9 +68,8 @@ for (const [fileName, md] of Object.entries(content)) {
 }
 
 app.get("/api-reference", async (c) => {
-	let apiReferenceHtml = raw(
-		(await processMarkdown({ md: apiReference.replaceAll("globals.md#", "#") }))
-			.html,
+	const apiReferenceHtml = raw(
+		processMarkdown({ md: apiReference.replaceAll("globals.md#", "#") }).html,
 	);
 
 	return c.render(
