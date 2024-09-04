@@ -1,5 +1,12 @@
 # create-domco
 
+## 0.1.8
+
+### Patch Changes
+
+- 0c243a9: Update template with links in html
+- a1e0bf8: bump domco version
+
 ## 0.1.7
 
 ### Patch Changes
