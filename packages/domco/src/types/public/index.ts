@@ -1,5 +1,6 @@
 import type { MaybePromise } from "../helper/index.js";
 import type { HtmlEscapedString } from "hono/utils/html";
+import type { SSRTarget } from "vite";
 
 export type AdapterEntry = (AdapterEntryOptions: {
 	/** The app entrypoint to import `createApp` from. */
@@ -24,6 +25,11 @@ export type Adapter = {
 	 * Entry point for the server application.
 	 */
 	entry: AdapterEntry;
+
+	/**
+	 * Target for SSR build.
+	 */
+	ssrTarget: SSRTarget;
 };
 
 export type AdapterBuilder<AdapterOptions = {}> = (

@@ -194,6 +194,8 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 		entry: isEdge ? edgeEntry : nodeEntry,
 
+		ssrTarget: isEdge ? "webworker" : "node",
+
 		run: async () => {
 			await clearDir(outDir);
 
