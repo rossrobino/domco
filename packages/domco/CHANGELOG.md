@@ -1,5 +1,12 @@
 # domco
 
+## 0.8.1
+
+### Patch Changes
+
+- ec46a54: Removes `esbuild` from deps. Dependencies are now bundled during SSR build by default to be compatible with `"webworker"` target.
+- ec46a54: stop using node:util `styleText` because it doesn't work in Bun yet, still experimental. Moves engines back to node 20.
+
 ## 0.8.0
 
 ### Minor Changes
