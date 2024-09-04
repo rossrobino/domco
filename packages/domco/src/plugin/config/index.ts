@@ -34,7 +34,7 @@ export const configPlugin = async (
 				appType: "custom",
 				ssr: {
 					target: adapter?.ssrTarget,
-					noExternal: ["domco"],
+					noExternal: build ? true : ["domco"],
 				},
 				logLevel: build ? "warn" : "info",
 				build: {
