@@ -34,6 +34,7 @@ export const configPlugin = async (
 					: path.join(process.cwd(), dirNames.public),
 				appType: "custom",
 				ssr: {
+					target: "webworker",
 					noExternal: build ? true : ["domco"],
 				},
 				logLevel: build ? "warn" : "info",
