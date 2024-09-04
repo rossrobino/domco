@@ -9,9 +9,8 @@ export default defineConfig({
 		domco({
 			adapter: adapter({
 				config: {
-					runtime: "nodejs20.x",
+					runtime: "edge",
 				},
-				isr: { expiration: 60 },
 			}),
 		}),
 		react(),

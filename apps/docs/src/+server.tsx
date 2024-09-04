@@ -52,19 +52,17 @@ for (const [fileName, md] of Object.entries(content)) {
 	const slug = fileName.split("/").at(-1)?.split(".").at(0);
 
 	if (slug && !slug.startsWith("_")) {
-		processMarkdown({ md }).then((result) => {
-			const html = raw(result.html);
+		const html = raw((await processMarkdown({ md })).html);
 
-			const pathName = `/${slug}`;
+		const pathName = `/${slug}`;
 
-			// prerender.push(pathName);
+		prerender.push(pathName);
 
-			app.get(pathName, (c) => {
-				return c.render(
-					{ title: slug.charAt(0).toUpperCase() + slug.slice(1) },
-					<section>{html}</section>,
-				);
-			});
+		app.get(pathName, (c) => {
+			return c.render(
+				{ title: slug.charAt(0).toUpperCase() + slug.slice(1) },
+				<section>{html}</section>,
+			);
 		});
 	}
 }
