@@ -7,9 +7,11 @@
 		"dev": "vite",
 		"check": "tsc",
 		"build": "vite build",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"preview:wrangler": "wrangler pages dev .cloudflare"
 	},
 	"devDependencies": {
-		"domco": "*"
+		"domco": "*",
+		"wrangler": "^3.74.0"
 	}
 }

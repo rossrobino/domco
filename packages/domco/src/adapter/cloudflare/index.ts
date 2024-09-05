@@ -35,7 +35,8 @@ export const adapter: AdapterBuilder = async () => {
 	return {
 		name: "cloudflare",
 
-		message: `created Cloudflare Pages build .cloudflare/`,
+		message:
+			"created Cloudflare Pages build .cloudflare/\n\ninstall wrangler and run `wrangler pages dev .cloudflare` to preview your build\nhttps://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler#installation\nhttps://developers.cloudflare.com/workers/wrangler/commands/#pages",
 
 		entry: ({ appId }) => {
 			return {

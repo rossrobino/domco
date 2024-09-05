@@ -53,7 +53,9 @@ export const adapterPlugin = async (
 
 				console.log(
 					style.dim(
-						style.italic("run `vite preview` to preview your app with Vite"),
+						style.italic(
+							"run `vite preview` to preview your app with Vite and Node.js",
+						),
 					),
 				);
 
