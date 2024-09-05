@@ -24,7 +24,7 @@ The `client/` directory holds client assets. JS and CSS assets with hashed file 
 Here's an example of how to serve your app using the result of your build with `@hono/node-server`.
 
 ```ts
-// node.js
+// main.js
 // import from build output
 import { createApp } from "./dist/server/app.js";
 import { serve } from "@hono/node-server";
@@ -33,6 +33,12 @@ import { serveStatic } from "@hono/node-server/serve-static";
 const app = createApp({ serveStatic });
 
 serve(app);
+```
+
+Run this module to start your server.
+
+```bash
+node main.js
 ```
 
 ## Adapters
@@ -60,7 +66,9 @@ export default defineConfig({
 
 ### Vercel
 
-The Vercel adapter outputs your app to Vercel's [Build Output API](https://vercel.com/docs/build-output-api/v3) specification.
+The [Vercel](https://vercel.com) adapter outputs your app to the [Build Output API](https://vercel.com/docs/build-output-api/v3) specification.
+
+![A screenshot of the Vercel Build and Development Settings UI. Set the Framework Preset field to "Other" and leave all of the other options blank.](/vercel/build-settings.webp)
 
 - Supports Serverless (+ ISR), and Edge Runtime.
 - Outputs public assets to be served on Vercel's CDN. Since your application will not be serving these assets, if you want to protect a page, you need to serve it from an endpoint instead.

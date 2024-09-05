@@ -1,25 +1,14 @@
+@import "uico";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
 	:root {
-		--background: 4% 0.05 257;
-		--foreground: 97% 0.01 257;
-		--muted: 17% 0.05 257;
-		--muted-foreground: 87% 0.022 257;
-		--primary: 99% 0.005 257;
-		--primary-foreground: 22% 0.05 257;
-		--secondary: 15% 0.05 257;
-		--secondary-foreground: 99% 0.005 257;
-		--destructive: 56% 0.19 17;
-		--destructive-foreground: 100% 0 0;
-		--accent: 87% 0.022 257;
-		--accent-foreground: 15% 0.05 257;
-		--card: 15% 0.05 257;
-		--card-foreground: 97% 0.01 257;
-		--border: 44% 0.05 257;
-		--radius: 0.3rem;
+		--base: theme(colors.slate.500);
+		--accent: theme(colors.teal.700);
+		--destructive: theme(colors.rose.700);
 
 		pre,
 		blockquote {
@@ -36,17 +25,12 @@
 			--shiki-token-link: theme(colors.slate.300);
 
 			margin-inline: -1.5rem;
-			margin-block: theme(margin.6);
-			background-color: theme(backgroundColor.slate.950);
-			padding-block: theme(padding.5);
-			overflow-x: auto;
-			scrollbar-width: none;
-			color: theme(colors.slate.50);
-			font-family: theme(fontFamily.mono);
+			border-radius: 0;
+			padding-inline: 0;
 
 			@media (min-width: 640px) {
 				margin-inline: 0;
-				border-radius: theme(borderRadius.lg);
+				border-radius: theme(borderRadius.sm);
 			}
 
 			& > code {
@@ -61,6 +45,7 @@
 			& p {
 				padding-inline: theme(padding.5);
 				height: 2.5ch;
+
 				&.highlighted {
 					background-color: theme(colors.slate.800);
 				}
@@ -68,83 +53,13 @@
 		}
 	}
 
+	body {
+		font-family: Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro,
+			sans-serif;
+	}
+
 	* {
 		scroll-padding-block-start: theme(padding.16);
-	}
-
-	a {
-		@apply link;
-	}
-
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		margin-block-end: theme(margin.4);
-		color: theme(colors.slate.200);
-		font-weight: theme(fontWeight.bold);
-		line-height: theme(lineHeight.snug);
-		letter-spacing: theme(letterSpacing.wide);
-		text-wrap: pretty;
-		word-break: break-word;
-	}
-	h1 {
-		margin-block-start: theme(margin.10);
-		color: theme(colors.slate.50);
-		font-size: theme(fontSize.4xl);
-		& a {
-			text-decoration-line: none;
-		}
-	}
-	h2 {
-		margin-block-start: theme(margin.10);
-		color: theme(colors.slate.100);
-		font-size: theme(fontSize.3xl);
-	}
-	h3 {
-		margin-block-start: theme(margin.8);
-		font-size: theme(fontSize.2xl);
-	}
-	h4 {
-		margin-block-start: theme(margin.7);
-		font-size: theme(fontSize.xl);
-	}
-	h5 {
-		margin-block-start: theme(margin.6);
-		font-size: theme(fontSize.lg);
-	}
-	h6 {
-		margin-block-start: theme(margin.5);
-		font-size: theme(fontSize.base);
-	}
-	p:not(blockquote p),
-	ul {
-		margin-block: theme(margin.6);
-		line-height: theme(lineHeight.relaxed);
-	}
-	li {
-		margin-block: theme(margin.2);
-		line-height: theme(lineHeight.relaxed);
-	}
-	ul {
-		padding-inline: theme(padding.8);
-		list-style-type: disc;
-		@apply marker:text-slate-300;
-	}
-	hr {
-		margin-block: theme(margin.8);
-		border-color: theme(colors.slate.600);
-	}
-	code:not(pre code):not(blockquote code) {
-		margin-inline: theme(margin[0.5]);
-		border-radius: theme(borderRadius.DEFAULT);
-		background-color: theme(backgroundColor.slate.900);
-		padding: theme(padding.1) theme(padding.2);
-		color: theme(colors.slate.50);
-		font-weight: theme(fontWeight.normal);
-		font-size: theme(fontSize.sm);
 	}
 
 	pre,
@@ -209,6 +124,16 @@
 			100% {
 				transform: translateX(0) translateY(0);
 			}
+		}
+	}
+}
+
+@layer utilities {
+	.prose blockquote {
+		padding-inline-start: 0;
+		font-style: normal;
+		p {
+			padding-inline-start: 0;
 		}
 	}
 }

@@ -17,7 +17,7 @@ type NavLinkProps = {
 
 const SideBar: FC = () => {
 	return (
-		<nav class="bg-muted sticky top-0 hidden h-screen overflow-y-auto lg:block">
+		<nav class="bg-muted-background sticky top-0 hidden h-screen overflow-y-auto lg:block">
 			<div class="p-6">
 				<HomeLink />
 			</div>
@@ -35,7 +35,7 @@ const HomeLink = () => (
 const NavContents: FC = () => {
 	return (
 		<div class="flex h-[90%] min-w-64 flex-col justify-between">
-			<ul class="m-0 list-none px-6">
+			<ul class="px-6">
 				<NavListItems />
 			</ul>
 			<div class="flex items-center gap-1 p-6">
@@ -49,18 +49,13 @@ const NavContents: FC = () => {
 const Dialog: FC = () => {
 	return (
 		<drab-dialog
-			class="sticky top-0 flex items-center gap-3 p-3 backdrop-blur-md lg:hidden"
+			class="sticky top-0 z-10 flex items-center gap-3 p-3 backdrop-blur-md lg:hidden"
 			click-outside-close
 			remove-body-scroll
 			animation-keyframe-from-transform="translateX(-100%)"
 			animation-keyframe-to-transform="translateX(0)"
 		>
-			<button
-				data-trigger
-				type="button"
-				class="button button-secondary button-ghost"
-				id="dialog-trigger"
-			>
+			<button data-trigger type="button" class="ghost" id="dialog-trigger">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
@@ -77,21 +72,17 @@ const Dialog: FC = () => {
 					<line x1="4" x2="20" y1="18" y2="18" />
 				</svg>
 			</button>
+
 			<HomeLink />
 
 			<dialog
 				data-content
-				class="bg-muted my-0 ml-0 h-full max-h-dvh max-w-[100vw] backdrop:backdrop-blur"
+				class="bg-muted-background my-0 ml-0 h-full max-h-dvh max-w-[100vw] backdrop:backdrop-blur"
 			>
 				<nav class="flex items-center justify-between p-3 pl-6">
 					<HomeLink />
 
-					<button
-						data-trigger
-						type="button"
-						class="button button-secondary"
-						title="Close"
-					>
+					<button data-trigger type="button" class="ghost" title="Close">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							width="24"
@@ -159,7 +150,7 @@ export const RepoLink: FC = () => {
 		<a
 			href="https://github.com/rossrobino/domco"
 			title="Repository"
-			class="button button-ghost button-icon"
+			class="button ghost icon"
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -181,10 +172,7 @@ export const RepoLink: FC = () => {
 
 export const NpmLink: FC = () => {
 	return (
-		<a
-			href="https://www.npmjs.com/package/domco"
-			class="button button-ghost button-icon"
-		>
+		<a href="https://www.npmjs.com/package/domco" class="button ghost icon">
 			<svg
 				role="img"
 				fill="currentColor"

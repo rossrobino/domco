@@ -31,10 +31,7 @@ app.get("/", async (c) => {
 			<Hero />
 			<section class="mb-24">{previewHtml}</section>
 			<div class="mb-24 flex justify-center">
-				<a
-					href="/tutorial"
-					class="button button-primary p-6 text-lg no-underline"
-				>
+				<a href="/tutorial" class="button px-6 py-4 text-lg">
 					Get Started
 				</a>
 			</div>
@@ -75,8 +72,10 @@ app.get("/api-reference", async (c) => {
 	return c.render(
 		{ title: "API Reference" },
 		<>
-			<h1>API Reference</h1>
-			<section>{apiReferenceHtml}</section>
+			<section>
+				<h1>API Reference</h1>
+				{apiReferenceHtml}
+			</section>
 		</>,
 	);
 });

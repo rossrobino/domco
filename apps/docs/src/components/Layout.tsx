@@ -31,11 +31,13 @@ export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
 					/>
 					<title>{title}</title>
 				</head>
-				<body class="font-humanist-geometric selection:text-foreground bg-background text-foreground tabular-nums selection:bg-sky-900">
+				<body class="tabular-nums">
 					<drab-prefetch trigger="a[href^='/']" class="contents">
 						<main class="flex flex-col lg:flex-row">
 							<Nav />
-							<div class="mx-6 my-6 max-w-screen-sm md:mx-auto">{children}</div>
+							<div class="prose mx-6 my-6 max-w-screen-sm md:mx-auto">
+								{children}
+							</div>
 						</main>
 					</drab-prefetch>
 				</body>
