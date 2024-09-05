@@ -1,5 +1,11 @@
 # create-domco
 
+## 0.1.9
+
+### Patch Changes
+
+- 0f66169: Adds cloudflare adapter.
+
 ## 0.1.8
 
 ### Patch Changes
