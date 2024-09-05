@@ -122,6 +122,8 @@ export const adapter: AdapterBuilder = async () => {
 
 			await clearDir(outDir);
 
+			await fs.mkdir(outDir, { recursive: true });
+
 			// if (!(await fileExists(wranglerToml.filePath))) {
 			// 	await fs.writeFile(wranglerToml.filePath, wranglerToml.toml);
 			// }
