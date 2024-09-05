@@ -1,5 +1,11 @@
 # domco
 
+## 0.9.0
+
+### Minor Changes
+
+- 0f66169: Adds cloudflare adapter.
+
 ## 0.8.1
 
 ### Patch Changes
