@@ -8,6 +8,7 @@ import {
 } from "../../util/fs/index.js";
 import fs from "node:fs/promises";
 import path from "node:path";
+import process from "node:process";
 
 /**
  * Creates a Cloudflare Pages build.
