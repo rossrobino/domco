@@ -29,6 +29,10 @@
 			"types": "./dist/index.d.ts",
 			"default": "./dist/index.js"
 		},
+		"./adapter/cloudflare": {
+			"types": "./dist/adapter/cloudflare/index.d.ts",
+			"default": "./dist/adapter/cloudflare/index.js"
+		},
 		"./adapter/vercel": {
 			"types": "./dist/adapter/vercel/index.d.ts",
 			"default": "./dist/adapter/vercel/index.js"

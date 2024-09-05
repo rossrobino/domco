@@ -1,5 +1,5 @@
 import { dirNames, fileNames } from "../../constants/index.js";
-import type { DomcoConfig } from "../../types/public/index.js";
+import type { Adapter, DomcoConfig } from "../../types/public/index.js";
 import { findFiles, toAllScriptEndings } from "../../util/fs/index.js";
 import { ssrId } from "../adapter/index.js";
 import { appId } from "../entry/index.js";
@@ -68,13 +68,15 @@ export const configPlugin = async (
 	};
 };
 
-const serverEntry = (adapter: DomcoConfig["adapter"]) => {
+const serverEntry = (adapter?: Adapter) => {
 	const entry: Record<string, string> = {
 		app: appId,
 	};
 
-	// only create `main` if there's an adapter
-	if (adapter) entry.main = ssrId;
+	// only create an adapter entrypoint if there's an adapter
+	if (adapter) {
+		entry[adapter.entry({ appId }).id] = ssrId;
+	}
 
 	return entry;
 };

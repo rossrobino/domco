@@ -1,5 +1,5 @@
 const versions = {
-	domco: "0.8.1",
+	domco: "0.9.0",
 	hono: "4.5.11",
 	autoprefixer: "10.4.20",
 	prettier: "3.3.3",
@@ -120,6 +120,9 @@ node_modules
 dist
 dist-ssr
 *.local
+
+.vercel
+.cloudflare
 
 # Editor directories and files
 .vscode/*

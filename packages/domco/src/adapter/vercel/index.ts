@@ -1,4 +1,4 @@
-import { dirNames, fileNames, headers } from "../../constants/index.js";
+import { dirNames, headers } from "../../constants/index.js";
 import type { AdapterBuilder, AdapterEntry } from "../../types/public/index.js";
 import { clearDir, copyClient, copyServer } from "../../util/fs/index.js";
 import { version } from "../../version/index.js";
@@ -66,6 +66,8 @@ type VercelAdapterOptions =
 			isr?: never;
 	  };
 
+const entryId = "main";
+
 /** use when runtime is set to node */
 const nodeEntry: AdapterEntry = ({ appId }) => {
 	const getPath: HonoOptions<{}>["getPath"] = (req) => {
@@ -83,7 +85,9 @@ const nodeEntry: AdapterEntry = ({ appId }) => {
 		return req.url;
 	};
 
-	return `
+	return {
+		id: entryId,
+		code: `
 import { createApp } from "${appId}";
 import { handle } from '@hono/node-server/vercel'
 
@@ -94,19 +98,23 @@ const app = createApp({
 });
 
 export default handle(app);
-`;
+`,
+	};
 };
 
 /** use when runtime is edge */
 const edgeEntry: AdapterEntry = ({ appId }) => {
-	return `
+	return {
+		id: entryId,
+		code: `
 import { createApp } from "${appId}";
 import { handle } from "hono/vercel";
 
 const app = createApp();
 
 export default handle(app);
-`;
+`,
+	};
 };
 
 /**
@@ -143,7 +151,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	if (isEdge) {
 		resolvedOptions = {
 			config: {
-				entrypoint: fileNames.out.entry.main,
+				entrypoint: `${entryId}.js`,
 				runtime: "edge",
 			},
 		};
@@ -151,7 +159,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		// node default
 		resolvedOptions = {
 			config: {
-				handler: fileNames.out.entry.main,
+				handler: `${entryId}.js`,
 				runtime: "nodejs20.x",
 				launcherType: "Nodejs",
 			},

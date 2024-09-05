@@ -120,6 +120,7 @@ export const clearDir = async (dir: string) => {
 export const copyClient = async (outDir: string) => {
 	await fs.cp(path.join(dirNames.out.base, dirNames.out.client.base), outDir, {
 		recursive: true,
+		errorOnExist: false,
 	});
 };
 
@@ -130,5 +131,6 @@ export const copyClient = async (outDir: string) => {
 export const copyServer = async (outDir: string) => {
 	await fs.cp(path.join(dirNames.out.base, dirNames.out.ssr), outDir, {
 		recursive: true,
+		errorOnExist: false,
 	});
 };

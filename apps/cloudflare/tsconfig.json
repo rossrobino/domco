@@ -1,0 +1,12 @@
+{
+	"extends": "@robino/tsconfig/bundler.json",
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"jsxImportSource": "hono/jsx",
+
+		"paths": {
+			"@": ["./src"],
+			"@/*": ["./src/*"]
+		}
+	}
+}

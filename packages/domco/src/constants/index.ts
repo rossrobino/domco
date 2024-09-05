@@ -15,10 +15,7 @@ export const fileNames = {
 	out: {
 		/** names of the output entry points */
 		entry: {
-			main: "main.js",
 			app: "app.js",
-			routes: "routes.js",
-			node: "node.js",
 		},
 	},
 } as const;

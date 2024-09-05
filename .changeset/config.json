@@ -7,5 +7,5 @@
 	"access": "public",
 	"baseBranch": "main",
 	"updateInternalDependencies": "patch",
-	"ignore": ["domco-docs", "domco-tester"]
+	"ignore": ["domco-docs", "domco-tester", "domco-cloudflare"]
 }

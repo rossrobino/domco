@@ -5,7 +5,17 @@ import type { SSRTarget } from "vite";
 export type AdapterEntry = (AdapterEntryOptions: {
 	/** The app entrypoint to import `createApp` from. */
 	appId: string;
-}) => Promise<string> | string;
+}) => {
+	/**
+	 * The name of the entrypoint without extension.
+	 *
+	 * @example "main"
+	 */
+	id: string;
+
+	/** Code for the entrypoint. */
+	code: string;
+};
 
 export type Adapter = {
 	/** The name of the adapter. */

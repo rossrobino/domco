@@ -28,24 +28,23 @@ export const adapterPlugin = async (
 			}
 		},
 
-		async load(id) {
+		load(id) {
 			if (id === ssrResolvedId && adapter) {
 				// adapter provided entry point that imports the final app
 				// and makes it usable in the target environment.
-				return adapter.entry({
-					appId,
-				});
+				return adapter.entry({ appId }).code;
 			}
 		},
 
 		async closeBundle() {
 			if (viteConfig.build.ssr) {
 				if (adapter) {
+					console.log(style.bold(`adapter - ${adapter.name}`));
+
 					if (adapter.run) {
 						await adapter.run();
 					}
 
-					console.log(style.bold(`adapter - ${adapter.name}`));
 					console.log(style.dim(style.italic(adapter.message)));
 					console.log();
 				}
