@@ -1,4 +1,4 @@
-import { dirNames } from "../../constants/index.js";
+import { dirNames, headers } from "../../constants/index.js";
 import type { AdapterBuilder } from "../../types/public/index.js";
 import {
 	clearDir,
@@ -122,6 +122,10 @@ export const adapter: AdapterBuilder = async () => {
 				fs.writeFile(
 					path.join(outDir, "_routes.json"),
 					JSON.stringify(routes, null, "\t"),
+				),
+				fs.writeFile(
+					path.join(outDir, "_headers"),
+					`/${dirNames.out.client.immutable}/*\n  ! Cache-Control\n\tCache-Control: ${headers.cacheControl.immutable}`,
 				),
 			]);
 		},
