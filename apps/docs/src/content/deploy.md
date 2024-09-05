@@ -62,11 +62,20 @@ export default defineConfig({
 });
 ```
 
+### Cloudflare
+
+The [Cloudflare](https://cloudflare.com) adapter outputs your app to work on Cloudflare Pages.
+
+![A screenshot of the Cloudflare Build Settings UI. Set the Framework Preset field to "None", set the build command to "npm run build", and the build output directory to ".cloudflare".](/cloudflare/build-settings.webp)
+
+- Functions run on the [Workers Runtime](https://developers.cloudflare.com/workers/runtime-apis/).
+- Outputs public assets to be served on Cloudflare's CDN.
+
 ### Vercel
 
 The [Vercel](https://vercel.com) adapter outputs your app to the [Build Output API](https://vercel.com/docs/build-output-api/v3) specification.
 
 ![A screenshot of the Vercel Build and Development Settings UI. Set the Framework Preset field to "Other" and leave all of the other options blank.](/vercel/build-settings.webp)
 
-- Supports Serverless (+ ISR), and Edge Runtime.
-- Outputs public assets to be served on Vercel's CDN. Since your application will not be serving these assets, if you want to protect a page, you need to serve it from an endpoint instead.
+- Supports [Node.js](https://vercel.com/docs/functions/runtimes#node.js), [Node.js with ISR](https://vercel.com/docs/incremental-static-regeneration), and [Edge Runtime](https://vercel.com/docs/functions/runtimes/edge-runtime).
+- Outputs public assets to be served on Vercel's [Edge Network](https://vercel.com/docs/edge-network/overview).
