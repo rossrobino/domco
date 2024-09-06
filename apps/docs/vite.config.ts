@@ -13,7 +13,7 @@ export default defineConfig({
 				},
 				images: {
 					domains: [],
-					sizes: [640],
+					sizes: [1280],
 					formats: ["image/avif"],
 				},
 			}),

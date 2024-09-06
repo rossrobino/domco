@@ -66,7 +66,7 @@ export default defineConfig({
 
 The [Cloudflare](https://cloudflare.com) adapter outputs your app to work on Cloudflare Pages.
 
-![A screenshot of the Cloudflare Build Settings UI. Set the Framework Preset field to "None", set the build command to "npm run build", and the build output directory to ".cloudflare".](/_vercel/image?url=/images/cloudflare/build-settings.png&w=640&q=100)
+![A screenshot of the Cloudflare Build Settings UI. Set the Framework Preset field to "None", set the build command to "npm run build", and the build output directory to ".cloudflare".](/_vercel/image?url=/images/cloudflare/build-settings.png&w=1280&q=100)
 
 - Functions run on the [Workers Runtime](https://developers.cloudflare.com/workers/runtime-apis/).
 - Outputs public assets to be served on Cloudflare's CDN.
@@ -75,7 +75,7 @@ The [Cloudflare](https://cloudflare.com) adapter outputs your app to work on Clo
 
 The [Vercel](https://vercel.com) adapter outputs your app to the [Build Output API](https://vercel.com/docs/build-output-api/v3) specification.
 
-![A screenshot of the Vercel Build and Development Settings UI. Set the Framework Preset field to "Other" and leave all of the other options blank.](/_vercel/image?url=/images/vercel/build-settings.png&w=640&q=100)
+![A screenshot of the Vercel Build and Development Settings UI. Set the Framework Preset field to "Other" and leave all of the other options blank.](/_vercel/image?url=/images/vercel/build-settings.png&w=1280&q=100)
 
 - Supports [Node.js](https://vercel.com/docs/functions/runtimes#node.js), [Node.js with ISR](https://vercel.com/docs/incremental-static-regeneration), and [Edge Runtime](https://vercel.com/docs/functions/runtimes/edge-runtime).
 - Outputs public assets to be served on Vercel's [Edge Network](https://vercel.com/docs/edge-network/overview).
