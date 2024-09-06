@@ -14,6 +14,7 @@ export default defineConfig({
 				images: {
 					domains: [],
 					sizes: [640],
+					formats: ["image/avif"],
 				},
 			}),
 		}),
