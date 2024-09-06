@@ -1,5 +1,11 @@
 # domco
 
+## 0.9.1
+
+### Patch Changes
+
+- 01cdb56: Adds image optimization support for vercel adapter
+
 ## 0.9.0
 
 ### Minor Changes

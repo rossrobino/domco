@@ -1,5 +1,11 @@
 # create-domco
 
+## 0.1.10
+
+### Patch Changes
+
+- 01cdb56: Adds image optimization support for vercel adapter
+
 ## 0.1.9
 
 ### Patch Changes
