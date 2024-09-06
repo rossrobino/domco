@@ -1,9 +1,8 @@
 import type { Routes } from "../../types/private/index.js";
 import { createRoutes } from "../../util/create-routes/index.js";
 import { addRoutes, applySetup, setServer } from "../util/index.js";
-import { Hono } from "hono";
+import { Hono, type MiddlewareHandler } from "hono";
 import type { HonoOptions } from "hono/hono-base";
-import { html } from "hono/html";
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
@@ -18,10 +17,17 @@ import type { ViteDevServer } from "vite";
 export const createAppDev = <Env extends {} = any>(options?: {
 	devServer?: ViteDevServer;
 	honoOptions?: HonoOptions<Env>;
+	middleware?: MiddlewareHandler[];
 }) => {
-	const { devServer, honoOptions } = options ?? {};
+	const { devServer, honoOptions, middleware } = options ?? {};
 
 	const rootApp = new Hono<Env>(honoOptions);
+
+	if (middleware) {
+		for (const mw of middleware) {
+			rootApp.use(mw);
+		}
+	}
 
 	rootApp.all("/*", async (c) => {
 		// this has to be called each request for HMR
@@ -110,7 +116,7 @@ const getRoutesDev = async (options: { devServer?: ViteDevServer }) => {
 	return loadedRoutes;
 };
 
-const errorTemplate = (err: Error) => html`
+const errorTemplate = (err: Error) => /* html */ `
 	<!doctype html>
 	<html>
 		<head>

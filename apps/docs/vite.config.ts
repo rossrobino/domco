@@ -11,6 +11,11 @@ export default defineConfig({
 				config: {
 					runtime: "edge",
 				},
+				images: {
+					domains: [],
+					sizes: [1280],
+					formats: ["image/avif"],
+				},
 			}),
 		}),
 	],

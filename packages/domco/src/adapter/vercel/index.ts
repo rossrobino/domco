@@ -4,105 +4,50 @@ import { clearDir, copyClient, copyServer } from "../../util/fs/index.js";
 import { version } from "../../version/index.js";
 import type {
 	PrerenderFunctionConfig,
-	NodejsServerlessFunctionConfig,
 	OutputConfig,
-	EdgeFunctionConfig,
+	RequiredOptions,
+	VercelAdapterOptions,
 } from "./types/index.js";
+import { createMiddleware } from "hono/factory";
 import type { HonoOptions } from "hono/hono-base";
 import fs from "node:fs/promises";
 import path from "node:path";
 
-// two separate types are required because we do not want the user to
-// be able to set some of the values that are required.
-type RequiredOptions =
-	| {
-			config: NodejsServerlessFunctionConfig;
-			isr?: PrerenderFunctionConfig;
-	  }
-	| { config: EdgeFunctionConfig; isr?: never };
+/** This function is required for ISR. */
+export const getPath: HonoOptions<{}>["getPath"] = (req) => {
+	const url = new URL(req.url);
+	const params = new URLSearchParams(url.search);
 
-type VercelAdapterOptions =
-	| {
-			/**
-			 * Serverless function config.
-			 *
-			 * @default
-			 *
-			 * {
-			 * 	handler: "index.mjs",
-			 * 	runtime: "nodejs20.x",
-			 * 	launcherType: "Nodejs",
-			 * }
-			 */
-			config?: Partial<
-				Omit<NodejsServerlessFunctionConfig, "handler" | "launcherType">
-			>;
+	const pathnameParam = "__pathname";
+	const pathname = `/${params.get(pathnameParam) ?? ""}`;
 
-			/**
-			 * ISR config.
-			 *
-			 * Use [Incremental Static Regeneration](https://vercel.com/docs/concepts/incremental-static-regeneration/overview)
-			 * to cache the result of a serverless function as a static asset for a given timeframe.
-			 *
-			 * For example, to refresh the page every minute, set the `expiration` to `60` seconds.
-			 *
-			 * Recommended to not use [Hono ETag middleware](https://hono.dev/docs/middleware/builtin/etag) if using ISR. If response is marked as STALE by Vercel but the content hasn't changed, edge server will send request to node server and it will respond 304 NOT MODIFIED. Vercel will never update the edge cache again with the new content and will continue to be STALE. This will result in a new request to the node server every time instead of getting the advantage ISR provides. User can easily apply etag within app if needed instead.
-			 *
-			 * @default undefined
-			 *
-			 * @example isr: { expiration: 60 }
-			 */
-			isr?: Omit<PrerenderFunctionConfig, "fallback" | "group">;
-	  }
-	| {
-			/**
-			 * Edge function config.
-			 */
-			config?: Omit<EdgeFunctionConfig, "entrypoint">;
+	if (pathname) {
+		params.delete(pathnameParam);
+		return `${pathname}${params.toString() ? `?${params}` : ""}`;
+	}
 
-			/**
-			 * ISR is not available for edge functions. Change `config.runtime` to "nodejs20.x" to use ISR.
-			 */
-			isr?: never;
-	  };
+	return req.url;
+};
 
 const entryId = "main";
 
-/** use when runtime is set to node */
+/** Use when runtime is set to node. */
 const nodeEntry: AdapterEntry = ({ appId }) => {
-	const getPath: HonoOptions<{}>["getPath"] = (req) => {
-		const url = new URL(req.url);
-		const params = new URLSearchParams(url.search);
-
-		const pathnameParam = "__pathname";
-		const pathname = `/${params.get(pathnameParam) ?? ""}`;
-
-		if (pathname) {
-			params.delete(pathnameParam);
-			return `${pathname}${params.toString() ? `?${params}` : ""}`;
-		}
-
-		return req.url;
-	};
-
 	return {
 		id: entryId,
 		code: `
 import { createApp } from "${appId}";
-import { handle } from '@hono/node-server/vercel'
+import { handle } from "@hono/node-server/vercel";
+import { getPath } from "domco/adapter/vercel";
 
-const app = createApp({
-	honoOptions: {
-		getPath: ${getPath.toString()}
-	}
-});
+const app = createApp({ honoOptions: { getPath } });
 
 export default handle(app);
 `,
 	};
 };
 
-/** use when runtime is edge */
+/** Use when runtime is edge. */
 const edgeEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
@@ -166,10 +111,35 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		};
 	}
 
+	// can't do this at top level or it will override the defaults set above
 	Object.assign(resolvedOptions.config, options?.config);
 
-	// `isr` could be undefined
+	// could be undefined
 	resolvedOptions.isr = options?.isr;
+	resolvedOptions.images = options?.images;
+
+	const imageMiddleware = createMiddleware(async (c, next) => {
+		if (resolvedOptions.images) {
+			if (c.req.path.startsWith("/_vercel/image")) {
+				const { url, w, q } = c.req.query();
+
+				if (!url) throw Error(`Add a \`url\` query param to ${c.req.url}`);
+				if (!w) throw Error(`Add a \`w\` query param to ${c.req.url}`);
+				if (!q) throw Error(`Add a \`q\` query param to ${c.req.url}`);
+
+				if (!resolvedOptions.images.sizes.includes(parseInt(w))) {
+					throw Error(
+						`\`${w}\` is not an included image size. Add \`${w}\` to \`sizes\` in your adapter config to support this width.`,
+					);
+				}
+
+				if (url) {
+					return c.redirect(url);
+				}
+			}
+		}
+		await next();
+	});
 
 	return {
 		name: "vercel",
@@ -180,16 +150,14 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 		ssrTarget: isEdge ? "webworker" : "node",
 
+		devMiddleware: [imageMiddleware],
+
+		previewMiddleware: [imageMiddleware],
+
 		run: async () => {
 			const outDir = path.join(".vercel", "output");
 			const fnName = "fn";
 			const fnDir = path.join(outDir, "functions", `${fnName}.func`);
-
-			const defaultIsr: Partial<PrerenderFunctionConfig> = {
-				allowQuery: ["__pathname"],
-				group: 1,
-				passQuery: true,
-			};
 
 			const outputConfig: OutputConfig = {
 				version: 3,
@@ -215,6 +183,16 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 						dest: `/${fnName}?__pathname=$1`,
 					},
 				],
+			};
+
+			if (resolvedOptions.images) {
+				outputConfig.images = resolvedOptions.images;
+			}
+
+			const defaultIsr: Partial<PrerenderFunctionConfig> = {
+				allowQuery: ["__pathname"],
+				group: 1,
+				passQuery: true,
 			};
 
 			await clearDir(outDir);
