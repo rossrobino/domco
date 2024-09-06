@@ -11,6 +11,10 @@ export default defineConfig({
 				config: {
 					runtime: "edge",
 				},
+				images: {
+					domains: [],
+					sizes: [640],
+				},
 			}),
 		}),
 	],

@@ -34,13 +34,20 @@ import type { ServeStaticOptions } from "hono/serve-static";
  */
 export const createApp = <Env extends {} = any>(options?: {
 	honoOptions?: HonoOptions<Env>;
+	middleware?: MiddlewareHandler[];
 	serveStatic?: (options?: ServeStaticOptions) => MiddlewareHandler;
 }) => {
-	const { honoOptions, serveStatic } = options ?? {};
+	const { honoOptions, serveStatic, middleware } = options ?? {};
 
 	const app = new Hono<Env>(honoOptions);
 
 	app.use(setServer);
+
+	if (middleware) {
+		for (const mw of middleware) {
+			app.use(mw);
+		}
+	}
 
 	applySetup(app, routes);
 

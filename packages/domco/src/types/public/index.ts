@@ -1,4 +1,5 @@
 import type { MaybePromise } from "../helper/index.js";
+import type { MiddlewareHandler } from "hono";
 import type { HtmlEscapedString } from "hono/utils/html";
 import type { SSRTarget } from "vite";
 
@@ -40,6 +41,20 @@ export type Adapter = {
 	 * Target for SSR build.
 	 */
 	ssrTarget: SSRTarget;
+
+	/**
+	 * Middleware to apply in `dev` mode.
+	 * For production middleware, export it from the adapter module,
+	 * and then import into the entry point.
+	 */
+	devMiddleware?: MiddlewareHandler[];
+
+	/**
+	 * Middleware to apply in `preview` mode.
+	 * For production middleware, export it from the adapter module,
+	 * and then import into the entry point.
+	 */
+	previewMiddleware?: MiddlewareHandler[];
 };
 
 export type AdapterBuilder<AdapterOptions = {}> = (

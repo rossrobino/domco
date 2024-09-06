@@ -1,5 +1,6 @@
 import { createAppDev } from "../../app/dev/index.js";
 import { dirNames, fileNames } from "../../constants/index.js";
+import type { Adapter } from "../../types/public/index.js";
 import { getRequestListener } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import path from "node:path";
@@ -7,7 +8,7 @@ import process from "node:process";
 import url from "node:url";
 import type { Plugin } from "vite";
 
-export const configureServerPlugin = (): Plugin => {
+export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 	return {
 		name: "domco:configure-server",
 		apply: "serve",
@@ -40,7 +41,10 @@ export const configureServerPlugin = (): Plugin => {
 
 			return async () => {
 				// POST MIDDLEWARE
-				const app = createAppDev({ devServer });
+				const app = createAppDev({
+					devServer,
+					middleware: adapter?.devMiddleware,
+				});
 
 				devServer.middlewares.use(async (req, res, next) => {
 					getRequestListener(
@@ -93,7 +97,10 @@ export const configureServerPlugin = (): Plugin => {
 			).createApp;
 
 			// use node serve static since the preview server is a node server
-			const app = createApp({ serveStatic });
+			const app = createApp({
+				serveStatic,
+				middleware: adapter?.previewMiddleware,
+			});
 
 			previewServer.middlewares.use(async (req, res) => {
 				getRequestListener(async (request) => {

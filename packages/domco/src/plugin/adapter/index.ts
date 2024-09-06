@@ -1,4 +1,4 @@
-import type { DomcoConfig } from "../../types/public/index.js";
+import type { Adapter } from "../../types/public/index.js";
 import { style } from "../../util/style/index.js";
 import { appId } from "../entry/index.js";
 import type { Plugin, ResolvedConfig } from "vite";
@@ -6,12 +6,8 @@ import type { Plugin, ResolvedConfig } from "vite";
 /** SSR entry ID for the entrypoint provided by the adapter. */
 export const ssrId = "domco:ssr-entry";
 
-export const adapterPlugin = async (
-	domcoConfig: DomcoConfig,
-): Promise<Plugin> => {
+export const adapterPlugin = async (adapter?: Adapter): Promise<Plugin> => {
 	const ssrResolvedId = "\0" + ssrId;
-
-	const adapter = await domcoConfig.adapter;
 
 	let viteConfig: ResolvedConfig;
 

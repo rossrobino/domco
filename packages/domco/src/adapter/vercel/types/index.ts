@@ -6,6 +6,7 @@ export type ServerlessFunctionConfig = {
 	 * Indicates the initial file where code will be executed for the Serverless Function.
 	 */
 	handler: string;
+
 	/**
 	 * Specifies which "runtime" will be used to execute the Serverless Function.
 	 * See [Runtimes](https://vercel.com/docs/functions/serverless-functions/runtimes) for more information.
@@ -13,30 +14,36 @@ export type ServerlessFunctionConfig = {
 	 * @default "nodejs20.x"
 	 */
 	runtime: "nodejs20.x";
+
 	/**
 	 * Amount of memory (RAM in MB) that will be allocated to the Serverless Function.
 	 * See [size limits](https://vercel.com/docs/functions/serverless-functions/runtimes#size-limits) for more information.
 	 */
 	memory?: number;
+
 	/**
 	 * Maximum duration (in seconds) that will be allowed for the Serverless Function.
 	 * See [size limits](https://vercel.com/docs/functions/serverless-functions/runtimes#size-limits) for more information.
 	 */
 	maxDuration?: number;
+
 	/**
 	 * Map of additional environment variables that will be available to the Serverless Function,
 	 * in addition to the env vars specified in the Project Settings.
 	 */
 	environment?: Record<string, string>[];
+
 	/**
 	 * List of Vercel [Regions](https://vercel.com/docs/concepts/edge-network/regions)
 	 * where the Serverless Function will be deployed to.
 	 */
 	regions?: string[];
+
 	/**
 	 * True if a custom runtime has support for Lambda runtime wrappers.
 	 */
 	supportsWrapper?: boolean;
+
 	/**
 	 * When true, the Serverless Function will stream the response to the client.
 	 */
@@ -50,12 +57,14 @@ export type NodejsServerlessFunctionConfig = ServerlessFunctionConfig & {
 	 * @default "Nodejs"
 	 */
 	launcherType: "Nodejs";
+
 	/**
 	 * Enables request and response helpers methods.
 	 *
 	 * @default false
 	 */
 	shouldAddHelpers?: boolean;
+
 	/**
 	 * Enables source map generation.
 	 *
@@ -74,26 +83,31 @@ export type PrerenderFunctionConfig = {
 	 * 60 * 60 * 24
 	 */
 	expiration: number | false;
+
 	/**
 	 * Option group number of the asset.
 	 * Prerender assets with the same group number will all be re-validated at the same time.
 	 */
 	group?: number;
+
 	/**
 	 * Random token assigned to the `__prerender_bypass` cookie when [Draft Mode](https://vercel.com/docs/workflow-collaboration/draft-mode) is enabled,
 	 * in order to safely bypass the Edge Network cache
 	 */
 	bypassToken?: string;
+
 	/**
 	 * Name of the optional fallback file relative to the configuration file.
 	 */
 	fallback?: string;
+
 	/**
 	 * List of query string parameter names that will be cached independently.
 	 * If an empty array, query values are not considered for caching.
 	 * If undefined each unique query value is cached independently
 	 */
 	allowQuery?: string[];
+
 	/**
 	 * 	When true, the query string will be present on the request argument passed to the invoked function.
 	 * The allowQuery filter still applies.
@@ -106,14 +120,17 @@ export type EdgeFunctionConfig = {
 	 * The runtime: "edge" property is required to indicate that this directory represents an Edge Function.
 	 */
 	runtime: "edge";
+
 	/**
 	 * Indicates the initial file where code will be executed for the Edge Function.
 	 */
 	entrypoint: string;
+
 	/**
 	 * List of environment variable names that will be available for the Edge Function to utilize.
 	 */
 	envVarsInUse?: string[];
+
 	/**
 	 * List of regions or a specific region that the edge function will be available in, defaults to all.
 	 * [View regions](https://vercel.com/docs/edge-network/regions#region-list)
@@ -204,14 +221,35 @@ type RemotePattern = {
 	pathname?: string;
 };
 
-type ImagesConfig = {
+export type ImagesConfig = {
+	/** Supported image widths. */
 	sizes: number[];
+
+	/**
+	 * Allowed external domains that can use Image Optimization. Leave empty for only allowing the deployment domain to use Image Optimization.
+	 */
 	domains: string[];
+
+	/**
+	 * Allowed external patterns that can use Image Optimization. Similar to `domains` but provides more control with RegExp.
+	 */
 	remotePatterns?: RemotePattern[];
-	minimumCacheTTL?: number; // seconds
+
+	/** Cache duration (in seconds) for the optimized images. */
+	minimumCacheTTL?: number;
+
+	/** Supported output image formats. */
 	formats?: ImageFormat[];
+
+	/** Allow SVG input image URLs. This is disabled by default for security purposes. */
 	dangerouslyAllowSVG?: boolean;
+
+	/**
+	 * Change the [Content Security Policy](https://developer.mozilla.org/docs/Web/HTTP/CSP) of the optimized images.
+	 */
 	contentSecurityPolicy?: string;
+
+	/** Specifies the value of the `"Content-Disposition"` response header. */
 	contentDispositionType?: string;
 };
 
@@ -242,3 +280,93 @@ type Cron = {
 };
 
 type CronsConfig = Cron[];
+
+// two separate types are required because we do not want the user to
+// be able to set some of the values that are required.
+export type RequiredOptions = (
+	| {
+			config: NodejsServerlessFunctionConfig;
+			isr?: PrerenderFunctionConfig;
+	  }
+	| { config: EdgeFunctionConfig; isr?: never }
+) & { images?: ImagesConfig };
+
+export type VercelAdapterOptions = (
+	| {
+			/**
+			 * Serverless function config.
+			 *
+			 * @default
+			 *
+			 * {
+			 * 	handler: "index.mjs",
+			 * 	runtime: "nodejs20.x",
+			 * 	launcherType: "Nodejs",
+			 * }
+			 */
+			config?: Partial<
+				Omit<NodejsServerlessFunctionConfig, "handler" | "launcherType">
+			>;
+
+			/**
+			 * ISR config.
+			 *
+			 * Use [Incremental Static Regeneration](https://vercel.com/docs/concepts/incremental-static-regeneration/overview)
+			 * to cache the result of a serverless function as a static asset for a given timeframe.
+			 *
+			 * For example, to refresh the page every minute, set the `expiration` to `60` seconds.
+			 *
+			 * Recommended to not use [Hono ETag middleware](https://hono.dev/docs/middleware/builtin/etag) if using ISR. If response is marked as STALE by Vercel but the content hasn't changed, edge server will send request to node server and it will respond 304 NOT MODIFIED. Vercel will never update the edge cache again with the new content and will continue to be STALE. This will result in a new request to the node server every time instead of getting the advantage ISR provides. User can easily apply etag within app if needed instead.
+			 *
+			 * @default undefined
+			 *
+			 * @example isr: { expiration: 60 }
+			 */
+			isr?: Omit<PrerenderFunctionConfig, "fallback" | "group">;
+	  }
+	| {
+			/**
+			 * Edge function config.
+			 */
+			config?: Omit<EdgeFunctionConfig, "entrypoint">;
+
+			/**
+			 * ISR is not available for edge functions. Change `config.runtime` to "nodejs20.x" to use ISR.
+			 */
+			isr?: never;
+	  }
+) & {
+	/**
+	 * When the `images` property is defined, the Image Optimization API will be available by visiting the `/_vercel/image` path. When the images property is undefined, visiting the `/_vercel/image` path will respond with 404 Not Found.
+	 *
+	 * The API accepts the following query string parameters:
+	 *
+	 * | Key | Type    | Required | Example          | Description                                                                                                                             |
+	 * | --- | ------- | -------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+	 * | url | String  | Yes      | `/assets/me.png` | The URL of the source image that should be optimized. Absolute URLs must match a pattern defined in the `remotePatterns` configuration. |
+	 * | w   | Integer | Yes      | `200`            | The width (in pixels) that the source image should be resized to. Must match a value defined in the sizes configuration.                |
+	 * | q   | Integer | Yes      | `75`             | The quality that the source image should be reduced to. Must be between 1 (lowest quality) to 100 (highest quality).                    |
+	 *
+	 * https://vercel.com/docs/build-output-api/v3/configuration#images
+	 *
+	 * @example
+	 *
+	 * ```js
+	 * {
+	 * 	// adapter config...
+	 * 	images: {
+	 * 		sizes: [640, 750, 828, 1080, 1200],
+	 * 		domains: [],
+	 * 		minimumCacheTTL: 60,
+	 * 		formats: ["image/avif", "image/webp"],
+	 * 		remotePatterns: [{
+	 * 			protocol: "https",
+	 * 			hostname: "^via\\.placeholder\\.com$",
+	 * 			pathname: "^/1280x640/.*$",
+	 * 		}],
+	 * 	},
+	 * }
+	 * ```
+	 */
+	images?: ImagesConfig;
+};
