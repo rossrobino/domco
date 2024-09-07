@@ -49,6 +49,10 @@
 			"types": "./dist/injector/index.d.ts",
 			"default": "./dist/injector/index.js"
 		},
+		"./node/request-listener": {
+			"types": "./dist/node/request-listener/index.d.ts",
+			"default": "./dist/node/request-listener/index.js"
+		},
 		"./version": {
 			"types": "./dist/version/index.d.ts",
 			"default": "./dist/version/index.js"
@@ -76,8 +80,5 @@
 	"peerDependencies": {
 		"hono": "^4.5.0",
 		"vite": "^5.4.0"
-	},
-	"dependencies": {
-		"@hono/node-server": "^1.12.2"
 	}
 }

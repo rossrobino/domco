@@ -1,10 +1,8 @@
-import { dirNames, headers } from "../constants/index.js";
 import { addRoutes, applySetup, setServer } from "./util/index.js";
 import { manifest } from "domco:manifest";
 import { routes } from "domco:routes";
 import { Hono, type MiddlewareHandler } from "hono";
 import type { HonoOptions } from "hono/hono-base";
-import type { ServeStaticOptions } from "hono/serve-static";
 
 /**
  * Creates your production Hono app instance. You can import `createApp` from
@@ -22,50 +20,32 @@ import type { ServeStaticOptions } from "hono/serve-static";
  * @example
  *
  * ```js
- * // example of the NodeJS build that is output to `./dist/server/node.js`
+ * // example using Node.js and `@hono/node-server`
  * import { serve } from "@hono/node-server";
  * import { serveStatic } from "@hono/node-server/serve-static";
  * import { createApp } from "./dist/server/app.js";
  *
- * const app = createApp({ serveStatic });
+ * const app = createApp({ middleware: [serveStatic({ root: "./dist/client" })] });
  *
  * serve(app);
  * ```
  */
-export const createApp = <Env extends {} = any>(options?: {
-	honoOptions?: HonoOptions<Env>;
-	middleware?: MiddlewareHandler[];
-	serveStatic?: (options?: ServeStaticOptions) => MiddlewareHandler;
-}) => {
-	const { honoOptions, serveStatic, middleware } = options ?? {};
-
-	const app = new Hono<Env>(honoOptions);
+export const createApp = <Env extends {} = any>(
+	options: {
+		honoOptions?: HonoOptions<Env>;
+		middleware?: MiddlewareHandler[];
+	} = {},
+) => {
+	const app = new Hono<Env>(options.honoOptions);
 
 	app.use(setServer);
 
-	if (middleware) {
-		for (const mw of middleware) {
-			app.use(mw);
-		}
-	}
-
 	applySetup(app, routes);
 
-	// handlers need to be added after static so handleStatic will run first
-	if (serveStatic) {
-		app.use(`/${dirNames.out.client.immutable}/*`, async (c, next) => {
-			await next();
-			c.header("cache-control", headers.cacheControl.immutable);
-		});
-
-		app.use(async (c, next) => {
-			if (c.req.method === "GET") {
-				return serveStatic({
-					root: `./${dirNames.out.base}/${dirNames.out.client.base}`,
-				})(c, next);
-			}
-			await next();
-		});
+	if (options.middleware) {
+		for (const mw of options.middleware) {
+			app.use(mw);
+		}
 	}
 
 	addRoutes({ app, routes, manifest });

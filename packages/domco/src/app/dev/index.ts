@@ -14,12 +14,14 @@ import type { ViteDevServer } from "vite";
  * @param options
  * @returns Hono app instance.
  */
-export const createAppDev = <Env extends {} = any>(options?: {
-	devServer?: ViteDevServer;
-	honoOptions?: HonoOptions<Env>;
-	middleware?: MiddlewareHandler[];
-}) => {
-	const { devServer, honoOptions, middleware } = options ?? {};
+export const createAppDev = <Env extends {} = any>(
+	options: {
+		devServer?: ViteDevServer;
+		honoOptions?: HonoOptions<Env>;
+		middleware?: MiddlewareHandler[];
+	} = {},
+) => {
+	const { devServer, honoOptions, middleware } = options;
 
 	const rootApp = new Hono<Env>(honoOptions);
 

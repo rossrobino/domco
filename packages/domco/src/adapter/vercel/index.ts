@@ -7,7 +7,7 @@ import type {
 	OutputConfig,
 	RequiredOptions,
 	VercelAdapterOptions,
-} from "./types/index.js";
+} from "./types.js";
 import { createMiddleware } from "hono/factory";
 import type { HonoOptions } from "hono/hono-base";
 import fs from "node:fs/promises";
@@ -37,12 +37,12 @@ const nodeEntry: AdapterEntry = ({ appId }) => {
 		id: entryId,
 		code: `
 import { createApp } from "${appId}";
-import { handle } from "@hono/node-server/vercel";
+import { createRequestListener } from "domco/node/request-listener";
 import { getPath } from "domco/adapter/vercel";
 
 const app = createApp({ honoOptions: { getPath } });
 
-export default handle(app);
+export default createRequestListener(app.fetch);
 `,
 	};
 };
@@ -118,24 +118,25 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	resolvedOptions.isr = options?.isr;
 	resolvedOptions.images = options?.images;
 
+	/**
+	 * This is applied in `dev` and `preview` so users can see the src images.
+	 */
 	const imageMiddleware = createMiddleware(async (c, next) => {
 		if (resolvedOptions.images) {
 			if (c.req.path.startsWith("/_vercel/image")) {
 				const { url, w, q } = c.req.query();
 
-				if (!url) throw Error(`Add a \`url\` query param to ${c.req.url}`);
-				if (!w) throw Error(`Add a \`w\` query param to ${c.req.url}`);
-				if (!q) throw Error(`Add a \`q\` query param to ${c.req.url}`);
+				if (!url) throw new Error(`Add a \`url\` query param to ${c.req.url}`);
+				if (!w) throw new Error(`Add a \`w\` query param to ${c.req.url}`);
+				if (!q) throw new Error(`Add a \`q\` query param to ${c.req.url}`);
 
 				if (!resolvedOptions.images.sizes.includes(parseInt(w))) {
-					throw Error(
+					throw new Error(
 						`\`${w}\` is not an included image size. Add \`${w}\` to \`sizes\` in your adapter config to support this width.`,
 					);
 				}
 
-				if (url) {
-					return c.redirect(url);
-				}
+				return c.redirect(url);
 			}
 		}
 		await next();
