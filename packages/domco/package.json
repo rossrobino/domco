@@ -1,6 +1,6 @@
 {
 	"name": "domco",
-	"description": "Construct Web Applications with Vite and Hono",
+	"description": "A Minimal Full-Stack JavaScript Framework",
 	"version": "0.10.0",
 	"author": {
 		"name": "Ross Robino",

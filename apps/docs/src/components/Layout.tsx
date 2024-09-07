@@ -27,7 +27,7 @@ export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
 					<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 					<meta
 						name="description"
-						content="Construct Web Applications with Vite and Hono."
+						content="A Minimal Full-Stack JavaScript Framework."
 					/>
 					<title>{title}</title>
 				</head>

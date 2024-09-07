@@ -13,11 +13,13 @@ Run `vite build` to build your application into `dist/`.
 		└── (adapter-entry.js)
 ```
 
-By default **domco** will generate a `app.js` module and static assets for your application. If you are not using an [adapter](#adapters), you can import `createApp` from the `app.js` module and configure your app to use in one of [Hono's supported environments](https://hono.dev/docs/getting-started/basic).
-
-The `client/` directory holds client assets. JS and CSS assets with hashed file names will be output to `dist/client/_immutable/`, you can serve this path with immutable cache headers. Other assets are processed and included in `dist/client/` directly.
+By default domco will generate a `app.js` module and static assets for your application.
 
 ## Example
+
+If you are not using an [adapter](#adapters), you can import `createApp` from the `app.js` module and configure your app to use in one of [Hono's supported environments](https://hono.dev/docs/getting-started/basic).
+
+The `client/` directory holds client assets. JS and CSS assets with hashed file names will be output to `dist/client/_immutable/`, you can serve this path with immutable cache headers. Other assets are processed and included in `dist/client/` directly.
 
 Here's an example of how to serve your app using the result of your build with [`@hono/node-server`](https://github.com/honojs/node-server).
 

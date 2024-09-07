@@ -1,6 +1,6 @@
 # domco
 
-## Construct Web Applications with Vite and Hono
+## A Minimal Full-Stack JavaScript Framework
 
 ```bash
 npm create domco@latest
