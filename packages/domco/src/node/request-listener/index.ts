@@ -1,7 +1,6 @@
 /**
- * copied from https://github.com/mjackson/remix-the-web/blob/main/packages/node-fetch-server/src/lib/request-listener.ts
- *
- * created this issue https://github.com/mjackson/remix-the-web/issues/13
+ * Adapted from https://github.com/mjackson/remix-the-web/blob/main/packages/node-fetch-server
+ * to use as middleware: https://github.com/mjackson/remix-the-web/issues/13
  */
 import type { MaybePromise } from "../../types/helper/index.js";
 import type { ReadStream } from "node:fs";
@@ -18,12 +17,14 @@ type ClientAddress = {
 	 * [Node.js Reference](https://nodejs.org/api/net.html#socketremoteaddress)
 	 */
 	address: string;
+
 	/**
 	 * The family of the client IP address.
 	 *
 	 * [Node.js Reference](https://nodejs.org/api/net.html#socketremotefamily)
 	 */
-	family: "IPv4" | "IPv6";
+	family: IncomingMessage["socket"]["remoteFamily"];
+
 	/**
 	 * The remote port of the client that sent the request.
 	 *
@@ -31,14 +32,6 @@ type ClientAddress = {
 	 */
 	port: number;
 };
-
-/**
- * A function that handles an error that occurred during request handling. May return a response to
- * send to the client, or `void` which creates an early return.
- *
- * [MDN `Response` Reference](https://developer.mozilla.org/en-US/docs/Web/API/Response)
- */
-type ErrorHandler = (error: unknown) => MaybePromise<Response | void>;
 
 /**
  * A function that handles an incoming request and returns a response.
@@ -65,11 +58,15 @@ type RequestListenerOptions = {
 	 * ```
 	 */
 	host?: string;
+
 	/**
-	 * An error handler that determines the response when the request handler throws an error. By
-	 * default a 500 Internal Server Error response will be sent.
+	 * A function that handles an error that occurred during request handling. May return a response to
+	 * send to the client, or `void` which creates an early return.
+	 *
+	 * [MDN `Response` Reference](https://developer.mozilla.org/en-US/docs/Web/API/Response)
 	 */
-	onError?: ErrorHandler;
+	onError?: (error: unknown) => MaybePromise<Response | void>;
+
 	/**
 	 * Overrides the protocol of the incoming request URL. By default the request URL protocol is
 	 * derived from the connection protocol. So e.g. when serving over HTTPS (using
@@ -103,7 +100,7 @@ export const createRequestListener = (
 		const request = createRequest(req, url, controller.signal);
 		const client = {
 			address: req.socket.remoteAddress!,
-			family: req.socket.remoteFamily! as ClientAddress["family"],
+			family: req.socket.remoteFamily!,
 			port: req.socket.remotePort!,
 		};
 
@@ -111,15 +108,12 @@ export const createRequestListener = (
 		try {
 			response = await handler(request, client);
 		} catch (error) {
-			try {
-				const errorResponse = await onError(error);
-				// handled in vite middleware via `next(error)`
-				if (!errorResponse) return;
-				response = errorResponse;
-			} catch (error) {
-				console.error(`There was an error in the error handler: ${error}`);
-				response = internalServerError();
+			const errorResponse = await onError(error);
+			if (!errorResponse) {
+				// handled by the user, in this case - Vite middleware via `next(error)`
+				return;
 			}
+			response = errorResponse;
 		}
 
 		// Use the rawHeaders API and iterate over response.headers so we are sure to send multiple
@@ -133,7 +127,7 @@ export const createRequestListener = (
 		res.writeHead(response.status, rawHeaders);
 
 		if (response.body != null && req.method !== "HEAD") {
-			//@ts-expect-error
+			// @ts-expect-error
 			for await (let chunk of response.body) {
 				res.write(chunk);
 			}
@@ -145,10 +139,6 @@ export const createRequestListener = (
 
 const defaultErrorHandler = (error: unknown) => {
 	console.error(error);
-	return internalServerError();
-};
-
-const internalServerError = () => {
 	return new Response(
 		// "Internal Server Error"
 		new Uint8Array([
