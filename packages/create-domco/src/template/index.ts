@@ -164,18 +164,6 @@ dist-ssr
 `,
 		},
 		{
-			name: `src/+server.${lang}`,
-			contents: `import { Hono } from "hono";
-
-const app = new Hono();
-
-app.get("/", (c) => c.html(c.var.page()));
-
-export default app;
-`,
-		},
-		{ name: `src/+client.${lang}`, contents: `console.log("hello world");\n` },
-		{
 			name: `src/${styleFileName}`,
 			contents: tailwind
 				? `@tailwind base;
