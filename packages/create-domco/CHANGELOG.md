@@ -1,5 +1,11 @@
 # create-domco
 
+## 0.1.12
+
+### Patch Changes
+
+- bc29d39: rm server and client from starter template
+
 ## 0.1.11
 
 ### Patch Changes
