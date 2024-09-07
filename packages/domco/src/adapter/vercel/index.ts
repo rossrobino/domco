@@ -7,7 +7,7 @@ import type {
 	OutputConfig,
 	RequiredOptions,
 	VercelAdapterOptions,
-} from "./types/index.js";
+} from "./types.js";
 import { createMiddleware } from "hono/factory";
 import type { HonoOptions } from "hono/hono-base";
 import fs from "node:fs/promises";
@@ -37,12 +37,12 @@ const nodeEntry: AdapterEntry = ({ appId }) => {
 		id: entryId,
 		code: `
 import { createApp } from "${appId}";
-import { handle } from "@hono/node-server/vercel";
+import { createRequestListener } from "domco/node/request-listener";
 import { getPath } from "domco/adapter/vercel";
 
 const app = createApp({ honoOptions: { getPath } });
 
-export default handle(app);
+export default requestListener(app.fetch);
 `,
 	};
 };

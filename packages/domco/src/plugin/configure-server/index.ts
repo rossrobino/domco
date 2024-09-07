@@ -1,8 +1,10 @@
 import { createAppDev } from "../../app/dev/index.js";
+import type { createApp as createAppType } from "../../app/index.js";
 import { dirNames, fileNames } from "../../constants/index.js";
+import { createRequestListener } from "../../node/request-listener/index.js";
+import { serveStatic } from "../../node/serve-static/index.js";
 import type { Adapter } from "../../types/public/index.js";
-import { getRequestListener } from "@hono/node-server";
-import { serveStatic } from "@hono/node-server/serve-static";
+import type { MiddlewareHandler } from "hono";
 import path from "node:path";
 import process from "node:process";
 import url from "node:url";
@@ -13,7 +15,6 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 		name: "domco:configure-server",
 		apply: "serve",
 
-		// only apply in dev
 		transform(code, id) {
 			// inject vite client to client entries, in case the script is added
 			// without adding an html file. This is a easier than injecting a tag
@@ -47,9 +48,8 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 				});
 
 				devServer.middlewares.use(async (req, res, next) => {
-					getRequestListener(
-						// This code is copied from
-						// https://github.com/honojs/vite-plugins/blob/main/packages/dev-server/src/dev-server.ts
+					createRequestListener(
+						// Copied from https://github.com/honojs/vite-plugins/blob/main/packages/dev-server/src/dev-server.ts
 						async (request) => {
 							const response = await app.fetch(request);
 
@@ -58,8 +58,7 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 							return response;
 						},
 						{
-							overrideGlobalObjects: false,
-							errorHandler: (e) => {
+							onError: (e) => {
 								let error: Error;
 
 								if (e instanceof Error) {
@@ -94,23 +93,17 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 						),
 					).href
 				)
-			).createApp;
+			).createApp as typeof createAppType;
 
-			// use node serve static since the preview server is a node server
-			const app = createApp({
-				serveStatic,
-				middleware: adapter?.previewMiddleware,
-			});
+			const middleware: MiddlewareHandler[] = [serveStatic];
 
-			previewServer.middlewares.use(async (req, res) => {
-				getRequestListener(async (request) => {
-					const response = await app.fetch(request);
+			if (adapter?.previewMiddleware) {
+				middleware.push(...adapter.previewMiddleware);
+			}
 
-					if (!(response instanceof Response)) throw response;
+			const app = createApp({ middleware });
 
-					return response;
-				})(req, res);
-			});
+			previewServer.middlewares.use(createRequestListener(app.fetch));
 		},
 	};
 };
