@@ -42,7 +42,7 @@ import { getPath } from "domco/adapter/vercel";
 
 const app = createApp({ honoOptions: { getPath } });
 
-export default requestListener(app.fetch);
+export default createRequestListener(app.fetch);
 `,
 	};
 };
