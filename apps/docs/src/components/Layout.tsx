@@ -23,9 +23,7 @@ export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
 						name="viewport"
 						content="width=device-width, initial-scale=1.0"
 					/>
-					{client.map((tags) => {
-						return tags;
-					})}
+					{client.map((tags) => tags)}
 					<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 					<meta
 						name="description"
@@ -37,8 +35,8 @@ export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
 					<drab-prefetch trigger="a[href^='/']" class="contents">
 						<main class="flex flex-col lg:flex-row">
 							<Nav />
-							<div class="prose mx-6 my-6 md:max-w-screen-md xl:mx-auto">
-								{children}
+							<div class="grow justify-center md:flex">
+								<div class="prose m-6 max-w-screen-md">{children}</div>
 							</div>
 						</main>
 					</drab-prefetch>

@@ -1,4 +1,4 @@
-import { BookSvg, EarthSvg, FuncSvg, PlugSvg } from "./svg";
+import { BookSvg, EarthSvg, FuncSvg, HomeSvg, PlugSvg, XSvg } from "./svg";
 import type { FC } from "hono/jsx";
 
 export const Nav: FC = () => {
@@ -17,11 +17,16 @@ type NavLinkProps = {
 
 const SideBar: FC = () => {
 	return (
-		<nav class="bg-muted-background sticky top-0 hidden h-screen overflow-y-auto lg:block">
-			<div class="p-6">
-				<HomeLink />
+		<nav class="bg-muted-background sticky top-0 hidden h-screen w-[20vw] min-w-52 justify-end overflow-y-auto lg:flex">
+			<div class="flex flex-col py-6 pl-6 pr-12">
+				<div class="pb-6">
+					<HomeLink />
+				</div>
+				<div class="flex grow flex-col justify-between">
+					<InternalLinks />
+					<ExternalLinks />
+				</div>
 			</div>
-			<NavContents />
 		</nav>
 	);
 };
@@ -31,20 +36,6 @@ const HomeLink = () => (
 		domco
 	</a>
 );
-
-const NavContents: FC = () => {
-	return (
-		<div class="flex h-[90%] min-w-64 flex-col justify-between">
-			<ul class="px-6">
-				<NavListItems />
-			</ul>
-			<div class="flex items-center gap-1 p-6">
-				<RepoLink />
-				<NpmLink />
-			</div>
-		</div>
-	);
-};
 
 const TopBar: FC = () => {
 	return (
@@ -77,36 +68,28 @@ const TopBar: FC = () => {
 
 			<dialog
 				data-content
-				class="bg-muted-background my-0 ml-0 h-full max-h-dvh max-w-[100vw] backdrop:backdrop-blur"
+				class="bg-muted-background my-0 ml-0 h-full max-h-dvh shadow-sm backdrop:backdrop-blur"
 			>
-				<nav class="flex items-center justify-between p-3 pl-6">
-					<HomeLink />
-
-					<button data-trigger type="button" class="ghost" title="Close">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						>
-							<path d="M18 6 6 18" />
-							<path d="m6 6 12 12" />
-						</svg>
-					</button>
+				<nav class="flex h-full min-w-64 flex-col p-6">
+					<div class="flex items-center justify-between pb-6">
+						<HomeLink />
+						<button data-trigger type="button" class="ghost" title="Close">
+							<XSvg />
+						</button>
+					</div>
+					<div class="flex grow flex-col justify-between">
+						<InternalLinks />
+						<ExternalLinks />
+					</div>
 				</nav>
-				<NavContents />
 			</dialog>
 		</drab-dialog>
 	);
 };
 
-export const NavListItems: FC = () => {
+export const InternalLinks: FC = () => {
 	const items: NavLinkProps[] = [
+		{ title: "Overview", Icon: HomeSvg },
 		{ title: "Tutorial", Icon: BookSvg },
 		{
 			title: "Migrate",
@@ -123,23 +106,38 @@ export const NavListItems: FC = () => {
 	];
 
 	return (
-		<>
-			{items.map(({ title, Icon }) => (
-				<li>
-					<a
-						class="flex items-center gap-3 py-1.5 no-underline data-[current]:font-bold"
-						href={`/${title.split(" ").join("-").toLowerCase()}`}
-					>
-						<Icon />
-						{title}
-					</a>
-				</li>
-			))}
-		</>
+		<ul>
+			{items.map(({ title, Icon }) => {
+				const href =
+					title === "Overview"
+						? "/"
+						: `/${title.split(" ").join("-").toLowerCase()}`;
+				return (
+					<li>
+						<a
+							class="flex items-center gap-3 py-1.5 no-underline data-[current]:font-bold"
+							href={href}
+						>
+							<Icon />
+							{title}
+						</a>
+					</li>
+				);
+			})}
+		</ul>
 	);
 };
 
-export const RepoLink: FC = () => {
+const ExternalLinks: FC = () => {
+	return (
+		<div class="flex items-center gap-1">
+			<RepoLink />
+			<NpmLink />
+		</div>
+	);
+};
+
+const RepoLink: FC = () => {
 	return (
 		<a
 			href="https://github.com/rossrobino/domco"
@@ -164,7 +162,7 @@ export const RepoLink: FC = () => {
 	);
 };
 
-export const NpmLink: FC = () => {
+const NpmLink: FC = () => {
 	return (
 		<a href="https://www.npmjs.com/package/domco" class="button ghost icon">
 			<svg

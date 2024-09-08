@@ -1,3 +1,5 @@
+import { html } from "hono/html";
+
 const headings = document.querySelectorAll("h2, h3");
 const tableOfContents = document.createElement("ul");
 tableOfContents.classList.add("overflow-hidden", "!my-0", "!pl-0");
@@ -12,7 +14,7 @@ headings.forEach((heading) => {
 	if (heading.tagName === "H2") {
 		li.classList.add("!list-none", "level-2", "!pl-0");
 		tableOfContents.append(li);
-		link.classList.add("no-underline", "font-bold");
+		link.classList.add("no-underline", "font-semibold");
 	} else {
 		link.classList.add("text-muted-foreground");
 		const last = tableOfContents.querySelector(".level-2:last-child");
@@ -59,16 +61,19 @@ summary.insertAdjacentHTML(
 	"beforeend",
 	`<svg
 		xmlns="http://www.w3.org/2000/svg"
-		viewBox="0 0 20 20"
-		fill="currentColor"
-		class="size-4 transition group-[[open]]:rotate-180"
+		width="20"
+		height="20"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		class="transition group-[[open]]:rotate-180"
 	>
-		<path
-			fill-rule="evenodd"
-			d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-			clip-rule="evenodd"
-		/>
-	</svg>`,
+		<path d="m6 9 6 6 6-6" />
+	</svg>
+	`,
 );
 
 const content = document.createElement("content");
