@@ -5,7 +5,7 @@ export const Nav: FC = () => {
 	return (
 		<>
 			<SideBar />
-			<Dialog />
+			<TopBar />
 		</>
 	);
 };
@@ -46,7 +46,7 @@ const NavContents: FC = () => {
 	);
 };
 
-const Dialog: FC = () => {
+const TopBar: FC = () => {
 	return (
 		<drab-dialog
 			class="sticky top-0 z-10 flex items-center gap-3 p-3 backdrop-blur-md lg:hidden"
@@ -105,20 +105,6 @@ const Dialog: FC = () => {
 	);
 };
 
-const NavLink: FC<NavLinkProps> = ({ title, Icon }: NavLinkProps) => {
-	return (
-		<li>
-			<a
-				class="flex items-center gap-3 py-1 font-bold no-underline"
-				href={`/${title.split(" ").join("-").toLowerCase()}`}
-			>
-				<Icon />
-				{title}
-			</a>
-		</li>
-	);
-};
-
 export const NavListItems: FC = () => {
 	const items: NavLinkProps[] = [
 		{ title: "Tutorial", Icon: BookSvg },
@@ -139,7 +125,15 @@ export const NavListItems: FC = () => {
 	return (
 		<>
 			{items.map(({ title, Icon }) => (
-				<NavLink title={title} Icon={Icon} />
+				<li>
+					<a
+						class="flex items-center gap-3 py-1.5 no-underline data-[current]:font-bold"
+						href={`/${title.split(" ").join("-").toLowerCase()}`}
+					>
+						<Icon />
+						{title}
+					</a>
+				</li>
 			))}
 		</>
 	);

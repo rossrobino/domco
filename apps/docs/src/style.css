@@ -43,11 +43,11 @@
 
 			& .line,
 			& p {
-				padding-inline: theme(padding.5);
+				padding-inline: theme(padding.6);
 				height: 2.5ch;
 
 				&.highlighted {
-					background-color: theme(colors.slate.800);
+					background-color: theme(colors.base.800);
 				}
 			}
 		}
@@ -59,7 +59,7 @@
 	}
 
 	* {
-		scroll-padding-block-start: theme(padding.16);
+		scroll-padding-block-start: theme(padding.20);
 	}
 
 	pre,
@@ -138,6 +138,11 @@
 		font-style: normal;
 		p {
 			padding-inline-start: 0;
+		}
+	}
+	.prose section {
+		&:first-of-type {
+			margin-block-start: 0;
 		}
 	}
 }

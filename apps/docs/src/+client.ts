@@ -9,3 +9,9 @@ toCopy.forEach((pre) => {
 		if (pre.textContent) await navigator.clipboard.writeText(pre.textContent);
 	});
 });
+
+document.querySelectorAll("a").forEach((link) => {
+	if (link.pathname === window.location.pathname) {
+		link.dataset.current = "";
+	}
+});
