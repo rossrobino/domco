@@ -140,19 +140,26 @@
 }
 
 @layer utilities {
-	.prose blockquote {
-		padding-inline-start: 0;
-		font-style: normal;
-		p {
+	.prose {
+		blockquote {
 			padding-inline-start: 0;
+			font-style: normal;
+			p {
+				padding-inline-start: 0;
+			}
 		}
-	}
-	.prose section {
-		&:first-of-type {
-			margin-block-start: 0;
+
+		section {
+			&:first-of-type {
+				margin-block-start: 0;
+			}
 		}
-	}
-	.prose li {
-		padding-block: theme(padding.1);
+
+		li {
+			padding-block-start: theme(padding.2);
+			:last-of-type {
+				padding-block-end: theme(padding.1);
+			}
+		}
 	}
 }
