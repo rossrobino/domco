@@ -10,7 +10,7 @@ const HtmlLayout: FC = ({ children }) => html`
 
 type LayoutProps = PropsWithChildren<{
 	title: string;
-	client: HtmlEscapedString;
+	client: HtmlEscapedString[];
 }>;
 
 export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
@@ -23,7 +23,9 @@ export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
 						name="viewport"
 						content="width=device-width, initial-scale=1.0"
 					/>
-					{client}
+					{client.map((tags) => {
+						return tags;
+					})}
 					<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 					<meta
 						name="description"
@@ -35,7 +37,7 @@ export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
 					<drab-prefetch trigger="a[href^='/']" class="contents">
 						<main class="flex flex-col lg:flex-row">
 							<Nav />
-							<div class="prose mx-6 my-6 max-w-screen-sm md:mx-auto">
+							<div class="prose mx-6 my-6 md:max-w-screen-md xl:mx-auto">
 								{children}
 							</div>
 						</main>

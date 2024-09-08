@@ -1,3 +1,4 @@
+import { Edit } from "./components/Edit";
 import { Hero } from "@/components/Hero";
 import { Layout } from "@/components/Layout";
 import preview from "@/content/_preview.md?raw";
@@ -12,9 +13,13 @@ export const prerender: Prerender = ["/", "/api-reference"];
 const app = new Hono();
 
 app.use(async (c, next) => {
-	c.setRenderer(({ title }, content) => {
+	c.setRenderer(({ title, client }, content) => {
+		const tags = [c.var.client()];
+		if (client) {
+			tags.push(...client);
+		}
 		return c.html(
-			<Layout title={title} client={c.var.client()}>
+			<Layout title={title} client={tags}>
 				{content}
 			</Layout>,
 		);
@@ -29,8 +34,8 @@ app.get("/", async (c) => {
 		{ title: "domco" },
 		<>
 			<Hero />
-			<section class="mb-24">{previewHtml}</section>
-			<div class="mb-24 flex justify-center">
+			<section>{previewHtml}</section>
+			<div class="my-16 flex justify-center">
 				<a href="/tutorial" class="button px-6 py-4 text-lg">
 					Get Started
 				</a>
@@ -57,8 +62,14 @@ for (const [fileName, md] of Object.entries(content)) {
 
 		app.get(pathName, (c) => {
 			return c.render(
-				{ title: slug.charAt(0).toUpperCase() + slug.slice(1) },
-				<section>{html}</section>,
+				{
+					title: slug.charAt(0).toUpperCase() + slug.slice(1),
+					client: [c.var.client("/lib/docs")],
+				},
+				<>
+					<section>{html}</section>
+					<Edit />
+				</>,
 			);
 		});
 	}
@@ -70,12 +81,13 @@ app.get("/api-reference", async (c) => {
 	);
 
 	return c.render(
-		{ title: "API Reference" },
+		{ title: "API Reference", client: [c.var.client("/lib/docs")] },
 		<>
 			<section>
 				<h1>API Reference</h1>
 				{apiReferenceHtml}
 			</section>
+			<Edit />
 		</>,
 	);
 });

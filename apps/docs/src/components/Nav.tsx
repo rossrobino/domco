@@ -27,7 +27,7 @@ const SideBar: FC = () => {
 };
 
 const HomeLink = () => (
-	<a class="text-lg font-bold no-underline" href="/">
+	<a class="text-xl font-bold no-underline" href="/">
 		domco
 	</a>
 );

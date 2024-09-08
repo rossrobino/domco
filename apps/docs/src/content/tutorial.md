@@ -1,6 +1,6 @@
 # Tutorial
 
-## Create
+## Create a new project
 
 To get started, you'll need to have [Node.js](https://nodejs.org) and npm installed on your computer.
 
@@ -14,7 +14,7 @@ This command creates files in your project's directory instead of having to manu
 
 The following documentation covers the basics of creating a site and all of the features domco provides in addition to Vite and Hono. See the [Vite](https://vitejs.dev/) or [Hono](https://hono.dev) documentation for more information and configuration options.
 
-### +page
+## +page
 
 Your project is located in `src/`---this serves as the root directory of your project. `src/+page.html` can be accessed at `https://example.com`, while `src/nested/+page.html` can be accessed at `https://example.com/nested`.
 

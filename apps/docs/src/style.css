@@ -10,8 +10,7 @@
 		--accent: theme(colors.teal.700);
 		--destructive: theme(colors.rose.700);
 
-		pre,
-		blockquote {
+		pre {
 			--shiki-foreground: theme(colors.base.200);
 			--shiki-background: theme(colors.base.900);
 			--shiki-token-constant: theme(colors.base.50);
@@ -60,6 +59,9 @@
 
 	* {
 		scroll-padding-block-start: theme(padding.20);
+		@media (min-width: 1024px) {
+			scroll-padding-block-start: theme(padding.4);
+		}
 	}
 
 	pre,
@@ -69,6 +71,11 @@
 		&:active {
 			cursor: default;
 		}
+	}
+
+	/* for safari */
+	summary::-webkit-details-marker {
+		display: none;
 	}
 
 	img {
@@ -144,5 +151,8 @@
 		&:first-of-type {
 			margin-block-start: 0;
 		}
+	}
+	.prose li {
+		padding-block: theme(padding.1);
 	}
 }
