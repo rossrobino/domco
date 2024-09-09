@@ -1,5 +1,13 @@
 # domco
 
+## 0.11.0
+
+### Minor Changes
+
+- aa4e711: Adds the ability paths to `CreateAppMiddleware`.
+
+  - This is breaking if you are using a custom setup and passing middleware into `createApp`, you now need to specify the `path` in addition to the `handler` passed in. [See example here](https://domco.robino.dev/deploy#example)
+
 ## 0.10.0
 
 ### Minor Changes
