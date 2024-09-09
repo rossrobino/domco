@@ -12,7 +12,7 @@
 
 ##### devMiddleware?
 
-> `optional` **devMiddleware**: `MiddlewareHandler`[]
+> `optional` **devMiddleware**: [`CreateAppOptions`](globals.md#createappoptions)\[`"middleware"`\]
 
 Middleware to apply in `dev` mode.
 For production middleware, export it from the adapter module,
@@ -46,7 +46,7 @@ The name of the adapter.
 
 ##### previewMiddleware?
 
-> `optional` **previewMiddleware**: `MiddlewareHandler`[]
+> `optional` **previewMiddleware**: [`CreateAppOptions`](globals.md#createappoptions)\[`"middleware"`\]
 
 Middleware to apply in `preview` mode.
 For production middleware, export it from the adapter module,
@@ -74,9 +74,9 @@ Target for SSR build.
 
 #### Defined in
 
-[types/public/index.ts:21](https://github.com/rossrobino/domco/blob/901651aa5239610bc8c1558f2e4c7e072bc52ee6/packages/domco/src/types/public/index.ts#L21)
+[types/public/index.ts:44](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L44)
 
-***
+---
 
 <a id="adapterbuilderadapteroptions" name="adapterbuilderadapteroptions"></a>
 
@@ -98,9 +98,9 @@ Target for SSR build.
 
 #### Defined in
 
-[types/public/index.ts:60](https://github.com/rossrobino/domco/blob/901651aa5239610bc8c1558f2e4c7e072bc52ee6/packages/domco/src/types/public/index.ts#L60)
+[types/public/index.ts:83](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L83)
 
-***
+---
 
 <a id="adapterentry" name="adapterentry"></a>
 
@@ -135,14 +135,14 @@ The name of the entrypoint without extension.
 ###### Example
 
 ```ts
-"main"
+"main";
 ```
 
 #### Defined in
 
-[types/public/index.ts:6](https://github.com/rossrobino/domco/blob/901651aa5239610bc8c1558f2e4c7e072bc52ee6/packages/domco/src/types/public/index.ts#L6)
+[types/public/index.ts:29](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L29)
 
-***
+---
 
 <a id="client" name="client"></a>
 
@@ -160,9 +160,78 @@ The name of the entrypoint without extension.
 
 #### Defined in
 
-[types/public/index.ts:123](https://github.com/rossrobino/domco/blob/901651aa5239610bc8c1558f2e4c7e072bc52ee6/packages/domco/src/types/public/index.ts#L123)
+[types/public/index.ts:146](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L146)
 
-***
+---
+
+<a id="createappmiddleware" name="createappmiddleware"></a>
+
+### CreateAppMiddleware
+
+> **CreateAppMiddleware**: `object`
+
+#### Type declaration
+
+<a id="handler" name="handler"></a>
+
+##### handler
+
+> **handler**: `MiddlewareHandler`
+
+The middleware to apply.
+
+<a id="path" name="path"></a>
+
+##### path
+
+> **path**: `string`
+
+Path to apply the middleware to.
+
+#### Defined in
+
+[types/public/index.ts:7](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L7)
+
+---
+
+<a id="createappoptions" name="createappoptions"></a>
+
+### CreateAppOptions
+
+> **CreateAppOptions**: `object`
+
+#### Type declaration
+
+<a id="devserver" name="devserver"></a>
+
+##### devServer?
+
+> `optional` **devServer**: `ViteDevServer`
+
+Only used in `dev` to call the server.
+
+<a id="honooptions" name="honooptions"></a>
+
+##### honoOptions?
+
+> `optional` **honoOptions**: `HonoOptions`\<`Env`\>
+
+Passthrough options to the Hono app.
+
+<a id="middleware" name="middleware"></a>
+
+##### middleware?
+
+> `optional` **middleware**: [`CreateAppMiddleware`](globals.md#createappmiddleware)[]
+
+Middleware to be applied before any routes. Useful for adapters that need to
+inject middleware.
+
+#### Defined in
+
+[types/public/index.ts:15](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L15)
+
+---
 
 <a id="domcoconfig" name="domcoconfig"></a>
 
@@ -190,7 +259,7 @@ Defaults to `undefined` - creates a `app` build only.
 ###### Default
 
 ```ts
-undefined
+undefined;
 ```
 
 ###### Example
@@ -203,8 +272,8 @@ import { adapter } from `"domco/adapter/...";`
 
 ```ts
 // vite.config.ts
-import { defineConfig } from "vite";
 import { domco, type DomcoConfig } from "domco";
+import { defineConfig } from "vite";
 
 const config: DomcoConfig = {
 	// options...
@@ -217,9 +286,9 @@ export default defineConfig({
 
 #### Defined in
 
-[types/public/index.ts:86](https://github.com/rossrobino/domco/blob/901651aa5239610bc8c1558f2e4c7e072bc52ee6/packages/domco/src/types/public/index.ts#L86)
+[types/public/index.ts:109](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L109)
 
-***
+---
 
 <a id="domcocontextvariablemap" name="domcocontextvariablemap"></a>
 
@@ -320,7 +389,7 @@ app.get("/", (c) => {
 	const page = c.var.page();
 
 	// gets `src/route/path/+page.html`
-	const differentPage = c.var.page("/route/path")
+	const differentPage = c.var.page("/route/path");
 
 	return c.html(page);
 });
@@ -378,9 +447,9 @@ declare module "hono" {
 
 #### Defined in
 
-[types/public/index.ts:148](https://github.com/rossrobino/domco/blob/901651aa5239610bc8c1558f2e4c7e072bc52ee6/packages/domco/src/types/public/index.ts#L148)
+[types/public/index.ts:171](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L171)
 
-***
+---
 
 <a id="page-1" name="page-1"></a>
 
@@ -398,9 +467,9 @@ declare module "hono" {
 
 #### Defined in
 
-[types/public/index.ts:121](https://github.com/rossrobino/domco/blob/901651aa5239610bc8c1558f2e4c7e072bc52ee6/packages/domco/src/types/public/index.ts#L121)
+[types/public/index.ts:144](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L144)
 
-***
+---
 
 <a id="prerender" name="prerender"></a>
 
@@ -425,9 +494,9 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/public/index.ts:119](https://github.com/rossrobino/domco/blob/901651aa5239610bc8c1558f2e4c7e072bc52ee6/packages/domco/src/types/public/index.ts#L119)
+[types/public/index.ts:142](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L142)
 
-***
+---
 
 <a id="server-1" name="server-1"></a>
 
@@ -447,7 +516,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/public/index.ts:125](https://github.com/rossrobino/domco/blob/901651aa5239610bc8c1558f2e4c7e072bc52ee6/packages/domco/src/types/public/index.ts#L125)
+[types/public/index.ts:148](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L148)
 
 ## Functions
 
@@ -474,8 +543,8 @@ The domco Vite plugin.
 
 ```ts
 // vite.config.ts
-import { defineConfig } from "vite";
 import { domco } from "domco";
+import { defineConfig } from "vite";
 
 export default defineConfig({
 	plugins: [domco()],
@@ -484,4 +553,4 @@ export default defineConfig({
 
 #### Defined in
 
-[plugin/index.ts:31](https://github.com/rossrobino/domco/blob/901651aa5239610bc8c1558f2e4c7e072bc52ee6/packages/domco/src/plugin/index.ts#L31)
+[plugin/index.ts:31](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/plugin/index.ts#L31)

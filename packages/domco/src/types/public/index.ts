@@ -1,7 +1,30 @@
 import type { MaybePromise } from "../helper/index.js";
-import type { MiddlewareHandler } from "hono";
+import type { Env, MiddlewareHandler } from "hono";
+import type { HonoOptions } from "hono/hono-base";
 import type { HtmlEscapedString } from "hono/utils/html";
-import type { SSRTarget } from "vite";
+import type { SSRTarget, ViteDevServer } from "vite";
+
+export type CreateAppMiddleware = {
+	/** Path to apply the middleware to. */
+	path: string;
+
+	/** The middleware to apply. */
+	handler: MiddlewareHandler;
+};
+
+export type CreateAppOptions = {
+	/** Only used in `dev` to call the server. */
+	devServer?: ViteDevServer;
+
+	/** Passthrough options to the Hono app. */
+	honoOptions?: HonoOptions<Env>;
+
+	/**
+	 * Middleware to be applied before any routes. Useful for adapters that need to
+	 * inject middleware.
+	 */
+	middleware?: CreateAppMiddleware[];
+};
 
 export type AdapterEntry = (AdapterEntryOptions: {
 	/** The app entrypoint to import `createApp` from. */
@@ -47,14 +70,14 @@ export type Adapter = {
 	 * For production middleware, export it from the adapter module,
 	 * and then import into the entry point.
 	 */
-	devMiddleware?: MiddlewareHandler[];
+	devMiddleware?: CreateAppOptions["middleware"];
 
 	/**
 	 * Middleware to apply in `preview` mode.
 	 * For production middleware, export it from the adapter module,
 	 * and then import into the entry point.
 	 */
-	previewMiddleware?: MiddlewareHandler[];
+	previewMiddleware?: CreateAppOptions["middleware"];
 };
 
 export type AdapterBuilder<AdapterOptions = {}> = (

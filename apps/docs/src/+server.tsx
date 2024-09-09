@@ -6,11 +6,14 @@ import apiReference from "@/generated/globals.md?raw";
 import { processMarkdown } from "@robino/md";
 import type { Prerender } from "domco";
 import { Hono } from "hono";
+import { etag } from "hono/etag";
 import { raw } from "hono/html";
 
 export const prerender: Prerender = ["/", "/api-reference"];
 
 const app = new Hono();
+
+app.use(etag());
 
 app.use(async (c, next) => {
 	c.setRenderer(({ title, client }, content) => {

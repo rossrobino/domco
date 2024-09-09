@@ -1,5 +1,3 @@
-import { html } from "hono/html";
-
 const headings = document.querySelectorAll("h2, h3");
 const tableOfContents = document.createElement("ul");
 tableOfContents.classList.add("overflow-hidden", "!my-0", "!pl-0");

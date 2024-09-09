@@ -3,8 +3,7 @@ import type { createApp as createAppType } from "../../app/index.js";
 import { dirNames, fileNames } from "../../constants/index.js";
 import { createRequestListener } from "../../node/request-listener/index.js";
 import { serveStatic } from "../../node/serve-static/index.js";
-import type { Adapter } from "../../types/public/index.js";
-import type { MiddlewareHandler } from "hono";
+import type { Adapter, CreateAppOptions } from "../../types/public/index.js";
 import path from "node:path";
 import process from "node:process";
 import url from "node:url";
@@ -95,7 +94,9 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 				)
 			).createApp as typeof createAppType;
 
-			const middleware: MiddlewareHandler[] = [serveStatic];
+			const middleware: CreateAppOptions["middleware"] = [
+				{ path: "/*", handler: serveStatic },
+			];
 
 			if (adapter?.previewMiddleware) {
 				middleware.push(...adapter.previewMiddleware);

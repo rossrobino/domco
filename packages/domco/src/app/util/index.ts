@@ -3,6 +3,7 @@ import { type TagDescriptor, serializeTags } from "../../injector/index.js";
 import type { Routes } from "../../types/private/index.js";
 import type {
 	Client,
+	CreateAppOptions,
 	DomcoContextVariableMap,
 	Page,
 	Server,
@@ -11,6 +12,17 @@ import type { Hono } from "hono";
 import { createMiddleware } from "hono/factory";
 import { raw } from "hono/html";
 import type { Manifest } from "vite";
+
+export const addMiddleware = (
+	app: Hono<any>,
+	middleware: CreateAppOptions["middleware"],
+) => {
+	if (middleware) {
+		for (const mw of middleware) {
+			app.use(mw.path, mw.handler);
+		}
+	}
+};
 
 /**
  * Adds routes based on route modules to the base app.
@@ -145,7 +157,7 @@ export const setVariables = (variables: Partial<DomcoContextVariableMap>) =>
 		await next();
 	});
 
-export const applySetup = (app: Hono<any>, routes: Routes) => {
+export const addSetup = (app: Hono<any>, routes: Routes) => {
 	if (routes[setup]?.server?.default) {
 		app.route("/", routes[setup].server.default);
 	}

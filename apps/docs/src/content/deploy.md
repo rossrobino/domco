@@ -30,7 +30,9 @@ import { createApp } from "./dist/server/app.js";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 
-const app = createApp({ middleware: [serveStatic({ root: "./dist/client" })] });
+const app = createApp({
+	middleware: [{ path: "/*", handler: serveStatic({ root: "./dist/client" }) }],
+});
 
 serve(app);
 ```

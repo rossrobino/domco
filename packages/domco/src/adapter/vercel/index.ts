@@ -1,5 +1,9 @@
 import { dirNames, headers } from "../../constants/index.js";
-import type { AdapterBuilder, AdapterEntry } from "../../types/public/index.js";
+import type {
+	AdapterBuilder,
+	AdapterEntry,
+	CreateAppMiddleware,
+} from "../../types/public/index.js";
 import { clearDir, copyClient, copyServer } from "../../util/fs/index.js";
 import { version } from "../../version/index.js";
 import type {
@@ -121,26 +125,30 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	/**
 	 * This is applied in `dev` and `preview` so users can see the src images.
 	 */
-	const imageMiddleware = createMiddleware(async (c, next) => {
-		if (resolvedOptions.images) {
-			if (c.req.path.startsWith("/_vercel/image")) {
-				const { url, w, q } = c.req.query();
+	const imageMiddleware: CreateAppMiddleware = {
+		path: "/*",
+		handler: createMiddleware(async (c, next) => {
+			if (resolvedOptions.images) {
+				if (c.req.path.startsWith("/_vercel/image")) {
+					const { url, w, q } = c.req.query();
 
-				if (!url) throw new Error(`Add a \`url\` query param to ${c.req.url}`);
-				if (!w) throw new Error(`Add a \`w\` query param to ${c.req.url}`);
-				if (!q) throw new Error(`Add a \`q\` query param to ${c.req.url}`);
+					if (!url)
+						throw new Error(`Add a \`url\` query param to ${c.req.url}`);
+					if (!w) throw new Error(`Add a \`w\` query param to ${c.req.url}`);
+					if (!q) throw new Error(`Add a \`q\` query param to ${c.req.url}`);
 
-				if (!resolvedOptions.images.sizes.includes(parseInt(w))) {
-					throw new Error(
-						`\`${w}\` is not an included image size. Add \`${w}\` to \`sizes\` in your adapter config to support this width.`,
-					);
+					if (!resolvedOptions.images.sizes.includes(parseInt(w))) {
+						throw new Error(
+							`\`${w}\` is not an included image size. Add \`${w}\` to \`sizes\` in your adapter config to support this width.`,
+						);
+					}
+
+					return c.redirect(url);
 				}
-
-				return c.redirect(url);
 			}
-		}
-		await next();
-	});
+			await next();
+		}),
+	};
 
 	return {
 		name: "vercel",

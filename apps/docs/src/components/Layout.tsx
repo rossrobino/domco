@@ -36,7 +36,7 @@ export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
 						<main class="flex flex-col lg:flex-row">
 							<Nav />
 							<div class="grow justify-center md:flex">
-								<div class="prose m-6 max-w-screen-md">{children}</div>
+								<div class="prose m-6 max-w-[700px]">{children}</div>
 							</div>
 						</main>
 					</drab-prefetch>

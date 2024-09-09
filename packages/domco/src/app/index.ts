@@ -1,8 +1,8 @@
-import { addRoutes, applySetup, setServer } from "./util/index.js";
+import type { CreateAppOptions } from "../types/public/index.js";
+import { addMiddleware, addRoutes, addSetup, setServer } from "./util/index.js";
 import { manifest } from "domco:manifest";
 import { routes } from "domco:routes";
-import { Hono, type MiddlewareHandler } from "hono";
-import type { HonoOptions } from "hono/hono-base";
+import { Hono } from "hono";
 
 /**
  * Creates your production Hono app instance. You can import `createApp` from
@@ -25,28 +25,23 @@ import type { HonoOptions } from "hono/hono-base";
  * import { serveStatic } from "@hono/node-server/serve-static";
  * import { createApp } from "./dist/server/app.js";
  *
- * const app = createApp({ middleware: [serveStatic({ root: "./dist/client" })] });
+ * const app = createApp({
+ * 	middleware: [{ path: "/*", handler: serveStatic({ root: "./dist/client" }) }],
+ * });
  *
  * serve(app);
  * ```
  */
 export const createApp = <Env extends {} = any>(
-	options: {
-		honoOptions?: HonoOptions<Env>;
-		middleware?: MiddlewareHandler[];
-	} = {},
+	options: CreateAppOptions = {},
 ) => {
 	const app = new Hono<Env>(options.honoOptions);
 
 	app.use(setServer);
 
-	applySetup(app, routes);
+	addSetup(app, routes);
 
-	if (options.middleware) {
-		for (const mw of options.middleware) {
-			app.use(mw);
-		}
-	}
+	addMiddleware(app, options.middleware);
 
 	addRoutes({ app, routes, manifest });
 
