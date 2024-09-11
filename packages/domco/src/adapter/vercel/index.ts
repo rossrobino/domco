@@ -152,15 +152,11 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 	return {
 		name: "vercel",
-
+		target: isEdge ? "webworker" : "node",
+		noExternal: true,
 		message: `created ${resolvedOptions.config.runtime} build .vercel/`,
-
 		entry: isEdge ? edgeEntry : nodeEntry,
-
-		ssrTarget: isEdge ? "webworker" : "node",
-
 		devMiddleware: [imageMiddleware],
-
 		previewMiddleware: [imageMiddleware],
 
 		run: async () => {

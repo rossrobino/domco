@@ -35,7 +35,8 @@ import process from "node:process";
 export const adapter: AdapterBuilder = async () => {
 	return {
 		name: "cloudflare",
-
+		target: "webworker",
+		noExternal: true,
 		message:
 			"created Cloudflare Pages build .cloudflare/\n\ninstall wrangler and run `wrangler pages dev .cloudflare` to preview your build\nhttps://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler#installation\nhttps://developers.cloudflare.com/workers/wrangler/commands/#pages",
 
@@ -51,8 +52,6 @@ export const adapter: AdapterBuilder = async () => {
 				`,
 			};
 		},
-
-		ssrTarget: "webworker",
 
 		run: async () => {
 			const outDir = ".cloudflare";

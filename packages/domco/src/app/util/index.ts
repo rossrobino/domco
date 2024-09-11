@@ -163,7 +163,7 @@ export const addSetup = (app: Hono<any>, routes: Routes) => {
 	}
 };
 
-export const setServer = createMiddleware(async (appC, next) => {
+export const setServer = createMiddleware((appC, next) => {
 	const server: Server = (routePath: string, init?: RequestInit) => {
 		const req = new Request(new URL(appC.req.url).origin + routePath, init);
 		return fetch(req);

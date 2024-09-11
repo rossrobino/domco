@@ -1,5 +1,6 @@
 import type { CreateAppOptions } from "../types/public/index.js";
-import { addMiddleware, addRoutes, addSetup, setServer } from "./util/index.js";
+import { standardMiddleware } from "./mw/index.js";
+import { addMiddleware, addRoutes, addSetup } from "./util/index.js";
 import { manifest } from "domco:manifest";
 import { routes } from "domco:routes";
 import { Hono } from "hono";
@@ -14,7 +15,7 @@ import { Hono } from "hono";
  * Below is an example of how to import your app after build is complete to make a
  * Node server. You can adapt this to different [environments of your choice](https://hono.dev/docs/getting-started/basic).
  *
- * @param options createApp options
+ * @param options
  * @returns Hono app instance.
  *
  * @example
@@ -37,11 +38,10 @@ export const createApp = <Env extends {} = any>(
 ) => {
 	const app = new Hono<Env>(options.honoOptions);
 
-	app.use(setServer);
+	addMiddleware(app, options.middleware);
+	addMiddleware(app, standardMiddleware);
 
 	addSetup(app, routes);
-
-	addMiddleware(app, options.middleware);
 
 	addRoutes({ app, routes, manifest });
 
