@@ -2,4 +2,4 @@
 "domco": minor
 ---
 
-Adds deno deploy adapter
+Adds `deno deploy` adapter

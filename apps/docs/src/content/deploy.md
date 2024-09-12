@@ -68,19 +68,28 @@ export default defineConfig({
 
 ### Cloudflare
 
-The [Cloudflare](https://cloudflare.com) adapter outputs your app to work on Cloudflare Pages.
+The [Cloudflare](https://cloudflare.com) adapter outputs your app to run on [Cloudflare Pages](https://pages.cloudflare.com/).
+
+- Function runs on [workerd](https://github.com/cloudflare/workerd).
+- Outputs public assets to be served on Cloudflare's CDN.
 
 ![A screenshot of the Cloudflare Build Settings UI. Set the Framework Preset field to "None", set the build command to "npm run build", and the build output directory to ".cloudflare".](/_vercel/image?url=/images/cloudflare/build-settings.png&w=1280&q=100)
 
-- Functions run on the [Workers Runtime](https://developers.cloudflare.com/workers/runtime-apis/).
-- Outputs public assets to be served on Cloudflare's CDN.
+### Deno
+
+The [Deno](https://deno.com) adapter outputs your app to run on [Deno Deploy](https://deno.com/deploy).
+
+- Function runs on Deno.
+- Static files are served with [`@std/http/file-server`](https://jsr.io/@std/http).
+
+![A screenshot of the Deno Deploy Project Configuration UI. Set the Framework Preset field to "None", set the build command to "deno run -A npm:vite build", and the entrypoint to "dist/server/main.js".](/_vercel/image?url=/images/deno/build-settings.png&w=1280&q=100)
 
 ### Vercel
 
 The [Vercel](https://vercel.com) adapter outputs your app to the [Build Output API](https://vercel.com/docs/build-output-api/v3) specification.
 
-![A screenshot of the Vercel Build and Development Settings UI. Set the Framework Preset field to "Other" and leave all of the other options blank.](/_vercel/image?url=/images/vercel/build-settings.png&w=1280&q=100)
-
-- Functions run on [Node.js](https://vercel.com/docs/functions/runtimes#node.js), [Node.js with ISR](https://vercel.com/docs/incremental-static-regeneration), or [Edge Runtime](https://vercel.com/docs/functions/runtimes/edge-runtime).
+- Function runs on [Node.js](https://vercel.com/docs/functions/runtimes#node.js), [Node.js with ISR](https://vercel.com/docs/incremental-static-regeneration), or [Edge Runtime](https://vercel.com/docs/functions/runtimes/edge-runtime).
 - Outputs public assets to be served on Vercel's [Edge Network](https://vercel.com/docs/edge-network/overview).
 - Supports on demand [Image Optimization](https://vercel.com/docs/image-optimization) when configured in the adapter config. Set the `src` attribute of an image using the `/_vercel/image/...` [optimized URL format](https://vercel.com/docs/image-optimization#optimized-url-format). In `dev` and `preview` modes, domco will redirect to the original image.
+
+![A screenshot of the Vercel Build and Development Settings UI. Set the Framework Preset field to "Other" and leave all of the other options blank.](/_vercel/image?url=/images/vercel/build-settings.png&w=1280&q=100)
