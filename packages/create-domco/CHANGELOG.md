@@ -1,5 +1,11 @@
 # create-domco
 
+## 0.1.14
+
+### Patch Changes
+
+- d52d692: add `deno` as a pm -- detects and outputs deno project template
+
 ## 0.1.13
 
 ### Patch Changes
