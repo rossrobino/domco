@@ -1,5 +1,11 @@
 # domco
 
+## 0.12.0
+
+### Minor Changes
+
+- d52d692: Adds `deno deploy` adapter
+
 ## 0.11.0
 
 ### Minor Changes
