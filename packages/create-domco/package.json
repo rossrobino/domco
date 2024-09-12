@@ -12,11 +12,12 @@
 		"LICENSE.md"
 	],
 	"scripts": {
-		"test": "rm -rf ./create-domco-test && echo 'Create your project in `create-domco-test`\n\n' && node ./dist/bin.js",
+		"test:clean": "rm -rf ./create-domco-test",
+		"test": "build:js && npm run test:clean && echo 'Create your project in `create-domco-test`\n\n' && node ./dist/bin.js",
 		"dev": "tsc --watch",
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc",
-		"build": "npm run build:clean && npm run build:js"
+		"build": "npm run test:clean && npm run build:clean && npm run build:js"
 	},
 	"author": {
 		"name": "Ross Robino",
