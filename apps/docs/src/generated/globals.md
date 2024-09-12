@@ -42,6 +42,14 @@ Message to log when the build is complete.
 
 The name of the adapter.
 
+<a id="noexternal" name="noexternal"></a>
+
+##### noExternal?
+
+> `optional` **noExternal**: `SSROptions`\[`"noExternal"`\]
+
+Passed into Vite `config.ssr.noExternal`.
+
 <a id="previewmiddleware" name="previewmiddleware"></a>
 
 ##### previewMiddleware?
@@ -64,17 +72,17 @@ The script to run after Vite build is complete.
 
 `any`
 
-<a id="ssrtarget" name="ssrtarget"></a>
+<a id="target" name="target"></a>
 
-##### ssrTarget
+##### target?
 
-> **ssrTarget**: `SSRTarget`
+> `optional` **target**: `SSRTarget`
 
-Target for SSR build.
+Passed into Vite `config.ssr.target`.
 
 #### Defined in
 
-[types/public/index.ts:44](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L44)
+[types/public/index.ts:44](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/types/public/index.ts#L44)
 
 ---
 
@@ -86,7 +94,7 @@ Target for SSR build.
 
 #### Type Parameters
 
-• **AdapterOptions** = `object`
+• **AdapterOptions** = `never`
 
 #### Parameters
 
@@ -98,7 +106,7 @@ Target for SSR build.
 
 #### Defined in
 
-[types/public/index.ts:83](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L83)
+[types/public/index.ts:78](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/types/public/index.ts#L78)
 
 ---
 
@@ -140,7 +148,7 @@ The name of the entrypoint without extension.
 
 #### Defined in
 
-[types/public/index.ts:29](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L29)
+[types/public/index.ts:29](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/types/public/index.ts#L29)
 
 ---
 
@@ -160,7 +168,7 @@ The name of the entrypoint without extension.
 
 #### Defined in
 
-[types/public/index.ts:146](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L146)
+[types/public/index.ts:141](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/types/public/index.ts#L141)
 
 ---
 
@@ -190,7 +198,7 @@ Path to apply the middleware to.
 
 #### Defined in
 
-[types/public/index.ts:7](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L7)
+[types/public/index.ts:7](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/types/public/index.ts#L7)
 
 ---
 
@@ -229,7 +237,7 @@ inject middleware.
 
 #### Defined in
 
-[types/public/index.ts:15](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L15)
+[types/public/index.ts:15](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/types/public/index.ts#L15)
 
 ---
 
@@ -286,7 +294,7 @@ export default defineConfig({
 
 #### Defined in
 
-[types/public/index.ts:109](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L109)
+[types/public/index.ts:104](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/types/public/index.ts#L104)
 
 ---
 
@@ -447,7 +455,7 @@ declare module "hono" {
 
 #### Defined in
 
-[types/public/index.ts:171](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L171)
+[types/public/index.ts:166](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/types/public/index.ts#L166)
 
 ---
 
@@ -467,7 +475,7 @@ declare module "hono" {
 
 #### Defined in
 
-[types/public/index.ts:144](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L144)
+[types/public/index.ts:139](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/types/public/index.ts#L139)
 
 ---
 
@@ -494,7 +502,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/public/index.ts:142](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L142)
+[types/public/index.ts:137](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/types/public/index.ts#L137)
 
 ---
 
@@ -516,7 +524,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/public/index.ts:148](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/types/public/index.ts#L148)
+[types/public/index.ts:143](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/types/public/index.ts#L143)
 
 ## Functions
 
@@ -553,4 +561,4 @@ export default defineConfig({
 
 #### Defined in
 
-[plugin/index.ts:31](https://github.com/rossrobino/domco/blob/fde430c2d32883df987ac54237edd49a27dfdd7e/packages/domco/src/plugin/index.ts#L31)
+[plugin/index.ts:31](https://github.com/rossrobino/domco/blob/b818d1141c9ab3d2c6ee8351170a98e520e95923/packages/domco/src/plugin/index.ts#L31)

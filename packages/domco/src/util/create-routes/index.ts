@@ -19,7 +19,7 @@ export const createRoutes = async () => {
 		checkEndings: toAllScriptEndings(fileNames.server),
 	});
 
-	// add init
+	// add setup
 	for (const fileName of toAllScriptEndings(fileNames.setup)) {
 		const filePath = path.join(process.cwd(), dirNames.src, fileName);
 		if (await fileExists(filePath)) {

@@ -5,7 +5,7 @@ import { ssrId } from "../adapter/index.js";
 import { appId } from "../entry/index.js";
 import path from "node:path";
 import process from "node:process";
-import type { Plugin } from "vite";
+import type { Plugin, SSROptions } from "vite";
 
 export const configPlugin = async (
 	domcoConfig: DomcoConfig,
@@ -33,8 +33,8 @@ export const configPlugin = async (
 					: path.join(process.cwd(), dirNames.public),
 				appType: "custom",
 				ssr: {
-					target: adapter?.ssrTarget,
-					noExternal: build ? true : ["domco"],
+					target: adapter?.target,
+					noExternal: getNoExternal({ build, adapter }),
 				},
 				logLevel: build ? "warn" : "info",
 				build: {
@@ -66,6 +66,24 @@ export const configPlugin = async (
 			};
 		},
 	};
+};
+
+const getNoExternal = (options: { adapter?: Adapter; build: boolean }) => {
+	const { adapter, build } = options;
+
+	let noExternal: SSROptions["noExternal"] = ["domco"];
+
+	if (!build) return noExternal;
+
+	if (adapter?.noExternal === true) {
+		noExternal = true;
+	} else if (adapter?.noExternal instanceof Array) {
+		noExternal.push(...adapter.noExternal);
+	} else if (adapter?.noExternal) {
+		noExternal.push(adapter.noExternal);
+	}
+
+	return noExternal;
 };
 
 const serverEntry = (adapter?: Adapter) => {

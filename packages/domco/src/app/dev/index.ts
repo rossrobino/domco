@@ -1,12 +1,8 @@
 import type { Routes } from "../../types/private/index.js";
 import type { CreateAppOptions } from "../../types/public/index.js";
 import { createRoutes } from "../../util/create-routes/index.js";
-import {
-	addMiddleware,
-	addRoutes,
-	addSetup,
-	setServer,
-} from "../util/index.js";
+import { standardMiddleware } from "../mw/index.js";
+import { addMiddleware, addRoutes, addSetup } from "../util/index.js";
 import { Hono } from "hono";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -50,10 +46,11 @@ export const createAppDev = <Env extends {} = any>(
 					stack: `No route matched for ${c.req.url}\n\nMake sure there is a route registered for this path.`,
 					name: "404 - Not Found",
 				}),
+				404,
 			);
 		});
 
-		app.use(setServer);
+		addMiddleware(app, standardMiddleware);
 
 		addSetup(app, routes);
 

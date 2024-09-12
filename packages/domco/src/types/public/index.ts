@@ -2,7 +2,7 @@ import type { MaybePromise } from "../helper/index.js";
 import type { Env, MiddlewareHandler } from "hono";
 import type { HonoOptions } from "hono/hono-base";
 import type { HtmlEscapedString } from "hono/utils/html";
-import type { SSRTarget, ViteDevServer } from "vite";
+import type { SSRTarget, ViteDevServer, SSROptions } from "vite";
 
 export type CreateAppMiddleware = {
 	/** Path to apply the middleware to. */
@@ -45,25 +45,20 @@ export type Adapter = {
 	/** The name of the adapter. */
 	name: string;
 
-	/**
-	 * The script to run after Vite build is complete.
-	 */
+	/** The script to run after Vite build is complete. */
 	run?: () => any;
 
-	/**
-	 * Message to log when the build is complete.
-	 */
+	/** Message to log when the build is complete. */
 	message: string;
 
-	/**
-	 * Entry point for the server application.
-	 */
+	/** Entry point for the server application. */
 	entry: AdapterEntry;
 
-	/**
-	 * Target for SSR build.
-	 */
-	ssrTarget: SSRTarget;
+	/** Passed into Vite `config.ssr.target`. */
+	target?: SSRTarget;
+
+	/** Passed into Vite `config.ssr.noExternal`. */
+	noExternal?: SSROptions["noExternal"];
 
 	/**
 	 * Middleware to apply in `dev` mode.
@@ -80,7 +75,7 @@ export type Adapter = {
 	previewMiddleware?: CreateAppOptions["middleware"];
 };
 
-export type AdapterBuilder<AdapterOptions = {}> = (
+export type AdapterBuilder<AdapterOptions = never> = (
 	AdapterOptions?: AdapterOptions,
 ) => MaybePromise<Adapter>;
 

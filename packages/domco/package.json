@@ -33,6 +33,10 @@
 			"types": "./dist/adapter/cloudflare/index.d.ts",
 			"default": "./dist/adapter/cloudflare/index.js"
 		},
+		"./adapter/deno": {
+			"types": "./dist/adapter/deno/index.d.ts",
+			"default": "./dist/adapter/deno/index.js"
+		},
 		"./adapter/vercel": {
 			"types": "./dist/adapter/vercel/index.d.ts",
 			"default": "./dist/adapter/vercel/index.js"
