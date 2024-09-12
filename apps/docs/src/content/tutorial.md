@@ -1,18 +1,28 @@
 # Tutorial
 
+The following documentation covers the basics of creating a site and all of the features domco provides in addition to Vite and Hono. See the [Vite](https://vitejs.dev/) or [Hono](https://hono.dev) documentation for more information and configuration options.
+
 ## Create a new project
 
-To get started, you'll need to have [Node.js](https://nodejs.org) and npm installed on your computer.
+To get started, you'll need to have [Node](https://nodejs.org), [Bun](https://bun.sh/), or [Deno](https://deno.com) or installed on your computer. Then run the `create-domco` script to create a new project. If you already have an existing Vite project check out the [migration instructions](/migrate).
 
-Run this command in your terminal.
+### Node
 
 ```bash
 npm create domco@latest
 ```
 
-This command creates files in your project's directory instead of having to manually set up the plugin with Vite.
+### Bun
 
-The following documentation covers the basics of creating a site and all of the features domco provides in addition to Vite and Hono. See the [Vite](https://vitejs.dev/) or [Hono](https://hono.dev) documentation for more information and configuration options.
+```bash
+bun create domco@latest
+```
+
+### Deno
+
+```bash
+deno run -A npm:create-domco@latest
+```
 
 ## +page
 

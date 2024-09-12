@@ -77,7 +77,7 @@ The [Cloudflare](https://cloudflare.com) adapter outputs your app to run on [Clo
 
 ### Deno
 
-The [Deno](https://deno.com) adapter outputs your app to run on [Deno Deploy](https://deno.com/deploy).
+The [Deno](https://deno.com) adapter outputs your app to run on [Deno Deploy](https://deno.com/deploy). You do not have to use Deno to build your app to use this adapter.
 
 - Function runs on Deno.
 - Static files are served with [`@std/http/file-server`](https://jsr.io/@std/http).
