@@ -25,10 +25,10 @@ export const getUrl = (req: Request) => {
 
 	if (pathname) {
 		params.delete(pathnameParam);
-		return `${pathname}${params.toString() ? `?${params}` : ""}`;
+		url.pathname = pathname;
 	}
 
-	return req.url;
+	return url;
 };
 
 const entryId = "main";
