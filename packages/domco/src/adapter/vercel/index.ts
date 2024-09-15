@@ -40,13 +40,24 @@ const nodeEntry: AdapterEntry = ({ appId }) => {
 		code: `
 import handler from "${appId}";
 import { createRequestListener } from "domco/request-listener";
+
+export default createRequestListener(handler);
+`,
+	};
+};
+
+/** Use when runtime is set to node and ISR. */
+const isrEntry: AdapterEntry = ({ appId }) => {
+	return {
+		id: entryId,
+		code: `
+import handler from "${appId}";
+import { createRequestListener } from "domco/request-listener";
 import { getUrl } from "domco/adapter/vercel";
 
-const vercelHandler = async (req) => {
-	return handler(new Request(getUrl(req)));
-} 
+const isrHandler = async (req) => handler(new Request(getUrl(req)));
 
-export default createRequestListener(vercelHandler);
+export default createRequestListener(isrHandler);
 `,
 	};
 };
@@ -119,6 +130,10 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	resolvedOptions.isr = options?.isr;
 	resolvedOptions.images = options?.images;
 
+	let entry = nodeEntry;
+	if (isEdge) entry = edgeEntry;
+	else if (options?.isr) entry = isrEntry;
+
 	/**
 	 * This is applied in `dev` and `preview` so users can see the src images.
 	 */
@@ -154,7 +169,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		target: isEdge ? "webworker" : "node",
 		noExternal: true,
 		message: `created ${resolvedOptions.config.runtime} build .vercel/`,
-		entry: isEdge ? edgeEntry : nodeEntry,
+		entry,
 		devMiddleware: [imageMiddleware],
 		previewMiddleware: [imageMiddleware],
 
