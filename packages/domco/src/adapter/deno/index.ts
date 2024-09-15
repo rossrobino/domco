@@ -35,7 +35,7 @@ export const adapter: AdapterBuilder = async () => {
 			return {
 				id: "main",
 				code: `
-					import appHandler from "${appId}";
+					import handler from "${appId}";
 					import { serveDir } from "https://jsr.io/@std/http/1.0.6/file_server.ts";
 
 					const getStatic = async (req) => {
@@ -45,7 +45,7 @@ export const adapter: AdapterBuilder = async () => {
 						});
 					};
 
-					const handler = async (req) => {
+					const denoHandler = async (req) => {
 						const res = await getStatic(req);
 
 						if (res.ok) return res;
@@ -58,10 +58,10 @@ export const adapter: AdapterBuilder = async () => {
 							}
 						}
 
-						return appHandler(req);
+						return handler(req);
 					};
 					
-					Deno.serve(handler);
+					Deno.serve(denoHandler);
 				`,
 			};
 		},

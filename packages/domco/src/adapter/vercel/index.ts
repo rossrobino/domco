@@ -42,9 +42,8 @@ import handler from "${appId}";
 import { createRequestListener } from "domco/request-listener";
 import { getUrl } from "domco/adapter/vercel";
 
-const vercelHandler = (req) => {
-	req.url = getUrl(req);
-	return handler(req);
+const vercelHandler = async (req) => {
+	return handler(new Request(getUrl(req)));
 } 
 
 export default createRequestListener(vercelHandler);
