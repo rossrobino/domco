@@ -23,10 +23,8 @@ export const getUrl = (req: Request) => {
 	const pathnameParam = "__pathname";
 	const pathname = `/${params.get(pathnameParam) ?? ""}`;
 
-	if (pathname) {
-		params.delete(pathnameParam);
-		url.pathname = pathname;
-	}
+	params.delete(pathnameParam);
+	url.pathname = pathname;
 
 	return url;
 };
