@@ -46,8 +46,6 @@ export const tagsPlugin = (): Plugin => {
 						`/${dirNames.src.base}`.length,
 					);
 
-					console.log(src);
-
 					if (!src) this.warn(`No client module found for ${pathName}`);
 
 					tags.push({

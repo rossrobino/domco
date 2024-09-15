@@ -34,7 +34,7 @@ app.use(async (c, next) => {
 
 app.get("/", async (c) => {
 	const previewHtml = raw(processMarkdown({ md: preview }).html);
-
+	a;
 	return c.render(
 		{ title: "domco" },
 		<>

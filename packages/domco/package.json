@@ -45,9 +45,9 @@
 			"types": "./dist/injector/index.d.ts",
 			"default": "./dist/injector/index.js"
 		},
-		"./request-listener": {
-			"types": "./dist/request-listener/index.d.ts",
-			"default": "./dist/request-listener/index.js"
+		"./listener": {
+			"types": "./dist/listener/index.d.ts",
+			"default": "./dist/listener/index.js"
 		},
 		"./types": {
 			"types": "./dist/types.d.ts"

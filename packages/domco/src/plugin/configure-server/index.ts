@@ -1,5 +1,5 @@
 import { dirNames, fileNames } from "../../constants/index.js";
-import { createRequestListener } from "../../request-listener/index.js";
+import { nodeListener } from "../../listener/index.js";
 import type { Adapter, Handler } from "../../types/public/index.js";
 import path from "node:path";
 import process from "node:process";
@@ -30,7 +30,7 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 				}
 
 				devServer.middlewares.use(async (req, res, next) => {
-					createRequestListener(
+					nodeListener(
 						// Copied from https://github.com/honojs/vite-plugins/blob/main/packages/dev-server/src/dev-server.ts
 						async (request) => {
 							const handler = (
@@ -94,7 +94,7 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 					)
 				).default as Handler;
 
-				previewServer.middlewares.use(createRequestListener(handler));
+				previewServer.middlewares.use(nodeListener(handler));
 			};
 		},
 	};

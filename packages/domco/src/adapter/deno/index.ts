@@ -34,6 +34,12 @@ export const adapter: AdapterBuilder = async () => {
 		entry: ({ appId }) => {
 			return {
 				id: "main",
+
+				/**
+				 * Need to first serve static, deno's file server will redirect if there
+				 * is a directory with the pathname, so that needs to be tried first before
+				 * falling back to the handler.
+				 */
 				code: `
 					import handler from "${appId}";
 					import { serveDir } from "https://jsr.io/@std/http/1.0.6/file_server.ts";

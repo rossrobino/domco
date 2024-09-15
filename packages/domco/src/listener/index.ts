@@ -45,7 +45,7 @@ type FetchHandler = (
 	client: ClientAddress,
 ) => MaybePromise<Response>;
 
-type RequestListenerOptions = {
+type ListenerOptions = {
 	/**
 	 * Overrides the host portion of the incoming request URL. By default the request URL host is
 	 * derived from the HTTP `Host` header.
@@ -79,9 +79,9 @@ type RequestListenerOptions = {
  * Wraps a fetch handler in a Node.js `http.RequestListener` that can be used with
  * `http.createServer()` or `https.createServer()`.
  */
-export const createRequestListener = (
+export const nodeListener = (
 	handler: FetchHandler,
-	options?: RequestListenerOptions,
+	options?: ListenerOptions,
 ): RequestListener => {
 	const onError = options?.onError ?? defaultErrorHandler;
 

@@ -15,7 +15,27 @@ import type {
 import fs from "node:fs/promises";
 import path from "node:path";
 
-/** This function is required for ISR. */
+const entryId = "main";
+
+/** Use when runtime is set to node. */
+const nodeEntry: AdapterEntry = ({ appId }) => {
+	return {
+		id: entryId,
+		code: `
+import handler from "${appId}";
+import { nodeListener } from "domco/listener";
+
+export default nodeListener(handler);
+`,
+	};
+};
+
+/**
+ * This function is required for ISR.
+ *
+ * Gets the `__pathname` query param and sets the url pathname
+ * to it. See `allowQuery` in config.
+ */
 export const getUrl = (req: Request) => {
 	const url = new URL(req.url);
 	const params = new URLSearchParams(url.search);
@@ -29,33 +49,18 @@ export const getUrl = (req: Request) => {
 	return url;
 };
 
-const entryId = "main";
-
-/** Use when runtime is set to node. */
-const nodeEntry: AdapterEntry = ({ appId }) => {
-	return {
-		id: entryId,
-		code: `
-import handler from "${appId}";
-import { createRequestListener } from "domco/request-listener";
-
-export default createRequestListener(handler);
-`,
-	};
-};
-
 /** Use when runtime is set to node and ISR. */
 const isrEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
 		code: `
 import handler from "${appId}";
-import { createRequestListener } from "domco/request-listener";
+import { nodeListener } from "domco/listener";
 import { getUrl } from "domco/adapter/vercel";
 
 const isrHandler = async (req) => handler(new Request(getUrl(req)));
 
-export default createRequestListener(isrHandler);
+export default nodeListener(isrHandler);
 `,
 	};
 };
@@ -144,13 +149,16 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 				const w = query.get("w");
 				const q = query.get("q");
 
-				if (!url) throw new Error(`Add a \`url\` query param to ${req.url}`);
-				if (!w) throw new Error(`Add a \`w\` query param to ${req.url}`);
-				if (!q) throw new Error(`Add a \`q\` query param to ${req.url}`);
+				if (!url)
+					return next(new Error(`Add a \`url\` query param to ${req.url}`));
+				if (!w) return next(new Error(`Add a \`w\` query param to ${req.url}`));
+				if (!q) return next(new Error(`Add a \`q\` query param to ${req.url}`));
 
 				if (!resolvedOptions.images.sizes.includes(parseInt(w))) {
-					throw new Error(
-						`\`${w}\` is not an included image size. Add \`${w}\` to \`sizes\` in your adapter config to support this width.`,
+					return next(
+						new Error(
+							`\`${w}\` is not an included image size. Add \`${w}\` to \`sizes\` in your adapter config to support this width.`,
+						),
 					);
 				}
 

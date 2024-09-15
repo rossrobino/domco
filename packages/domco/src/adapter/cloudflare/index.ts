@@ -63,6 +63,8 @@ export const adapter: AdapterBuilder = async () => {
 
 			/**
 			 * Adds paths to exclude from when the worker gets called.
+			 * Need to exclude all static files, since these will be served in
+			 * front of the function.
 			 *
 			 * @param dir directory to walk
 			 */
@@ -82,14 +84,16 @@ export const adapter: AdapterBuilder = async () => {
 					let relativePath = toPosix(`/${path.relative(base, filePath)}`);
 
 					if (
+						// already added via wildcard
 						relativePath.startsWith(`/${dirNames.out.client.immutable}`) ||
+						// manifest
 						relativePath.startsWith("/.vite")
 					) {
-						// already added via wildcard
 						continue;
 					}
 
 					if (file.isDirectory()) {
+						// recursively call on the next directory
 						await addExclusions(filePath);
 						continue;
 					}
@@ -109,15 +113,13 @@ export const adapter: AdapterBuilder = async () => {
 				}
 			};
 
-			await addExclusions();
-
-			await clearDir(outDir);
-
-			await fs.mkdir(outDir, { recursive: true });
+			await Promise.all([addExclusions(), clearDir(outDir)]);
 
 			await Promise.all([
+				// copy output into .cloudflare
 				copyClient(outDir),
 				copyServer(outDir),
+				
 				fs.writeFile(
 					path.join(outDir, "_routes.json"),
 					JSON.stringify(routes, null, "\t"),
