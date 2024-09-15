@@ -1,4 +1,4 @@
-import { routesId } from "../routes/index.js";
+import { dirNames, fileNames } from "../../constants/index.js";
 import type { Plugin } from "vite";
 
 /** ID of the entry point that exports `createApp`. */
@@ -18,12 +18,11 @@ export const entryPlugin = (): Plugin => {
 
 		async load(id) {
 			if (id == resolvedAppId) {
-				// this entry provides an export of the built app
-				// user can create a separate module and import createApp
-				// to build their app if adapters do not suit their needs
 				return `
-					export { createApp } from "domco/app";
-					export { routes } from "${routesId}";
+					import app from "/${dirNames.src.server}/${fileNames.app}";
+					export default app;
+
+					export * from "/${dirNames.src.server}/${fileNames.app}";
 				`;
 			}
 		},

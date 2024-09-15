@@ -41,21 +41,16 @@
 			"types": "./dist/adapter/vercel/index.d.ts",
 			"default": "./dist/adapter/vercel/index.js"
 		},
-		"./app": {
-			"types": "./dist/app/index.d.ts",
-			"default": "./dist/app/index.js"
-		},
-		"./app/dev": {
-			"types": "./dist/app/dev/index.d.ts",
-			"default": "./dist/app/dev/index.js"
-		},
 		"./injector": {
 			"types": "./dist/injector/index.d.ts",
 			"default": "./dist/injector/index.js"
 		},
-		"./node/request-listener": {
-			"types": "./dist/node/request-listener/index.d.ts",
-			"default": "./dist/node/request-listener/index.js"
+		"./request-listener": {
+			"types": "./dist/request-listener/index.d.ts",
+			"default": "./dist/request-listener/index.js"
+		},
+		"./types": {
+			"types": "./dist/types.d.ts"
 		},
 		"./version": {
 			"types": "./dist/version/index.d.ts",
@@ -73,8 +68,8 @@
 		"test:dev": "vitest",
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc",
-		"build": "node scripts/version && npm run build:clean && npm run build:js",
-		"doc": "typedoc src/index.ts --out ../../apps/docs/src/generated --plugin typedoc-plugin-markdown --outputFileStrategy modules --hidePageHeader --hidePageTitle --useHTMLAnchors"
+		"build": "node scripts/version && npm run build:clean && npm run build:js && cp src/types.d.ts dist/types.d.ts",
+		"doc": "typedoc src/index.ts --out ../../apps/docs/src/server/generated --plugin typedoc-plugin-markdown --outputFileStrategy modules --hidePageHeader --hidePageTitle --useHTMLAnchors"
 	},
 	"devDependencies": {
 		"typedoc": "^0.26.6",

@@ -1,20 +1,14 @@
-import { setup, dirNames, fileNames } from "../../constants/index.js";
-import type { Routes } from "../../types/private/index.js";
+import { dirNames, fileNames } from "../../constants/index.js";
+import type { Handler, Prerender } from "../../types/public/index.js";
 import { codeSize } from "../../util/code-size/index.js";
-import {
-	fileExists,
-	findFiles,
-	toAllScriptEndings,
-	toPosix,
-} from "../../util/fs/index.js";
+import { findFiles, toPosix } from "../../util/fs/index.js";
 import { getMaxLengths } from "../../util/get-max-lengths/index.js";
 import { style } from "../../util/style/index.js";
-import type { Hono } from "hono";
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import url from "node:url";
-import type { HtmlTagDescriptor, Plugin } from "vite";
+import type { Plugin } from "vite";
 
 type StaticFile = { path: string; kB: string; gzip: string };
 
@@ -28,75 +22,17 @@ export const htmlPlugin = (): Plugin => {
 			ssr = isSsrBuild;
 		},
 
-		transformIndexHtml: {
-			// the modifications need to be applied `order: "pre"` in order for the linked
-			// assets to be updated afterwards
-			order: "pre",
-			async handler(html, ctx) {
-				let pathname: string;
-
-				const dev = ctx.server?.config.command === "serve";
-
-				if (dev) {
-					// during dev, `ctx.path` is the whatever is passed into
-					// devServer.transformIndexHtml
-					pathname = ctx.path;
-				} else {
-					// during build, `ctx.path` is the path to the HTML relative to root
-					pathname = path.dirname(ctx.path);
-				}
-
-				const getClientJsPath = async (pathname: string) => {
-					const filePath = path.join(
-						process.cwd(),
-						dirNames.src,
-						pathname,
-						fileNames.client,
-					);
-
-					for (const fileName of toAllScriptEndings(filePath)) {
-						if (await fileExists(fileName)) {
-							return (
-								"/" +
-								toPosix(
-									path.relative(
-										path.join(process.cwd(), dirNames.src),
-										fileName,
-									),
-								)
-							);
-						}
-					}
-
-					return null;
-				};
-
-				const injectScript = await getClientJsPath(pathname);
-
-				const tags: HtmlTagDescriptor[] = [];
-
-				if (injectScript) {
-					tags.push({
-						tag: "script",
-						attrs: { type: "module", src: injectScript },
-					});
-				}
-
-				return { html, tags };
-			},
-		},
-
 		async writeBundle() {
 			if (ssr) {
-				const moved = await renameAndRemoveHtml();
-				const generated = await generateStatic();
-
-				const staticFiles = [...moved, ...generated];
-
-				staticFiles.sort((a, b) => a.path.localeCompare(b.path));
+				const [staticFiles] = await Promise.all([
+					generateStatic(),
+					removeHtml(),
+				]);
 
 				if (staticFiles.length) {
 					console.log(style.bold("static"));
+
+					staticFiles.sort((a, b) => a.path.localeCompare(b.path));
 
 					const maxLengths = getMaxLengths(staticFiles);
 
@@ -115,65 +51,30 @@ export const htmlPlugin = (): Plugin => {
 	};
 };
 
-/**
- * renames pages to `index.html`, deletes pages that have
- * endpoints associated to not clash when serving static files
- */
-const renameAndRemoveHtml = async () => {
-	const staticFiles: StaticFile[] = [];
-
+const removeHtml = async () => {
 	const pageFiles = await findFiles({
 		dir: `${dirNames.out.base}/${dirNames.out.client.base}`,
 		checkEndings: [fileNames.page],
 	});
 
-	const serverFiles = await findFiles({
-		dir: dirNames.src,
-		checkEndings: toAllScriptEndings(fileNames.server),
-	});
+	const promises = [];
 
-	for (const [pagePath, filePath] of Object.entries(pageFiles)) {
-		// don't include pages that have a handler function,
-		// the html will be included in each route module instead to import
-		if (!Object.keys(serverFiles).includes(pagePath)) {
-			const finalPath = path.join(
-				process.cwd(),
-				path.dirname(filePath),
-				"index.html",
-			);
-
-			await fs.rename(path.join(process.cwd(), filePath), finalPath);
-
-			const code = await fs.readFile(finalPath, "utf-8");
-
-			const outDir = path.join(dirNames.out.base, dirNames.out.client.base);
-
-			const { kB, gzip } = codeSize(code);
-
-			staticFiles.push({
-				path: toPosix(
-					`${style.dim(outDir + "/")}${style.green(path.join(pagePath, "index.html").slice(1))}`,
-				),
-				kB,
-				gzip,
-			});
-		} else {
-			// delete the pages that are included in `routes` module
-			await fs.rm(path.join(process.cwd(), filePath), { recursive: true });
-		}
+	for (const filePath of Object.values(pageFiles)) {
+		promises.push(
+			fs.rm(path.join(process.cwd(), filePath), { recursive: true }),
+		);
 	}
 
-	return staticFiles;
+	await Promise.all(promises);
 };
 
 /**
- * Creates a node server and requests pages for static prerender
- * provided by the user.
+ * Requests pages for static prerender paths provided by the user.
  *
- * This server is only used at build time.
+ * Used at build time.
  */
 const generateStatic = async () => {
-	const { createApp, routes } = (await import(
+	let { default: handler, prerender } = (await import(
 		/* @vite-ignore */
 		url.pathToFileURL(
 			path.join(
@@ -183,72 +84,63 @@ const generateStatic = async () => {
 				fileNames.out.entry.app,
 			),
 		).href
-	)) as { createApp: () => Hono; routes: Routes };
-
-	const app = createApp();
+	)) as { default: Handler; prerender: Prerender };
 
 	const staticFiles: StaticFile[] = [];
 
-	for (let [routePath, { server: mod }] of Object.entries(routes)) {
-		if (mod && routePath !== setup) {
-			const { prerender } = mod;
-			if (prerender) {
-				const generate = async (routePath: string) => {
-					const res = await app.request(toPosix(routePath));
+	if (prerender) {
+		const generate = async (routePath: string) => {
+			const res = await handler(
+				new Request(new URL(`http://0.0.0.0:4545${toPosix(routePath)}`)),
+			);
 
-					if (res.status === 404) {
-						throw new Error(
-							`Prerendering failed for path \`${routePath}\` | 404 - not found.`,
-						);
-					}
-
-					const code = await res.text();
-
-					const outDir = path.join(dirNames.out.base, dirNames.out.client.base);
-
-					const outDirPath = path.join(process.cwd(), `${outDir}${routePath}`);
-
-					await fs.mkdir(outDirPath, { recursive: true });
-					await fs.writeFile(`${outDirPath}/index.html`, code, "utf-8");
-
-					const { kB, gzip } = codeSize(code);
-
-					staticFiles.push({
-						path: toPosix(
-							`${style.dim(outDir + "/")}${style.green(
-								routePath.slice(1) +
-									(routePath === "/" || routePath === "" ? "" : "/") +
-									"index.html",
-							)}`,
-						),
-						kB,
-						gzip,
-					});
-				};
-
-				if (prerender === true) {
-					await generate(routePath);
-				} else {
-					for (let staticPath of prerender) {
-						if (!staticPath.startsWith("/")) {
-							throw Error(
-								`Prerender path \`${staticPath}\` does not start with \`"/"\`.`,
-							);
-						}
-
-						if (routePath === "/") {
-							routePath = "";
-						}
-
-						if (staticPath === "/") {
-							staticPath = "";
-						}
-
-						await generate(`${routePath}${staticPath}`);
-					}
-				}
+			if (res.status === 404) {
+				throw new Error(
+					`Prerendering failed for path \`${routePath}\` | 404 - not found.`,
+				);
 			}
+
+			const code = await res.text();
+
+			const outDir = path.join(dirNames.out.base, dirNames.out.client.base);
+
+			const outDirPath = path.join(process.cwd(), `${outDir}${routePath}`);
+
+			await fs.mkdir(outDirPath, { recursive: true });
+			await fs.writeFile(`${outDirPath}/index.html`, code, "utf-8");
+
+			const { kB, gzip } = codeSize(code);
+
+			staticFiles.push({
+				path: toPosix(
+					`${style.dim(outDir + "/")}${style.green(
+						routePath.slice(1) +
+							(routePath === "/" || routePath === "" ? "" : "/") +
+							"index.html",
+					)}`,
+				),
+				kB,
+				gzip,
+			});
+		};
+
+		if (prerender === true) {
+			prerender = ["/"];
 		}
+
+		const promises = [];
+
+		for (let staticPath of prerender) {
+			if (!staticPath.startsWith("/")) {
+				throw Error(
+					`Prerender path \`${staticPath}\` does not start with \`"/"\`.`,
+				);
+			}
+
+			promises.push(generate(staticPath));
+		}
+
+		await Promise.all(promises);
 	}
 
 	return staticFiles;

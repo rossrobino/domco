@@ -5,7 +5,7 @@ import { ssrId } from "../adapter/index.js";
 import { appId } from "../entry/index.js";
 import path from "node:path";
 import process from "node:process";
-import type { Plugin, SSROptions } from "vite";
+import type { Plugin } from "vite";
 
 export const configPlugin = async (
 	domcoConfig: DomcoConfig,
@@ -23,18 +23,18 @@ export const configPlugin = async (
 					alias: [
 						{
 							find: "@",
-							replacement: path.resolve(dirNames.src),
+							replacement: path.resolve(dirNames.src.base),
 						},
 					],
 				},
-				root: dirNames.src,
+				root: dirNames.src.base,
 				publicDir: isSsrBuild
 					? false
 					: path.join(process.cwd(), dirNames.public),
 				appType: "custom",
 				ssr: {
 					target: adapter?.target,
-					noExternal: getNoExternal({ build, adapter }),
+					noExternal: adapter?.noExternal,
 				},
 				logLevel: build ? "warn" : "info",
 				build: {
@@ -68,24 +68,6 @@ export const configPlugin = async (
 	};
 };
 
-const getNoExternal = (options: { adapter?: Adapter; build: boolean }) => {
-	const { adapter, build } = options;
-
-	let noExternal: SSROptions["noExternal"] = ["domco"];
-
-	if (!build) return noExternal;
-
-	if (adapter?.noExternal === true) {
-		noExternal = true;
-	} else if (adapter?.noExternal instanceof Array) {
-		noExternal.push(...adapter.noExternal);
-	} else if (adapter?.noExternal) {
-		noExternal.push(adapter.noExternal);
-	}
-
-	return noExternal;
-};
-
 const serverEntry = (adapter?: Adapter) => {
 	const entry: Record<string, string> = {
 		app: appId,
@@ -100,41 +82,41 @@ const serverEntry = (adapter?: Adapter) => {
 };
 
 const clientEntry = async () => {
-	const entryPoints = await findFiles({
-		dir: dirNames.src,
+	const pages = await findFiles({
+		dir: path.join(dirNames.src.base, dirNames.src.client),
 		checkEndings: [fileNames.page],
 	});
 
 	// rename key
-	if (entryPoints["/"]) {
-		entryPoints.main = entryPoints["/"];
-		delete entryPoints["/"];
+	if (pages["/"]) {
+		pages.main = pages["/"];
+		delete pages["/"];
 	}
 
 	// remove leading slash
-	for (const key in entryPoints) {
-		const entryPath = entryPoints[key];
+	for (const key in pages) {
+		const entryPath = pages[key];
 		if (entryPath) {
-			entryPoints[key] = entryPath.slice(1);
+			pages[key] = entryPath.slice(1);
 		}
 	}
 
-	const jsFiles = await findFiles({
-		dir: dirNames.src,
-		checkEndings: toAllScriptEndings("+client"),
+	const scripts = await findFiles({
+		dir: path.join(dirNames.src.base, dirNames.src.client),
+		checkEndings: toAllScriptEndings(fileNames.script),
 	});
 
 	// rename key
-	if (jsFiles["/"]) {
-		jsFiles["/main"] = jsFiles["/"];
-		delete jsFiles["/"];
+	if (scripts["/"]) {
+		scripts["/main"] = scripts["/"];
+		delete scripts["/"];
 	}
 
-	const jsEntry: Record<string, string> = {};
+	const scriptsEntry: Record<string, string> = {};
 
-	for (const [key, value] of Object.entries(jsFiles)) {
-		jsEntry[`/_client${key}`] = value.slice(1);
+	for (const [key, value] of Object.entries(scripts)) {
+		scriptsEntry[`/_script${key}`] = value.slice(1);
 	}
 
-	return Object.assign(entryPoints, jsEntry);
+	return Object.assign(pages, scriptsEntry);
 };

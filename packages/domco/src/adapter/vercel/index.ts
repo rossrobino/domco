@@ -2,7 +2,7 @@ import { dirNames, headers } from "../../constants/index.js";
 import type {
 	AdapterBuilder,
 	AdapterEntry,
-	CreateAppMiddleware,
+	AdapterMiddleware,
 } from "../../types/public/index.js";
 import { clearDir, copyClient, copyServer } from "../../util/fs/index.js";
 import { version } from "../../version/index.js";
@@ -12,13 +12,11 @@ import type {
 	RequiredOptions,
 	VercelAdapterOptions,
 } from "./types.js";
-import { createMiddleware } from "hono/factory";
-import type { HonoOptions } from "hono/hono-base";
 import fs from "node:fs/promises";
 import path from "node:path";
 
 /** This function is required for ISR. */
-export const getPath: HonoOptions<{}>["getPath"] = (req) => {
+export const getUrl = (req: Request) => {
 	const url = new URL(req.url);
 	const params = new URLSearchParams(url.search);
 
@@ -40,13 +38,16 @@ const nodeEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
 		code: `
-import { createApp } from "${appId}";
-import { createRequestListener } from "domco/node/request-listener";
-import { getPath } from "domco/adapter/vercel";
+import handler from "${appId}";
+import { createRequestListener } from "domco/request-listener";
+import { getUrl } from "domco/adapter/vercel";
 
-const app = createApp({ honoOptions: { getPath } });
+const vercelHandler = (req) => {
+	req.url = getUrl(req);
+	return handler(req);
+} 
 
-export default createRequestListener(app.fetch);
+export default createRequestListener(vercelHandler);
 `,
 	};
 };
@@ -56,12 +57,9 @@ const edgeEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
 		code: `
-import { createApp } from "${appId}";
-import { handle } from "hono/vercel";
+import handler from "${appId}";
 
-const app = createApp();
-
-export default handle(app);
+export default handler;
 `,
 	};
 };
@@ -125,29 +123,31 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	/**
 	 * This is applied in `dev` and `preview` so users can see the src images.
 	 */
-	const imageMiddleware: CreateAppMiddleware = {
-		path: "/*",
-		handler: createMiddleware(async (c, next) => {
-			if (resolvedOptions.images) {
-				if (c.req.path.startsWith("/_vercel/image")) {
-					const { url, w, q } = c.req.query();
+	const imageMiddleware: AdapterMiddleware = async (req, res, next) => {
+		if (resolvedOptions.images) {
+			if (req.url?.startsWith("/_vercel/image")) {
+				const query = new URLSearchParams(req.url.split("?")[1]);
 
-					if (!url)
-						throw new Error(`Add a \`url\` query param to ${c.req.url}`);
-					if (!w) throw new Error(`Add a \`w\` query param to ${c.req.url}`);
-					if (!q) throw new Error(`Add a \`q\` query param to ${c.req.url}`);
+				const url = query.get("url");
+				const w = query.get("w");
+				const q = query.get("q");
 
-					if (!resolvedOptions.images.sizes.includes(parseInt(w))) {
-						throw new Error(
-							`\`${w}\` is not an included image size. Add \`${w}\` to \`sizes\` in your adapter config to support this width.`,
-						);
-					}
+				if (!url) throw new Error(`Add a \`url\` query param to ${req.url}`);
+				if (!w) throw new Error(`Add a \`w\` query param to ${req.url}`);
+				if (!q) throw new Error(`Add a \`q\` query param to ${req.url}`);
 
-					return c.redirect(url);
+				if (!resolvedOptions.images.sizes.includes(parseInt(w))) {
+					throw new Error(
+						`\`${w}\` is not an included image size. Add \`${w}\` to \`sizes\` in your adapter config to support this width.`,
+					);
 				}
+
+				res.writeHead(302, { Location: url });
+				return res.end();
 			}
-			await next();
-		}),
+		}
+
+		return next();
 	};
 
 	return {

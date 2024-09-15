@@ -35,7 +35,7 @@ export const adapter: AdapterBuilder = async () => {
 			return {
 				id: "main",
 				code: `
-					import { createApp } from "${appId}";
+					import appHandler from "${appId}";
 					import { serveDir } from "https://jsr.io/@std/http/1.0.6/file_server.ts";
 
 					const getStatic = async (req) => {
@@ -45,8 +45,8 @@ export const adapter: AdapterBuilder = async () => {
 						});
 					};
 
-					const serveStatic = async (c, next) => {
-						const res = await getStatic(c.req.raw);
+					const handler = async (req) => {
+						const res = await getStatic(req);
 
 						if (res.ok) return res;
 
@@ -58,19 +58,10 @@ export const adapter: AdapterBuilder = async () => {
 							}
 						}
 
-						await next();
+						return appHandler(req);
 					};
 					
-					const app = createApp({
-						middleware: [
-							{
-								path: "/*",
-								handler: serveStatic,
-							},
-						],
-					});
-					
-					Deno.serve(app.fetch);
+					Deno.serve(handler);
 				`,
 			};
 		},

@@ -1,7 +1,7 @@
 import denoJson from "./template-files/deno-json.js";
+import envTypes from "./template-files/env-types.js";
 import favicon from "./template-files/favicon.js";
 import gitignore from "./template-files/gitignore.js";
-import globalTypes from "./template-files/global-types.js";
 import packageJson from "./template-files/package-json.js";
 import pageHtml from "./template-files/page-html.js";
 import prettier from "./template-files/prettier.js";
@@ -113,7 +113,7 @@ const getAllTemplateFiles: GetTemplateFile = (options) => {
 		denoJson,
 		favicon,
 		gitignore,
-		globalTypes,
+		envTypes,
 		packageJson,
 		pageHtml,
 		prettier,

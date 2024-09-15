@@ -5,8 +5,8 @@ import { configureServerPlugin } from "./configure-server/index.js";
 import { entryPlugin } from "./entry/index.js";
 import { htmlPlugin } from "./html/index.js";
 import { lifecyclePlugin } from "./lifecycle/index.js";
-import { manifestPlugin } from "./manifest/index.js";
-import { routesPlugin } from "./routes/index.js";
+import { pagePlugin } from "./page/index.js";
+import { tagsPlugin } from "./tags/index.js";
 import type { Plugin } from "vite";
 
 /**
@@ -37,8 +37,8 @@ export const domco = async (
 		await configPlugin(domcoConfig),
 		configureServerPlugin(adapter),
 		htmlPlugin(),
-		await routesPlugin(),
-		manifestPlugin(),
+		pagePlugin(),
+		tagsPlugin(),
 		entryPlugin(),
 		await adapterPlugin(adapter),
 		lifecyclePlugin(),
