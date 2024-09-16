@@ -109,8 +109,9 @@ export const toAllScriptEndings = (s: string) => {
 export const clearDir = async (dir: string) => {
 	if (await fileExists(dir)) {
 		await fs.rm(dir, { recursive: true });
-		await fs.mkdir(dir, { recursive: true });
 	}
+
+	await fs.mkdir(dir, { recursive: true });
 };
 
 /**
