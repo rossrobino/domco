@@ -1,24 +1,37 @@
 import { dirNames, fileNames } from "../../constants/index.js";
-import type { Adapter, DomcoConfig } from "../../types/public/index.js";
+import type { Adapter, DomcoConfig } from "../../types/index.js";
 import { findFiles, toAllScriptEndings } from "../../util/fs/index.js";
-import { ssrId } from "../adapter/index.js";
-import { appId } from "../entry/index.js";
+import { adapterId } from "../adapter/index.js";
+import { entryId } from "../entry/index.js";
 import path from "node:path";
 import process from "node:process";
-import type { Plugin } from "vite";
+import { type Plugin, createLogger } from "vite";
 
+/**
+ * Dynamically sets the Vite config.
+ *
+ * @param domcoConfig
+ * @returns Vite plugin
+ */
 export const configPlugin = async (
 	domcoConfig: DomcoConfig,
 ): Promise<Plugin> => {
 	const adapter = await domcoConfig.adapter;
 
+	const customLogger = createLogger();
+	customLogger.info = (msg, _options) => {
+		if (msg.includes("../dist")) {
+			console.log(msg.split("../dist/").join("dist/"));
+		} else {
+			console.log(msg);
+		}
+	};
+
 	return {
 		name: "domco:config",
 		async config(_, { isSsrBuild, command }) {
-			/** If Vite is building. */
-			const build = command === "build";
-
 			return {
+				customLogger,
 				resolve: {
 					alias: [
 						{
@@ -34,9 +47,8 @@ export const configPlugin = async (
 				appType: "custom",
 				ssr: {
 					target: adapter?.target,
-					noExternal: adapter?.noExternal,
+					noExternal: command === "build" ? adapter?.noExternal : undefined,
 				},
-				logLevel: build ? "warn" : "info",
 				build: {
 					manifest: !isSsrBuild,
 					target: "es2022",
@@ -70,12 +82,12 @@ export const configPlugin = async (
 
 const serverEntry = (adapter?: Adapter) => {
 	const entry: Record<string, string> = {
-		app: appId,
+		app: entryId,
 	};
 
-	// only create an adapter entrypoint if there's an adapter
+	// only create an adapter entry point if there's an adapter
 	if (adapter) {
-		entry[adapter.entry({ appId }).id] = ssrId;
+		entry[adapter.entry({ appId: entryId }).id] = adapterId;
 	}
 
 	return entry;

@@ -1,5 +1,5 @@
 import { dirNames, headers } from "../../constants/index.js";
-import type { AdapterBuilder } from "../../types/public/index.js";
+import type { AdapterBuilder } from "../../types/index.js";
 import {
 	clearDir,
 	copyClient,
@@ -38,13 +38,13 @@ export const adapter: AdapterBuilder = async () => {
 		target: "webworker",
 		noExternal: true,
 		message:
-			"created Cloudflare Pages build .cloudflare/\n\ninstall wrangler and run `wrangler pages dev .cloudflare` to preview your build\nhttps://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler#installation\nhttps://developers.cloudflare.com/workers/wrangler/commands/#pages",
+			"created Cloudflare Pages build .cloudflare/\ninstall wrangler and run `wrangler pages dev .cloudflare` to preview your build\nhttps://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler#installation\nhttps://developers.cloudflare.com/workers/wrangler/commands/#pages",
 
 		entry: ({ appId }) => {
 			return {
 				id: "_worker",
 				code: `
-					import handler from "${appId}";
+					import { handler } from "${appId}";
 					
 					export default { fetch: handler };
 				`,
@@ -119,7 +119,7 @@ export const adapter: AdapterBuilder = async () => {
 				// copy output into .cloudflare
 				copyClient(outDir),
 				copyServer(outDir),
-				
+
 				fs.writeFile(
 					path.join(outDir, "_routes.json"),
 					JSON.stringify(routes, null, "\t"),

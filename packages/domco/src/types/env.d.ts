@@ -1,11 +1,11 @@
 declare module "client:page*" {
 	/** Transformed HTML page. */
-	const page: string;
+	const html: string;
 
-	export default page;
+	export { html };
 }
 
-declare module "client:tags*" {
+declare module "client:script*" {
 	/**
 	 * Import the tags for a client entry point if you want to add client-side JS without adding an HTML page.
 	 *
@@ -21,5 +21,5 @@ declare module "client:tags*" {
 	 */
 	const tags: string;
 
-	export default tags;
+	export { tags };
 }

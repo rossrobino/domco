@@ -6,6 +6,8 @@
 
 > **Adapter**: `object`
 
+A domco adapter that configures the build to a target production environment.
+
 #### Type declaration
 
 <a id="devmiddleware" name="devmiddleware"></a>
@@ -78,7 +80,7 @@ Passed into Vite `config.ssr.target`.
 
 #### Defined in
 
-[types/public/index.ts:23](https://github.com/rossrobino/domco/blob/f721ce8a79ffda9a2b1661fc1874cde6bb508954/packages/domco/src/types/public/index.ts#L23)
+types/index.ts:58
 
 ---
 
@@ -87,6 +89,9 @@ Passed into Vite `config.ssr.target`.
 ### AdapterBuilder()\<AdapterOptions\>
 
 > **AdapterBuilder**\<`AdapterOptions`\>: (`AdapterOptions`?) => `MaybePromise`\<[`Adapter`](globals.md#adapter)\>
+
+Use this type to create your own adapter.
+Pass any options for the adapter in as a generic.
 
 #### Type Parameters
 
@@ -102,7 +107,7 @@ Passed into Vite `config.ssr.target`.
 
 #### Defined in
 
-[types/public/index.ts:53](https://github.com/rossrobino/domco/blob/f721ce8a79ffda9a2b1661fc1874cde6bb508954/packages/domco/src/types/public/index.ts#L53)
+types/index.ts:88
 
 ---
 
@@ -112,13 +117,15 @@ Passed into Vite `config.ssr.target`.
 
 > **AdapterEntry**: (`AdapterEntryOptions`) => `object`
 
+A function that returns an additional entry point to include in the SSR build.
+
 #### Parameters
 
 • **AdapterEntryOptions**
 
 • **AdapterEntryOptions.appId**: `string`
 
-The app entrypoint to import `createApp` from.
+The app entry point to import `handler` from.
 
 #### Returns
 
@@ -128,13 +135,13 @@ The app entrypoint to import `createApp` from.
 
 > **code**: `string`
 
-Code for the entrypoint.
+Code for the entry point.
 
 ##### id
 
 > **id**: `string`
 
-The name of the entrypoint without extension.
+The name of the entry point without extension.
 
 ###### Example
 
@@ -144,7 +151,7 @@ The name of the entrypoint without extension.
 
 #### Defined in
 
-[types/public/index.ts:8](https://github.com/rossrobino/domco/blob/f721ce8a79ffda9a2b1661fc1874cde6bb508954/packages/domco/src/types/public/index.ts#L8)
+types/index.ts:42
 
 ---
 
@@ -154,9 +161,39 @@ The name of the entrypoint without extension.
 
 > **AdapterMiddleware**: `Connect.NextHandleFunction`
 
+Middleware used in the Vite server for dev and preview.
+
 #### Defined in
 
-[types/public/index.ts:6](https://github.com/rossrobino/domco/blob/f721ce8a79ffda9a2b1661fc1874cde6bb508954/packages/domco/src/types/public/index.ts#L6)
+types/index.ts:39
+
+---
+
+<a id="appmodule" name="appmodule"></a>
+
+### AppModule
+
+> **AppModule**: `object`
+
+Exports from the SSR `app` entry point.
+
+#### Type declaration
+
+<a id="handler" name="handler"></a>
+
+##### handler
+
+> **handler**: [`Handler`](globals.md#handler-1)
+
+<a id="prerender" name="prerender"></a>
+
+##### prerender
+
+> **prerender**: [`Prerender`](globals.md#prerender-1)
+
+#### Defined in
+
+types/index.ts:5
 
 ---
 
@@ -213,15 +250,26 @@ export default defineConfig({
 
 #### Defined in
 
-[types/public/index.ts:79](https://github.com/rossrobino/domco/blob/f721ce8a79ffda9a2b1661fc1874cde6bb508954/packages/domco/src/types/public/index.ts#L79)
+types/index.ts:114
 
 ---
 
-<a id="handler" name="handler"></a>
+<a id="handler-1" name="handler-1"></a>
 
 ### Handler()
 
 > **Handler**: (`req`) => `MaybePromise`\<`Response`\>
+
+Request handler, takes a web request and returns a web response.
+
+```ts
+// src/server/+app.ts
+import type { Handler } from "domco";
+
+export const handler: Handler = async (req) => {
+	return new Response("Hello world");
+};
+```
 
 #### Parameters
 
@@ -233,34 +281,30 @@ export default defineConfig({
 
 #### Defined in
 
-[types/public/index.ts:4](https://github.com/rossrobino/domco/blob/f721ce8a79ffda9a2b1661fc1874cde6bb508954/packages/domco/src/types/public/index.ts#L4)
+types/index.ts:22
 
 ---
 
-<a id="prerender" name="prerender"></a>
+<a id="prerender-1" name="prerender-1"></a>
 
 ### Prerender
 
-> **Prerender**: `string`[] \| `true`
+> **Prerender**: `string`[]
 
-Paths to prerender relative to the current route.
+Paths to prerender at build time.
 
 #### Example
 
 ```ts
-// src/posts/+server.ts
+// src/server/+app.ts
 import type { Prerender } from "domco";
 
-// prerender current route
-export const prerender: Prerender = true;
-
-// prerender multiple paths relative to the current route.
 export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 ```
 
 #### Defined in
 
-[types/public/index.ts:112](https://github.com/rossrobino/domco/blob/f721ce8a79ffda9a2b1661fc1874cde6bb508954/packages/domco/src/types/public/index.ts#L112)
+types/index.ts:36
 
 ## Functions
 
@@ -297,4 +341,4 @@ export default defineConfig({
 
 #### Defined in
 
-[plugin/index.ts:31](https://github.com/rossrobino/domco/blob/f721ce8a79ffda9a2b1661fc1874cde6bb508954/packages/domco/src/plugin/index.ts#L31)
+[plugin/index.ts:30](https://github.com/rossrobino/domco/blob/29ef114cae0a188885511b744378e6e77b5e550d/packages/domco/src/plugin/index.ts#L30)

@@ -1,62 +1,32 @@
-import type { Adapter } from "../../types/public/index.js";
-import { style } from "../../util/style/index.js";
-import { appId } from "../entry/index.js";
-import type { Plugin, ResolvedConfig } from "vite";
+import type { Adapter } from "../../types/index.js";
+import { entryId } from "../entry/index.js";
+import type { Plugin } from "vite";
 
-/** SSR entry ID for the entrypoint provided by the adapter. */
-export const ssrId = "domco:ssr-entry";
+/** Adapter entry ID for the entry point provided by the adapter. */
+export const adapterId = "domco:adapter";
 
+/**
+ * Creates a virtual module for the adapter entry point to make
+ * the app usable in the target environment.
+ *
+ * @param adapter
+ * @returns vite plugin
+ */
 export const adapterPlugin = async (adapter?: Adapter): Promise<Plugin> => {
-	const ssrResolvedId = "\0" + ssrId;
-
-	let viteConfig: ResolvedConfig;
+	const resolvedAdapterId = `\0${adapterId}`;
 
 	return {
-		name: "domco:adapter",
-
-		configResolved(config) {
-			viteConfig = config;
-		},
+		name: adapterId,
 
 		resolveId(id) {
-			if (id === ssrId) {
-				return ssrResolvedId;
+			if (id === adapterId) {
+				return resolvedAdapterId;
 			}
 		},
 
 		load(id) {
-			if (id === ssrResolvedId && adapter) {
-				// adapter provided entry point that imports the final app
-				// and makes it usable in the target environment.
-				return adapter.entry({ appId }).code;
-			}
-		},
-
-		async closeBundle() {
-			if (viteConfig.build.ssr) {
-				if (adapter) {
-					console.log(style.bold(`adapter - ${adapter.name}`));
-
-					if (adapter.run) {
-						await adapter.run();
-					}
-
-					console.log(style.dim(style.italic(adapter.message)));
-					console.log();
-				}
-
-				console.log(style.bold("✓ build complete"));
-
-				console.log(
-					style.dim(
-						style.italic(
-							"run `vite preview` to preview your app with Vite and Node.js",
-						),
-					),
-				);
-
-				console.log();
-				console.log();
+			if (id === resolvedAdapterId && adapter) {
+				return adapter.entry({ appId: entryId }).code;
 			}
 		},
 	};

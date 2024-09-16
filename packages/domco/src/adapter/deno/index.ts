@@ -1,5 +1,5 @@
 import { dirNames } from "../../constants/index.js";
-import type { AdapterBuilder } from "../../types/public/index.js";
+import type { AdapterBuilder } from "../../types/index.js";
 
 /**
  * Creates a Deno Deploy build.
@@ -41,7 +41,7 @@ export const adapter: AdapterBuilder = async () => {
 				 * falling back to the handler.
 				 */
 				code: `
-					import handler from "${appId}";
+					import { handler } from "${appId}";
 					import { serveDir } from "https://jsr.io/@std/http/1.0.6/file_server.ts";
 
 					const getStatic = async (req) => {

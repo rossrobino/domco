@@ -4,8 +4,8 @@ import { Layout } from "@/server/components/Layout";
 import preview from "@/server/content/_preview.md?raw";
 import apiReference from "@/server/generated/globals.md?raw";
 import { processMarkdown } from "@robino/md";
-import rootTags from "client:tags";
-import docTags from "client:tags/docs";
+import { tags as rootTags } from "client:script";
+import { tags as docTags } from "client:script/docs";
 import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { etag } from "hono/etag";
@@ -32,8 +32,9 @@ app.use(async (c, next) => {
 	await next();
 });
 
+const previewHtml = raw(processMarkdown({ md: preview }).html);
+
 app.get("/", async (c) => {
-	const previewHtml = raw(processMarkdown({ md: preview }).html);
 	return c.render(
 		{ title: "domco" },
 		<>
@@ -79,11 +80,11 @@ for (const [fileName, md] of Object.entries(content)) {
 	}
 }
 
-app.get("/api-reference", async (c) => {
-	const apiReferenceHtml = raw(
-		processMarkdown({ md: apiReference.replaceAll("globals.md#", "#") }).html,
-	);
+const apiReferenceHtml = raw(
+	processMarkdown({ md: apiReference.replaceAll("globals.md#", "#") }).html,
+);
 
+app.get("/api-reference", async (c) => {
 	return c.render(
 		{ title: "API Reference", client: [raw(docTags)] },
 		<>
@@ -96,4 +97,4 @@ app.get("/api-reference", async (c) => {
 	);
 });
 
-export default app.fetch;
+export const handler = app.fetch;

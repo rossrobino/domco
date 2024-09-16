@@ -1,25 +1,60 @@
-import type { MaybePromise } from "../helper/index.js";
+import type { MaybePromise } from "./helper/index.js";
 import type { SSRTarget, SSROptions, Connect } from "vite";
 
+/** Exports from the SSR `app` entry point. */
+export type AppModule = {
+	handler: Handler;
+	prerender: Prerender;
+};
+
+/**
+ * Request handler, takes a web request and returns a web response.
+ *
+ * ```ts
+ * // src/server/+app.ts
+ * import type { Handler } from "domco";
+ *
+ * export const handler: Handler = async (req) => {
+ * 	return new Response("Hello world");
+ * };
+ * ```
+ */
 export type Handler = (req: Request) => MaybePromise<Response>;
 
+/**
+ * Paths to prerender at build time.
+ *
+ * @example
+ *
+ * ```ts
+ * // src/server/+app.ts
+ * import type { Prerender } from "domco";
+ *
+ * export const prerender: Prerender = ["/", "/post-1", "/post-2"];
+ * ```
+ */
+export type Prerender = Array<string>;
+
+/** Middleware used in the Vite server for dev and preview. */
 export type AdapterMiddleware = Connect.NextHandleFunction;
 
+/** A function that returns an additional entry point to include in the SSR build. */
 export type AdapterEntry = (AdapterEntryOptions: {
-	/** The app entrypoint to import `createApp` from. */
+	/** The app entry point to import `handler` from. */
 	appId: string;
 }) => {
 	/**
-	 * The name of the entrypoint without extension.
+	 * The name of the entry point without extension.
 	 *
 	 * @example "main"
 	 */
 	id: string;
 
-	/** Code for the entrypoint. */
+	/** Code for the entry point. */
 	code: string;
 };
 
+/** A domco adapter that configures the build to a target production environment. */
 export type Adapter = {
 	/** The name of the adapter. */
 	name: string;
@@ -39,17 +74,17 @@ export type Adapter = {
 	/** Passed into Vite `config.ssr.noExternal`. */
 	noExternal?: SSROptions["noExternal"];
 
-	/**
-	 * Middleware to apply in `dev` mode.
-	 */
+	/** Middleware to apply in `dev` mode. */
 	devMiddleware?: AdapterMiddleware[];
 
-	/**
-	 * Middleware to apply in `preview` mode.
-	 */
+	/** Middleware to apply in `preview` mode. */
 	previewMiddleware?: AdapterMiddleware[];
 };
 
+/**
+ * Use this type to create your own adapter.
+ * Pass any options for the adapter in as a generic.
+ */
 export type AdapterBuilder<AdapterOptions = never> = (
 	AdapterOptions?: AdapterOptions,
 ) => MaybePromise<Adapter>;
@@ -92,21 +127,3 @@ export type DomcoConfig = {
 	 */
 	adapter?: ReturnType<AdapterBuilder>;
 };
-
-/**
- * Paths to prerender relative to the current route.
- *
- * @example
- *
- * ```ts
- * // src/posts/+server.ts
- * import type { Prerender } from "domco";
- *
- * // prerender current route
- * export const prerender: Prerender = true;
- *
- * // prerender multiple paths relative to the current route.
- * export const prerender: Prerender = ["/", "/post-1", "/post-2"];
- * ```
- */
-export type Prerender = Array<string> | true;

@@ -1,10 +1,10 @@
+import { html } from "client:page";
 import { Hono } from "hono";
-import page from "client:page";
 
-export const prerender = true;
+export const prerender = ["/"];
 
 const app = new Hono();
 
-app.get("/", (c) => c.html(page));
+app.get("/", (c) => c.html(html));
 
-export default app.fetch;
+export const handler = app.fetch;

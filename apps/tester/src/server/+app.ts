@@ -1,8 +1,8 @@
-import page from "client:page";
+import { html } from "client:page";
 import { Hono } from "hono";
 
 export const app = new Hono();
 
-app.get("/", (c) => c.html(page));
+app.get("/", (c) => c.html(html));
 
-export default app.fetch;
+export const handler = app.fetch;

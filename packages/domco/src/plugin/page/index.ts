@@ -3,12 +3,18 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { Plugin, ViteDevServer } from "vite";
 
+/**
+ * Creates the `client:page` virtual module.
+ *
+ * @returns Vite plugin
+ */
 export const pagePlugin = (): Plugin => {
 	const pageId = "client:page";
+	const resolvedPageId = `\0${pageId}`;
 
 	let devServer: ViteDevServer;
 
-	/** watched page filePaths */
+	/** Watched page filePaths. */
 	const watched = new Set<string>();
 
 	return {
@@ -20,15 +26,14 @@ export const pagePlugin = (): Plugin => {
 
 		resolveId(id) {
 			if (id.startsWith(pageId)) {
-				return "\0" + id;
+				// Don't return the resolved id here, needs to be the full path.
+				return `\0${id}`;
 			}
 		},
 
 		async load(id, _options) {
-			const beginning = `\0${pageId}`;
-
-			if (id.startsWith(beginning)) {
-				const pathName = id.slice(beginning.length);
+			if (id.startsWith(resolvedPageId)) {
+				const pathName = id.slice(resolvedPageId.length);
 
 				let html: string;
 
@@ -78,7 +83,7 @@ export const pagePlugin = (): Plugin => {
 					html = await fs.readFile(filePath, "utf-8");
 				}
 
-				return `export default ${JSON.stringify(html)};`;
+				return `export const html = ${JSON.stringify(html)};`;
 			}
 		},
 	};

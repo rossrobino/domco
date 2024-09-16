@@ -5,28 +5,33 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { Manifest, ManifestChunk, Plugin } from "vite";
 
-export const tagsPlugin = (): Plugin => {
-	const tagsId = "client:tags";
+/**
+ * Creates the `client:script` virtual module.
+ *
+ * @returns Vite plugin
+ */
+export const scriptPlugin = (): Plugin => {
+	const scriptId = "client:script";
+	const resolvedScriptId = `\0${scriptId}`;
 
 	let prod: boolean | undefined;
 
 	return {
-		name: `domco:${tagsId}`,
+		name: `domco:${scriptId}`,
 		config(_config, env) {
 			prod = env.mode === "production";
 		},
 
 		resolveId(id) {
-			if (id.startsWith(tagsId)) {
+			if (id.startsWith(scriptId)) {
+				// Don't return the resolved id here, needs to be the full path.
 				return `\0${id}`;
 			}
 		},
 
 		async load(id) {
-			const beginning = `\0${tagsId}`;
-
-			if (id.startsWith(beginning)) {
-				let pathName = id.slice(beginning.length);
+			if (id.startsWith(resolvedScriptId)) {
+				let pathName = id.slice(resolvedScriptId.length);
 
 				// remove trailing slash
 				if (pathName.endsWith("/")) pathName = pathName.slice(0, -1);
@@ -71,7 +76,7 @@ export const tagsPlugin = (): Plugin => {
 					);
 				}
 
-				return `export default ${JSON.stringify(serializeTags(tags))};`;
+				return `export const tags = ${JSON.stringify(serializeTags(tags))};`;
 			}
 		},
 	};

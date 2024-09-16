@@ -4,7 +4,7 @@ This section will show you how to migrate an existing Vite single page applicati
 
 ## Client
 
-- Run `npm i -D hono domco` in your terminal to install hono and domco as dependencies.
+- Run `npm i -D domco` in your terminal to install domco as a dependency.
 - Add `domco` to your `plugins` array in your `vite.config`.
 
 <!-- // prettier-ignore -->
@@ -24,45 +24,30 @@ export default defineConfig({
 });
 ```
 
-- Move `index.html` into `src/` and rename it to `+page.html`.
-- Change the `src` attribute of the `script` tag linking to `/src/main.tsx` to `/main.tsx` (alternatively remove the tag entirely and rename `main.tsx` to `+client.tsx`).
-- Run `npm run dev` to serve your application.
-
-You have successfully migrated your app to domco.
-
-## Server
-
-To add an API route, follow these instructions.
-
+- Move `index.html` into `src/client/` and rename it to `+page.html`.
+- Move `main.tsx` into `src/client/` and change the `src` attribute of the `script` tag in `+page.html` linking to `/src/main.tsx` to `/client/main.tsx`.
 - Add types to `/src/vite.env.d.ts`.
 
-```ts {3-8}
+```ts {3}
 // /src/vite.env.d.ts
 /// <reference types="vite/client" />
-import type { DomcoContextVariableMap } from "domco";
-import "hono";
-
-declare module "hono" {
-	interface ContextVariableMap extends DomcoContextVariableMap {}
-}
+/// <reference types="domco/env" />
 ```
 
-- Create a `+server.ts` file anywhere within `src/`. In this example, we can make `/src/+server.ts` and serve the app from an endpoint.
+- Create a `src/server/+app.ts` file and serve your page from the endpoint.
 
 ```ts
-// /src/+server.ts
-import { Hono } from "hono";
+// /src/server/+app.ts
+import { html } from "client:page";
 
-const app = new Hono();
-
-app.get("/", (c) => c.html(c.var.page()));
-
-app.get("/api", (c) => c.html("hello world"));
-
-export default app;
+export const handler = async (req: Request) => {
+	return new Response(
+		html, // Your Vite app.
+		{
+			headers: { "Content-Type": "text/html" },
+		},
+	);
+};
 ```
 
-- `/` is now an API route serving your React SPA application.
-- Navigate to `/api` to see the `"hello world"` response from your API.
-
-You now have a full-stack application.
+- `handler` is now an API route serving your React SPA application.

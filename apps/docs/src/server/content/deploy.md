@@ -17,24 +17,23 @@ By default domco will generate a `app.js` module and static assets for your appl
 
 ## Example
 
-If you are not using an [adapter](#adapters), you can import `createApp` from the `app.js` module and configure your app to use in one of [Hono's supported environments](https://hono.dev/docs/getting-started/basic).
+If you are not using an [adapter](#adapters), you can import `handler` from the `app.js` module and configure your app to use in another environment.
 
-The `client/` directory holds client assets. JS and CSS assets with hashed file names will be output to `dist/client/_immutable/`, you can serve this path with immutable cache headers. Other assets are processed and included in `dist/client/` directly.
+The `dist/client/` directory holds client assets. JS and CSS assets with hashed file names will be output to `dist/client/_immutable/`, you can serve this path with immutable cache headers. Other assets like HTML files are processed and included in `dist/client/` directly.
 
-Here's an example of how to serve your app using the result of your build with [`@hono/node-server`](https://github.com/honojs/node-server).
+Here's an example of how to serve your app using the result of your build using `node:http`.
 
 ```ts
 // server.js
 // import from build output
-import { createApp } from "./dist/server/app.js";
-import { serve } from "@hono/node-server";
-import { serveStatic } from "@hono/node-server/serve-static";
+import { handler } from "./dist/server/app.js";
+// converts web to node
+import { nodeListener } from "domco/listener";
+import { createServer } from "node:http";
 
-const app = createApp({
-	middleware: [{ path: "/*", handler: serveStatic({ root: "./dist/client" }) }],
-});
+const server = createServer(nodeListener(handler));
 
-serve(app);
+server.listen(3000);
 ```
 
 Run this module to start your server.
@@ -82,7 +81,7 @@ The [Deno](https://deno.com) adapter outputs your app to run on [Deno Deploy](ht
 - Function runs on Deno.
 - Static files are served with [`@std/http/file-server`](https://jsr.io/@std/http).
 
-![A screenshot of the Deno Deploy Project Configuration UI. Set the Framework Preset field to "None", set the build command to "deno run -A npm:vite build", and the entrypoint to "dist/server/main.js".](/_vercel/image?url=/images/deno/build-settings.png&w=1280&q=100)
+![A screenshot of the Deno Deploy Project Configuration UI. Set the Framework Preset field to "None", set the build command to "deno run -A npm:vite build", and the entry point to "dist/server/main.js".](/_vercel/image?url=/images/deno/build-settings.png&w=1280&q=100)
 
 ### Vercel
 

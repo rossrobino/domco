@@ -1,12 +1,11 @@
-import type { DomcoConfig } from "../types/public/index.js";
+import type { DomcoConfig } from "../types/index.js";
 import { adapterPlugin } from "./adapter/index.js";
 import { configPlugin } from "./config/index.js";
 import { configureServerPlugin } from "./configure-server/index.js";
 import { entryPlugin } from "./entry/index.js";
-import { htmlPlugin } from "./html/index.js";
 import { lifecyclePlugin } from "./lifecycle/index.js";
 import { pagePlugin } from "./page/index.js";
-import { tagsPlugin } from "./tags/index.js";
+import { scriptPlugin } from "./script/index.js";
 import type { Plugin } from "vite";
 
 /**
@@ -33,14 +32,13 @@ export const domco = async (
 ): Promise<Plugin[]> => {
 	const adapter = await domcoConfig.adapter;
 
-	return [
-		await configPlugin(domcoConfig),
+	return Promise.all([
+		configPlugin(domcoConfig),
 		configureServerPlugin(adapter),
-		htmlPlugin(),
 		pagePlugin(),
-		tagsPlugin(),
+		scriptPlugin(),
 		entryPlugin(),
-		await adapterPlugin(adapter),
-		lifecyclePlugin(),
-	];
+		lifecyclePlugin(adapter),
+		adapterPlugin(adapter),
+	]);
 };

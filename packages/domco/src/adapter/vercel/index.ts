@@ -3,7 +3,7 @@ import type {
 	AdapterBuilder,
 	AdapterEntry,
 	AdapterMiddleware,
-} from "../../types/public/index.js";
+} from "../../types/index.js";
 import { clearDir, copyClient, copyServer } from "../../util/fs/index.js";
 import { version } from "../../version/index.js";
 import type {
@@ -22,7 +22,7 @@ const nodeEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
 		code: `
-import handler from "${appId}";
+import { handler } from "${appId}";
 import { nodeListener } from "domco/listener";
 
 export default nodeListener(handler);
@@ -54,7 +54,7 @@ const isrEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
 		code: `
-import handler from "${appId}";
+import { handler } from "${appId}";
 import { nodeListener } from "domco/listener";
 import { getUrl } from "domco/adapter/vercel";
 
@@ -70,7 +70,7 @@ const edgeEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
 		code: `
-import handler from "${appId}";
+import { handler } from "${appId}";
 
 export default handler;
 `,

@@ -1,11 +1,17 @@
 import { dirNames, fileNames } from "../../constants/index.js";
 import { nodeListener } from "../../listener/index.js";
-import type { Adapter, Handler } from "../../types/public/index.js";
+import type { Adapter, AppModule } from "../../types/index.js";
 import path from "node:path";
 import process from "node:process";
 import url from "node:url";
 import type { Plugin } from "vite";
 
+/**
+ * Configures the dev and preview server for SSR.
+ *
+ * @param adapter
+ * @returns Vite plugin
+ */
 export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 	return {
 		name: "domco:configure-server",
@@ -33,16 +39,14 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 					nodeListener(
 						// Copied from https://github.com/honojs/vite-plugins/blob/main/packages/dev-server/src/dev-server.ts
 						async (request) => {
-							const handler = (
-								await devServer.ssrLoadModule(
-									path.join(
-										process.cwd(),
-										dirNames.src.base,
-										dirNames.src.server,
-										fileNames.app,
-									),
-								)
-							).default as Handler;
+							const { handler } = (await devServer.ssrLoadModule(
+								path.join(
+									process.cwd(),
+									dirNames.src.base,
+									dirNames.src.server,
+									fileNames.app,
+								),
+							)) as AppModule;
 
 							const response = await handler(request);
 
@@ -81,18 +85,16 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 				}
 
 				// import from dist
-				const handler = (
-					await import(
-						url.pathToFileURL(
-							path.join(
-								process.cwd(),
-								dirNames.out.base,
-								dirNames.out.ssr,
-								fileNames.out.entry.app,
-							),
-						).href
-					)
-				).default as Handler;
+				const { handler } = (await import(
+					url.pathToFileURL(
+						path.join(
+							process.cwd(),
+							dirNames.out.base,
+							dirNames.out.ssr,
+							fileNames.out.entry.app,
+						),
+					).href
+				)) as AppModule;
 
 				previewServer.middlewares.use(nodeListener(handler));
 			};

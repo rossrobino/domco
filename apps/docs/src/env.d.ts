@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-/// <reference types="domco/types" />
+/// <reference types="domco/env" />
 import "hono";
 import type { HtmlEscapedString } from "hono/utils/html";
 
