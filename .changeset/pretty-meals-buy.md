@@ -67,5 +67,3 @@ app.use((c) => c.html(html));
 
 export const handler = app.fetch;
 ```
-
-
