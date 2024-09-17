@@ -21,6 +21,8 @@ app.all("/", async (c) => {
 
 		const userInput = formData.get("test");
 
+		console.log(userInput);
+
 		if (typeof userInput === "string" && userInput.length) {
 			return c.html(
 				new Injector(html).comment([{ text: "result", children: userInput }])
