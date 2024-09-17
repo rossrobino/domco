@@ -7,11 +7,7 @@ import { Hono } from "hono";
 import React from "react";
 import { renderToString } from "react-dom/server";
 
-export const prerender: Prerender = [
-	"/",
-	"/static-page",
-	"/half-static/static",
-];
+export const prerender: Prerender = ["/static-page", "/half-static/static"];
 
 export const app = new Hono();
 
@@ -35,6 +31,7 @@ app.all("/", async (c) => {
 			);
 		}
 	}
+
 	return c.html(html + Date.now());
 });
 
