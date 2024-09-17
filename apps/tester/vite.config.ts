@@ -10,7 +10,7 @@ export default defineConfig({
 				config: {
 					runtime: "nodejs20.x",
 				},
-				isr: { expiration: 60 },
+				// isr: { expiration: 60 },
 			}),
 		}),
 		react(),
