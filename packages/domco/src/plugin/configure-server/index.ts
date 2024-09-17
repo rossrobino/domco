@@ -83,30 +83,29 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 
 			const htmlFiles = await findFiles({
 				dir: serveDir,
-				checkEndings: ["html"],
+				checkEndings: ["index.html"],
 			});
 
-			for (const [key, value] of Object.entries(htmlFiles)) {
-				if (!value.endsWith("index.html")) {
-					// Example: public.html needs to be sent when /public is requested.
-					delete htmlFiles[key];
-					const fileName = path.basename(value).slice(0, -5);
-
-					htmlFiles[`${key === "/" ? "" : key}/${fileName}`] = value;
-				}
-			}
-
 			// Rewrites static routes to HTML urls so Vite will serve the static file.
-			previewServer.middlewares.use(async (req, _res, next) => {
+			previewServer.middlewares.use(async (req, res, next) => {
 				let pathName = req.url;
 
-				if (pathName) {
+				if (pathName && req.method === "GET") {
+					let trailingSlash = false;
+
 					if (pathName !== "/" && pathName.endsWith("/")) {
 						// Remove the trailing slash on the temporary pathName since htmlFiles keys do not have it.
 						pathName = pathName.slice(0, -1);
+						trailingSlash = true;
 					}
 
 					if (pathName in htmlFiles) {
+						if (trailingSlash) {
+							// redirect to path without trailing slash
+							res.writeHead(307, { location: pathName });
+							return res.end();
+						}
+
 						// Rewrite the url so Vite serves the HTML file.
 						req.url = htmlFiles[pathName]?.slice(`/${serveDir}`.length);
 					}

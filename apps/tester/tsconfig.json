@@ -2,7 +2,6 @@
 	"extends": "@robino/tsconfig/bundler.json",
 	"compilerOptions": {
 		"jsx": "react-jsx",
-
 		"paths": {
 			"@": ["./src"],
 			"@/*": ["./src/*"]

@@ -33,7 +33,7 @@ app.all("/", async (c) => {
 			);
 		}
 	}
-	return c.html(html);
+	return c.html(html + Date.now());
 });
 
 app.get("/static-page", (c) =>
