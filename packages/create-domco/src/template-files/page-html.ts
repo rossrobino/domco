@@ -2,10 +2,10 @@ import type { GetTemplateFile } from "../index.js";
 import { faviconFileName } from "./favicon.js";
 import { styleFileName } from "./style-css.js";
 
-const getTemplateFiles: GetTemplateFile = () => {
+const getTemplateFiles: GetTemplateFile = ({ tailwind }) => {
 	return [
 		{
-			name: "src/+page.html",
+			name: "src/client/+page.html",
 			contents: `<!doctype html>
 <html lang="en">
 	<head>
@@ -19,10 +19,9 @@ const getTemplateFiles: GetTemplateFile = () => {
 	<body>
 		<header></header>
 		<main>
-			<h1>Hello World</h1>
+			<h1${tailwind ? ` class="text-3xl"` : ""}>Hello World</h1>
 			<ul>
 				<li><a href="https://vitejs.dev">Vite</a></li>
-				<li><a href="https://hono.dev">Hono</a></li>
 				<li><a href="https://domco.robino.dev">domco</a></li>
 			</ul>
 		</main>

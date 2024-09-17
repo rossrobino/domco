@@ -9,7 +9,7 @@ const getTemplateFiles: GetTemplateFile = ({ lang, tailwind }) => {
 			contents: `${
 				lang === "ts"
 					? `import type { Config } from "tailwindcss";\n`
-					: `/** @type {import("tailwindcss").Config} */`
+					: `/** @import { Config } from "tailwindcss" */\n\n/** @type {Config} */`
 			}
 export default {
 	content: ["./src/**/*.{html,js,ts,jsx,tsx}"],

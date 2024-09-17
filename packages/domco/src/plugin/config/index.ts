@@ -18,18 +18,22 @@ export const configPlugin = async (
 ): Promise<Plugin> => {
 	const adapter = await domcoConfig.adapter;
 
-	const customLogger = createLogger();
-	customLogger.info = (msg, _options) => {
-		if (msg.includes("../dist")) {
-			console.log(msg.split("../dist/").join("dist/"));
-		} else {
-			console.log(msg);
-		}
-	};
-
 	return {
 		name: "domco:config",
 		async config(_, { isSsrBuild, command }) {
+			const build = command === "build";
+
+			const customLogger = createLogger();
+			const loggerInfo = customLogger.info;
+			customLogger.info = (msg, _options) => {
+				if (build && msg.includes("../dist")) {
+					// usually logs output relative to root, correct
+					return loggerInfo(msg.split("../dist/").join("dist/"));
+				}
+
+				return loggerInfo(msg);
+			};
+
 			return {
 				customLogger,
 				resolve: {
@@ -47,7 +51,7 @@ export const configPlugin = async (
 				appType: "custom",
 				ssr: {
 					target: adapter?.target,
-					noExternal: command === "build" ? adapter?.noExternal : undefined,
+					noExternal: build ? adapter?.noExternal : undefined,
 				},
 				build: {
 					manifest: !isSsrBuild,

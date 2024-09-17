@@ -1,6 +1,6 @@
 import type { GetTemplateFile } from "../index.js";
 
-export const styleFileName = "style.css";
+export const styleFileName = "client/style.css";
 
 const getTemplateFiles: GetTemplateFile = ({ tailwind }) => {
 	return [

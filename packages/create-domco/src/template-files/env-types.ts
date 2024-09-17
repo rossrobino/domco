@@ -5,12 +5,7 @@ const getTemplateFiles: GetTemplateFile = () => {
 		{
 			name: "src/env.d.ts",
 			contents: `/// <reference types="vite/client" />
-import type { DomcoContextVariableMap } from "domco";
-import "hono";
-
-declare module "hono" {
-	interface ContextVariableMap extends DomcoContextVariableMap {}
-}
+/// <reference types="domco/env" />
 `,
 		},
 	];

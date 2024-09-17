@@ -63,10 +63,11 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 
 				if (adapter) await runAdapter(adapter);
 
-				console.log(style.bold("build complete"));
 				console.log(
-					style.dim(
-						"run `vite preview` to preview your app with Vite and Node.js.",
+					style.italic(
+						style.dim(
+							"run `vite preview` to preview your app with Vite and Node.js.",
+						),
 					),
 				);
 				console.log();

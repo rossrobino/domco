@@ -1,3 +1,4 @@
+import app from "./template-files/app.js";
 import denoJson from "./template-files/deno-json.js";
 import envTypes from "./template-files/env-types.js";
 import favicon from "./template-files/favicon.js";
@@ -110,6 +111,7 @@ export const createDomco = async () => {
 
 const getAllTemplateFiles: GetTemplateFile = (options) => {
 	const getTemplateFileFunctions = [
+		app,
 		denoJson,
 		favicon,
 		gitignore,

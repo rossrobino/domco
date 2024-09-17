@@ -1,10 +1,16 @@
 import { html } from "client:page";
-import { Hono } from "hono";
+import type { Handler } from "domco";
 
-export const prerender = ["/"];
+export const handler: Handler = (req) => {
+	const { pathname } = new URL(req.url);
 
-const app = new Hono();
+	if (pathname === "/") {
+		return new Response(html, {
+			headers: {
+				"Content-Type": "text/html",
+			},
+		});
+	}
 
-app.get("/", (c) => c.html(html));
-
-export const handler = app.fetch;
+	return new Response("Not found", { status: 404 });
+};
