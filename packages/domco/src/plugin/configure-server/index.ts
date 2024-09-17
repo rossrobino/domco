@@ -1,6 +1,7 @@
 import { dirNames, fileNames } from "../../constants/index.js";
 import { nodeListener } from "../../listener/index.js";
 import type { Adapter, AppModule } from "../../types/index.js";
+import { findFiles } from "../../util/fs/index.js";
 import path from "node:path";
 import process from "node:process";
 import url from "node:url";
@@ -78,8 +79,45 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 		},
 
 		async configurePreviewServer(previewServer) {
-			// this must be post middleware or serve static will not work
+			const serveDir = path.join(dirNames.out.base, dirNames.out.client.base);
+
+			const htmlFiles = await findFiles({
+				dir: serveDir,
+				checkEndings: ["html"],
+			});
+
+			for (const [key, value] of Object.entries(htmlFiles)) {
+				if (!value.endsWith("index.html")) {
+					// Example: public.html needs to be sent when /public is requested.
+					delete htmlFiles[key];
+					const fileName = path.basename(value).slice(0, -5);
+
+					htmlFiles[`${key === "/" ? "" : key}/${fileName}`] = value;
+				}
+			}
+
+			// Rewrites static routes to HTML urls so Vite will serve the static file.
+			previewServer.middlewares.use(async (req, _res, next) => {
+				let pathName = req.url;
+
+				if (pathName) {
+					if (pathName !== "/" && pathName.endsWith("/")) {
+						// Remove the trailing slash on the temporary pathName since htmlFiles keys do not have it.
+						pathName = pathName.slice(0, -1);
+					}
+
+					if (pathName in htmlFiles) {
+						// Rewrite the url so Vite serves the HTML file.
+						req.url = htmlFiles[pathName]?.slice(`/${serveDir}`.length);
+					}
+				}
+
+				return next();
+			});
+
 			return async () => {
+				// This must be post middleware or serve static will not work.
+
 				for (const mw of adapter?.previewMiddleware ?? []) {
 					previewServer.middlewares.use(mw);
 				}

@@ -1,4 +1,3 @@
-import { svelte } from "@sveltejs/vite-plugin-svelte";
 import react from "@vitejs/plugin-react";
 import { domco } from "domco";
 import { adapter } from "domco/adapter/vercel";
@@ -15,10 +14,5 @@ export default defineConfig({
 			}),
 		}),
 		react(),
-		svelte({
-			compilerOptions: {
-				hydratable: true,
-			},
-		}),
 	],
 });

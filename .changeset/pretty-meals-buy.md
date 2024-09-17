@@ -2,9 +2,11 @@
 "domco": minor
 ---
 
-Removes dependency on Hono, Hono can still be easily used.
+Server framework agnostic
 
-This makes domco have no dependencies other than Vite. You can now use any server framework like Hono that provides a function that handles a web `Request` and returns a `Response`. This update also simplifies domco's API and refactors much of the codebase to make it smaller and builds faster.
+This project had a lot of overlap with HonoX, HonoX should be the default if you are wanting all of the features Hono provides like client components. This update removes the dependency on Hono and making the library framework agnostic. Hono can still be easily used with domco (see below).
+
+This makes domco have no dependencies other than Vite. You can now build your app with vanilla JS without any external libraries. You can now use any server framework like Hono that provides a function that handles a web `Request` and returns a `Response`. This update also simplifies domco's API and refactors much of the codebase to make it smaller and builds faster.
 
 ## Overview of Changes
 
@@ -32,8 +34,6 @@ This makes domco have no dependencies other than Vite. You can now use any serve
 ## Examples
 
 ### Vanilla
-
-You can now build your app with vanilla JS without any external libraries.
 
 ```ts
 import { html } from "client:page";
