@@ -38,3 +38,11 @@ export const dirNames = {
 export const headers = {
 	cacheControl: { immutable: "public, immutable, max-age=31536000" },
 } as const;
+
+export const ids = {
+	/** App entry point ID. */
+	app: `/${dirNames.src.server}/${fileNames.app}`,
+
+	/** Adapter entry ID for the entry point provided by the adapter. */
+	adapter: "domco:adapter",
+} as const;

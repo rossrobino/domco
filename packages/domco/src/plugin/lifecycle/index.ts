@@ -3,6 +3,7 @@ import type { Adapter, AppModule, Handler } from "../../types/index.js";
 import { codeSize } from "../../util/code-size/index.js";
 import { findFiles, toPosix } from "../../util/fs/index.js";
 import { getMaxLengths } from "../../util/get-max-lengths/index.js";
+import { getTime } from "../../util/perf/index.js";
 import { style } from "../../util/style/index.js";
 import { version } from "../../version/index.js";
 import fs from "node:fs/promises";
@@ -97,20 +98,6 @@ const removeHtml = async () => {
 	}
 
 	await Promise.all(promises);
-};
-
-/**
- * @param start time in ms
- * @param end time in ms
- * @returns formatted string ms/s
- */
-const getTime = (start: number, end: number) => {
-	const ms = end - start;
-	if (ms > 999) {
-		return `${(ms / 1000).toFixed(2)}s`;
-	} else {
-		return `${Math.ceil(ms)}ms`;
-	}
 };
 
 /**

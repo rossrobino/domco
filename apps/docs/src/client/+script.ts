@@ -1,4 +1,4 @@
-import "@/client/style.css";
+import "@/client/tailwind.css";
 import "drab/details/define";
 import "drab/dialog/define";
 import "drab/prefetch/define";

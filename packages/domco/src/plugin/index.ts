@@ -2,7 +2,6 @@ import type { DomcoConfig } from "../types/index.js";
 import { adapterPlugin } from "./adapter/index.js";
 import { configPlugin } from "./config/index.js";
 import { configureServerPlugin } from "./configure-server/index.js";
-import { entryPlugin } from "./entry/index.js";
 import { lifecyclePlugin } from "./lifecycle/index.js";
 import { pagePlugin } from "./page/index.js";
 import { scriptPlugin } from "./script/index.js";
@@ -37,7 +36,6 @@ export const domco = async (
 		configureServerPlugin(adapter),
 		pagePlugin(),
 		scriptPlugin(),
-		entryPlugin(),
 		lifecyclePlugin(adapter),
 		adapterPlugin(adapter),
 	]);

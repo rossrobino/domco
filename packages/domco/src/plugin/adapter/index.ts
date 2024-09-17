@@ -1,9 +1,6 @@
+import { ids } from "../../constants/index.js";
 import type { Adapter } from "../../types/index.js";
-import { entryId } from "../entry/index.js";
 import type { Plugin } from "vite";
-
-/** Adapter entry ID for the entry point provided by the adapter. */
-export const adapterId = "domco:adapter";
 
 /**
  * Creates a virtual module for the adapter entry point to make
@@ -13,20 +10,20 @@ export const adapterId = "domco:adapter";
  * @returns vite plugin
  */
 export const adapterPlugin = async (adapter?: Adapter): Promise<Plugin> => {
-	const resolvedAdapterId = `\0${adapterId}`;
+	const resolvedAdapterId = `\0${ids.adapter}`;
 
 	return {
-		name: adapterId,
+		name: ids.adapter,
 
 		resolveId(id) {
-			if (id === adapterId) {
+			if (id === ids.adapter) {
 				return resolvedAdapterId;
 			}
 		},
 
 		load(id) {
 			if (id === resolvedAdapterId && adapter) {
-				return adapter.entry({ appId: entryId }).code;
+				return adapter.entry({ appId: ids.app }).code;
 			}
 		},
 	};

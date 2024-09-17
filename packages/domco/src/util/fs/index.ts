@@ -43,16 +43,17 @@ export const findFiles = async (options: {
 		withFileTypes: true,
 	});
 
+	const subDirPromises: Promise<Record<string, string>>[] = [];
+
 	for (const file of files) {
 		if (file.isDirectory()) {
-			// recursively run again
-			const subDirPaths = await findFiles({
-				dir: path.join(dir, file.name),
-				checkEndings,
-				root,
-			});
-
-			Object.assign(paths, subDirPaths);
+			subDirPromises.push(
+				findFiles({
+					dir: path.join(dir, file.name),
+					checkEndings,
+					root,
+				}),
+			);
 		} else if (checkEnding({ checkEndings, fileName: file.name })) {
 			const relativePath = path.relative(root, dir);
 
@@ -60,6 +61,12 @@ export const findFiles = async (options: {
 
 			paths[`/${toPosix(relativePath)}`] = path.join("/", dir, file.name);
 		}
+	}
+
+	const subDirPaths = await Promise.all(subDirPromises);
+
+	for (const sdp of subDirPaths) {
+		Object.assign(paths, sdp);
 	}
 
 	return paths;
@@ -77,7 +84,7 @@ const checkEnding = (options: { checkEndings: string[]; fileName: string }) => {
 
 /**
  * @param filePath
- * @returns true if the file exists
+ * @returns `true` if the file exists
  */
 export const fileExists = async (filePath: PathLike) => {
 	try {
@@ -88,6 +95,7 @@ export const fileExists = async (filePath: PathLike) => {
 	}
 };
 
+/** Replace all forward slashes with back slashes. */
 export const toPosix = (s: string) => s.replaceAll("\\", "/");
 
 /**
@@ -119,7 +127,7 @@ export const clearDir = async (dir: string) => {
  * @param outDir target directory
  */
 export const copyClient = async (outDir: string) => {
-	await fs.cp(path.join(dirNames.out.base, dirNames.out.client.base), outDir, {
+	return fs.cp(path.join(dirNames.out.base, dirNames.out.client.base), outDir, {
 		recursive: true,
 		errorOnExist: false,
 	});
@@ -130,7 +138,7 @@ export const copyClient = async (outDir: string) => {
  * @param outDir target directory
  */
 export const copyServer = async (outDir: string) => {
-	await fs.cp(path.join(dirNames.out.base, dirNames.out.ssr), outDir, {
+	return fs.cp(path.join(dirNames.out.base, dirNames.out.ssr), outDir, {
 		recursive: true,
 		errorOnExist: false,
 	});

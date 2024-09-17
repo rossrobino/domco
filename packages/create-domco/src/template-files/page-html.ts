@@ -12,7 +12,7 @@ const getTemplateFiles: GetTemplateFile = ({ tailwind }) => {
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/${faviconFileName}" />
-		<link rel="stylesheet" href="/${styleFileName}" />
+		<link rel="stylesheet" href="/${tailwind ? styleFileName.tailwind : styleFileName.base}" />
 		<title>Title</title>
 		<meta name="description" content="Description" />
 	</head>

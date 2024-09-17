@@ -41,6 +41,9 @@
 			"types": "./dist/adapter/vercel/index.d.ts",
 			"default": "./dist/adapter/vercel/index.js"
 		},
+		"./env": {
+			"types": "./dist/types/env.d.ts"
+		},
 		"./injector": {
 			"types": "./dist/injector/index.d.ts",
 			"default": "./dist/injector/index.js"
@@ -49,8 +52,8 @@
 			"types": "./dist/listener/index.d.ts",
 			"default": "./dist/listener/index.js"
 		},
-		"./env": {
-			"types": "./dist/types/env.d.ts"
+		"./types": {
+			"types": "./dist/types/index.d.ts"
 		},
 		"./version": {
 			"types": "./dist/version/index.d.ts",

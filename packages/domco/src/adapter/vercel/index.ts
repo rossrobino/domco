@@ -140,7 +140,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	/**
 	 * This is applied in `dev` and `preview` so users can see the src images.
 	 */
-	const imageMiddleware: AdapterMiddleware = async (req, res, next) => {
+	const imageMiddleware: AdapterMiddleware = (req, res, next) => {
 		if (resolvedOptions.images) {
 			if (req.url?.startsWith("/_vercel/image")) {
 				const query = new URLSearchParams(req.url.split("?")[1]);
@@ -224,7 +224,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 			await fs.mkdir(fnDir, { recursive: true });
 
-			await Promise.all([
+			const tasks = [
 				copyClient(path.join(outDir, "static")),
 
 				copyServer(fnDir),
@@ -246,20 +246,23 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 					path.join(outDir, "functions", `${fnName}.func`, "package.json"),
 					JSON.stringify({ type: "module" }, null, "\t"),
 				),
-			]);
+			];
 
 			if (resolvedOptions.isr) {
-				// TODO add prerender fallback
-				// write prerender-config
-				await fs.writeFile(
-					path.join(outDir, "functions", `${fnName}.prerender-config.json`),
-					JSON.stringify(
-						Object.assign(defaultIsr, resolvedOptions.isr),
-						null,
-						"\t",
+				tasks.push(
+					// write prerender-config
+					fs.writeFile(
+						path.join(outDir, "functions", `${fnName}.prerender-config.json`),
+						JSON.stringify(
+							Object.assign(defaultIsr, resolvedOptions.isr),
+							null,
+							"\t",
+						),
 					),
 				);
 			}
+
+			await Promise.all(tasks);
 		},
 	};
 };

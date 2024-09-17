@@ -1,8 +1,6 @@
-import { dirNames, fileNames } from "../../constants/index.js";
+import { dirNames, fileNames, ids } from "../../constants/index.js";
 import type { Adapter, DomcoConfig } from "../../types/index.js";
 import { findFiles, toAllScriptEndings } from "../../util/fs/index.js";
-import { adapterId } from "../adapter/index.js";
-import { entryId } from "../entry/index.js";
 import path from "node:path";
 import process from "node:process";
 import { type Plugin, createLogger } from "vite";
@@ -86,52 +84,47 @@ export const configPlugin = async (
 
 const serverEntry = (adapter?: Adapter) => {
 	const entry: Record<string, string> = {
-		app: entryId,
+		app: ids.app,
 	};
 
 	// only create an adapter entry point if there's an adapter
 	if (adapter) {
-		entry[adapter.entry({ appId: entryId }).id] = adapterId;
+		entry[adapter.entry({ appId: ids.app }).id] = ids.adapter;
 	}
 
 	return entry;
 };
 
 const clientEntry = async () => {
-	const pages = await findFiles({
-		dir: path.join(dirNames.src.base, dirNames.src.client),
-		checkEndings: [fileNames.page],
-	});
+	const [pages, scripts] = await Promise.all([
+		findFiles({
+			dir: path.join(dirNames.src.base, dirNames.src.client),
+			checkEndings: [fileNames.page],
+		}),
+		findFiles({
+			dir: path.join(dirNames.src.base, dirNames.src.client),
+			checkEndings: toAllScriptEndings(fileNames.script),
+		}),
+	]);
 
-	// rename key
+	// rename keys
 	if (pages["/"]) {
 		pages.main = pages["/"];
 		delete pages["/"];
 	}
-
-	// remove leading slash
-	for (const key in pages) {
-		const entryPath = pages[key];
-		if (entryPath) {
-			pages[key] = entryPath.slice(1);
-		}
-	}
-
-	const scripts = await findFiles({
-		dir: path.join(dirNames.src.base, dirNames.src.client),
-		checkEndings: toAllScriptEndings(fileNames.script),
-	});
-
-	// rename key
 	if (scripts["/"]) {
 		scripts["/main"] = scripts["/"];
 		delete scripts["/"];
 	}
 
+	for (const [key, value] of Object.entries(pages)) {
+		pages[key] = value.slice(dirNames.src.base.length + 1); // remove "/src"
+	}
+
 	const scriptsEntry: Record<string, string> = {};
 
 	for (const [key, value] of Object.entries(scripts)) {
-		scriptsEntry[`/_script${key}`] = value.slice(1);
+		scriptsEntry[`/_script${key}`] = value.slice(dirNames.src.base.length + 1); // remove "/src"
 	}
 
 	return Object.assign(pages, scriptsEntry);

@@ -79,6 +79,8 @@ export const adapter: AdapterBuilder = async () => {
 
 				const staticFiles = await fs.readdir(dir, { withFileTypes: true });
 
+				const subDirPromises: Promise<void>[] = [];
+
 				for (const file of staticFiles) {
 					const filePath = path.join(dir, file.name);
 					let relativePath = toPosix(`/${path.relative(base, filePath)}`);
@@ -93,8 +95,7 @@ export const adapter: AdapterBuilder = async () => {
 					}
 
 					if (file.isDirectory()) {
-						// recursively call on the next directory
-						await addExclusions(filePath);
+						subDirPromises.push(addExclusions(filePath));
 						continue;
 					}
 
@@ -111,6 +112,8 @@ export const adapter: AdapterBuilder = async () => {
 
 					routes.exclude.push(relativePath);
 				}
+
+				await Promise.all(subDirPromises);
 			};
 
 			await Promise.all([addExclusions(), clearDir(outDir)]);
