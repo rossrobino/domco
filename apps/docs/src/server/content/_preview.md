@@ -3,7 +3,7 @@ import { html } from "client:page";
 
 export const handler = async (req: Request) => {
 	return new Response(
-		html, // Bundled client application.
+		html, // bundled client application
 		{
 			headers: { "Content-Type": "text/html" },
 		},

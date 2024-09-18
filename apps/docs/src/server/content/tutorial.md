@@ -111,7 +111,7 @@ import { html as otherHtml } from "client:page/other";
 
 export const handler = async (req: Request) => {
 	return new Response(
-		html, // Your Vite app.
+		html, // bundled client application
 		{
 			headers: { "Content-Type": "text/html" },
 		},

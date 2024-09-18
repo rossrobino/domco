@@ -98,9 +98,9 @@ Create a server entry `src/server/+app.tsx` file.
 
 ```tsx
 // /src/server/+app.tsx
-// Import your App.
+// import your App
 import App from "../app/App";
-// Import the HTML page.
+// import the HTML page
 import { html } from "client:page";
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
@@ -108,7 +108,7 @@ import { renderToString } from "react-dom/server";
 export const handler = async (_req: Request) => {
 	return new Response(
 		html.replace(
-			"%root%", // replace the text "%root%" with the React App.
+			"%root%", // replace the text "%root%" with the React App
 			renderToString(
 				<StrictMode>
 					<App />

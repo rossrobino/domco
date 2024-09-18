@@ -27,18 +27,18 @@ Here's an example of how to serve your app using the result of your build using 
 
 ```ts
 // server.js
-// Import the `handler` from the build output.
+// import the `handler` from the build output
 import { handler } from "./dist/server/app.js";
-// Converts web handler to a Node compatible request listener.
+// converts web handler to a Node compatible request listener
 import { nodeListener } from "domco/listener";
 import { createServer } from "node:http";
-// `sirv` serves static assets.
+// `sirv` serves static assets
 import sirv from "sirv";
 
 const assets = sirv("dist/client", {
 	etag: true,
 	setHeaders: (res, pathname) => {
-		// Serve `dist/client/_immutable/*` with immutable headers.
+		// serve `dist/client/_immutable/*` with immutable headers
 		if (pathname.startsWith("/_immutable/")) {
 			res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 		}
@@ -46,9 +46,9 @@ const assets = sirv("dist/client", {
 });
 
 const server = createServer((req, res) =>
-	// First, look for a static asset.
+	// first, look for a static asset
 	assets(req, res, () =>
-		// Fallthrough to the handler if static asset is not found.
+		// fallthrough to the handler if static asset is not found
 		nodeListener(handler)(req, res),
 	),
 );
