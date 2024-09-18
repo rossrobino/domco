@@ -1,5 +1,11 @@
 # domco
 
+## 0.13.1
+
+### Patch Changes
+
+- f915105: fix: reference on `DomcoConfig` and export `MaybePromise`
+
 ## 0.13.0
 
 ### Minor Changes
