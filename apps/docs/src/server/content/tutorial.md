@@ -1,6 +1,6 @@
 # Tutorial
 
-The following documentation covers the basics of creating a site and all of the features domco provides in addition to Vite and Hono. See the [Vite](https://vitejs.dev/) or [Hono](https://hono.dev) documentation for more information and configuration options.
+The following documentation covers the basics of creating a site and all of the features domco provides in addition to Vite. See the [Vite](https://vitejs.dev/) documentation for more information and configuration options.
 
 ## Create a new project
 
