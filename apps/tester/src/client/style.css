@@ -1,11 +1,10 @@
+@import "uico";
+
 body {
-	padding: 1rem;
+	padding: 2rem;
 	font-family: system-ui, sans-serif;
 }
 
-a {
-	color: blue;
-	&:visited {
-		color: blueviolet;
-	}
+input {
+	margin-bottom: 1rem;
 }

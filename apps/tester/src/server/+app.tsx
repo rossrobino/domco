@@ -17,11 +17,9 @@ app.all("/", async (c) => {
 
 		const userInput = formData.get("test");
 
-		console.log(userInput);
-
 		if (typeof userInput === "string" && userInput.length) {
 			return c.html(
-				new Injector(html).comment([{ text: "result", children: userInput }])
+				new Injector(html).comment([{ text: "result", children: "success" }])
 					.html,
 			);
 		} else {
@@ -32,17 +30,17 @@ app.all("/", async (c) => {
 		}
 	}
 
-	return c.html(html + Date.now());
+	return c.html(html + new Date().toUTCString());
 });
 
 app.get("/static-page", (c) =>
-	c.html(`<h1>Static</h1>` + Date.now().toString()),
+	c.html(`<h1>Static</h1>` + new Date().toUTCString()),
 );
 
-app.get("/dynamic", (c) => c.html(Date.now().toString()));
+app.get("/dynamic", (c) => c.html(new Date().toUTCString()));
 
-app.get("/half-static/static", (c) => c.html(Date.now().toString()));
-app.get("/half-static/dynamic", (c) => c.html(Date.now().toString()));
+app.get("/half-static/static", (c) => c.html(new Date().toUTCString()));
+app.get("/half-static/dynamic", (c) => c.html(new Date().toUTCString()));
 
 app.get("/api", (c) => c.json({ hello: "world" }));
 

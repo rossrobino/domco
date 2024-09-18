@@ -8,8 +8,10 @@
 		<link rel="stylesheet" href="/client/style.css" />
 		<title>domco tester</title>
 	</head>
-	<body>
-		<header><a href="/">home</a></header>
+	<body class="prose">
+		<header>
+			<p><a href="/">home</a></p>
+		</header>
 
 		<main>
 			<h1>Tester</h1>
@@ -26,10 +28,11 @@
 				<li><a href="/does-not-exist">404</a></li>
 			</ul>
 
-			<h2>Post Method</h2>
+			<h2>Post</h2>
 
 			<form action="/" method="post">
-				<input type="text" name="test" />
+				<label for="test">Test</label>
+				<input type="text" name="test" id="test" />
 				<button>Submit</button>
 			</form>
 
