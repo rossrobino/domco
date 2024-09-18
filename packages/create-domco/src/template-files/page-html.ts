@@ -2,7 +2,7 @@ import type { GetTemplateFile } from "../index.js";
 import { faviconFileName } from "./favicon.js";
 import { styleFileName } from "./style-css.js";
 
-const getTemplateFiles: GetTemplateFile = ({ tailwind }) => {
+const getTemplateFiles: GetTemplateFile = ({ tailwind, projectName }) => {
 	return [
 		{
 			name: "src/client/+page.html",
@@ -13,13 +13,13 @@ const getTemplateFiles: GetTemplateFile = ({ tailwind }) => {
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/${faviconFileName}" />
 		<link rel="stylesheet" href="/${tailwind ? styleFileName.tailwind : styleFileName.base}" />
-		<title>Title</title>
-		<meta name="description" content="Description" />
+		<title>${projectName}</title>
+		<meta name="description" content="${projectName}" />
 	</head>
 	<body>
 		<header></header>
 		<main>
-			<h1${tailwind ? ` class="text-3xl"` : ""}>Hello World</h1>
+			<h1${tailwind ? ` class="text-3xl"` : ""}>${projectName}</h1>
 			<ul>
 				<li><a href="https://vitejs.dev">Vite</a></li>
 				<li><a href="https://domco.robino.dev">domco</a></li>
