@@ -35,3 +35,60 @@ app.use(eventHandler(() => html));
 
 export const handler = toWebHandler(app);
 ```
+
+## Routers
+
+If you just want to add a router, and create your own context for each route, here's an example.
+
+### Trouter
+
+[Trouter](https://github.com/lukeed/trouter) is a fast, small-but-mighty, familiar ~~fish~~ router.
+
+```ts
+import { html } from "client:page";
+import type { Handler, Prerender } from "domco";
+import { Trouter, type Methods } from "trouter";
+
+export const prerender: Prerender = ["/"];
+
+type Context = {
+	req: Request;
+	params: Record<string, string>;
+};
+
+type RouteHandler = (context: Context) => Promise<Response | void>;
+
+const router = new Trouter<RouteHandler>();
+
+router
+	.get("/", async (_c) => {
+		return new Response(html, {
+			headers: {
+				"Content-Type": "text/html",
+			},
+		});
+	})
+	.get("/api/:id", async ({ params }) => {
+		return new Response(JSON.stringify({ id: params.id }), {
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+	});
+
+export const handler: Handler = async (req) => {
+	const { pathname } = new URL(req.url);
+
+	const { handlers, params } = router.find(req.method as Methods, pathname);
+
+	for (const h of handlers) {
+		const res = await h({ req, params });
+
+		if (res instanceof Response) {
+			return res;
+		}
+	}
+
+	return new Response("Not found", { status: 404 });
+};
+```
