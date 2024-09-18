@@ -1,5 +1,11 @@
 # domco
 
+## 0.13.2
+
+### Patch Changes
+
+- 74f1827: fix: windows entry point paths
+
 ## 0.13.1
 
 ### Patch Changes
