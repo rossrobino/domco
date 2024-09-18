@@ -1,4 +1,12 @@
-import { BookSvg, EarthSvg, FuncSvg, HomeSvg, PlugSvg, XSvg } from "./svg";
+import {
+	BookSvg,
+	EarthSvg,
+	FuncSvg,
+	HomeSvg,
+	PenSvg,
+	PlugSvg,
+	XSvg,
+} from "./svg";
 import type { FC } from "hono/jsx";
 
 export const Nav: FC = () => {
@@ -98,6 +106,10 @@ export const InternalLinks: FC = () => {
 		{
 			title: "Deploy",
 			Icon: EarthSvg,
+		},
+		{
+			title: "Examples",
+			Icon: PenSvg,
 		},
 		{
 			title: "API Reference",

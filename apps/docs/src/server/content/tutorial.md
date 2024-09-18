@@ -65,7 +65,7 @@ export const handler = async (req: Request) => {
 };
 ```
 
-Or add a framework like [Hono](/#hono) to do your routing and more!
+Or add a framework like [Hono](/examples#hono) to do your routing and more!
 
 ### +page
 
