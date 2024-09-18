@@ -13,7 +13,7 @@ export const handler = async (req: Request) => {
 
 ## Create Full-Stack Applications with Vite
 
-domco turns your [Vite](https://vitejs.dev) project into a full-stack application. You can leverage Vite's build pipeline, plugins, and HMR within a full-stack context using Hono as your web server.
+domco turns your [Vite](https://vitejs.dev) project into a full-stack application. You can take advantage of Vite’s build pipeline, plugins, and HMR on the server using web APIs.
 
 This project draws inspiration from [HonoX](https://github.com/honojs/honox), [Vinxi](https://vinxi.vercel.app/), and [SvelteKit](https://kit.svelte.dev).
 
