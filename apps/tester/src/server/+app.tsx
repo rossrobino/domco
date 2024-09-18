@@ -4,7 +4,7 @@ import { html as reactHtml } from "client:page/react";
 import type { Handler, Prerender } from "domco";
 import { Injector } from "domco/injector";
 import { Hono } from "hono";
-import React from "react";
+import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 
 export const prerender: Prerender = ["/static-page", "/half-static/static"];
@@ -47,11 +47,11 @@ app.get("/api", (c) => c.json({ hello: "world" }));
 app.get("/react", (c) => {
 	return c.html(
 		reactHtml.replace(
-			"__ROOT__",
+			"%root%",
 			renderToString(
-				<React.StrictMode>
+				<StrictMode>
 					<App />
-				</React.StrictMode>,
+				</StrictMode>,
 			),
 		),
 	);

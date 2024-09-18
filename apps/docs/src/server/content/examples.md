@@ -46,16 +46,16 @@ If you just want to add a router, and create your own context for each route, he
 
 ```ts
 import { html } from "client:page";
-import type { Handler, Prerender } from "domco";
+import type { Handler } from "domco";
 import { Trouter, type Methods } from "trouter";
 
-export const prerender: Prerender = ["/"];
-
+// Custom context variable.
 type Context = {
 	req: Request;
 	params: Record<string, string>;
 };
 
+// Custom handler/middleware.
 type RouteHandler = (context: Context) => Promise<Response | void>;
 
 const router = new Trouter<RouteHandler>();
@@ -82,7 +82,11 @@ export const handler: Handler = async (req) => {
 	const { handlers, params } = router.find(req.method as Methods, pathname);
 
 	for (const h of handlers) {
-		const res = await h({ req, params });
+		// Create context.
+		const context: Context = { req, params };
+
+		// Pass into handler.
+		const res = await h(context);
 
 		if (res instanceof Response) {
 			return res;
