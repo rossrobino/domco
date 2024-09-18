@@ -1,5 +1,7 @@
-import type { MaybePromise } from "./helper/index.js";
 import type { SSRTarget, SSROptions, Connect } from "vite";
+
+/** Helper type for a type that could be a promise. */
+export type MaybePromise<T> = T | Promise<T>;
 
 /** Exports from the SSR `app` entry point. */
 export type AppModule = {

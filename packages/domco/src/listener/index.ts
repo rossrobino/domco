@@ -2,7 +2,7 @@
  * Adapted from https://github.com/mjackson/remix-the-web/blob/main/packages/node-fetch-server
  * to use as middleware: https://github.com/mjackson/remix-the-web/issues/13
  */
-import type { MaybePromise } from "../types/helper/index.js";
+import type { MaybePromise } from "../types/index.js";
 import type { ReadStream } from "node:fs";
 import type {
 	IncomingHttpHeaders,

@@ -11,7 +11,7 @@ import type { Plugin } from "vite";
  * Creates domco Vite plugin, add to your `plugins` array within your `vite.config`
  * to start using domco.
  *
- * @param config Your domco config object.
+ * @param domcoConfig Your domco config object.
  * @returns The domco Vite plugin.
  *
  * @example

@@ -80,7 +80,7 @@ Passed into Vite `config.ssr.target`.
 
 #### Defined in
 
-[types/index.ts:58](https://github.com/rossrobino/domco/blob/079c24a873dea21ac0e5db4ef90b4f223f824e4a/packages/domco/src/types/index.ts#L58)
+[types/index.ts:60](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L60)
 
 ---
 
@@ -88,7 +88,7 @@ Passed into Vite `config.ssr.target`.
 
 ### AdapterBuilder()\<AdapterOptions\>
 
-> **AdapterBuilder**\<`AdapterOptions`\>: (`AdapterOptions`?) => `MaybePromise`\<[`Adapter`](globals.md#adapter)\>
+> **AdapterBuilder**\<`AdapterOptions`\>: (`AdapterOptions`?) => [`MaybePromise`](globals.md#maybepromiset)\<[`Adapter`](globals.md#adapter)\>
 
 Use this type to create your own adapter.
 Pass any options for the adapter in as a generic.
@@ -103,11 +103,11 @@ Pass any options for the adapter in as a generic.
 
 #### Returns
 
-`MaybePromise`\<[`Adapter`](globals.md#adapter)\>
+[`MaybePromise`](globals.md#maybepromiset)\<[`Adapter`](globals.md#adapter)\>
 
 #### Defined in
 
-[types/index.ts:88](https://github.com/rossrobino/domco/blob/079c24a873dea21ac0e5db4ef90b4f223f824e4a/packages/domco/src/types/index.ts#L88)
+[types/index.ts:90](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L90)
 
 ---
 
@@ -151,7 +151,7 @@ The name of the entry point without extension.
 
 #### Defined in
 
-[types/index.ts:42](https://github.com/rossrobino/domco/blob/079c24a873dea21ac0e5db4ef90b4f223f824e4a/packages/domco/src/types/index.ts#L42)
+[types/index.ts:44](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L44)
 
 ---
 
@@ -165,7 +165,7 @@ Middleware used in the Vite server for dev and preview.
 
 #### Defined in
 
-[types/index.ts:39](https://github.com/rossrobino/domco/blob/079c24a873dea21ac0e5db4ef90b4f223f824e4a/packages/domco/src/types/index.ts#L39)
+[types/index.ts:41](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L41)
 
 ---
 
@@ -193,7 +193,7 @@ Exports from the SSR `app` entry point.
 
 #### Defined in
 
-[types/index.ts:5](https://github.com/rossrobino/domco/blob/079c24a873dea21ac0e5db4ef90b4f223f824e4a/packages/domco/src/types/index.ts#L5)
+[types/index.ts:7](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L7)
 
 ---
 
@@ -250,7 +250,7 @@ export default defineConfig({
 
 #### Defined in
 
-[types/index.ts:114](https://github.com/rossrobino/domco/blob/079c24a873dea21ac0e5db4ef90b4f223f824e4a/packages/domco/src/types/index.ts#L114)
+[types/index.ts:116](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L116)
 
 ---
 
@@ -258,7 +258,7 @@ export default defineConfig({
 
 ### Handler()
 
-> **Handler**: (`req`) => `MaybePromise`\<`Response`\>
+> **Handler**: (`req`) => [`MaybePromise`](globals.md#maybepromiset)\<`Response`\>
 
 Request handler, takes a web request and returns a web response.
 
@@ -277,11 +277,29 @@ export const handler: Handler = async (req) => {
 
 #### Returns
 
-`MaybePromise`\<`Response`\>
+[`MaybePromise`](globals.md#maybepromiset)\<`Response`\>
 
 #### Defined in
 
-[types/index.ts:22](https://github.com/rossrobino/domco/blob/079c24a873dea21ac0e5db4ef90b4f223f824e4a/packages/domco/src/types/index.ts#L22)
+[types/index.ts:24](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L24)
+
+---
+
+<a id="maybepromiset" name="maybepromiset"></a>
+
+### MaybePromise\<T\>
+
+> **MaybePromise**\<`T`\>: `T` \| `Promise`\<`T`\>
+
+Helper type for a type that could be a promise.
+
+#### Type Parameters
+
+• **T**
+
+#### Defined in
+
+[types/index.ts:4](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L4)
 
 ---
 
@@ -304,7 +322,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/index.ts:36](https://github.com/rossrobino/domco/blob/079c24a873dea21ac0e5db4ef90b4f223f824e4a/packages/domco/src/types/index.ts#L36)
+[types/index.ts:38](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L38)
 
 ## Functions
 
@@ -320,6 +338,8 @@ to start using domco.
 #### Parameters
 
 • **domcoConfig**: [`DomcoConfig`](globals.md#domcoconfig) = `{}`
+
+Your domco config object.
 
 #### Returns
 
@@ -341,4 +361,4 @@ export default defineConfig({
 
 #### Defined in
 
-[plugin/index.ts:29](https://github.com/rossrobino/domco/blob/079c24a873dea21ac0e5db4ef90b4f223f824e4a/packages/domco/src/plugin/index.ts#L29)
+[plugin/index.ts:29](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/plugin/index.ts#L29)
