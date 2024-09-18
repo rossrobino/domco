@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+		<script type="module" src="/client/+script.ts"></script>
+		<link rel="stylesheet" href="/client/style.css" />
+		<title>domco tester</title>
+	</head>
+	<body class="prose">
+		<header>
+			<p><a href="/">home</a></p>
+		</header>
+
+		<main>
+			<h1>Tester</h1>
+
+			<h2>Routes</h2>
+
+			<ul>
+				<li><a href="/static-page">static page</a></li>
+				<li><a href="/dynamic">dynamic</a></li>
+				<li><a href="/half-static/static">half static static</a></li>
+				<li><a href="/half-static/dynamic">half static dynamic</a></li>
+				<li><a href="/api">api</a></li>
+				<li><a href="/react">react SSR</a></li>
+				<li><a href="/does-not-exist">404</a></li>
+			</ul>
+
+			<h2>Post</h2>
+
+			<form action="/" method="post">
+				<label for="test">Test</label>
+				<input type="text" name="test" id="test" />
+				<button>Submit</button>
+			</form>
+
+			<p><!-- result --></p>
+		</main>
+	</body>
+</html>

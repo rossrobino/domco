@@ -1,0 +1,10 @@
+@import "uico";
+
+body {
+	padding: 2rem;
+	font-family: system-ui, sans-serif;
+}
+
+input {
+	margin-bottom: 1rem;
+}

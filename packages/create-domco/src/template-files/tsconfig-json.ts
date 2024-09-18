@@ -21,7 +21,6 @@ const getTemplateFiles: GetTemplateFile = ({ pm }) => {
 		"moduleDetection": "force",
 		"noEmit": true,
 		"jsx": "react-jsx",
-		"jsxImportSource": "hono/jsx",
 
 		/* Linting */
 		"strict": true,

@@ -6,7 +6,9 @@ const getTemplateFiles: GetTemplateFile = ({ prettier, tailwind }) => {
 	return [
 		{
 			name: "prettier.config.js",
-			contents: `/** @type {import("prettier").Config} */
+			contents: `/** @import { Config } from "prettier" */
+
+/** @type {Config} */
 export default {
 	useTabs: true,${
 		tailwind ? `\n\tplugins: ["prettier-plugin-tailwindcss"],\n` : ""
@@ -14,7 +16,7 @@ export default {
 		},
 		{
 			name: ".prettierignore",
-			contents: `.DS_Store\nnode_modules\n/dist\n.env\n.env.*\npackage-lock.json\npnpm-lock.yaml\nyarn.lock\nbun.lockb\n.vercel\n.cloudflare\n`,
+			contents: `.DS_Store\nnode_modules\n/dist\npackage-lock.json\npnpm-lock.yaml\nyarn.lock\nbun.lockb\n.vercel\n.cloudflare\n`,
 		},
 	];
 };

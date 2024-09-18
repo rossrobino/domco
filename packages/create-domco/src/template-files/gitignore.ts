@@ -13,6 +13,8 @@ pnpm-debug.log*
 lerna-debug.log*
 node_modules
 dist
+.env
+.env.*
 *.local
 .vscode/*
 !.vscode/extensions.json

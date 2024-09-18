@@ -1,11 +1,14 @@
 import type { GetTemplateFile } from "../index.js";
 
-export const styleFileName = "style.css";
+export const styleFileName = {
+	base: "client/style.css",
+	tailwind: "client/tailwind.css",
+} as const;
 
 const getTemplateFiles: GetTemplateFile = ({ tailwind }) => {
 	return [
 		{
-			name: `src/${styleFileName}`,
+			name: `src/${tailwind ? styleFileName.tailwind : styleFileName.base}`,
 			contents: tailwind
 				? `@tailwind base;
 @tailwind components;

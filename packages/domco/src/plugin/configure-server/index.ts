@@ -1,14 +1,18 @@
-import { createAppDev } from "../../app/dev/index.js";
-import type { createApp as createAppType } from "../../app/index.js";
 import { dirNames, fileNames } from "../../constants/index.js";
-import { createRequestListener } from "../../node/request-listener/index.js";
-import { serveStatic } from "../../node/serve-static/index.js";
-import type { Adapter, CreateAppOptions } from "../../types/public/index.js";
+import { nodeListener } from "../../listener/index.js";
+import type { Adapter, AppModule } from "../../types/index.js";
+import { findFiles } from "../../util/fs/index.js";
 import path from "node:path";
 import process from "node:process";
 import url from "node:url";
 import type { Plugin } from "vite";
 
+/**
+ * Configures the dev and preview server for SSR.
+ *
+ * @param adapter
+ * @returns Vite plugin
+ */
 export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 	return {
 		name: "domco:configure-server",
@@ -18,7 +22,7 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 			// inject vite client to client entries, in case the script is added
 			// without adding an html file. This is a easier than injecting a tag
 			// into the html response, but will only work if a script is added.
-			if (id.includes(fileNames.client)) {
+			if (id.includes(fileNames.script)) {
 				return {
 					// put it at the end to not mess up line numbers
 					code: `${code}\n\n// dev\nimport "/@vite/client";`,
@@ -27,30 +31,25 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 		},
 
 		async configureServer(devServer) {
-			const sendFullReload = () => devServer.hot.send({ type: "full-reload" });
-
-			const listener = (filePath: string) => {
-				if (filePath.endsWith(fileNames.page)) {
-					sendFullReload();
-				}
-			};
-
-			devServer.watcher.on("add", listener);
-			devServer.watcher.on("unlink", listener);
-			devServer.watcher.on("change", listener);
-
 			return async () => {
-				// POST MIDDLEWARE
-				const app = createAppDev({
-					devServer,
-					middleware: adapter?.devMiddleware,
-				});
+				for (const mw of adapter?.devMiddleware ?? []) {
+					devServer.middlewares.use(mw);
+				}
 
 				devServer.middlewares.use(async (req, res, next) => {
-					createRequestListener(
+					nodeListener(
 						// Copied from https://github.com/honojs/vite-plugins/blob/main/packages/dev-server/src/dev-server.ts
 						async (request) => {
-							const response = await app.fetch(request);
+							const { handler } = (await devServer.ssrLoadModule(
+								path.join(
+									process.cwd(),
+									dirNames.src.base,
+									dirNames.src.server,
+									fileNames.app,
+								),
+							)) as AppModule;
+
+							const response = await handler(request);
 
 							if (!(response instanceof Response)) throw response;
 
@@ -80,9 +79,50 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 		},
 
 		async configurePreviewServer(previewServer) {
-			// import built app from dist
-			const createApp = (
-				await import(
+			const serveDir = path.join(dirNames.out.base, dirNames.out.client.base);
+
+			const htmlFiles = await findFiles({
+				dir: serveDir,
+				checkEndings: ["index.html"],
+			});
+
+			// Rewrites static routes to HTML urls so Vite will serve the static file.
+			previewServer.middlewares.use(async (req, res, next) => {
+				let pathName = req.url;
+
+				if (pathName && req.method === "GET") {
+					let trailingSlash = false;
+
+					if (pathName !== "/" && pathName.endsWith("/")) {
+						// Remove the trailing slash on the temporary pathName since htmlFiles keys do not have it.
+						pathName = pathName.slice(0, -1);
+						trailingSlash = true;
+					}
+
+					if (pathName in htmlFiles) {
+						if (trailingSlash) {
+							// redirect to path without trailing slash
+							res.writeHead(307, { location: pathName });
+							return res.end();
+						}
+
+						// Rewrite the url so Vite serves the HTML file.
+						req.url = htmlFiles[pathName]?.slice(`/${serveDir}`.length);
+					}
+				}
+
+				return next();
+			});
+
+			return async () => {
+				// This must be post middleware or serve static will not work.
+
+				for (const mw of adapter?.previewMiddleware ?? []) {
+					previewServer.middlewares.use(mw);
+				}
+
+				// import from dist
+				const { handler } = (await import(
 					url.pathToFileURL(
 						path.join(
 							process.cwd(),
@@ -91,20 +131,10 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 							fileNames.out.entry.app,
 						),
 					).href
-				)
-			).createApp as typeof createAppType;
+				)) as AppModule;
 
-			const middleware: CreateAppOptions["middleware"] = [
-				{ path: "/*", handler: serveStatic },
-			];
-
-			if (adapter?.previewMiddleware) {
-				middleware.push(...adapter.previewMiddleware);
-			}
-
-			const app = createApp({ middleware });
-
-			previewServer.middlewares.use(createRequestListener(app.fetch));
+				previewServer.middlewares.use(nodeListener(handler));
+			};
 		},
 	};
 };

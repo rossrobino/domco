@@ -2,8 +2,8 @@ import { dirNames, headers } from "../../constants/index.js";
 import type {
 	AdapterBuilder,
 	AdapterEntry,
-	CreateAppMiddleware,
-} from "../../types/public/index.js";
+	AdapterMiddleware,
+} from "../../types/index.js";
 import { clearDir, copyClient, copyServer } from "../../util/fs/index.js";
 import { version } from "../../version/index.js";
 import type {
@@ -12,26 +12,8 @@ import type {
 	RequiredOptions,
 	VercelAdapterOptions,
 } from "./types.js";
-import { createMiddleware } from "hono/factory";
-import type { HonoOptions } from "hono/hono-base";
 import fs from "node:fs/promises";
 import path from "node:path";
-
-/** This function is required for ISR. */
-export const getPath: HonoOptions<{}>["getPath"] = (req) => {
-	const url = new URL(req.url);
-	const params = new URLSearchParams(url.search);
-
-	const pathnameParam = "__pathname";
-	const pathname = `/${params.get(pathnameParam) ?? ""}`;
-
-	if (pathname) {
-		params.delete(pathnameParam);
-		return `${pathname}${params.toString() ? `?${params}` : ""}`;
-	}
-
-	return req.url;
-};
 
 const entryId = "main";
 
@@ -40,13 +22,45 @@ const nodeEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
 		code: `
-import { createApp } from "${appId}";
-import { createRequestListener } from "domco/node/request-listener";
-import { getPath } from "domco/adapter/vercel";
+import { handler } from "${appId}";
+import { nodeListener } from "domco/listener";
 
-const app = createApp({ honoOptions: { getPath } });
+export default nodeListener(handler);
+`,
+	};
+};
 
-export default createRequestListener(app.fetch);
+/**
+ * This function is required for ISR.
+ *
+ * Gets the `__pathname` query param and sets the url pathname
+ * to it. See `allowQuery` in config.
+ */
+export const getUrl = (req: Request) => {
+	const url = new URL(req.url);
+	const params = new URLSearchParams(url.search);
+
+	const pathnameParam = "__pathname";
+	const pathname = `/${params.get(pathnameParam) ?? ""}`;
+
+	params.delete(pathnameParam);
+	url.pathname = pathname;
+
+	return url;
+};
+
+/** Use when runtime is set to node and ISR. */
+const isrEntry: AdapterEntry = ({ appId }) => {
+	return {
+		id: entryId,
+		code: `
+import { handler } from "${appId}";
+import { nodeListener } from "domco/listener";
+import { getUrl } from "domco/adapter/vercel";
+
+const isrHandler = async (req) => handler(new Request(getUrl(req)));
+
+export default nodeListener(isrHandler);
 `,
 	};
 };
@@ -56,12 +70,9 @@ const edgeEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
 		code: `
-import { createApp } from "${appId}";
-import { handle } from "hono/vercel";
+import { handler } from "${appId}";
 
-const app = createApp();
-
-export default handle(app);
+export default handler;
 `,
 	};
 };
@@ -122,32 +133,41 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	resolvedOptions.isr = options?.isr;
 	resolvedOptions.images = options?.images;
 
+	let entry = nodeEntry;
+	if (isEdge) entry = edgeEntry;
+	else if (options?.isr) entry = isrEntry;
+
 	/**
 	 * This is applied in `dev` and `preview` so users can see the src images.
 	 */
-	const imageMiddleware: CreateAppMiddleware = {
-		path: "/*",
-		handler: createMiddleware(async (c, next) => {
-			if (resolvedOptions.images) {
-				if (c.req.path.startsWith("/_vercel/image")) {
-					const { url, w, q } = c.req.query();
+	const imageMiddleware: AdapterMiddleware = (req, res, next) => {
+		if (resolvedOptions.images) {
+			if (req.url?.startsWith("/_vercel/image")) {
+				const query = new URLSearchParams(req.url.split("?")[1]);
 
-					if (!url)
-						throw new Error(`Add a \`url\` query param to ${c.req.url}`);
-					if (!w) throw new Error(`Add a \`w\` query param to ${c.req.url}`);
-					if (!q) throw new Error(`Add a \`q\` query param to ${c.req.url}`);
+				const url = query.get("url");
+				const w = query.get("w");
+				const q = query.get("q");
 
-					if (!resolvedOptions.images.sizes.includes(parseInt(w))) {
-						throw new Error(
+				if (!url)
+					return next(new Error(`Add a \`url\` query param to ${req.url}`));
+				if (!w) return next(new Error(`Add a \`w\` query param to ${req.url}`));
+				if (!q) return next(new Error(`Add a \`q\` query param to ${req.url}`));
+
+				if (!resolvedOptions.images.sizes.includes(parseInt(w))) {
+					return next(
+						new Error(
 							`\`${w}\` is not an included image size. Add \`${w}\` to \`sizes\` in your adapter config to support this width.`,
-						);
-					}
-
-					return c.redirect(url);
+						),
+					);
 				}
+
+				res.writeHead(302, { Location: url });
+				return res.end();
 			}
-			await next();
-		}),
+		}
+
+		return next();
 	};
 
 	return {
@@ -155,7 +175,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		target: isEdge ? "webworker" : "node",
 		noExternal: true,
 		message: `created ${resolvedOptions.config.runtime} build .vercel/`,
-		entry: isEdge ? edgeEntry : nodeEntry,
+		entry,
 		devMiddleware: [imageMiddleware],
 		previewMiddleware: [imageMiddleware],
 
@@ -204,7 +224,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 			await fs.mkdir(fnDir, { recursive: true });
 
-			await Promise.all([
+			const tasks = [
 				copyClient(path.join(outDir, "static")),
 
 				copyServer(fnDir),
@@ -226,20 +246,23 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 					path.join(outDir, "functions", `${fnName}.func`, "package.json"),
 					JSON.stringify({ type: "module" }, null, "\t"),
 				),
-			]);
+			];
 
 			if (resolvedOptions.isr) {
-				// TODO add prerender fallback
-				// write prerender-config
-				await fs.writeFile(
-					path.join(outDir, "functions", `${fnName}.prerender-config.json`),
-					JSON.stringify(
-						Object.assign(defaultIsr, resolvedOptions.isr),
-						null,
-						"\t",
+				tasks.push(
+					// write prerender-config
+					fs.writeFile(
+						path.join(outDir, "functions", `${fnName}.prerender-config.json`),
+						JSON.stringify(
+							Object.assign(defaultIsr, resolvedOptions.isr),
+							null,
+							"\t",
+						),
 					),
 				);
 			}
+
+			await Promise.all(tasks);
 		},
 	};
 };

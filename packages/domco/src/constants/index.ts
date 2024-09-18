@@ -1,15 +1,12 @@
 export const fileNames = {
+	/** app file name without extension */
+	app: "+app",
+
 	/** page file name with extension */
 	page: "+page.html",
 
-	/** server file name without extension */
-	server: "+server",
-
-	/** client file name without extension */
-	client: "+client",
-
-	/** setup file name without extension */
-	setup: "+setup",
+	/** script file name without extension */
+	script: "+script",
 
 	/** output files */
 	out: {
@@ -34,7 +31,7 @@ export const dirNames = {
 		},
 		ssr: "server",
 	},
-	src: "src",
+	src: { base: "src", client: "client", server: "server" },
 	public: "public",
 } as const;
 
@@ -42,4 +39,10 @@ export const headers = {
 	cacheControl: { immutable: "public, immutable, max-age=31536000" },
 } as const;
 
-export const setup = "setup";
+export const ids = {
+	/** App entry point ID. */
+	app: `/${dirNames.src.server}/${fileNames.app}`,
+
+	/** Adapter entry ID for the entry point provided by the adapter. */
+	adapter: "domco:adapter",
+} as const;

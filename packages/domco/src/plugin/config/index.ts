@@ -1,12 +1,16 @@
-import { dirNames, fileNames } from "../../constants/index.js";
-import type { Adapter, DomcoConfig } from "../../types/public/index.js";
+import { dirNames, fileNames, ids } from "../../constants/index.js";
+import type { Adapter, DomcoConfig } from "../../types/index.js";
 import { findFiles, toAllScriptEndings } from "../../util/fs/index.js";
-import { ssrId } from "../adapter/index.js";
-import { appId } from "../entry/index.js";
 import path from "node:path";
 import process from "node:process";
-import type { Plugin, SSROptions } from "vite";
+import { type Plugin, createLogger } from "vite";
 
+/**
+ * Dynamically sets the Vite config.
+ *
+ * @param domcoConfig
+ * @returns Vite plugin
+ */
 export const configPlugin = async (
 	domcoConfig: DomcoConfig,
 ): Promise<Plugin> => {
@@ -15,28 +19,38 @@ export const configPlugin = async (
 	return {
 		name: "domco:config",
 		async config(_, { isSsrBuild, command }) {
-			/** If Vite is building. */
 			const build = command === "build";
 
+			const customLogger = createLogger();
+			const loggerInfo = customLogger.info;
+			customLogger.info = (msg, _options) => {
+				if (build && msg.includes("../dist")) {
+					// usually logs output relative to root, correct
+					return loggerInfo(msg.split("../dist/").join("dist/"));
+				}
+
+				return loggerInfo(msg);
+			};
+
 			return {
+				customLogger,
 				resolve: {
 					alias: [
 						{
 							find: "@",
-							replacement: path.resolve(dirNames.src),
+							replacement: path.resolve(dirNames.src.base),
 						},
 					],
 				},
-				root: dirNames.src,
+				root: dirNames.src.base,
 				publicDir: isSsrBuild
 					? false
 					: path.join(process.cwd(), dirNames.public),
 				appType: "custom",
 				ssr: {
 					target: adapter?.target,
-					noExternal: getNoExternal({ build, adapter }),
+					noExternal: build ? adapter?.noExternal : undefined,
 				},
-				logLevel: build ? "warn" : "info",
 				build: {
 					manifest: !isSsrBuild,
 					target: "es2022",
@@ -68,73 +82,50 @@ export const configPlugin = async (
 	};
 };
 
-const getNoExternal = (options: { adapter?: Adapter; build: boolean }) => {
-	const { adapter, build } = options;
-
-	let noExternal: SSROptions["noExternal"] = ["domco"];
-
-	if (!build) return noExternal;
-
-	if (adapter?.noExternal === true) {
-		noExternal = true;
-	} else if (adapter?.noExternal instanceof Array) {
-		noExternal.push(...adapter.noExternal);
-	} else if (adapter?.noExternal) {
-		noExternal.push(adapter.noExternal);
-	}
-
-	return noExternal;
-};
-
 const serverEntry = (adapter?: Adapter) => {
 	const entry: Record<string, string> = {
-		app: appId,
+		app: ids.app,
 	};
 
-	// only create an adapter entrypoint if there's an adapter
+	// only create an adapter entry point if there's an adapter
 	if (adapter) {
-		entry[adapter.entry({ appId }).id] = ssrId;
+		entry[adapter.entry({ appId: ids.app }).id] = ids.adapter;
 	}
 
 	return entry;
 };
 
 const clientEntry = async () => {
-	const entryPoints = await findFiles({
-		dir: dirNames.src,
-		checkEndings: [fileNames.page],
-	});
+	const [pages, scripts] = await Promise.all([
+		findFiles({
+			dir: path.join(dirNames.src.base, dirNames.src.client),
+			checkEndings: [fileNames.page],
+		}),
+		findFiles({
+			dir: path.join(dirNames.src.base, dirNames.src.client),
+			checkEndings: toAllScriptEndings(fileNames.script),
+		}),
+	]);
 
-	// rename key
-	if (entryPoints["/"]) {
-		entryPoints.main = entryPoints["/"];
-		delete entryPoints["/"];
+	// rename keys
+	if (pages["/"]) {
+		pages.main = pages["/"];
+		delete pages["/"];
+	}
+	if (scripts["/"]) {
+		scripts["/main"] = scripts["/"];
+		delete scripts["/"];
 	}
 
-	// remove leading slash
-	for (const key in entryPoints) {
-		const entryPath = entryPoints[key];
-		if (entryPath) {
-			entryPoints[key] = entryPath.slice(1);
-		}
+	for (const [key, value] of Object.entries(pages)) {
+		pages[key] = value.slice(dirNames.src.base.length + 1); // remove "/src"
 	}
 
-	const jsFiles = await findFiles({
-		dir: dirNames.src,
-		checkEndings: toAllScriptEndings("+client"),
-	});
+	const scriptsEntry: Record<string, string> = {};
 
-	// rename key
-	if (jsFiles["/"]) {
-		jsFiles["/main"] = jsFiles["/"];
-		delete jsFiles["/"];
+	for (const [key, value] of Object.entries(scripts)) {
+		scriptsEntry[`/_script${key}`] = value.slice(dirNames.src.base.length + 1); // remove "/src"
 	}
 
-	const jsEntry: Record<string, string> = {};
-
-	for (const [key, value] of Object.entries(jsFiles)) {
-		jsEntry[`/_client${key}`] = value.slice(1);
-	}
-
-	return Object.assign(entryPoints, jsEntry);
+	return Object.assign(pages, scriptsEntry);
 };

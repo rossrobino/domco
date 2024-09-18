@@ -1,3 +1,3 @@
-export type * from "./types/public/index.js";
+export type * from "./types/index.js";
 
 export { domco } from "./plugin/index.js";

@@ -19,8 +19,7 @@ const getTemplateFiles: GetTemplateFile = ({ pm, prettier, tailwind }) => {
 	},
 	"nodeModulesDir": true,
 	"imports": {
-		"domco": "npm:domco@^${dependencies.domco}",
-		"hono": "npm:hono@^${dependencies.hono}",${prettier ? `\n\t\t"prettier": "npm:prettier@^${dependencies.prettier}",` : ""}${
+		"domco": "npm:domco@^${dependencies.domco}",${prettier ? `\n\t\t"prettier": "npm:prettier@^${dependencies.prettier}",` : ""}${
 			prettier && tailwind
 				? `\n\t\t"prettier-plugin-tailwindcss": "npm:prettier-plugin-tailwindcss@^${dependencies.prettierTailwind}",`
 				: ""
@@ -33,8 +32,6 @@ const getTemplateFiles: GetTemplateFile = ({ pm, prettier, tailwind }) => {
 	},
 	"compilerOptions": {
 		"checkJs": true,
-		"jsx": "react-jsx",
-		"jsxImportSource": "hono/jsx",
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,

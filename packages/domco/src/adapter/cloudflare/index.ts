@@ -1,5 +1,5 @@
 import { dirNames, headers } from "../../constants/index.js";
-import type { AdapterBuilder } from "../../types/public/index.js";
+import type { AdapterBuilder } from "../../types/index.js";
 import {
 	clearDir,
 	copyClient,
@@ -38,17 +38,15 @@ export const adapter: AdapterBuilder = async () => {
 		target: "webworker",
 		noExternal: true,
 		message:
-			"created Cloudflare Pages build .cloudflare/\n\ninstall wrangler and run `wrangler pages dev .cloudflare` to preview your build\nhttps://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler#installation\nhttps://developers.cloudflare.com/workers/wrangler/commands/#pages",
+			"created Cloudflare Pages build .cloudflare/\ninstall wrangler and run `wrangler pages dev .cloudflare` to preview your build\nhttps://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler#installation\nhttps://developers.cloudflare.com/workers/wrangler/commands/#pages",
 
 		entry: ({ appId }) => {
 			return {
 				id: "_worker",
 				code: `
-					import { createApp } from "${appId}";
+					import { handler } from "${appId}";
 					
-					const app = createApp();
-					
-					export default app;
+					export default { fetch: handler };
 				`,
 			};
 		},
@@ -65,6 +63,8 @@ export const adapter: AdapterBuilder = async () => {
 
 			/**
 			 * Adds paths to exclude from when the worker gets called.
+			 * Need to exclude all static files, since these will be served in
+			 * front of the function.
 			 *
 			 * @param dir directory to walk
 			 */
@@ -79,20 +79,23 @@ export const adapter: AdapterBuilder = async () => {
 
 				const staticFiles = await fs.readdir(dir, { withFileTypes: true });
 
+				const subDirPromises: Promise<void>[] = [];
+
 				for (const file of staticFiles) {
 					const filePath = path.join(dir, file.name);
 					let relativePath = toPosix(`/${path.relative(base, filePath)}`);
 
 					if (
+						// already added via wildcard
 						relativePath.startsWith(`/${dirNames.out.client.immutable}`) ||
+						// manifest
 						relativePath.startsWith("/.vite")
 					) {
-						// already added via wildcard
 						continue;
 					}
 
 					if (file.isDirectory()) {
-						await addExclusions(filePath);
+						subDirPromises.push(addExclusions(filePath));
 						continue;
 					}
 
@@ -109,17 +112,17 @@ export const adapter: AdapterBuilder = async () => {
 
 					routes.exclude.push(relativePath);
 				}
+
+				await Promise.all(subDirPromises);
 			};
 
-			await addExclusions();
-
-			await clearDir(outDir);
-
-			await fs.mkdir(outDir, { recursive: true });
+			await Promise.all([addExclusions(), clearDir(outDir)]);
 
 			await Promise.all([
+				// copy output into .cloudflare
 				copyClient(outDir),
 				copyServer(outDir),
+
 				fs.writeFile(
 					path.join(outDir, "_routes.json"),
 					JSON.stringify(routes, null, "\t"),
