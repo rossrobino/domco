@@ -73,7 +73,7 @@ export const configPlugin = async (
 							chunkFileNames: `${isSsrBuild ? "" : dirNames.out.client.immutable + "/"}chunks/[name]/[hash].js`,
 						},
 					},
-					// rel=modulepreload is supported in all major browsers as of 2023
+					// `rel=modulepreload` is supported in all major browsers as of 2023
 					// https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/modulepreload#browser_compatibility
 					modulePreload: false,
 				},
@@ -107,7 +107,7 @@ const clientEntry = async () => {
 		}),
 	]);
 
-	// rename keys
+	// rename "/" keys to main
 	if (pages["/"]) {
 		pages.main = pages["/"];
 		delete pages["/"];
@@ -117,14 +117,16 @@ const clientEntry = async () => {
 		delete scripts["/"];
 	}
 
+	// pages and scripts have to start with "src/" instead of just "/client"
+	// for builds to work on Windows
 	for (const [key, value] of Object.entries(pages)) {
-		pages[key] = value.slice(dirNames.src.base.length + 1); // remove "/src"
+		pages[key] = value.slice(1); // remove "/"
 	}
 
 	const scriptsEntry: Record<string, string> = {};
 
 	for (const [key, value] of Object.entries(scripts)) {
-		scriptsEntry[`/_script${key}`] = value.slice(dirNames.src.base.length + 1); // remove "/src"
+		scriptsEntry[`/_script${key}`] = value.slice(1); // remove "/"
 	}
 
 	return Object.assign(pages, scriptsEntry);
