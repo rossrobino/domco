@@ -24,7 +24,7 @@ export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
 						content="width=device-width, initial-scale=1.0"
 					/>
 					{client.map((tags) => tags)}
-					<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+					<link rel="icon" type="image/svg+xml" href="/circle.svg" />
 					<meta
 						name="description"
 						content="A Minimal Full-Stack JavaScript Framework."
