@@ -23,9 +23,9 @@ Server-side JavaScript runtimes are standardizing on the Web [`Request`](https:/
 
 ### Add a Framework, or don't
 
-One of the main goals of domco is to be able to create full-stack JavaScript applications using vanilla JavaScript. Without domco, it's challenging to achieve the same developer experience as other frameworks that are based around a UI library. By default, domco only bundles only the code you write, making it efficient and straightforward.
+One of the main goals of domco is to be able to create full-stack applications using vanilla JavaScript. With domco, it's easy to achieve the same developer experience as other frameworks that are based around a UI library, without having to pull in additional dependencies. By default, domco only bundles only the code you write, making it efficient and straightforward.
 
-If you need a UI framework, you can use any Vite plugin as you would in a traditional Vite application.
+If you need a UI framework, you can still use any Vite plugin as you would in a traditional Vite application.
 
 domco is compatible with any server-side JavaScript framework that provides a web request handler taking a `Request` argument and returning a `Response`. Check out the [examples](/examples) to see how to use popular server frameworks with domco.
 
