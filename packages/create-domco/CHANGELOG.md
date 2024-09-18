@@ -1,5 +1,11 @@
 # create-domco
 
+## 0.2.0
+
+### Minor Changes
+
+- a5f23e7: Updates template to 0.13
+
 ## 0.1.14
 
 ### Patch Changes
