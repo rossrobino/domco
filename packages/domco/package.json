@@ -72,7 +72,7 @@
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc",
 		"build": "node scripts/version && npm run build:clean && npm run build:js && cp src/types/env.d.ts dist/types/env.d.ts",
-		"doc": "typedoc src/index.ts --out ../../apps/docs/src/server/generated --plugin typedoc-plugin-markdown --outputFileStrategy modules --hidePageHeader --hidePageTitle --useHTMLAnchors"
+		"doc": "typedoc --options typedoc.config.js"
 	},
 	"devDependencies": {
 		"typedoc": "^0.26.7",
