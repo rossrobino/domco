@@ -80,7 +80,7 @@ Passed into Vite `config.ssr.target`.
 
 #### Defined in
 
-[types/index.ts:60](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L60)
+[types/index.ts:60](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L60)
 
 ---
 
@@ -107,7 +107,7 @@ Pass any options for the adapter in as a generic.
 
 #### Defined in
 
-[types/index.ts:90](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L90)
+[types/index.ts:90](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L90)
 
 ---
 
@@ -151,7 +151,7 @@ The name of the entry point without extension.
 
 #### Defined in
 
-[types/index.ts:44](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L44)
+[types/index.ts:44](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L44)
 
 ---
 
@@ -165,7 +165,7 @@ Middleware used in the Vite server for dev and preview.
 
 #### Defined in
 
-[types/index.ts:41](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L41)
+[types/index.ts:41](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L41)
 
 ---
 
@@ -193,7 +193,7 @@ Exports from the SSR `app` entry point.
 
 #### Defined in
 
-[types/index.ts:7](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L7)
+[types/index.ts:7](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L7)
 
 ---
 
@@ -250,7 +250,7 @@ export default defineConfig({
 
 #### Defined in
 
-[types/index.ts:116](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L116)
+[types/index.ts:116](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L116)
 
 ---
 
@@ -281,7 +281,7 @@ export const handler: Handler = async (req) => {
 
 #### Defined in
 
-[types/index.ts:24](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L24)
+[types/index.ts:24](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L24)
 
 ---
 
@@ -299,7 +299,7 @@ Helper type for a type that could be a promise.
 
 #### Defined in
 
-[types/index.ts:4](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L4)
+[types/index.ts:4](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L4)
 
 ---
 
@@ -322,7 +322,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 #### Defined in
 
-[types/index.ts:38](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/types/index.ts#L38)
+[types/index.ts:38](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L38)
 
 ## Functions
 
@@ -361,4 +361,4 @@ export default defineConfig({
 
 #### Defined in
 
-[plugin/index.ts:29](https://github.com/rossrobino/domco/blob/96bc88dd5cb595f98ceeaa40c8e6c0f3884cd45b/packages/domco/src/plugin/index.ts#L29)
+[plugin/index.ts:29](https://github.com/rossrobino/domco/blob/main/packages/domco/src/plugin/index.ts#L29)
