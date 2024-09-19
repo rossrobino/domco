@@ -2,7 +2,7 @@
 
 This section will show you how to server-side render an existing Vite/React single page application with domco. It will use the React template created when running `npm create vite`.
 
-You could also import the `html` and serve your single-page application without server-rendering as well.
+You could also import the `html` and serve your single-page application without server-rendering.
 
 ## Install
 
