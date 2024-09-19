@@ -13,7 +13,7 @@ const markdownOptions = {
 /** @type {Partial<TypeDocOptions & PluginOptions>} */
 export default {
 	entryPoints: ["src/index.ts"],
-	out: "../../apps/docs/src/server/generated",
+	out: "../../apps/docs/src/server/content/generated",
 	plugin: ["typedoc-plugin-markdown"],
 	gitRevision: "main",
 	...markdownOptions,

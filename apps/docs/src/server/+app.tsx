@@ -2,7 +2,7 @@ import { Edit } from "@/server/components/Edit";
 import { Hero } from "@/server/components/Hero";
 import { Layout } from "@/server/components/Layout";
 import preview from "@/server/content/_preview.md?raw";
-import apiReference from "@/server/generated/globals.md?raw";
+import apiReference from "@/server/content/generated/globals.md?raw";
 import { processMarkdown } from "@robino/md";
 import { tags as rootTags } from "client:script";
 import { tags as docTags } from "client:script/docs";
