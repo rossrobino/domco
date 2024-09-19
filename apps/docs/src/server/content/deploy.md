@@ -1,6 +1,6 @@
 # Deploy
 
-Run `vite build` to build your application into `dist/`.
+Run [`vite build`](https://vitejs.dev/guide/cli.html#vite-build) to build your application into `dist/`.
 
 ```
 .
@@ -26,6 +26,8 @@ Check out the [deployment examples](/examples#deployment) to see how to do this.
 ## Adapters
 
 Add a deployment adapter within your Vite config to output your app to a different target with no additional configuration.
+
+### Example
 
 ```ts {4,11-13}
 // vite.config
@@ -73,3 +75,17 @@ The [Vercel](https://vercel.com) adapter outputs your app to the [Build Output A
 - Supports on demand [Image Optimization](https://vercel.com/docs/image-optimization) when configured in the adapter config. Set the `src` attribute of an image using the `/_vercel/image/...` [optimized URL format](https://vercel.com/docs/image-optimization#optimized-url-format). In `dev` and `preview` modes, domco will redirect to the original image.
 
 ![A screenshot of the Vercel Build and Development Settings UI. Set the Framework Preset field to "Other" and leave all of the other options blank.](/_vercel/image?url=/images/vercel/build-settings.png&w=1280&q=100)
+
+### Creating an adapter
+
+If you'd like to deploy a domco app to a different provider, and you need many configuration steps for this to take place you can create an adapter.
+
+Check out the [current adapters](https://github.com/rossrobino/domco/tree/main/packages/domco/src/adapter) to see how to make your own.
+
+Adapters take care of these deployment steps.
+
+1. Set [`ssr`](https://vitejs.dev/config/ssr-options.html) options if changes are needed, for example if you are deploying to an edge function, set this to `"web worker"`.
+2. Create an entry point for the target environment by using the `handler` from `dist/server/app.js`. This could be reexporting it as a different export, or applying to a node server.
+3. Within the entry point, serve the `dist/client/*` directory as static assets, and the `dist/client/_immutable/*` directory with immutable cache headers. Static assets must be hit before the `handler` to take advantage of prerendering. When an asset is not found, the request needs to fallthrough to the `handler`.
+
+If you think others might benefit from your adapter you can [create an issue](https://github.com/rossrobino/domco/issues) or pull request to propose a new adapter. Adapters should be created for zero configuration deployments for deployment providers, not specific to JavaScript runtimes.

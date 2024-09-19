@@ -2,6 +2,14 @@
 
 domco is open to contributions and is licensed under the MIT license. If you find a bug or have an idea feel free to create an issue to get feedback before going to the work of creating a PR.
 
+## dependencies
+
+domco currently has no dependencies other than Vite, please take this into consideration when contributing.
+
+## scope
+
+The scope of the project is to be a minimal wrapper to add server-side functionality to Vite. Some of the things that are outside the scope include adding a server framework, or a UI library into the core.
+
 ## clone
 
 - Clone the monorepo and run `npm i` to install dependencies.

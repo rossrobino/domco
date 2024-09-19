@@ -1,10 +1,10 @@
 # Tutorial
 
-The following documentation covers the basics of creating a site and all of the features domco provides in addition to Vite. See the [Vite](https://vitejs.dev/) documentation for more information and configuration options.
+The following documentation covers the basics of creating a site and all of the features domco provides in addition to Vite. See the [Vite documentation](https://vitejs.dev/) for more information and configuration options.
 
 ## Create a new project
 
-To get started, you'll need to have [Node](https://nodejs.org) (recommended), [Bun](https://bun.sh/), or [Deno](https://deno.com) (experimental support) or installed on your computer. Then run the `create-domco` script to create a new project. If you already have an existing client-side Vite project check out the [migration instructions](/migrate).
+To get started, you'll need to have [Node](https://nodejs.org) (recommended), [Bun](https://bun.sh/), or [Deno](https://deno.com) (experimental support) or installed on your computer. Then run the [`create-domco`](https://github.com/rossrobino/domco/tree/main/packages/create-domco) script to create a new project. If you already have an existing client-side Vite project check out the [migration instructions](/migrate).
 
 ### Node
 
@@ -39,7 +39,7 @@ The `app` entry point is located in within `src/server/`, this is the server ent
 		└── +app.(js,ts,jsx,tsx)
 ```
 
-`+app` modules export a `handler` function that takes in a `Request`, and returns a `Response`.
+`+app` modules export a `handler` function that takes in a [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request), and returns a [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
 ```ts
 // src/server/+app.ts
@@ -48,7 +48,7 @@ export const handler = async (req: Request) => {
 };
 ```
 
-From here, it's up to you. For example, you could route different requests to different responses, based on the `req.url`.
+From here, it's up to you. For example, you could route different requests to different responses, based on the [`req.url`](https://developer.mozilla.org/en-US/docs/Web/API/Request/url).
 
 ```ts
 // src/server/+app.ts
@@ -65,13 +65,13 @@ export const handler = async (req: Request) => {
 };
 ```
 
-Or add a framework like [Hono](/examples#hono) to do your routing and more.
+Or [add a framework](/examples#server-frameworks) like [Hono](/examples#hono) to do your routing and more.
 
 ### +page
 
 To create a page, add `+page.html` file in a directory within `src/client/`.
 
-domco configures Vite to process each `+page.html` as a separate entry point automatically. Everything linked in these pages will be bundled and included in the output upon running `vite build`. You can serve the transformed contents of a page via the [`client:page`](#client%3Apage) virtual module.
+domco [configures Vite](https://vitejs.dev/guide/build#multi-page-app) to process each `+page.html` as a separate entry point automatically. Everything linked in these pages will be bundled and included in the output upon running `vite build`. You can serve the transformed contents of a page via the [`client:page`](#client%3Apage) virtual module.
 
 ```txt {4}
 .
@@ -84,7 +84,7 @@ domco configures Vite to process each `+page.html` as a separate entry point aut
 
 ### +script
 
-Each `+script.(js,ts,jsx,tsx)` file within `src/client/` will be processed as an entry point by Vite. Client-side scripts can be used in pages via a `script` tag, or on the server _without_ a page by using the [`client:script`](#client%3Ascript) virtual module.
+Each `+script.(js,ts,jsx,tsx)` file within `src/client/` will be [processed as an entry point](https://rollupjs.org/configuration-options/#input) by Vite. Client-side scripts can be used in pages via a `script` tag, or on the server _without_ a page by using the [`client:script`](#client%3Ascript) virtual module.
 
 ```txt {4}
 .
@@ -97,11 +97,13 @@ Each `+script.(js,ts,jsx,tsx)` file within `src/client/` will be processed as an
 
 ## Virtual Modules
 
-domco provides a doorway to the client via virtual modules. These allow you to not have to worry about getting the hashed filenames for client assets after the build is complete. You can easily serve a `+page` or include the tags for a `+script` in a response.
+One challenging aspect of full-stack development and server-side rendering is managing the client files correctly during development and production. In development, you need to link directly to source files to benefit from features like TypeScript support and Hot Module Replacement (HMR). In production, the build process transforms each file and applies a hash to the filename for caching purposes.
+
+domco takes care of these problems using [virtual modules](https://vitejs.dev/guide/api-plugin.html#virtual-modules-convention). You can easily serve a `+page` or include the tags for a `+script` in a response. domco ensures the correct assets are linked during development and in production.
 
 ### client:page
 
-You can import the transformed HTML of any `+page.html` from this module or one of it's sub-paths.
+You can import the transformed HTML of any `+page.html` from this module or one of it's sub-paths. domco calls Vite's [`transformIndexHtml`](https://vitejs.dev/guide/api-plugin.html#transformindexhtml) hook on the imported page and inlines it into your server build.
 
 ```ts {2,8}
 // returns transformed content of `src/client/+page.html`
@@ -123,7 +125,7 @@ export const handler = async (req: Request) => {
 
 You can also easily get the `<script>` tags for any `+script` module on the server as well. These script tags (including all imports) can be accessed via the `client:script` virtual module. They can be included in an HTML string, or inside of JSX.
 
-In development, domco links the scripts to the source. In production, domco reads the manifest generated by the client build and includes the hashed version of these file names and their imports.
+In development, domco links the scripts to the source. In production, domco [reads](https://vitejs.dev/guide/backend-integration.html) the [manifest](https://vitejs.dev/config/build-options.html#build-manifest) generated by the client build and includes the hashed version of these file names and their imports.
 
 ```ts {2,13}
 // returns transformed content of `src/client/+script.ts`

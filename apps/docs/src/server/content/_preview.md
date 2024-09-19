@@ -25,10 +25,14 @@ Server-side JavaScript runtimes are standardizing on the Web [`Request`](https:/
 
 One of the main goals of domco is to be able to create full-stack applications using vanilla JavaScript. With domco, it's easy to achieve the same developer experience as other frameworks that are based around a UI library, without having to pull in additional dependencies. By default, domco only bundles only the code you write, making it efficient and straightforward.
 
-If you need a UI framework, you can still use any Vite plugin as you would in a traditional Vite application.
+If you need a UI framework, you can still use any [Vite plugin](https://vitejs.dev/plugins/) as you would in a traditional Vite application. These plugins will also work on the server side.
 
 domco is compatible with any server-side JavaScript framework that provides a web request handler taking a `Request` argument and returning a `Response`. Check out the [examples](/examples) to see how to use popular server frameworks with domco.
 
 ### Minimal Dependencies
 
 domco is lightweight, relying solely on Vite as its dependency. This results in quick installation times, fast build and development processes, and a reduced risk of supply chain attacks.
+
+### Open Source
+
+domco is open source under the [MIT License](https://github.com/rossrobino/domco/blob/main/LICENSE.md). Contributions are welcome, see the [contributing guide](https://github.com/rossrobino/domco/blob/main/CONTRIBUTING.md) for instructions.

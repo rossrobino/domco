@@ -101,7 +101,7 @@ export const handler: Handler = async (req) => {
 
 ### Node server
 
-Here's an example of how to serve your app using the result of your build using `node:http` and [`sirv`](https://github.com/lukeed/sirv/tree/master/packages/sirv).
+Here's an example of how to serve your app using the result of your build using `node:http`, [`sirv`](https://github.com/lukeed/sirv/tree/master/packages/sirv), and [`domco/listener`](https://github.com/rossrobino/domco/blob/main/packages/domco/src/listener/index.ts).
 
 ```ts
 // server.js

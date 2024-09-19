@@ -148,18 +148,5 @@
 				padding-inline-start: 0;
 			}
 		}
-
-		section {
-			&:first-of-type {
-				margin-block-start: 0;
-			}
-		}
-
-		li {
-			padding-block-start: theme(padding.2);
-			:last-of-type {
-				padding-block-end: theme(padding.1);
-			}
-		}
 	}
 }
