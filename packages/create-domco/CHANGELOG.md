@@ -1,5 +1,11 @@
 # create-domco
 
+## 0.2.1
+
+### Patch Changes
+
+- 8a99276: use project name for title and header
+
 ## 0.2.0
 
 ### Minor Changes
