@@ -91,7 +91,7 @@ export class Injector {
 	/**
 	 * Replace comments with tags.
 	 *
-	 * Set `tag` equal to text within comment.
+	 * Set `text` equal to text within comment.
 	 *
 	 * @param tags Comments to replace.
 	 */
