@@ -1,5 +1,13 @@
 # domco
 
+## 0.13.3
+
+### Patch Changes
+
+- f498a79: fix: tags import chunks not found error
+
+  - Preloads modules that are imported into entry points in case of manual chunks are used.
+
 ## 0.13.2
 
 ### Patch Changes

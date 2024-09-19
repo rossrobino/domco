@@ -1,7 +1,7 @@
 {
 	"name": "domco",
 	"description": "A Minimal Full-Stack JavaScript Framework",
-	"version": "0.13.2",
+	"version": "0.13.3",
 	"author": {
 		"name": "Ross Robino",
 		"url": "https://robino.dev"
