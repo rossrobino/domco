@@ -32,7 +32,7 @@ export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
 					<title>{title}</title>
 				</head>
 				<body class="tabular-nums">
-					<drab-prefetch trigger="a[href^='/']" class="contents">
+					<drab-prefetch trigger="a[href^='/']" prerender class="contents">
 						<main class="flex flex-col lg:flex-row">
 							<Nav />
 							<div class="grow justify-center md:flex">
