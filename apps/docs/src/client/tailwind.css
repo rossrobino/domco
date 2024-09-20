@@ -73,6 +73,10 @@
 		}
 	}
 
+	pre {
+		font-size: theme(fontSize.sm);
+	}
+
 	/* for safari */
 	summary::-webkit-details-marker {
 		display: none;
@@ -149,6 +153,11 @@
 }
 
 @layer utilities {
+	.level-2 {
+		/* on this page heading links */
+		padding-block-start: theme(padding.1);
+	}
+
 	.prose {
 		blockquote {
 			padding-inline-start: 0;

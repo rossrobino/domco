@@ -106,16 +106,16 @@ export const InternalLinks: FC = () => {
 		{ title: "Overview", Icon: HomeSvg },
 		{ title: "Tutorial", Icon: BookSvg },
 		{
-			title: "Migrate",
-			Icon: PlugSvg,
-		},
-		{
 			title: "Deploy",
 			Icon: EarthSvg,
 		},
 		{
 			title: "Examples",
 			Icon: PenSvg,
+		},
+		{
+			title: "Migrate",
+			Icon: PlugSvg,
 		},
 		{
 			title: "API Reference",

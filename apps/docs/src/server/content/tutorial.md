@@ -34,11 +34,10 @@ domco identifies the entry points of your application by file name. These entry 
 
 The `app` entry point is located in within `src/server/`, this is the server entry point for your application.
 
-```txt {4}
-.
-└── src/
-	└── server/
-		└── +app.(js,ts,jsx,tsx)
+```txt {3}
+src/
+└── server/
+	└── +app.(js,ts,jsx,tsx)
 ```
 
 `+app` modules export a `handler` function that takes in a [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request), and returns a [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
@@ -75,26 +74,24 @@ To create a page, add `+page.html` file in a directory within `src/client/`.
 
 domco [configures Vite](https://vitejs.dev/guide/build#multi-page-app) to process each `+page.html` as a separate entry point automatically. Everything linked in these pages will be bundled and included in the output upon running `vite build`. You can serve the transformed contents of a page via the [`client:page`](#client%3Apage) virtual module.
 
-```txt {4}
-.
-└── src/
-	├── client/
-	│	└── +page.html
-	└── server/
-		└── +app.ts
+```txt {3}
+src/
+├── client/
+│	└── +page.html
+└── server/
+	└── +app.ts
 ```
 
 ### +script
 
 Each `+script.(js,ts,jsx,tsx)` file within `src/client/` will be [processed as an entry point](https://rollupjs.org/configuration-options/#input) by Vite. Client-side scripts can be used in pages via a `script` tag, or on the server _without_ a page by using the [`client:script`](#client%3Ascript) virtual module.
 
-```txt {4}
-.
-└── src/
-	├── client/
-	│	└── +script.ts
-	└── server/
-		└── +app.ts
+```txt {3}
+src/
+├── client/
+│	└── +script.ts
+└── server/
+	└── +app.ts
 ```
 
 ## Virtual Modules

@@ -107,20 +107,26 @@ import { html } from "client:page";
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 
-export const handler = async (_req: Request) => {
-	return new Response(
-		html.replace(
-			"%root%", // replace the text "%root%" with the React App
-			renderToString(
-				<StrictMode>
-					<App />
-				</StrictMode>,
+export const handler = async (req: Request) => {
+	const { pathname } = new URL(req.url);
+
+	if (pathname === "/") {
+		return new Response(
+			html.replace(
+				"%root%", // replace the text "%root%" with the React App
+				renderToString(
+					<StrictMode>
+						<App />
+					</StrictMode>,
+				),
 			),
-		),
-		{
-			headers: { "Content-Type": "text/html" },
-		},
-	);
+			{
+				headers: { "Content-Type": "text/html" },
+			},
+		);
+	}
+
+	return new Response("Not found", { status: 404 });
 };
 ```
 

@@ -73,7 +73,7 @@ summary.insertAdjacentHTML(
 	`,
 );
 
-const content = document.createElement("content");
+const content = document.createElement("div");
 content.classList.add("grid");
 content.dataset.content = "";
 content.append(tocUl);

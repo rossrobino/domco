@@ -2,20 +2,19 @@
 
 <on-this-page></on-this-page>
 
-Run [`vite build`](https://vitejs.dev/guide/cli.html#vite-build) to build your application into `dist/`.
+## Build
+
+Run [`vite build`](https://vitejs.dev/guide/cli.html#vite-build) to build your application into `dist/`. Vite will build both the client and server builds, then domco will prerender any static routes and [run the adapter](#adapters) if set.
 
 ```
-.
-└── dist/
-	├── client/
-	│	├── (_immutable/) - any JS/CSS/immutable assets
-	│	└── (index.html) - prerendered pages
-	└── server/
-		├── app.js
-		└── (adapter-entry.js) - if using an adapter
+dist/
+├── client/
+│	├── (_immutable/) - any JS/CSS/immutable assets
+│	└── (index.html) - prerendered pages
+└── server/
+	├── app.js - server entry point
+	└── (adapter-entry.js) - if using an adapter
 ```
-
-By default domco will generate a `app.js` module and static assets for your application.
 
 ## Manual deployment
 
