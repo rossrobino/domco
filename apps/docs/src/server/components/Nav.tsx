@@ -54,7 +54,13 @@ const TopBar: FC = () => {
 			animation-keyframe-from-transform="translateX(-100%)"
 			animation-keyframe-to-transform="translateX(0)"
 		>
-			<button data-trigger type="button" class="ghost" id="dialog-trigger">
+			<button
+				data-trigger
+				aria-label="Open navigation"
+				type="button"
+				class="ghost"
+				id="dialog-trigger"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"

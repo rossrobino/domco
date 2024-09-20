@@ -1,6 +1,6 @@
 const headings = document.querySelectorAll("h2, h3");
-const tableOfContents = document.createElement("ul");
-tableOfContents.classList.add("overflow-hidden", "!my-0", "!pl-0");
+const tocUl = document.createElement("ul");
+tocUl.classList.add("overflow-hidden", "!my-0", "!pl-0");
 
 headings.forEach((heading) => {
 	const li = document.createElement("li");
@@ -11,11 +11,11 @@ headings.forEach((heading) => {
 
 	if (heading.tagName === "H2") {
 		li.classList.add("!list-none", "level-2", "!pl-0");
-		tableOfContents.append(li);
+		tocUl.append(li);
 		link.classList.add("no-underline", "font-semibold");
 	} else {
 		link.classList.add("text-muted-foreground");
-		const last = tableOfContents.querySelector(".level-2:last-child");
+		const last = tocUl.querySelector(".level-2:last-child");
 
 		let nestedUl = last?.querySelector("ul");
 		if (!nestedUl) {
@@ -33,7 +33,7 @@ drabDetails.setAttribute("animation-keyframe-from-grid-template-rows", "0fr");
 drabDetails.setAttribute("animation-keyframe-to-grid-template-rows", "1fr");
 
 const details = document.createElement("details");
-details.classList.add("group", "overflow-hidden", "border-b", "p-4", "mb-12");
+details.classList.add("group", "overflow-hidden", "border-b", "p-4");
 
 const summary = document.createElement("summary");
 summary.classList.add(
@@ -76,11 +76,21 @@ summary.insertAdjacentHTML(
 const content = document.createElement("content");
 content.classList.add("grid");
 content.dataset.content = "";
-content.append(tableOfContents);
+content.append(tocUl);
 
 details.append(summary);
 details.append(content);
 drabDetails.append(details);
 
-const h1 = document.querySelector("h1");
-h1?.insertAdjacentElement("afterend", drabDetails);
+let onThisPage = document.querySelector("on-this-page");
+
+if (!onThisPage) {
+	// if not explicitly set, append after h1, this is not
+	// preferred since it causes layout shift, but some md
+	// docs are generated like the API reference
+	onThisPage = document.createElement("on-this-page");
+	const h1 = document.querySelector("h1");
+	h1?.insertAdjacentElement("afterend", onThisPage);
+}
+
+onThisPage.append(drabDetails);

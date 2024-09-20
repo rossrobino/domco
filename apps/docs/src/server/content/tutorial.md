@@ -1,5 +1,7 @@
 # Tutorial
 
+<on-this-page></on-this-page>
+
 The following documentation covers the basics of creating a site and all of the features domco provides in addition to Vite. See the [Vite documentation](https://vitejs.dev/) for more information and configuration options.
 
 ## Create a new project

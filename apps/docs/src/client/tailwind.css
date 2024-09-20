@@ -15,7 +15,7 @@
 			--shiki-background: theme(colors.base.900);
 			--shiki-token-constant: theme(colors.base.50);
 			--shiki-token-string: theme(colors.sky.200);
-			--shiki-token-comment: theme(colors.base.500);
+			--shiki-token-comment: theme(colors.base.400);
 			--shiki-token-keyword: theme(colors.teal.300);
 			--shiki-token-parameter: theme(colors.base.300);
 			--shiki-token-function: theme(colors.violet.300);
@@ -80,10 +80,19 @@
 
 	img {
 		border: var(--border);
+		width: auto;
+		height: auto;
 	}
 }
 
 @layer components {
+	on-this-page {
+		/* gets rid of layout shift */
+		display: block;
+		margin-block-end: theme(margin.12);
+		min-height: 86px;
+	}
+
 	@media (prefers-reduced-motion: no-preference) {
 		/* modified from https://codepen.io/jh3y/pen/vzqVWa */
 		#npm {

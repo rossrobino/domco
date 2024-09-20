@@ -1,5 +1,7 @@
 # Deploy
 
+<on-this-page></on-this-page>
+
 Run [`vite build`](https://vitejs.dev/guide/cli.html#vite-build) to build your application into `dist/`.
 
 ```
@@ -55,7 +57,7 @@ The [Cloudflare](https://cloudflare.com) adapter outputs your app to run on [Clo
 - Function runs on [workerd](https://github.com/cloudflare/workerd).
 - Outputs public assets to be served on Cloudflare's CDN.
 
-![A screenshot of the Cloudflare Build Settings UI. Set the Framework Preset field to "None", set the build command to "npm run build", and the build output directory to ".cloudflare".](/_vercel/image?url=/images/cloudflare/build-settings.png&w=1280&q=100)
+<img loading="lazy" src="/_vercel/image?url=/images/cloudflare/build-settings.png&w=1280&q=100" alt='A screenshot of the Cloudflare Build Settings UI. Set the Framework Preset field to "None", set the build command to "npm run build", and the build output directory to ".cloudflare".' />
 
 ### Deno
 
@@ -64,7 +66,7 @@ The [Deno](https://deno.com) adapter outputs your app to run on [Deno Deploy](ht
 - Function runs on Deno.
 - Static files are served with [`@std/http/file-server`](https://jsr.io/@std/http).
 
-![A screenshot of the Deno Deploy Project Configuration UI. Set the Framework Preset field to "None", set the build command to "deno run -A npm:vite build", and the entry point to "dist/server/main.js".](/_vercel/image?url=/images/deno/build-settings.png&w=1280&q=100)
+<img loading="lazy" src="/_vercel/image?url=/images/deno/build-settings.png&w=1280&q=100" alt='A screenshot of the Deno Deploy Project Configuration UI. Set the Framework Preset field to "None", set the build command to "deno run -A npm:vite build", and the entry point to "dist/server/main.js".' />
 
 ### Vercel
 
@@ -74,7 +76,7 @@ The [Vercel](https://vercel.com) adapter outputs your app to the [Build Output A
 - Outputs public assets to be served on Vercel's [Edge Network](https://vercel.com/docs/edge-network/overview).
 - Supports on demand [Image Optimization](https://vercel.com/docs/image-optimization) when configured in the adapter config. Set the `src` attribute of an image using the `/_vercel/image/...` [optimized URL format](https://vercel.com/docs/image-optimization#optimized-url-format). In `dev` and `preview` modes, domco will redirect to the original image.
 
-![A screenshot of the Vercel Build and Development Settings UI. Set the Framework Preset field to "Other" and leave all of the other options blank.](/_vercel/image?url=/images/vercel/build-settings.png&w=1280&q=100)
+<img loading="lazy" src="/_vercel/image?url=/images/vercel/build-settings.png&w=1280&q=100" alt='A screenshot of the Vercel Build and Development Settings UI. Set the Framework Preset field to "Other" and leave all of the other options blank.' />
 
 ### Creating an adapter
 
