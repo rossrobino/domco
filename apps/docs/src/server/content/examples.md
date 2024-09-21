@@ -2,7 +2,7 @@
 
 <on-this-page></on-this-page>
 
-Check out the [domco-examples](https://github.com/rossrobino/domco-exmaples) repository for the complete suite of examples including SSR framework integrations. Here are a few basic examples of common integrations and workflows.
+Check out the [domco-examples](https://github.com/rossrobino/domco-examples) repository for the complete suite of examples including SSR framework integrations. Here are a few basic examples of common integrations and workflows.
 
 ## Server Frameworks
 
