@@ -31,7 +31,7 @@ export const adapter: AdapterBuilder = async () => {
 		message:
 			"created Deno build dist/\n\nrun `deno run -A dist/server/main.js` to start the server.",
 
-		entry: ({ appId }) => {
+		entry: ({ funcId }) => {
 			return {
 				id: "main",
 
@@ -41,7 +41,7 @@ export const adapter: AdapterBuilder = async () => {
 				 * falling back to the handler.
 				 */
 				code: `
-					import { handler } from "${appId}";
+					import { handler } from "${funcId}";
 					import { serveDir } from "https://jsr.io/@std/http/1.0.6/file_server.ts";
 
 					const getStatic = async (req) => {

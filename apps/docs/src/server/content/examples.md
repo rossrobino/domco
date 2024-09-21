@@ -11,7 +11,7 @@ Here are some examples of how to use a few popular server-side frameworks with d
 [Hono](https://hono.dev/) is a fast, lightweight server framework built on Web Standards with support for any JavaScript runtime.
 
 ```ts
-// src/server/+app.ts
+// src/server/+func.ts
 import { html } from "client:page";
 import { Hono } from "hono";
 
@@ -27,7 +27,7 @@ export const handler = app.fetch;
 [h3](https://h3.unjs.io/) is a server framework built for high performance and portability running in any JavaScript runtime.
 
 ```ts
-// src/server/+app.ts
+// src/server/+func.ts
 import { html } from "client:page";
 import { createApp, eventHandler, toWebHandler } from "h3";
 
@@ -47,6 +47,7 @@ If you just want to add a router, and create your own context for each route, he
 [Trouter](https://github.com/lukeed/trouter) is a fast, small-but-mighty, familiar ~~fish~~ router.
 
 ```ts
+// src/server/+func.ts
 import { html } from "client:page";
 import type { Handler } from "domco";
 import { Trouter, type Methods } from "trouter";
@@ -103,12 +104,12 @@ export const handler: Handler = async (req) => {
 
 ### Node server
 
-Here's an example of how to serve your app using the result of your build using `node:http`, [`sirv`](https://github.com/lukeed/sirv/tree/master/packages/sirv), and [`domco/listener`](https://github.com/rossrobino/domco/blob/main/packages/domco/src/listener/index.ts).
+Here's an example of how to serve your func using the result of your build using `node:http`, [`sirv`](https://github.com/lukeed/sirv/tree/master/packages/sirv), and [`domco/listener`](https://github.com/rossrobino/domco/blob/main/packages/domco/src/listener/index.ts).
 
 ```ts
 // server.js
 // import the `handler` from the build output
-import { handler } from "./dist/server/app.js";
+import { handler } from "./dist/server/func.js";
 // converts web handler to a Node compatible request listener
 import { nodeListener } from "domco/listener";
 import { createServer } from "node:http";

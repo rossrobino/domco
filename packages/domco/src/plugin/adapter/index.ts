@@ -4,7 +4,7 @@ import type { Plugin } from "vite";
 
 /**
  * Creates a virtual module for the adapter entry point to make
- * the app usable in the target environment.
+ * the function usable in the target environment.
  *
  * @param adapter
  * @returns vite plugin
@@ -23,7 +23,7 @@ export const adapterPlugin = async (adapter?: Adapter): Promise<Plugin> => {
 
 		load(id) {
 			if (id === resolvedAdapterId && adapter) {
-				return adapter.entry({ appId: ids.app }).code;
+				return adapter.entry({ funcId: ids.func }).code;
 			}
 		},
 	};

@@ -3,8 +3,8 @@ import type { SSRTarget, SSROptions, Connect } from "vite";
 /** Helper type for a type that could be a promise. */
 export type MaybePromise<T> = T | Promise<T>;
 
-/** Exports from the SSR `app` entry point. */
-export type AppModule = {
+/** Exports from the SSR `+func` entry point. */
+export type FuncModule = {
 	handler: Handler;
 	prerender: Prerender;
 };
@@ -13,7 +13,7 @@ export type AppModule = {
  * Request handler, takes a web request and returns a web response.
  *
  * ```ts
- * // src/server/+app.ts
+ * // src/server/+func.ts
  * import type { Handler } from "domco";
  *
  * export const handler: Handler = async (req) => {
@@ -29,7 +29,7 @@ export type Handler = (req: Request) => MaybePromise<Response>;
  * @example
  *
  * ```ts
- * // src/server/+app.ts
+ * // src/server/+func.ts
  * import type { Prerender } from "domco";
  *
  * export const prerender: Prerender = ["/", "/post-1", "/post-2"];
@@ -42,8 +42,8 @@ export type AdapterMiddleware = Connect.NextHandleFunction;
 
 /** A function that returns an additional entry point to include in the SSR build. */
 export type AdapterEntry = (AdapterEntryOptions: {
-	/** The app entry point to import `handler` from. */
-	appId: string;
+	/** The function entry point to import `handler` from. */
+	funcId: string;
 }) => {
 	/**
 	 * The name of the entry point without extension.
@@ -117,7 +117,7 @@ export type DomcoConfig = {
 	/**
 	 * domco adapter.
 	 *
-	 * Defaults to `undefined` - creates a `app` build only.
+	 * Defaults to `undefined` - creates a `func` build only.
 	 *
 	 * @default undefined
 	 *

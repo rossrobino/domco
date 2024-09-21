@@ -84,12 +84,12 @@ export const configPlugin = async (
 
 const serverEntry = (adapter?: Adapter) => {
 	const entry: Record<string, string> = {
-		app: ids.app,
+		func: ids.func,
 	};
 
 	// only create an adapter entry point if there's an adapter
 	if (adapter) {
-		entry[adapter.entry({ appId: ids.app }).id] = ids.adapter;
+		entry[adapter.entry({ funcId: ids.func }).id] = ids.adapter;
 	}
 
 	return entry;

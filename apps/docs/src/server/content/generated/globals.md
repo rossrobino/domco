@@ -123,9 +123,9 @@ A function that returns an additional entry point to include in the SSR build.
 
 • **AdapterEntryOptions**
 
-• **AdapterEntryOptions.appId**: `string`
+• **AdapterEntryOptions.funcId**: `string`
 
-The app entry point to import `handler` from.
+The function entry point to import `handler` from.
 
 #### Returns
 
@@ -169,34 +169,6 @@ Middleware used in the Vite server for dev and preview.
 
 ---
 
-<a id="appmodule" name="appmodule"></a>
-
-### AppModule
-
-> **AppModule**: `object`
-
-Exports from the SSR `app` entry point.
-
-#### Type declaration
-
-<a id="handler" name="handler"></a>
-
-##### handler
-
-> **handler**: [`Handler`](globals.md#handler-1)
-
-<a id="prerender" name="prerender"></a>
-
-##### prerender
-
-> **prerender**: [`Prerender`](globals.md#prerender-1)
-
-#### Defined in
-
-[types/index.ts:7](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L7)
-
----
-
 <a id="domcoconfig" name="domcoconfig"></a>
 
 ### DomcoConfig
@@ -218,7 +190,7 @@ Pass the config into the `domco` vite plugin.
 
 domco adapter.
 
-Defaults to `undefined` - creates a `app` build only.
+Defaults to `undefined` - creates a `func` build only.
 
 ###### Default
 
@@ -254,6 +226,34 @@ export default defineConfig({
 
 ---
 
+<a id="funcmodule" name="funcmodule"></a>
+
+### FuncModule
+
+> **FuncModule**: `object`
+
+Exports from the SSR `+func` entry point.
+
+#### Type declaration
+
+<a id="handler" name="handler"></a>
+
+##### handler
+
+> **handler**: [`Handler`](globals.md#handler-1)
+
+<a id="prerender" name="prerender"></a>
+
+##### prerender
+
+> **prerender**: [`Prerender`](globals.md#prerender-1)
+
+#### Defined in
+
+[types/index.ts:7](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L7)
+
+---
+
 <a id="handler-1" name="handler-1"></a>
 
 ### Handler()
@@ -263,7 +263,7 @@ export default defineConfig({
 Request handler, takes a web request and returns a web response.
 
 ```ts
-// src/server/+app.ts
+// src/server/+func.ts
 import type { Handler } from "domco";
 
 export const handler: Handler = async (req) => {
@@ -314,7 +314,7 @@ Paths to prerender at build time.
 #### Example
 
 ```ts
-// src/server/+app.ts
+// src/server/+func.ts
 import type { Prerender } from "domco";
 
 export const prerender: Prerender = ["/", "/post-1", "/post-2"];

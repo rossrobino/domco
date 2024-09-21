@@ -4,7 +4,7 @@ const getTemplateFiles: GetTemplateFile = ({ lang }) => {
 	const isTs = lang === "ts";
 	return [
 		{
-			name: `src/server/+app.${lang}`,
+			name: `src/server/+func.${lang}`,
 			contents: `${isTs ? `import type { Handler } from "domco";` : `/** @import { Handler } from "domco" */`}
 import { html } from "client:page";
 ${isTs ? "" : "\n/** @type {Handler} */"}

@@ -1,6 +1,6 @@
 import { dirNames, fileNames } from "../../constants/index.js";
 import { nodeListener } from "../../listener/index.js";
-import type { Adapter, AppModule } from "../../types/index.js";
+import type { Adapter, FuncModule } from "../../types/index.js";
 import { findFiles } from "../../util/fs/index.js";
 import path from "node:path";
 import process from "node:process";
@@ -45,9 +45,9 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 									process.cwd(),
 									dirNames.src.base,
 									dirNames.src.server,
-									fileNames.app,
+									fileNames.func,
 								),
-							)) as AppModule;
+							)) as FuncModule;
 
 							const response = await handler(request);
 
@@ -128,10 +128,10 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 							process.cwd(),
 							dirNames.out.base,
 							dirNames.out.ssr,
-							fileNames.out.entry.app,
+							fileNames.out.entry.func,
 						),
 					).href
-				)) as AppModule;
+				)) as FuncModule;
 
 				previewServer.middlewares.use(nodeListener(handler));
 			};

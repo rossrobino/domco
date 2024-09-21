@@ -1,5 +1,5 @@
 import { dirNames, fileNames } from "../../constants/index.js";
-import type { Adapter, AppModule, Handler } from "../../types/index.js";
+import type { Adapter, FuncModule, Handler } from "../../types/index.js";
 import { codeSize } from "../../util/code-size/index.js";
 import { findFiles, toPosix } from "../../util/fs/index.js";
 import { getMaxLengths } from "../../util/get-max-lengths/index.js";
@@ -33,12 +33,12 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 
 		writeBundle(_options, bundle) {
 			if (ssr) {
-				const appChunk = bundle[fileNames.out.entry.app];
+				const funcChunk = bundle[fileNames.out.entry.func];
 
-				if (appChunk?.type === "chunk") {
-					// Only prerender if there's a named export "prerender" from app chunk.
-					// This prevents having to import the app if it is not needed for prerendering.
-					shouldPrerender = appChunk.exports.includes("prerender");
+				if (funcChunk?.type === "chunk") {
+					// Only prerender if there's a named export "prerender" from function chunk.
+					// This prevents having to import the func if it is not needed for prerendering.
+					shouldPrerender = funcChunk.exports.includes("prerender");
 				}
 			}
 		},
@@ -67,7 +67,7 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 				console.log(
 					style.italic(
 						style.dim(
-							"run `vite preview` to preview your app with Vite and Node.js.",
+							"run `vite preview` to preview your func with Vite and Node.js.",
 						),
 					),
 				);
@@ -80,7 +80,7 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 const domcoTag = style.cyan(`domco v${version}`);
 
 /**
- * Removes all of the `+page.html` files from the build, since the app entry will
+ * Removes all of the `+page.html` files from the build, since the function entry will
  * contain what it needs from virtual module imports.
  */
 const removeHtml = async () => {
@@ -143,14 +143,14 @@ const prerender = async () => {
 				// process.cwd(),
 				dirNames.out.base,
 				dirNames.out.ssr,
-				fileNames.out.entry.app,
+				fileNames.out.entry.func,
 			),
 		).href
-	)) as AppModule;
+	)) as FuncModule;
 
 	console.log(
 		style.dim(
-			`imported production app in ${getTime(prerenderStart, performance.now())}`,
+			`imported function in ${getTime(prerenderStart, performance.now())}`,
 		),
 	);
 

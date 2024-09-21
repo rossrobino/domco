@@ -1,18 +1,18 @@
 export const fileNames = {
-	/** app file name without extension */
-	app: "+app",
+	/** Function file name without extension. */
+	func: "+func",
 
-	/** page file name with extension */
+	/** Page file name with extension. */
 	page: "+page.html",
 
-	/** script file name without extension */
+	/** Script file name without extension. */
 	script: "+script",
 
 	/** output files */
 	out: {
 		/** names of the output entry points */
 		entry: {
-			app: "app.js",
+			func: "func.js",
 		},
 	},
 } as const;
@@ -40,8 +40,8 @@ export const headers = {
 } as const;
 
 export const ids = {
-	/** App entry point ID. */
-	app: `/${dirNames.src.server}/${fileNames.app}`,
+	/** Function entry point ID. */
+	func: `/${dirNames.src.server}/${fileNames.func}`,
 
 	/** Adapter entry ID for the entry point provided by the adapter. */
 	adapter: "domco:adapter",
