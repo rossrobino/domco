@@ -10,8 +10,8 @@ const getTemplateFiles: GetTemplateFile = ({ prettier, tailwind }) => {
 
 /** @type {Config} */
 export default {
-	useTabs: true,${
-		tailwind ? `\n\tplugins: ["prettier-plugin-tailwindcss"],\n` : ""
+	useTabs: true,\n${
+		tailwind ? `\tplugins: ["prettier-plugin-tailwindcss"],\n` : ""
 	}};\n`,
 		},
 		{
