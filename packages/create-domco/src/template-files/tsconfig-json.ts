@@ -20,7 +20,6 @@ const getTemplateFiles: GetTemplateFile = ({ pm }) => {
 		"resolveJsonModule": true,
 		"moduleDetection": "force",
 		"noEmit": true,
-		"jsx": "react-jsx",
 
 		/* Linting */
 		"strict": true,
