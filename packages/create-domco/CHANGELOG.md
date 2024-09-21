@@ -1,5 +1,11 @@
 # create-domco
 
+## 2.0.1
+
+### Patch Changes
+
+- 557722d: bump versions
+
 ## 2.0.0
 
 ### Major Changes
