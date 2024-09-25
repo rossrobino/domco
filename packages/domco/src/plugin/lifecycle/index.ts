@@ -67,7 +67,7 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 				console.log(
 					style.italic(
 						style.dim(
-							"run `vite preview` to preview your func with Vite and Node.js.",
+							"run `vite preview` to preview your application with Vite and Node.js.",
 						),
 					),
 				);
@@ -194,7 +194,13 @@ const prerender = async () => {
 		);
 
 		// Sort alphabetically for logs.
-		staticFiles.sort((a, b) => a.path.localeCompare(b.path));
+		staticFiles.sort(
+			(a, b) =>
+				a.path
+					.split("index.html")
+					.at(0)
+					?.localeCompare(b.path.split("index.html").at(0) ?? "") ?? 1,
+		);
 
 		const maxLengths = getMaxLengths(staticFiles);
 
