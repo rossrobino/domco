@@ -21,18 +21,20 @@ const getTemplateFiles: GetTemplateFile = ({
 		"dev": "vite",
 		"check": "tsc",
 		"build": "vite build",
-		"preview": "vite preview"${
-			prettier ? `,\n\t\t"format": "prettier --write ."` : ""
-		}
+		"preview": "vite preview"
+		${prettier ? `,"format": "prettier --write ."` : ""}
 	},
 	"devDependencies": {
-		"domco": "^${dependencies.domco}",${prettier ? `\n\t\t"prettier": "^${dependencies.prettier}",` : ""}${
+		"domco": "^${dependencies.domco}",
+		${prettier ? `"prettier": "^${dependencies.prettier}",` : ""}
+		${
 			prettier && tailwind
-				? `\n\t\t"prettier-plugin-tailwindcss": "^${dependencies.prettierTailwind}",`
+				? `"prettier-plugin-tailwindcss": "^${dependencies.prettierTailwind}",`
 				: ""
-		}${
+		}
+		${
 			tailwind
-				? `\n\t\t"tailwindcss": "^${dependencies.tailwind}",\n\t\t"autoprefixer": "^${dependencies.autoprefixer}",`
+				? `"tailwindcss": "^${dependencies.tailwind}","autoprefixer": "^${dependencies.autoprefixer}",`
 				: ""
 		}
 		"typescript": "^${dependencies.typescript}",

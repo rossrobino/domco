@@ -14,6 +14,7 @@ import * as p from "@clack/prompts";
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { format } from "prettier";
 import whichPmRuns from "which-pm-runs";
 
 type PackageManager =
@@ -33,7 +34,7 @@ type GetTemplateFileOptions = {
 
 export type GetTemplateFile = (
 	options: GetTemplateFileOptions,
-) => TemplateFile[];
+) => TemplateFile[] | Promise<TemplateFile[]>;
 
 /**
  * Programmatically create a new domco project.
@@ -98,7 +99,7 @@ export const createDomco = async () => {
 		projectName: getProjectName(dir),
 	};
 
-	await writeTemplateFiles(dir, getAllTemplateFiles(options));
+	await writeTemplateFiles(dir, await getAllTemplateFiles(options));
 
 	s.stop("Files created");
 
@@ -109,7 +110,7 @@ export const createDomco = async () => {
 	process.exit(0);
 };
 
-const getAllTemplateFiles: GetTemplateFile = (options) => {
+const getAllTemplateFiles: GetTemplateFile = async (options) => {
 	const getTemplateFileFunctions = [
 		func,
 		denoJson,
@@ -128,7 +129,24 @@ const getAllTemplateFiles: GetTemplateFile = (options) => {
 	const allTemplateFiles: TemplateFile[] = [];
 
 	for (const fn of getTemplateFileFunctions) {
-		allTemplateFiles.push(...fn(options));
+		allTemplateFiles.push(...(await fn(options)));
+	}
+
+	for (const templateFile of allTemplateFiles) {
+		// format files with prettier
+		const ext = path.extname(templateFile.name).slice(1);
+
+		if (["html", "css", "json", "md"].includes(ext)) {
+			templateFile.contents = await format(templateFile.contents, {
+				parser: ext,
+				useTabs: true,
+			});
+		} else if (["ts", "js"].includes(ext)) {
+			templateFile.contents = await format(templateFile.contents, {
+				parser: "babel-ts",
+				useTabs: true,
+			});
+		}
 	}
 
 	return allTemplateFiles;

@@ -9,14 +9,22 @@ const getTemplateFiles: GetTemplateFile = ({ prettier, tailwind }) => {
 			contents: `/** @import { Config } from "prettier" */
 
 /** @type {Config} */
-export default {
-	useTabs: true,\n${
-		tailwind ? `\tplugins: ["prettier-plugin-tailwindcss"],\n` : ""
-	}};\n`,
+export default {useTabs: true,${
+				tailwind ? `plugins: ["prettier-plugin-tailwindcss"],` : ""
+			}};`,
 		},
 		{
 			name: ".prettierignore",
-			contents: `.DS_Store\nnode_modules\n/dist\npackage-lock.json\npnpm-lock.yaml\nyarn.lock\nbun.lockb\n.vercel\n.cloudflare\n`,
+			contents: `.DS_Store
+node_modules
+/dist
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lockb
+.vercel
+.cloudflare
+`,
 		},
 	];
 };

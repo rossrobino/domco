@@ -12,14 +12,13 @@ const getTemplateFiles: GetTemplateFile = ({ lang, tailwind, pm }) => {
 import { domco } from "domco";
 ${
 	tailwind
-		? `import tailwindcss from "tailwindcss";\nimport autoprefixer from "autoprefixer";\n`
+		? `import tailwindcss from "tailwindcss"; import autoprefixer from "autoprefixer";`
 		: ``
 }
+
 export default defineConfig({
 	plugins: [domco()],${
-		tailwind
-			? `\n\tcss: {\n\t\tpostcss: {\n\t\t\tplugins: [tailwindcss(), autoprefixer()]\n\t\t}\n\t}`
-			: ``
+		tailwind ? `css: {postcss: {plugins: [tailwindcss(), autoprefixer()]}}` : ``
 	}
 });
 `,
