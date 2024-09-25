@@ -87,6 +87,15 @@
 		width: auto;
 		height: auto;
 	}
+
+	/* For youtube embeds */
+	iframe {
+		border: 2px solid theme(colors.muted.foreground);
+		border-radius: theme(borderRadius.DEFAULT);
+		background-color: theme(colors.muted.foreground);
+		aspect-ratio: 16 / 9;
+		width: 100%;
+	}
 }
 
 @layer components {

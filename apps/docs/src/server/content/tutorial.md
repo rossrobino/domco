@@ -4,6 +4,10 @@
 
 The following documentation covers the basics of creating a site and all of the features domco provides in addition to Vite. See the [Vite documentation](https://vitejs.dev/) for more information and configuration options.
 
+<drab-youtube aria-label="YouTube Tutorial" uid="jWnzCZru6cU">
+    <iframe data-content loading="lazy"></iframe>
+</drab-youtube>
+
 ## Create a new project
 
 To get started, you'll need to have [Node](https://nodejs.org) (recommended), [Bun](https://bun.sh/), or [Deno](https://deno.com) (experimental support) or installed on your computer. Then run the [`create-domco`](https://github.com/rossrobino/domco/tree/main/packages/create-domco) script to create a new project. If you already have an existing client-side Vite project check out the [migration instructions](/migrate).

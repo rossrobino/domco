@@ -2,6 +2,7 @@ import "@/client/tailwind.css";
 import "drab/details/define";
 import "drab/dialog/define";
 import "drab/prefetch/define";
+import "drab/youtube/define";
 
 const toCopy = document.querySelectorAll("pre, .copy-text");
 toCopy.forEach((pre) => {
