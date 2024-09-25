@@ -1,5 +1,12 @@
 # create-domco
 
+## 2.0.2
+
+### Patch Changes
+
+- a6c55c9: removes react jsx default from tsconfig
+- d5d4e35: format template files with prettier before writing
+
 ## 2.0.1
 
 ### Patch Changes

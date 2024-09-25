@@ -1,5 +1,12 @@
 # domco
 
+## 2.0.1
+
+### Patch Changes
+
+- 8f9be00: Include Vite 6 as peer dependency to support when released - tested with beta
+- 135fda4: Improves build logs
+
 ## 2.0.0
 
 ### Major Changes
