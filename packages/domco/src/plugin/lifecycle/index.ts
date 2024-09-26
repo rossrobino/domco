@@ -158,6 +158,9 @@ const prerender = async () => {
 
 	const staticFilePromises: Promise<StaticFile>[] = [];
 
+	// sort for logs
+	prerender.sort();
+
 	for (const staticPath of prerender) {
 		if (!staticPath.startsWith("/")) {
 			throw Error(
@@ -191,15 +194,6 @@ const prerender = async () => {
 	if (staticFiles?.length) {
 		console.log(
 			`${style.green("✓")} ${staticFiles.length} page${staticFiles.length > 1 ? "s" : ""} generated.`,
-		);
-
-		// Sort alphabetically for logs.
-		staticFiles.sort(
-			(a, b) =>
-				a.path
-					.split("index.html")
-					.at(0)
-					?.localeCompare(b.path.split("index.html").at(0) ?? "") ?? 1,
 		);
 
 		const maxLengths = getMaxLengths(staticFiles);
@@ -237,9 +231,7 @@ const generateRoute = async (
 ): Promise<StaticFile> => {
 	const startTime = performance.now();
 
-	const res = await handler(
-		new Request(`http://0.0.0.0:4545${toPosix(staticPath)}`),
-	);
+	const res = await handler(new Request(`http://0.0.0.0:4545${staticPath}`));
 
 	if (res.status === 404) {
 		throw new Error(
@@ -249,23 +241,32 @@ const generateRoute = async (
 
 	const code = await res.text();
 
-	const outDir = path.join(dirNames.out.base, dirNames.out.client.base);
+	const outDirBase = path.join(dirNames.out.base, dirNames.out.client.base);
 
-	const outDirPath = path.join(process.cwd(), `${outDir}${staticPath}`);
+	if (!path.basename(staticPath).includes(".")) {
+		// Does not have extension, add `/index.html`.
+		staticPath = path.join(staticPath, "index.html");
+	}
 
-	await fs.mkdir(outDirPath, { recursive: true });
-	await fs.writeFile(`${outDirPath}/index.html`, code, "utf-8");
+	const outPath = path.join(process.cwd(), outDirBase, staticPath);
+
+	await fs.mkdir(path.dirname(outPath), { recursive: true });
+	await fs.writeFile(outPath, code, "utf-8");
 
 	const { kB, gzip } = codeSize(code);
 
+	let styled = style.dim(outDirBase + "/");
+
+	if (staticPath.endsWith("css")) {
+		styled += style.magenta(staticPath.slice(1));
+	} else if (staticPath.endsWith("js")) {
+		styled += style.cyan(staticPath.slice(1));
+	} else {
+		styled += style.green(staticPath.slice(1));
+	}
+
 	return {
-		path: toPosix(
-			`${style.dim(outDir + "/")}${style.green(
-				staticPath.slice(1) +
-					(staticPath === "/" || staticPath === "" ? "" : "/") +
-					"index.html",
-			)}`,
-		),
+		path: toPosix(styled),
 		kB,
 		gzip,
 		time: getTime(startTime, performance.now()),

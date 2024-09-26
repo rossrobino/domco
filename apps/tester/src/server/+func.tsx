@@ -7,7 +7,12 @@ import { Hono } from "hono";
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 
-export const prerender: Prerender = ["/static-page", "/half-static/static"];
+export const prerender: Prerender = [
+	"/static-page",
+	"/half-static/static",
+	"/static.css",
+	"/static.json",
+];
 
 export const app = new Hono();
 
@@ -31,6 +36,11 @@ app.all("/", async (c) => {
 	}
 
 	return c.html(html + new Date().toUTCString());
+});
+
+app.get("/static.json", (c) => c.json({ prerender: Date.now() }));
+app.get("/static.css", (c) => {
+	return c.text("h1 { color: blue }", 200, { "Content-Type": "text/css" });
 });
 
 app.get("/static-page", (c) =>

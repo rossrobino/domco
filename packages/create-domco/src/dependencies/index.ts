@@ -1,5 +1,5 @@
 export const dependencies = {
-	domco: "2.0.1",
+	domco: "2.1.0",
 	autoprefixer: "10.4.20",
 	prettier: "3.3.3",
 	prettierTailwind: "0.6.8",

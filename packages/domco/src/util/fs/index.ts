@@ -95,7 +95,11 @@ export const fileExists = async (filePath: PathLike) => {
 	}
 };
 
-/** Replace all forward slashes with back slashes. */
+/**
+ *
+ * @param s string to modify.
+ * @returns string with all forward slashes replaced with back slashes.
+ */
 export const toPosix = (s: string) => s.replaceAll("\\", "/");
 
 /**

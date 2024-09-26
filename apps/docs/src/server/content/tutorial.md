@@ -159,14 +159,24 @@ export const handler = async (req: Request) => {
 
 ## Prerender
 
-Export a `prerender` variable to prerender routes that respond with HTML.
+Export a `prerender` variable to prerender routes.
 
 ```ts
 // src/server/+func.ts
-export const prerender = ["/", "/post-1", "/post-2"];
+export const prerender = ["/", "/post-1", "/post-2", "/some.css", "/some.json"];
 ```
 
-After the Vite build is complete, domco will import your function and request the routes provided. The responses will be written into `dist/client/(prerender-path)/index.html` files upon build.
+After the Vite build is complete, domco will import your function and request the routes provided. The responses will be written to `dist/client/(prerender-path)` files upon build. If the path does not have an extension, `/index.html` will be added to the end of the file path to write.
+
+For the export above, domco would request each path and generate the following files from the responses.
+
+| Prerender Path | File Created                    |
+| -------------- | ------------------------------- |
+| `/`            | `dist/client/index.html`        |
+| `/post-1`      | `dist/client/post-1/index.html` |
+| `/post-2`      | `dist/client/post-2/index.html` |
+| `/some.css`    | `dist/client/some.css`          |
+| `/some.json`   | `dist/client/some.json`         |
 
 If you are using an [adapter](/deploy#adapters), these static files will be served in front of your request handler. So when an `index.html` file is found for the route, it is served directly without hitting your handler.
 
