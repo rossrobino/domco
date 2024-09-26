@@ -1,5 +1,11 @@
 # create-domco
 
+## 2.0.3
+
+### Patch Changes
+
+- 3ac7c4b: Adds support for prerendering any file instead of just `html`. See [docs](https://domco.robino.dev/tutorial#prerender)
+
 ## 2.0.2
 
 ### Patch Changes
