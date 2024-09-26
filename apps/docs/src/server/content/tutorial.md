@@ -5,7 +5,7 @@
 The following documentation covers the basics of creating a site and all of the features domco provides in addition to Vite. See the [Vite documentation](https://vitejs.dev/) for more information and configuration options.
 
 <drab-youtube aria-label="YouTube Tutorial" uid="jWnzCZru6cU">
-    <iframe data-content loading="lazy"></iframe>
+    <iframe data-content></iframe>
 </drab-youtube>
 
 ## Create a new project
