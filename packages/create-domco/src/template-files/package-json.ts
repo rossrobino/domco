@@ -1,4 +1,3 @@
-import { dependencies } from "../dependencies/index.js";
 import type { GetTemplateFile } from "../index.js";
 
 const getTemplateFiles: GetTemplateFile = ({
@@ -6,6 +5,7 @@ const getTemplateFiles: GetTemplateFile = ({
 	tailwind,
 	pm,
 	projectName,
+	dependencies,
 }) => {
 	if (pm === "deno") return [];
 

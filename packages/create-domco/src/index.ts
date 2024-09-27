@@ -1,3 +1,4 @@
+import { getDependencies } from "./dependencies/index.js";
 import denoJson from "./template-files/deno-json.js";
 import envTypes from "./template-files/env-types.js";
 import favicon from "./template-files/favicon.js";
@@ -30,6 +31,7 @@ type GetTemplateFileOptions = {
 	tailwind: boolean;
 	prettier: boolean;
 	projectName: string;
+	dependencies: Record<string, string>;
 };
 
 export type GetTemplateFile = (
@@ -97,6 +99,7 @@ export const createDomco = async () => {
 		tailwind: extras.includes("tailwind"),
 		pm: getPackageManager(),
 		projectName: getProjectName(dir),
+		dependencies: await getDependencies(),
 	};
 
 	await writeTemplateFiles(dir, await getAllTemplateFiles(options));

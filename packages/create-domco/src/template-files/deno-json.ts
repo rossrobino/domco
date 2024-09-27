@@ -1,7 +1,11 @@
-import { dependencies } from "../dependencies/index.js";
 import type { GetTemplateFile } from "../index.js";
 
-const getTemplateFiles: GetTemplateFile = ({ pm, prettier, tailwind }) => {
+const getTemplateFiles: GetTemplateFile = ({
+	pm,
+	prettier,
+	tailwind,
+	dependencies,
+}) => {
 	if (pm !== "deno") return [];
 
 	return [
