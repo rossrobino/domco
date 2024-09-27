@@ -18,18 +18,6 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 		name: "domco:configure-server",
 		apply: "serve",
 
-		transform(code, id) {
-			// inject vite client to client entries, in case the script is added
-			// without adding an html file. This is a easier than injecting a tag
-			// into the html response, but will only work if a script is added.
-			if (id.includes(fileNames.script)) {
-				return {
-					// put it at the end to not mess up line numbers
-					code: `${code}\n\n// dev\nimport "/@vite/client";`,
-				};
-			}
-		},
-
 		async configureServer(devServer) {
 			return async () => {
 				for (const mw of adapter?.devMiddleware ?? []) {
@@ -49,11 +37,15 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 								),
 							)) as FuncModule;
 
-							const response = await handler(request);
+							const res = await handler(request);
 
-							if (!(response instanceof Response)) throw response;
+							if (!(res instanceof Response)) throw res;
 
-							return response;
+							if (res.headers.get("Content-Type")?.startsWith("text/html")) {
+								return injectViteClient(res);
+							}
+
+							return res;
 						},
 						{
 							onError: (e) => {
@@ -137,4 +129,42 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 			};
 		},
 	};
+};
+
+/**
+ * Injects the vite client script into the response body for refresh in dev.
+ *
+ * @param res
+ * @returns the modified response
+ */
+const injectViteClient = (res: Response) => {
+	if (!res.body) return res;
+
+	const viteClient = new TextEncoder().encode(
+		'<script type="module" src="/@vite/client"></script>',
+	);
+
+	const reader = res.body.getReader();
+
+	const stream = new ReadableStream({
+		async start(controller) {
+			controller.enqueue(viteClient);
+
+			while (true) {
+				const result = await reader.read();
+
+				if (result.done) {
+					controller.close();
+					break;
+				}
+
+				controller.enqueue(result.value);
+			}
+		},
+	});
+
+	const headers = new Headers(res.headers);
+	headers.delete("Content-Length");
+
+	return new Response(stream, { headers, status: res.status });
 };
