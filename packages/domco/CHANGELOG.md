@@ -1,5 +1,11 @@
 # domco
 
+## 2.1.2
+
+### Patch Changes
+
+- d84a2c8: Inject vite client into all html responses for better dev experience. Now will refresh even when there is only html returned from a response.
+
 ## 2.1.1
 
 ### Patch Changes
