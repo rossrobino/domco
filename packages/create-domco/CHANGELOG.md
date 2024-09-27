@@ -1,5 +1,11 @@
 # create-domco
 
+## 2.0.5
+
+### Patch Changes
+
+- e899065: fetch latest version of domco from npm
+
 ## 2.0.4
 
 ### Patch Changes
