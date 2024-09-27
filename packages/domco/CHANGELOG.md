@@ -1,5 +1,11 @@
 # domco
 
+## 2.1.1
+
+### Patch Changes
+
+- e783a67: clean up empty directories after prerendering
+
 ## 2.1.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # create-domco
 
+## 2.0.4
+
+### Patch Changes
+
+- e783a67: clean up empty directories after prerendering
+
 ## 2.0.3
 
 ### Patch Changes
