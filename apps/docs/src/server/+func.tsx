@@ -1,31 +1,17 @@
+import { mdProcessor } from "./lib/md";
 import { Edit } from "@/server/components/Edit";
 import { Hero } from "@/server/components/Hero";
 import { Layout } from "@/server/components/Layout";
 import preview from "@/server/content/_preview.md?raw";
 import apiReference from "@/server/content/generated/globals.md?raw";
-import { MarkdownProcessor } from "@robino/md";
 import { tags as rootTags } from "client:script";
 import { tags as docTags } from "client:script/docs";
 import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { etag } from "hono/etag";
 import { raw } from "hono/html";
-import langBash from "shiki/langs/bash.mjs";
-import langHtml from "shiki/langs/html.mjs";
-import langTsx from "shiki/langs/tsx.mjs";
 
 export const prerender: Prerender = ["/", "/api-reference"];
-
-const mdProcessor = new MarkdownProcessor({
-	highlighter: {
-		langs: [langTsx, langBash, langHtml],
-		langAlias: {
-			ts: "tsx",
-			js: "tsx",
-			jsx: "tsx",
-		},
-	},
-});
 
 const app = new Hono();
 

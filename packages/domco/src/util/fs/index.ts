@@ -147,3 +147,33 @@ export const copyServer = async (outDir: string) => {
 		errorOnExist: false,
 	});
 };
+
+/**
+ * Recursively removes empty directories from a directory.
+ *
+ * @param dir directory to remove empty directories from.
+ */
+export const removeEmptyDirs = async (dir: string) => {
+	const stats = await fs.lstat(dir);
+	if (!stats.isDirectory()) return;
+
+	let files = await fs.readdir(dir);
+
+	if (files.length > 0) {
+		const tasks = [];
+
+		for (const file of files) {
+			tasks.push(removeEmptyDirs(path.join(dir, file)));
+		}
+
+		await Promise.all(tasks);
+
+		// read the directory again in case it's now empty,
+		// then it will be removed below
+		files = await fs.readdir(dir);
+	}
+
+	if (files.length === 0) {
+		await fs.rmdir(dir);
+	}
+};

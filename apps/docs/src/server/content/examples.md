@@ -2,7 +2,49 @@
 
 <on-this-page></on-this-page>
 
-Check out the [domco-examples](https://github.com/rossrobino/domco-examples) repository for the complete suite of examples including SSR framework integrations. Here are a few basic examples of common integrations and workflows.
+Here are a few basic examples of common integrations and workflows. Check out the [domco-examples](https://github.com/rossrobino/domco-examples) repository for the complete suite of examples including SSR framework integrations.
+
+## Multi-Page Application
+
+Given the following directory structure, you can create a multi-page application.
+
+```txt
+src/
+├── client/
+│	├── bar
+│   │   └── +page.html
+│   └── foo
+│       └── +page.html
+└── server/
+	└── +func.ts
+```
+
+Import the pages and send them in a `Response` based on the `pathname`.
+
+```ts
+// src/server/+func.ts
+// transformed src/client/bar/+page.html
+import { html as bar } from "client:page/bar";
+// transformed src/client/foo/+page.html
+import { html as foo } from "client:page/foo";
+import type { Handler, Prerender } from "domco";
+
+export const handler: Handler = (req) => {
+	const { pathname } = new URL(req.url); // get the pathname from the request
+
+	// serve the html based on the pathname
+	if (pathname === "/bar") {
+		return new Response(bar, { headers: { "Content-Type": "text/html" } });
+	} else if (pathname === "/foo") {
+		return new Response(foo, { headers: { "Content-Type": "text/html" } });
+	}
+
+	return new Response("Not found", { status: 404 });
+};
+
+// if you want to prerender the routes to static pages during build
+export const prerender: Prerender = ["/bar", "/foo"];
+```
 
 ## Server Frameworks
 

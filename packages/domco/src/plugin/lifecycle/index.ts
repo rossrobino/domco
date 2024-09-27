@@ -1,7 +1,7 @@
 import { dirNames, fileNames } from "../../constants/index.js";
 import type { Adapter, FuncModule, Handler } from "../../types/index.js";
 import { codeSize } from "../../util/code-size/index.js";
-import { findFiles, toPosix } from "../../util/fs/index.js";
+import { findFiles, removeEmptyDirs, toPosix } from "../../util/fs/index.js";
 import { getMaxLengths } from "../../util/get-max-lengths/index.js";
 import { getTime } from "../../util/perf/index.js";
 import { style } from "../../util/style/index.js";
@@ -54,11 +54,15 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 					},
 				});
 			} else {
-				const tasks: Promise<any>[] = [removeHtml()];
+				const outDir = `${dirNames.out.base}/${dirNames.out.client.base}`;
+
+				const tasks: Promise<any>[] = [removeHtml(outDir)];
 
 				if (shouldPrerender) tasks.push(prerender());
 
 				await Promise.all(tasks);
+
+				await removeEmptyDirs(outDir);
 
 				console.log();
 
@@ -83,9 +87,9 @@ const domcoTag = style.cyan(`domco v${version}`);
  * Removes all of the `+page.html` files from the build, since the function entry will
  * contain what it needs from virtual module imports.
  */
-const removeHtml = async () => {
+const removeHtml = async (dir: string) => {
 	const pageFiles = await findFiles({
-		dir: `${dirNames.out.base}/${dirNames.out.client.base}`,
+		dir,
 		checkEndings: [fileNames.page],
 	});
 
