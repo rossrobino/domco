@@ -80,6 +80,33 @@ app.use(eventHandler(() => html));
 export const handler = toWebHandler(app);
 ```
 
+### Elysia
+
+[Elysia](https://elysiajs.com) is an ergonomic server framework for humans. It has end-to-end type safety, type integrity, and exceptional developer experience. Supercharged by [Bun](https://bun.sh/).
+
+```ts
+// src/server/+func.ts
+import { html } from "client:page";
+import { Elysia } from "elysia";
+
+const app = new Elysia().get("/", () => {
+	return new Response(html, {
+		headers: { "Content-Type": "text/html" },
+	});
+});
+
+export const handler = app.handle;
+```
+
+```json {4}
+// package.json
+{
+	"scripts": {
+		"dev": "bunx --bun vite"
+	}
+}
+```
+
 ## Routers
 
 If you just want to add a router, and create your own context for each route, here's an example.
