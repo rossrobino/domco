@@ -67,10 +67,10 @@ export const configPlugin = async (
 						output: {
 							entryFileNames({ name }) {
 								if (name.startsWith("/")) name = name.slice(1);
-								return `${isSsrBuild ? "" : dirNames.out.client.immutable + "/"}${name}${isSsrBuild ? "" : "/[hash]"}.js`;
+								return `${isSsrBuild ? "" : dirNames.out.client.immutable + "/"}${name}${isSsrBuild ? "" : ".[hash]"}.js`;
 							},
-							assetFileNames: `${isSsrBuild ? "" : dirNames.out.client.immutable + "/"}assets/[name]/[hash][extname]`,
-							chunkFileNames: `${isSsrBuild ? "" : dirNames.out.client.immutable + "/"}chunks/[name]/[hash].js`,
+							assetFileNames: `${isSsrBuild ? "" : dirNames.out.client.immutable + "/"}assets/[name].[hash][extname]`,
+							chunkFileNames: `${isSsrBuild ? "" : dirNames.out.client.immutable + "/"}chunks/[name].[hash].js`,
 						},
 					},
 					// `rel=modulepreload` is supported in all major browsers as of 2023
