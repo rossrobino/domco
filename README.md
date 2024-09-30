@@ -1,6 +1,6 @@
 # domco
 
-## A Minimal Full-Stack JavaScript Framework
+## Minimal Full-Stack JavaScript
 
 ```bash
 npm create domco@latest

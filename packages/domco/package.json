@@ -1,6 +1,6 @@
 {
 	"name": "domco",
-	"description": "A Minimal Full-Stack JavaScript Framework",
+	"description": "Minimal Full-Stack JavaScript",
 	"version": "2.1.2",
 	"author": {
 		"name": "Ross Robino",
@@ -13,9 +13,11 @@
 	"homepage": "https://domco.robino.dev",
 	"license": "MIT",
 	"keywords": [
-		"hono",
 		"vite",
-		"vite-plugin"
+		"vite-plugin",
+		"SSR",
+		"SSG",
+		"vanilla-js"
 	],
 	"type": "module",
 	"engines": {

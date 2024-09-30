@@ -3,7 +3,9 @@ import type { FC } from "hono/jsx";
 export const Hero: FC = () => {
 	return (
 		<section class="flex flex-col">
-			<h1>A Minimal Full-Stack JavaScript Framework</h1>
+			<h1>
+				Minimal <span class="whitespace-nowrap">Full-Stack</span> JavaScript
+			</h1>
 			<Npm />
 		</section>
 	);

@@ -25,10 +25,7 @@ export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
 					/>
 					{client.map((tags) => tags)}
 					<link rel="icon" type="image/svg+xml" href="/circle.svg" />
-					<meta
-						name="description"
-						content="A Minimal Full-Stack JavaScript Framework."
-					/>
+					<meta name="description" content="Minimal Full-Stack JavaScript" />
 					<title>{title}</title>
 				</head>
 				<body class="tabular-nums">
