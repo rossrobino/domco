@@ -1,5 +1,11 @@
 # create-domco
 
+## 2.0.6
+
+### Patch Changes
+
+- 0b2ee01: fix package.json formatting
+
 ## 2.0.5
 
 ### Patch Changes
