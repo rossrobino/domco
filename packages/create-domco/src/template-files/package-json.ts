@@ -31,13 +31,11 @@ const getTemplateFiles: GetTemplateFile = ({
 			prettier && tailwind
 				? `"prettier-plugin-tailwindcss": "^${dependencies.prettierTailwind}",`
 				: ""
-		}
-		${
+		}${
 			tailwind
 				? `"tailwindcss": "^${dependencies.tailwind}","autoprefixer": "^${dependencies.autoprefixer}",`
 				: ""
-		}
-		"typescript": "^${dependencies.typescript}",
+		}"typescript": "^${dependencies.typescript}",
 		"vite": "^${dependencies.vite}"
 	}
 }
