@@ -79,7 +79,7 @@ The [Vercel](https://vercel.com) adapter outputs your application to the [Build 
 
 ### Creating an adapter
 
-If you'd like to deploy a domco func to a different provider, and you need many configuration steps for this to take place you can create an adapter.
+If you'd like to deploy a domco application to a different provider, and you need many configuration steps for this to take place you can create an adapter.
 
 Check out the [current adapters](https://github.com/rossrobino/domco/tree/main/packages/domco/src/adapter) to see how to make your own.
 
