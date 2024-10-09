@@ -155,10 +155,15 @@ const prerender = async () => {
 
 	if (!prerender) return;
 
-	const staticFilePromises: Promise<StaticFile>[] = [];
+	if (prerender instanceof Set) {
+		// convert to array (can't sort a set)
+		prerender = Array.from(prerender);
+	}
 
 	// sort for logs
 	prerender.sort();
+
+	const staticFilePromises: Promise<StaticFile>[] = [];
 
 	for (const staticPath of prerender) {
 		if (!staticPath.startsWith("/")) {

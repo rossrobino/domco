@@ -163,10 +163,18 @@ Export a `prerender` variable to prerender routes.
 
 ```ts
 // src/server/+func.ts
-export const prerender = ["/", "/post-1", "/post-2", "/some.css", "/some.json"];
+import type { Prerender } from "domco";
+
+export const prerender: Prerender = [
+	"/",
+	"/post-1",
+	"/post-2",
+	"/some.css",
+	"/some.json",
+];
 ```
 
-After the Vite build is complete, domco will import your function and request the routes provided. The responses will be written to `dist/client/(prerender-path)` files upon build. If the path does not have an extension, `/index.html` will be added to the end of the file path to write.
+After the Vite build is complete, domco will import the `handler` from your function module and request the routes provided. The responses will be written to `dist/client/(prerender-path)` files upon build. If the path does not have an extension, `/index.html` will be added to the end of the file path to write.
 
 For the export above, domco would request each path and generate the following files from the responses.
 

@@ -12,7 +12,7 @@ import { Hono } from "hono";
 import { etag } from "hono/etag";
 import { raw } from "hono/html";
 
-export const prerender: Prerender = ["/", "/api-reference"];
+export const prerender: Prerender = new Set(["/", "/api-reference"]);
 
 const app = new Hono();
 
@@ -66,7 +66,7 @@ for (const [fileName, md] of Object.entries(content)) {
 
 		const pathName = `/${slug}`;
 
-		prerender.push(pathName);
+		prerender.add(pathName);
 
 		app.get(pathName, (c) => {
 			return c.render(

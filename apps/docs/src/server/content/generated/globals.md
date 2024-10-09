@@ -307,7 +307,7 @@ Helper type for a type that could be a promise.
 
 ### Prerender
 
-> **Prerender**: `string`[]
+> **Prerender**: `string`[] \| `Set`\<`string`\>
 
 Paths to prerender at build time.
 
