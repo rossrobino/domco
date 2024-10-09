@@ -55,6 +55,24 @@ export const createDomco = async () => {
 		process.exit(0);
 	}
 
+	try {
+		const existingFiles = await fs.readdir(dir);
+
+		if (existingFiles.length) {
+			const proceed = await p.confirm({
+				message: `The \`${dir}\` directory is not empty, continue?`,
+				initialValue: false,
+			});
+
+			if (!proceed || p.isCancel(proceed)) {
+				p.cancel("Operation cancelled.");
+				process.exit(0);
+			}
+		}
+	} catch {
+		// will throw if dir doesn't exist - OK, should proceed
+	}
+
 	const lang = await p.select({
 		message: "Select language",
 		options: [
