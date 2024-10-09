@@ -42,7 +42,7 @@ export const adapter: AdapterBuilder = async () => {
 				 */
 				code: `
 					import { handler } from "${funcId}";
-					import { serveDir } from "https://jsr.io/@std/http/1.0.6/file_server.ts";
+					import { serveDir } from "https://jsr.io/@std/http/1.0.7/file_server.ts";
 
 					const getStatic = (req) => {
 						return serveDir(req, {
