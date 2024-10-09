@@ -143,12 +143,7 @@ const prerender = async () => {
 	let { handler, prerender } = (await import(
 		/* @vite-ignore */
 		url.pathToFileURL(
-			path.join(
-				// process.cwd(),
-				dirNames.out.base,
-				dirNames.out.ssr,
-				fileNames.out.entry.func,
-			),
+			path.join(dirNames.out.base, dirNames.out.ssr, fileNames.out.entry.func),
 		).href
 	)) as FuncModule;
 
