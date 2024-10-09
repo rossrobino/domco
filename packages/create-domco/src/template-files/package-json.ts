@@ -25,8 +25,7 @@ const getTemplateFiles: GetTemplateFile = ({
 		${prettier ? `,"format": "prettier --write ."` : ""}
 	},
 	"devDependencies": {
-		"domco": "^${dependencies.domco}",
-		${prettier ? `"prettier": "^${dependencies.prettier}",` : ""}
+		"domco": "^${dependencies.domco}",${prettier ? `"prettier": "^${dependencies.prettier}",` : ""}
 		${
 			prettier && tailwind
 				? `"prettier-plugin-tailwindcss": "^${dependencies.prettierTailwind}",`

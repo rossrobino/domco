@@ -21,7 +21,7 @@ const getTemplateFiles: GetTemplateFile = ({
 			prettier ? `,\n\t\t"format": "deno run -A npm:prettier --write ."` : ""
 		}
 	},
-	"nodeModulesDir": true,
+	"nodeModulesDir": "manual",
 	"imports": {
 		"domco": "npm:domco@^${dependencies.domco}",${prettier ? `\n\t\t"prettier": "npm:prettier@^${dependencies.prettier}",` : ""}${
 			prettier && tailwind

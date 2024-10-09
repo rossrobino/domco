@@ -10,24 +10,24 @@ The following documentation covers the basics of creating a site and all of the 
 
 ## Create a new project
 
-To get started, you'll need to have [Node](https://nodejs.org) (recommended), [Bun](https://bun.sh/), or [Deno](https://deno.com) (experimental support) or installed on your computer. Then run the [`create-domco`](https://github.com/rossrobino/domco/tree/main/packages/create-domco) script to create a new project. If you already have an existing client-side Vite project check out the [migration instructions](/migrate).
+To get started, you'll need to have [Node](https://nodejs.org) (recommended), [Bun](https://bun.sh/), or [Deno](https://deno.com) or installed on your computer. Then run the [`create-domco`](https://github.com/rossrobino/domco/tree/main/packages/create-domco) script to create a new project. If you already have an existing client-side Vite project check out the [migration instructions](/migrate).
 
 ### Node
 
 ```bash
-npm create domco@latest
+npm create domco@__CREATE_VERSION__
 ```
 
 ### Bun
 
 ```bash
-bun create domco@latest
+bun create domco@__CREATE_VERSION__
 ```
 
 ### Deno
 
 ```bash
-deno run -A npm:create-domco@latest
+deno run -A npm:create-domco@__CREATE_VERSION__
 ```
 
 ## Entry Points

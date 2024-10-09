@@ -6,6 +6,7 @@ import preview from "@/server/content/_preview.md?raw";
 import apiReference from "@/server/content/generated/globals.md?raw";
 import { tags as rootTags } from "client:script";
 import { tags as docTags } from "client:script/docs";
+import { version } from "create-domco/package.json";
 import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { etag } from "hono/etag";
@@ -59,7 +60,9 @@ for (const [fileName, md] of Object.entries(content)) {
 	const slug = fileName.split("/").at(-1)?.split(".").at(0);
 
 	if (slug && !slug.startsWith("_")) {
-		const html = raw(mdProcessor.process(md).html);
+		const html = raw(
+			mdProcessor.process(md).html.replaceAll("__CREATE_VERSION__", version),
+		);
 
 		const pathName = `/${slug}`;
 

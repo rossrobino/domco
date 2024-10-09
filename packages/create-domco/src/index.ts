@@ -195,7 +195,7 @@ const getPackageManager = (): PackageManager => {
  */
 const getNote = ({ dir, pm }: GetTemplateFileOptions) => {
 	const cd = dir === "." ? "" : `cd ${dir}\n`;
-	const install = pm === "deno" ? "" : `${pm} install\n`;
+	const install = `${pm} install\n`;
 	const run = `${pm} run dev`;
 
 	return `${cd}${install}${run}`;
