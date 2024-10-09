@@ -1,5 +1,13 @@
 # create-domco
 
+## 2.0.9
+
+### Patch Changes
+
+- 8c59699: `prerender` export can now be a `Set` in addition to being an `Array`
+- Updated dependencies [8c59699]
+  - domco@2.1.4
+
 ## 2.0.8
 
 ### Patch Changes
