@@ -77,9 +77,9 @@
 		"doc": "typedoc --options typedoc.config.js"
 	},
 	"devDependencies": {
-		"typedoc": "^0.26.7",
-		"typedoc-plugin-markdown": "^4.2.7",
-		"vitest": "^2.1.1"
+		"typedoc": "^0.26.8",
+		"typedoc-plugin-markdown": "^4.2.9",
+		"vitest": "^2.1.2"
 	},
 	"peerDependencies": {
 		"vite": "^5.4.0 || ^6.0.0"
