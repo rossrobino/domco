@@ -1,4 +1,3 @@
-import { version } from "create-domco/package.json";
 import type { FC } from "hono/jsx";
 
 export const Hero: FC = () => {
@@ -13,7 +12,7 @@ export const Hero: FC = () => {
 };
 
 const Npm: FC = () => {
-	const words = `npm create domco@${version}`.split(" ");
+	const words = `npm create domco`.split(" ");
 	const chars = words.map((w) => w.split(""));
 	return (
 		<div id="npm" class="copy-text font-mono">
