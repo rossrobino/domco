@@ -44,7 +44,7 @@ export const adapter: AdapterBuilder = async () => {
 					import { handler } from "${funcId}";
 					import { serveDir } from "https://jsr.io/@std/http/1.0.6/file_server.ts";
 
-					const getStatic = async (req) => {
+					const getStatic = (req) => {
 						return serveDir(req, {
 							fsRoot: "./${dirNames.out.base}/${dirNames.out.client.base}",
 							quiet: true,
