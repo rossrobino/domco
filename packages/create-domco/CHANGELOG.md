@@ -1,5 +1,11 @@
 # create-domco
 
+## 2.0.8
+
+### Patch Changes
+
+- 185c105: show warning if the target directory exists and is not empty
+
 ## 2.0.7
 
 ### Patch Changes
