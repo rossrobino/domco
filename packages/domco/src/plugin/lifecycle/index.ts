@@ -197,7 +197,7 @@ const prerender = async () => {
 
 	if (staticFiles?.length) {
 		console.log(
-			`${style.green("✓")} ${staticFiles.length} page${staticFiles.length > 1 ? "s" : ""} generated.`,
+			`${style.green("✓")} ${staticFiles.length} file${staticFiles.length > 1 ? "s" : ""} generated.`,
 		);
 
 		const maxLengths = getMaxLengths(staticFiles);
