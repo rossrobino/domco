@@ -1,13 +1,9 @@
 import type { GetTemplateFile } from "../index.js";
 
-const getTemplateFiles: GetTemplateFile = ({ lang, tailwind, pm }) => {
-	// Required in vite 5 since no package.json in deno
-	// I think it is fixed in vite 6 - can just use ts
-	const ext = pm === "deno" ? `m${lang}` : lang;
-
+const getTemplateFiles: GetTemplateFile = ({ lang, tailwind }) => {
 	return [
 		{
-			name: `vite.config.${ext}`,
+			name: `vite.config.${lang}`,
 			contents: `import { defineConfig } from "vite";
 import { domco } from "domco";
 ${
