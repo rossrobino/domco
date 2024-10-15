@@ -80,7 +80,7 @@ Passed into Vite `config.ssr.target`.
 
 #### Defined in
 
-[types/index.ts:60](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L60)
+[types/index.ts:63](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L63)
 
 ---
 
@@ -107,7 +107,7 @@ Pass any options for the adapter in as a generic.
 
 #### Defined in
 
-[types/index.ts:90](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L90)
+[types/index.ts:93](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L93)
 
 ---
 
@@ -151,7 +151,7 @@ The name of the entry point without extension.
 
 #### Defined in
 
-[types/index.ts:44](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L44)
+[types/index.ts:47](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L47)
 
 ---
 
@@ -165,7 +165,7 @@ Middleware used in the Vite server for dev and preview.
 
 #### Defined in
 
-[types/index.ts:41](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L41)
+[types/index.ts:44](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L44)
 
 ---
 
@@ -222,7 +222,7 @@ export default defineConfig({
 
 #### Defined in
 
-[types/index.ts:116](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L116)
+[types/index.ts:119](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L119)
 
 ---
 
@@ -307,7 +307,7 @@ Helper type for a type that could be a promise.
 
 ### Prerender
 
-> **Prerender**: `string`[] \| `Set`\<`string`\>
+> **Prerender**: `string`[] \| `Set`\<`string`\> \| () => [`MaybePromise`](globals.md#maybepromiset)\<`string`[] \| `Set`\<`string`\>\>
 
 Paths to prerender at build time.
 
