@@ -155,6 +155,10 @@ const prerender = async () => {
 
 	if (!prerender) return;
 
+	if (typeof prerender === "function") {
+		prerender = await prerender();
+	}
+
 	if (prerender instanceof Set) {
 		// convert to array (can't sort a set)
 		prerender = Array.from(prerender);

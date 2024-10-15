@@ -159,7 +159,7 @@ export const handler = async (req: Request) => {
 
 ## Prerender
 
-Export a `prerender` variable to prerender routes.
+Export a `prerender` variable to prerender routes. `prerender` can be an array or set of paths to prerender, or a function that returns the paths.
 
 ```ts
 // src/server/+func.ts

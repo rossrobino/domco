@@ -7,7 +7,7 @@ import { Hono } from "hono";
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 
-export const prerender: Prerender = [
+export const prerender: Prerender = async () => [
 	"/static-page",
 	"/half-static/static",
 	"/static.css",

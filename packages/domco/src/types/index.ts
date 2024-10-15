@@ -35,7 +35,10 @@ export type Handler = (req: Request) => MaybePromise<Response>;
  * export const prerender: Prerender = ["/", "/post-1", "/post-2"];
  * ```
  */
-export type Prerender = Array<string> | Set<string>;
+export type Prerender =
+	| Array<string>
+	| Set<string>
+	| (() => MaybePromise<Array<string> | Set<string>>);
 
 /** Middleware used in the Vite server for dev and preview. */
 export type AdapterMiddleware = Connect.NextHandleFunction;
