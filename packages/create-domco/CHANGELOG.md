@@ -1,5 +1,13 @@
 # create-domco
 
+## 2.0.10
+
+### Patch Changes
+
+- 002ca9a: update deno template, `mjs/mts` vite config no longer required
+- Updated dependencies [9605fe3]
+  - domco@2.1.5
+
 ## 2.0.9
 
 ### Patch Changes
