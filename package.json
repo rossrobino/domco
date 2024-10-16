@@ -2,7 +2,7 @@
 	"name": "domco-monorepo",
 	"private": true,
 	"type": "module",
-	"packageManager": "npm@10.8.3",
+	"packageManager": "npm@10.9.0",
 	"workspaces": [
 		"packages/*",
 		"apps/*"
@@ -21,11 +21,11 @@
 		"@robino/md": "^1.0.1",
 		"@robino/prettier": "^0.1.1",
 		"@robino/tsconfig": "^0.2.2",
-		"hono": "^4.6.3",
+		"hono": "^4.6.5",
 		"prettier": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.8",
 		"turbo": "^2.1.3",
 		"typescript": "^5.6.3",
-		"vite": "^5.4.8"
+		"vite": "^5.4.9"
 	}
 }
