@@ -1,203 +1,210 @@
-export type TagDescriptor = {
-	tag: string;
-	attrs?: Record<string, string | boolean | undefined>;
-	children?: string | TagDescriptor[];
-};
-
-export type CommentDescriptor = {
-	text: string;
-	children?: string | TagDescriptor[];
-};
-
-const serializeAttrs = (attrs: TagDescriptor["attrs"]) => {
-	let res = "";
-	for (const key in attrs) {
-		if (typeof attrs[key] === "boolean") {
-			res += attrs[key] ? ` ${key}` : ``;
-		} else {
-			res += ` ${key}=${JSON.stringify(attrs[key])}`;
-		}
-	}
-	return res;
-};
-
-const unaryTags = new Set(["link", "meta", "base"]);
-
-export const serializeTag = ({ tag, attrs, children }: TagDescriptor) => {
-	if (unaryTags.has(tag)) {
-		return `<${tag}${serializeAttrs(attrs)}>`;
-	} else {
-		return `<${tag}${serializeAttrs(attrs)}>${serializeTags(
-			children,
-		)}</${tag}>`;
-	}
-};
-
-export const serializeTags = (tags: TagDescriptor["children"]): string => {
-	if (typeof tags === "string") {
-		return tags;
-	} else if (tags && tags.length) {
-		return tags.map((tag) => serializeTag(tag)).join("");
-	}
-	return "";
-};
+// Vite reference - https://github.com/vitejs/vite/blob/fcf50c2e881356ea0d725cc563722712a2bf5695/packages/vite/src/node/plugins/html.ts
+import type { TagInput, TagDescriptor, InjectMethod } from "../types/index.js";
 
 /**
  * Inject tags into an HTML string.
  *
- * Much of this code is [copied from Vite](https://github.com/vitejs/vite/blob/fcf50c2e881356ea0d725cc563722712a2bf5695/packages/vite/src/node/plugins/html.ts)
- * and modified into a class.
+ * ```ts
+ * import { Injector } from "domco/injector";
+ *
+ * const injector = new Injector(
+ * 	`<!doctype html><html><body><!-- comment --></body></html>`,
+ * );
+ *
+ * injector
+ * 	// Set or change the title
+ * 	.title("My Title")
+ * 	// pass a TagDescriptor
+ * 	.head([{ name: "script", attrs: { type: "module", src: "./script.js" } }])
+ * 	// pass a string of text
+ * 	.body("Prepended to the body! ", "prepend")
+ * 	// replace comments
+ * 	.comment("comment", "My comment")
+ * 	// stringify HTML
+ * 	.toString();
+ * ```
+ *
+ * Produces the following HTML.
+ *
+ * ```html
+ * <!doctype html><html><head><title>My Title</title><script type="module" src="./script.js"></script></head><body>Prepended to the body! My comment</body></html>
+ * ```
  */
 export class Injector {
-	#headInjectRE = /<\/head>/i;
-	#headPrependInjectRE = /<head[^>]*>/i;
-	#htmlInjectRE = /<\/html>/i;
-	#htmlPrependInjectRE = /<html[^>]*>/i;
-	#bodyInjectRE = /<\/body>/i;
-	#bodyPrependInjectRE = /<body[^>]*>/i;
-	#doctypePrependInjectRE = /<!doctype html>/i;
-	#titleRE = /<title>(.*?)<\/title>/;
+	#html: string;
 
-	html: string;
-
+	/**
+	 * @param html The HTML string.
+	 *
+	 * @default
+	 *
+	 * ```html
+	 * <!doctype html><html><head></head><body></body></html>
+	 * ```
+	 */
 	constructor(html?: string) {
-		this.html =
+		this.#html =
 			html ?? "<!doctype html><html><head></head><body></body></html>";
 	}
 
+	/** @returns The HTML. */
 	toString() {
-		return this.html;
+		return this.#html;
 	}
 
-	#prependInjectFallback(html: string, tags: TagDescriptor[]) {
-		// prepend to the html tag, append after doctype, or the document start
-		if (this.#htmlPrependInjectRE.test(html)) {
-			return html.replace(
-				this.#htmlPrependInjectRE,
-				`$&${serializeTags(tags)}`,
-			);
+	/** Serializes HTML attribute objects into a string. */
+	static #serializeAttrs(attrs: TagDescriptor["attrs"]) {
+		let str = "";
+
+		for (const key in attrs) {
+			if (
+				// if `false` don't add
+				attrs[key] &&
+				typeof attrs[key] === "boolean"
+			) {
+				str += ` ${key}`;
+			} else {
+				str += ` ${key}=${JSON.stringify(attrs[key])}`;
+			}
 		}
 
-		if (this.#doctypePrependInjectRE.test(html)) {
-			return html.replace(
-				this.#doctypePrependInjectRE,
-				`$&${serializeTags(tags)}`,
-			);
+		return str;
+	}
+
+	/** Serializes a TagDescriptor into a string. */
+	static #serializeTag({ name, attrs, children }: TagDescriptor) {
+		if (["link", "meta", "base"].includes(name)) {
+			return `<${name}${this.#serializeAttrs(attrs)}>`;
 		}
 
-		return serializeTags(tags) + html;
+		return `<${name}${this.#serializeAttrs(attrs)}>${this.serializeTags(
+			children,
+		)}</${name}>`;
+	}
+
+	/** Serializes an array of TagDescriptors into a string. */
+	static serializeTags(tags: TagDescriptor["children"]): string {
+		if (tags instanceof Array) {
+			return tags.map((tag) => this.#serializeTag(tag)).join("");
+		}
+
+		return tags ?? "";
+	}
+
+	/**
+	 * Inject tags into the HTML string.
+	 *
+	 * @param target Name of the tag that is being targeted.
+	 * @param tags Tags to inject into the target.
+	 * @param method Add tags at the end, beginning, or replace. - defaults to `"append"`
+	 * @returns The Injector instance.
+	 */
+	#inject(target: string, tags: TagInput, method: InjectMethod = "append") {
+		let regex: RegExp;
+
+		if (method === "append") {
+			regex = new RegExp(`<\/${target}>`, "i");
+		} else if (method === "prepend") {
+			regex = new RegExp(`<${target}[^>]*>`, "i");
+		} else {
+			// "replace"
+			regex = new RegExp(`<${target}>(.*?)<\/${target}>`, "i");
+		}
+
+		if (regex.test(this.#html)) {
+			// found
+			this.#html = this.#html.replace(regex, (m) => {
+				if (method === "append") {
+					return `${Injector.serializeTags(tags)}${m}`;
+				} else if (method === "prepend") {
+					return `${m}${Injector.serializeTags(tags)}`;
+				} else {
+					// "replace"
+					return `<${target}>${Injector.serializeTags(tags)}</${target}>`;
+				}
+			});
+
+			return this;
+		}
+
+		throw new Error(`${target} not found.`);
 	}
 
 	/**
 	 * Replace comments with tags.
 	 *
-	 * Set `text` equal to text within comment.
-	 *
-	 * @param tags Comments to replace.
+	 * @param text Text within comment.
+	 * @param tags Tags to replace the comment with.
+	 * @returns The Injector instance.
 	 */
-	comment(tags?: CommentDescriptor[]) {
-		if (tags && tags.length) {
-			for (const tag of tags) {
-				this.html = this.html.replace(
-					new RegExp(`<!--\\s*${tag.text}\\s*-->`, "g"),
-					serializeTags(tag.children),
-				);
-			}
-		}
+	comment(text: string, tags: TagInput) {
+		this.#html = this.#html.replace(
+			new RegExp(`<!--\\s*${text}\\s*-->`, "gi"),
+			Injector.serializeTags(tags),
+		);
 
-		return new Injector(this.html);
+		return this;
 	}
 
 	/**
-	 * @param text Text to set or change the title to.
+	 * Set or change the document's title element.
+	 *
+	 * @param text Text to set or change the `title` to.
+	 * @returns The Injector instance.
 	 */
-	title(text?: string) {
-		if (!text) return new Injector(this.html);
-
-		if (this.#titleRE.test(this.html)) {
-			return new Injector(
-				this.html.replace(this.#titleRE, `<title>${text}</title>`),
-			);
+	title(text: string) {
+		try {
+			return this.#inject("title", text, "replace");
+		} catch {
+			return this.head([{ name: "title", children: text }]);
 		}
-
-		return this.head([{ tag: "title", children: text }]);
 	}
 
 	/**
 	 * Inject tags into the `head` element.
 	 *
 	 * @param tags Tags to inject.
-	 * @param prepend Add tags at the beginning. - defaults to `false`
+	 * @param method Add tags at the end, beginning, or replace. - defaults to `"append"`
+	 * @returns The Injector instance.
 	 */
-	head(tags?: TagDescriptor[], prepend = false) {
-		if (!tags || tags.length === 0) return new Injector(this.html);
-
-		if (prepend) {
-			// inject as the first element of head
-			if (this.#headPrependInjectRE.test(this.html)) {
-				return new Injector(
-					this.html.replace(this.#headPrependInjectRE, serializeTags(tags)),
+	head(tags: TagInput, method: InjectMethod = "append") {
+		try {
+			// try to inject into head
+			return this.#inject("head", tags, method);
+		} catch {
+			try {
+				// try to prepend a new head element to html
+				return this.#inject(
+					"html",
+					[{ name: "head", children: tags }],
+					"prepend",
 				);
-			}
-		} else {
-			// inject before head close
-			if (this.#headInjectRE.test(this.html)) {
-				return new Injector(
-					this.html.replace(this.#headInjectRE, serializeTags(tags)),
-				);
-			}
-
-			// try to inject before the body tag
-			if (this.#bodyPrependInjectRE.test(this.html)) {
-				return new Injector(
-					this.html.replace(this.#bodyPrependInjectRE, serializeTags(tags)),
-				);
+			} catch {
+				this.#html += Injector.serializeTags(tags);
+				return this;
 			}
 		}
-		// if no head tag is present, we prepend the tag for both prepend and append
-		return new Injector(this.#prependInjectFallback(this.html, tags));
 	}
 
 	/**
 	 * Inject tags into the `body` element.
 	 *
 	 * @param tags Tags to inject.
-	 * @param prepend Add tags at the beginning. - defaults to `false`
+	 * @param method Add tags at the end, beginning, or replace. - defaults to `"append"`
+	 * @returns The Injector instance.
 	 */
-	body(tags?: TagDescriptor[], prepend = false) {
-		if (!tags || tags.length === 0) return new Injector(this.html);
-
-		if (prepend) {
-			// inject after body open
-			if (this.#bodyPrependInjectRE.test(this.html)) {
-				return new Injector(
-					this.html.replace(this.#bodyPrependInjectRE, serializeTags(tags)),
-				);
+	body(tags: TagInput, method: InjectMethod = "append") {
+		try {
+			// try to inject into body
+			return this.#inject("body", tags, method);
+		} catch {
+			try {
+				// try to append a new body element to html
+				return this.#inject("html", [{ name: "body", children: tags }]);
+			} catch {
+				this.#html += Injector.serializeTags(tags);
+				return this;
 			}
-
-			// if no there is no body tag, inject after head or fallback to prepend in html
-			if (this.#headInjectRE.test(this.html)) {
-				return new Injector(
-					this.html.replace(this.#headInjectRE, serializeTags(tags)),
-				);
-			}
-			return new Injector(this.#prependInjectFallback(this.html, tags));
-		} else {
-			// inject before body close
-			if (this.#bodyInjectRE.test(this.html)) {
-				return new Injector(
-					this.html.replace(this.#bodyInjectRE, serializeTags(tags)),
-				);
-			}
-
-			// if no body tag is present, append to the html tag, or at the end of the file
-			if (this.#htmlInjectRE.test(this.html)) {
-				return new Injector(
-					this.html.replace(this.#htmlInjectRE, `${serializeTags(tags)}$&`),
-				);
-			}
-
-			return new Injector(this.html + serializeTags(tags));
 		}
 	}
 }

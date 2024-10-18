@@ -1,5 +1,6 @@
 import { dirNames, fileNames } from "../../constants/index.js";
-import { serializeTags, type TagDescriptor } from "../../injector/index.js";
+import { Injector } from "../../injector/index.js";
+import type { TagDescriptor } from "../../types/index.js";
 import { findFiles, toAllScriptEndings, toPosix } from "../../util/fs/index.js";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -54,7 +55,7 @@ export const scriptPlugin = (): Plugin => {
 					if (!src) this.warn(`No client module found for ${pathName}`);
 
 					tags.push({
-						tag: "script",
+						name: "script",
 						attrs: { type: "module", src },
 					});
 				} else {
@@ -74,7 +75,7 @@ export const scriptPlugin = (): Plugin => {
 					tags.push(...getTags({ manifest, pathName, error: this.error }));
 				}
 
-				return `export const tags = ${JSON.stringify(serializeTags(tags))};`;
+				return `export const tags = ${JSON.stringify(Injector.serializeTags(tags))};`;
 			}
 		},
 	};
@@ -140,14 +141,14 @@ const getTags = (options: {
 	if (!imp) {
 		// push the entry file name
 		tags.push({
-			tag: "script",
+			name: "script",
 			attrs: { type: "module", src: `/${chunk.file}` },
 		});
 	} else {
 		// push a modulepreload link to get the script ready but don't execute immediately
 		// this is required to flatten the request waterfall if you are using manual chunks for example
 		tags.push({
-			tag: "link",
+			name: "link",
 			attrs: {
 				rel: "modulepreload",
 				crossorigin: "",
@@ -160,7 +161,7 @@ const getTags = (options: {
 		// need to also do this for `imports` since css does not actually link in the code
 		for (const cssFile of chunk.css) {
 			tags.push({
-				tag: "link",
+				name: "link",
 				attrs: { rel: "stylesheet", href: `/${cssFile}` },
 			});
 		}

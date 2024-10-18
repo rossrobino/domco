@@ -1,3 +1,224 @@
+## Classes
+
+<a id="injector" name="injector"></a>
+
+### Injector
+
+Inject tags into an HTML string.
+
+```ts
+import { Injector } from "domco/injector";
+
+const injector = new Injector(
+	`<!doctype html><html><body><!-- comment --></body></html>`,
+);
+
+injector
+	// Set or change the title
+	.title("My Title")
+	// pass a TagDescriptor
+	.head([{ name: "script", attrs: { type: "module", src: "./script.js" } }])
+	// pass a string of text
+	.body("Prepended to the body! ", "prepend")
+	// replace comments
+	.comment("comment", "My comment")
+	// stringify HTML
+	.toString();
+```
+
+Produces the following HTML.
+
+```html
+<!doctype html>
+<html>
+	<head>
+		<title>My Title</title>
+		<script type="module" src="./script.js"></script>
+	</head>
+	<body>
+		Prepended to the body! My comment
+	</body>
+</html>
+```
+
+#### Constructors
+
+<a id="constructors" name="constructors"></a>
+
+##### new Injector()
+
+> **new Injector**(`html`?): [`Injector`](globals.md#injector)
+
+###### Parameters
+
+• **html?**: `string`
+
+The HTML string.
+
+###### Returns
+
+[`Injector`](globals.md#injector)
+
+###### Default
+
+```html
+<!doctype html>
+<html>
+	<head></head>
+	<body></body>
+</html>
+```
+
+###### Defined in
+
+[injector/index.ts:45](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L45)
+
+#### Methods
+
+<a id="body" name="body"></a>
+
+##### body()
+
+> **body**(`tags`, `method`): [`Injector`](globals.md#injector)
+
+Inject tags into the `body` element.
+
+###### Parameters
+
+• **tags**: [`TagInput`](globals.md#taginput)
+
+Tags to inject.
+
+• **method**: [`InjectMethod`](globals.md#injectmethod) = `"append"`
+
+Add tags at the end, beginning, or replace. - defaults to `"append"`
+
+###### Returns
+
+[`Injector`](globals.md#injector)
+
+The Injector instance.
+
+###### Defined in
+
+[injector/index.ts:196](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L196)
+
+<a id="comment" name="comment"></a>
+
+##### comment()
+
+> **comment**(`text`, `tags`): [`Injector`](globals.md#injector)
+
+Replace comments with tags.
+
+###### Parameters
+
+• **text**: `string`
+
+Text within comment.
+
+• **tags**: [`TagInput`](globals.md#taginput)
+
+Tags to replace the comment with.
+
+###### Returns
+
+[`Injector`](globals.md#injector)
+
+The Injector instance.
+
+###### Defined in
+
+[injector/index.ts:140](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L140)
+
+<a id="head" name="head"></a>
+
+##### head()
+
+> **head**(`tags`, `method`): [`Injector`](globals.md#injector)
+
+Inject tags into the `head` element.
+
+###### Parameters
+
+• **tags**: [`TagInput`](globals.md#taginput)
+
+Tags to inject.
+
+• **method**: [`InjectMethod`](globals.md#injectmethod) = `"append"`
+
+Add tags at the end, beginning, or replace. - defaults to `"append"`
+
+###### Returns
+
+[`Injector`](globals.md#injector)
+
+The Injector instance.
+
+###### Defined in
+
+[injector/index.ts:170](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L170)
+
+<a id="title" name="title"></a>
+
+##### title()
+
+> **title**(`text`): [`Injector`](globals.md#injector)
+
+Set or change the document's title element.
+
+###### Parameters
+
+• **text**: `string`
+
+Text to set or change the `title` to.
+
+###### Returns
+
+[`Injector`](globals.md#injector)
+
+The Injector instance.
+
+###### Defined in
+
+[injector/index.ts:155](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L155)
+
+<a id="tostring" name="tostring"></a>
+
+##### toString()
+
+> **toString**(): `string`
+
+###### Returns
+
+`string`
+
+The HTML.
+
+###### Defined in
+
+[injector/index.ts:51](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L51)
+
+<a id="serializetags" name="serializetags"></a>
+
+##### serializeTags()
+
+> `static` **serializeTags**(`tags`): `string`
+
+Serializes an array of TagDescriptors into a string.
+
+###### Parameters
+
+• **tags**: `undefined` \| [`TagInput`](globals.md#taginput)
+
+###### Returns
+
+`string`
+
+###### Defined in
+
+[injector/index.ts:86](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L86)
+
 ## Type Aliases
 
 <a id="adapter" name="adapter"></a>
@@ -285,6 +506,20 @@ export const handler: Handler = async (req) => {
 
 ---
 
+<a id="injectmethod" name="injectmethod"></a>
+
+### InjectMethod
+
+> **InjectMethod**: `"append"` \| `"prepend"` \| `"replace"`
+
+How to inject tags into the HTML string.
+
+#### Defined in
+
+[types/index.ts:175](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L175)
+
+---
+
 <a id="maybepromiset" name="maybepromiset"></a>
 
 ### MaybePromise\<T\>
@@ -323,6 +558,83 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 #### Defined in
 
 [types/index.ts:38](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L38)
+
+---
+
+<a id="tagdescriptor" name="tagdescriptor"></a>
+
+### TagDescriptor
+
+> **TagDescriptor**: `object`
+
+An object that describes a tag and its children.
+
+#### Type declaration
+
+<a id="attrs" name="attrs"></a>
+
+##### attrs?
+
+> `optional` **attrs**: `Record`\<`string`, `string` \| `boolean` \| `undefined`\>
+
+The attributes on the tag.
+
+###### Example
+
+These attributes,
+
+```js
+{
+	class: "text-black",
+	open: true,
+}
+```
+
+would produce the following HTML.
+
+```html
+<dialog class="text-black" open>...</dialog>
+```
+
+<a id="children" name="children"></a>
+
+##### children?
+
+> `optional` **children**: [`TagInput`](globals.md#taginput)
+
+Children of the tag. Tags or a string of HTML.
+
+<a id="name-1" name="name-1"></a>
+
+##### name
+
+> **name**: `string`
+
+The tagName of the element.
+
+###### Example
+
+```ts
+"h1";
+```
+
+#### Defined in
+
+[types/index.ts:137](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L137)
+
+---
+
+<a id="taginput" name="taginput"></a>
+
+### TagInput
+
+> **TagInput**: `string` \| [`TagDescriptor`](globals.md#tagdescriptor)[]
+
+Tags can be a string, or an array of TagDescriptors.
+
+#### Defined in
+
+[types/index.ts:172](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L172)
 
 ## Functions
 
