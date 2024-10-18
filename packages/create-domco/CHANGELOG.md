@@ -1,5 +1,11 @@
 # create-domco
 
+## 2.0.11
+
+### Patch Changes
+
+- 9a0295c: bump domco version
+
 ## 2.0.10
 
 ### Patch Changes
