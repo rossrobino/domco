@@ -5,6 +5,7 @@ import { configureServerPlugin } from "./configure-server/index.js";
 import { lifecyclePlugin } from "./lifecycle/index.js";
 import { pagePlugin } from "./page/index.js";
 import { scriptPlugin } from "./script/index.js";
+import { ssrReloadPlugin } from "./ssr-reload/index.js";
 import type { Plugin } from "vite";
 
 /**
@@ -34,6 +35,7 @@ export const domco = async (
 	return Promise.all([
 		configPlugin(domcoConfig),
 		configureServerPlugin(adapter),
+		ssrReloadPlugin(),
 		pagePlugin(),
 		scriptPlugin(),
 		lifecyclePlugin(adapter),

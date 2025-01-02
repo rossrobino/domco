@@ -24,13 +24,15 @@ app.all("/", async (c) => {
 
 		if (typeof userInput === "string" && userInput.length) {
 			return c.html(
-				new Injector(html).comment([{ text: "result", children: "success" }])
-					.html,
+				new Injector(html)
+					.comment("result", [{ name: "div", children: "success" }])
+					.toString(),
 			);
 		} else {
 			return c.html(
-				new Injector(html).comment([{ text: "result", children: "invalid" }])
-					.html,
+				new Injector(html)
+					.comment("result", [{ name: "div", children: "invalid" }])
+					.toString(),
 			);
 		}
 	}
@@ -49,8 +51,7 @@ app.get("/static-page", (c) =>
 
 app.get("/dynamic", (c) => c.html(new Date().toUTCString()));
 
-app.get("/half-static/static", (c) => c.html(new Date().toUTCString()));
-app.get("/half-static/dynamic", (c) => c.html(new Date().toUTCString()));
+app.get("/half-static/*", (c) => c.html(new Date().toUTCString()));
 
 app.get("/api", (c) => c.json({ hello: "world" }));
 

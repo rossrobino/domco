@@ -1,8 +1,10 @@
 ## Classes
 
-<a id="injector" name="injector"></a>
+<a id="injector"></a>
 
 ### Injector
+
+Defined in: [injector/index.ts:33](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L33)
 
 Inject tags into an HTML string.
 
@@ -43,15 +45,19 @@ Produces the following HTML.
 
 #### Constructors
 
-<a id="constructors" name="constructors"></a>
+<a id="constructors"></a>
 
 ##### new Injector()
 
 > **new Injector**(`html`?): [`Injector`](globals.md#injector)
 
+Defined in: [injector/index.ts:45](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L45)
+
 ###### Parameters
 
-• **html?**: `string`
+###### html?
+
+`string`
 
 The HTML string.
 
@@ -69,27 +75,29 @@ The HTML string.
 </html>
 ```
 
-###### Defined in
-
-[injector/index.ts:45](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L45)
-
 #### Methods
 
-<a id="body" name="body"></a>
+<a id="body"></a>
 
 ##### body()
 
 > **body**(`tags`, `method`): [`Injector`](globals.md#injector)
 
+Defined in: [injector/index.ts:196](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L196)
+
 Inject tags into the `body` element.
 
 ###### Parameters
 
-• **tags**: [`TagInput`](globals.md#taginput)
+###### tags
+
+[`TagInput`](globals.md#taginput)
 
 Tags to inject.
 
-• **method**: [`InjectMethod`](globals.md#injectmethod) = `"append"`
+###### method
+
+[`InjectMethod`](globals.md#injectmethod) = `"append"`
 
 Add tags at the end, beginning, or replace. - defaults to `"append"`
 
@@ -99,25 +107,27 @@ Add tags at the end, beginning, or replace. - defaults to `"append"`
 
 The Injector instance.
 
-###### Defined in
-
-[injector/index.ts:196](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L196)
-
-<a id="comment" name="comment"></a>
+<a id="comment"></a>
 
 ##### comment()
 
 > **comment**(`text`, `tags`): [`Injector`](globals.md#injector)
 
+Defined in: [injector/index.ts:140](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L140)
+
 Replace comments with tags.
 
 ###### Parameters
 
-• **text**: `string`
+###### text
+
+`string`
 
 Text within comment.
 
-• **tags**: [`TagInput`](globals.md#taginput)
+###### tags
+
+[`TagInput`](globals.md#taginput)
 
 Tags to replace the comment with.
 
@@ -127,25 +137,27 @@ Tags to replace the comment with.
 
 The Injector instance.
 
-###### Defined in
-
-[injector/index.ts:140](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L140)
-
-<a id="head" name="head"></a>
+<a id="head"></a>
 
 ##### head()
 
 > **head**(`tags`, `method`): [`Injector`](globals.md#injector)
 
+Defined in: [injector/index.ts:170](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L170)
+
 Inject tags into the `head` element.
 
 ###### Parameters
 
-• **tags**: [`TagInput`](globals.md#taginput)
+###### tags
+
+[`TagInput`](globals.md#taginput)
 
 Tags to inject.
 
-• **method**: [`InjectMethod`](globals.md#injectmethod) = `"append"`
+###### method
+
+[`InjectMethod`](globals.md#injectmethod) = `"append"`
 
 Add tags at the end, beginning, or replace. - defaults to `"append"`
 
@@ -155,21 +167,21 @@ Add tags at the end, beginning, or replace. - defaults to `"append"`
 
 The Injector instance.
 
-###### Defined in
-
-[injector/index.ts:170](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L170)
-
-<a id="title" name="title"></a>
+<a id="title"></a>
 
 ##### title()
 
 > **title**(`text`): [`Injector`](globals.md#injector)
 
+Defined in: [injector/index.ts:155](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L155)
+
 Set or change the document's title element.
 
 ###### Parameters
 
-• **text**: `string`
+###### text
+
+`string`
 
 Text to set or change the `title` to.
 
@@ -179,15 +191,13 @@ Text to set or change the `title` to.
 
 The Injector instance.
 
-###### Defined in
-
-[injector/index.ts:155](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L155)
-
-<a id="tostring" name="tostring"></a>
+<a id="tostring"></a>
 
 ##### toString()
 
 > **toString**(): `string`
+
+Defined in: [injector/index.ts:51](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L51)
 
 ###### Returns
 
@@ -195,43 +205,41 @@ The Injector instance.
 
 The HTML.
 
-###### Defined in
-
-[injector/index.ts:51](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L51)
-
-<a id="serializetags" name="serializetags"></a>
+<a id="serializetags"></a>
 
 ##### serializeTags()
 
 > `static` **serializeTags**(`tags`): `string`
 
+Defined in: [injector/index.ts:86](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L86)
+
 Serializes an array of TagDescriptors into a string.
 
 ###### Parameters
 
-• **tags**: `undefined` \| [`TagInput`](globals.md#taginput)
+###### tags
+
+`undefined` | [`TagInput`](globals.md#taginput)
 
 ###### Returns
 
 `string`
 
-###### Defined in
-
-[injector/index.ts:86](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L86)
-
 ## Type Aliases
 
-<a id="adapter" name="adapter"></a>
+<a id="adapter"></a>
 
 ### Adapter
 
 > **Adapter**: `object`
 
+Defined in: [types/index.ts:63](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L63)
+
 A domco adapter that configures the build to a target production environment.
 
 #### Type declaration
 
-<a id="devmiddleware" name="devmiddleware"></a>
+<a id="devmiddleware"></a>
 
 ##### devMiddleware?
 
@@ -239,7 +247,7 @@ A domco adapter that configures the build to a target production environment.
 
 Middleware to apply in `dev` mode.
 
-<a id="entry" name="entry"></a>
+<a id="entry"></a>
 
 ##### entry
 
@@ -247,7 +255,7 @@ Middleware to apply in `dev` mode.
 
 Entry point for the server application.
 
-<a id="message" name="message"></a>
+<a id="message"></a>
 
 ##### message
 
@@ -255,7 +263,7 @@ Entry point for the server application.
 
 Message to log when the build is complete.
 
-<a id="name" name="name"></a>
+<a id="name"></a>
 
 ##### name
 
@@ -263,7 +271,7 @@ Message to log when the build is complete.
 
 The name of the adapter.
 
-<a id="noexternal" name="noexternal"></a>
+<a id="noexternal"></a>
 
 ##### noExternal?
 
@@ -271,7 +279,7 @@ The name of the adapter.
 
 Passed into Vite `config.ssr.noExternal`.
 
-<a id="previewmiddleware" name="previewmiddleware"></a>
+<a id="previewmiddleware"></a>
 
 ##### previewMiddleware?
 
@@ -279,7 +287,7 @@ Passed into Vite `config.ssr.noExternal`.
 
 Middleware to apply in `preview` mode.
 
-<a id="run" name="run"></a>
+<a id="run"></a>
 
 ##### run()?
 
@@ -291,7 +299,7 @@ The script to run after Vite build is complete.
 
 `any`
 
-<a id="target" name="target"></a>
+<a id="target"></a>
 
 ##### target?
 
@@ -299,17 +307,15 @@ The script to run after Vite build is complete.
 
 Passed into Vite `config.ssr.target`.
 
-#### Defined in
-
-[types/index.ts:63](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L63)
-
 ---
 
-<a id="adapterbuilderadapteroptions" name="adapterbuilderadapteroptions"></a>
+<a id="adapterbuilderadapteroptions"></a>
 
 ### AdapterBuilder()\<AdapterOptions\>
 
 > **AdapterBuilder**\<`AdapterOptions`\>: (`AdapterOptions`?) => [`MaybePromise`](globals.md#maybepromiset)\<[`Adapter`](globals.md#adapter)\>
+
+Defined in: [types/index.ts:93](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L93)
 
 Use this type to create your own adapter.
 Pass any options for the adapter in as a generic.
@@ -320,31 +326,33 @@ Pass any options for the adapter in as a generic.
 
 #### Parameters
 
-• **AdapterOptions?**: `AdapterOptions`
+##### AdapterOptions?
+
+`AdapterOptions`
 
 #### Returns
 
 [`MaybePromise`](globals.md#maybepromiset)\<[`Adapter`](globals.md#adapter)\>
 
-#### Defined in
-
-[types/index.ts:93](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L93)
-
 ---
 
-<a id="adapterentry" name="adapterentry"></a>
+<a id="adapterentry"></a>
 
 ### AdapterEntry()
 
 > **AdapterEntry**: (`AdapterEntryOptions`) => `object`
 
+Defined in: [types/index.ts:47](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L47)
+
 A function that returns an additional entry point to include in the SSR build.
 
 #### Parameters
 
-• **AdapterEntryOptions**
+##### AdapterEntryOptions
 
-• **AdapterEntryOptions.funcId**: `string`
+###### funcId
+
+`string`
 
 The function entry point to import `handler` from.
 
@@ -370,31 +378,27 @@ The name of the entry point without extension.
 "main";
 ```
 
-#### Defined in
-
-[types/index.ts:47](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L47)
-
 ---
 
-<a id="adaptermiddleware" name="adaptermiddleware"></a>
+<a id="adaptermiddleware"></a>
 
 ### AdapterMiddleware
 
 > **AdapterMiddleware**: `Connect.NextHandleFunction`
 
+Defined in: [types/index.ts:44](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L44)
+
 Middleware used in the Vite server for dev and preview.
-
-#### Defined in
-
-[types/index.ts:44](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L44)
 
 ---
 
-<a id="domcoconfig" name="domcoconfig"></a>
+<a id="domcoconfig"></a>
 
 ### DomcoConfig
 
 > **DomcoConfig**: `object`
+
+Defined in: [types/index.ts:119](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L119)
 
 domco Config
 
@@ -403,7 +407,7 @@ Pass the config into the `domco` vite plugin.
 
 #### Type declaration
 
-<a id="adapter-1" name="adapter-1"></a>
+<a id="adapter-1"></a>
 
 ##### adapter?
 
@@ -441,45 +445,41 @@ export default defineConfig({
 });
 ```
 
-#### Defined in
-
-[types/index.ts:119](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L119)
-
 ---
 
-<a id="funcmodule" name="funcmodule"></a>
+<a id="funcmodule"></a>
 
 ### FuncModule
 
 > **FuncModule**: `object`
 
+Defined in: [types/index.ts:7](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L7)
+
 Exports from the SSR `+func` entry point.
 
 #### Type declaration
 
-<a id="handler" name="handler"></a>
+<a id="handler"></a>
 
 ##### handler
 
 > **handler**: [`Handler`](globals.md#handler-1)
 
-<a id="prerender" name="prerender"></a>
+<a id="prerender"></a>
 
 ##### prerender
 
 > **prerender**: [`Prerender`](globals.md#prerender-1)
 
-#### Defined in
-
-[types/index.ts:7](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L7)
-
 ---
 
-<a id="handler-1" name="handler-1"></a>
+<a id="handler-1"></a>
 
 ### Handler()
 
 > **Handler**: (`req`) => [`MaybePromise`](globals.md#maybepromiset)\<`Response`\>
+
+Defined in: [types/index.ts:24](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L24)
 
 Request handler, takes a web request and returns a web response.
 
@@ -494,37 +494,35 @@ export const handler: Handler = async (req) => {
 
 #### Parameters
 
-• **req**: `Request`
+##### req
+
+`Request`
 
 #### Returns
 
 [`MaybePromise`](globals.md#maybepromiset)\<`Response`\>
 
-#### Defined in
-
-[types/index.ts:24](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L24)
-
 ---
 
-<a id="injectmethod" name="injectmethod"></a>
+<a id="injectmethod"></a>
 
 ### InjectMethod
 
 > **InjectMethod**: `"append"` \| `"prepend"` \| `"replace"`
 
+Defined in: [types/index.ts:175](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L175)
+
 How to inject tags into the HTML string.
-
-#### Defined in
-
-[types/index.ts:175](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L175)
 
 ---
 
-<a id="maybepromiset" name="maybepromiset"></a>
+<a id="maybepromiset"></a>
 
 ### MaybePromise\<T\>
 
 > **MaybePromise**\<`T`\>: `T` \| `Promise`\<`T`\>
+
+Defined in: [types/index.ts:4](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L4)
 
 Helper type for a type that could be a promise.
 
@@ -532,17 +530,15 @@ Helper type for a type that could be a promise.
 
 • **T**
 
-#### Defined in
-
-[types/index.ts:4](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L4)
-
 ---
 
-<a id="prerender-1" name="prerender-1"></a>
+<a id="prerender-1"></a>
 
 ### Prerender
 
 > **Prerender**: `string`[] \| `Set`\<`string`\> \| () => [`MaybePromise`](globals.md#maybepromiset)\<`string`[] \| `Set`\<`string`\>\>
+
+Defined in: [types/index.ts:38](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L38)
 
 Paths to prerender at build time.
 
@@ -555,23 +551,21 @@ import type { Prerender } from "domco";
 export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 ```
 
-#### Defined in
-
-[types/index.ts:38](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L38)
-
 ---
 
-<a id="tagdescriptor" name="tagdescriptor"></a>
+<a id="tagdescriptor"></a>
 
 ### TagDescriptor
 
 > **TagDescriptor**: `object`
 
+Defined in: [types/index.ts:137](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L137)
+
 An object that describes a tag and its children.
 
 #### Type declaration
 
-<a id="attrs" name="attrs"></a>
+<a id="attrs"></a>
 
 ##### attrs?
 
@@ -596,7 +590,7 @@ would produce the following HTML.
 <dialog class="text-black" open>...</dialog>
 ```
 
-<a id="children" name="children"></a>
+<a id="children"></a>
 
 ##### children?
 
@@ -604,7 +598,7 @@ would produce the following HTML.
 
 Children of the tag. Tags or a string of HTML.
 
-<a id="name-1" name="name-1"></a>
+<a id="name-1"></a>
 
 ##### name
 
@@ -618,44 +612,42 @@ The tagName of the element.
 "h1";
 ```
 
-#### Defined in
-
-[types/index.ts:137](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L137)
-
 ---
 
-<a id="taginput" name="taginput"></a>
+<a id="taginput"></a>
 
 ### TagInput
 
 > **TagInput**: `string` \| [`TagDescriptor`](globals.md#tagdescriptor)[]
 
+Defined in: [types/index.ts:172](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L172)
+
 Tags can be a string, or an array of TagDescriptors.
-
-#### Defined in
-
-[types/index.ts:172](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L172)
 
 ## Functions
 
-<a id="domco" name="domco"></a>
+<a id="domco"></a>
 
 ### domco()
 
-> **domco**(`domcoConfig`): `Promise`\<`Plugin`\<`any`\>[]\>
+> **domco**(`domcoConfig`): `Promise`\<`Plugin`[]\>
+
+Defined in: [plugin/index.ts:30](https://github.com/rossrobino/domco/blob/main/packages/domco/src/plugin/index.ts#L30)
 
 Creates domco Vite plugin, add to your `plugins` array within your `vite.config`
 to start using domco.
 
 #### Parameters
 
-• **domcoConfig**: [`DomcoConfig`](globals.md#domcoconfig) = `{}`
+##### domcoConfig
+
+[`DomcoConfig`](globals.md#domcoconfig) = `{}`
 
 Your domco config object.
 
 #### Returns
 
-`Promise`\<`Plugin`\<`any`\>[]\>
+`Promise`\<`Plugin`[]\>
 
 The domco Vite plugin.
 
@@ -670,7 +662,3 @@ export default defineConfig({
 	plugins: [domco()],
 });
 ```
-
-#### Defined in
-
-[plugin/index.ts:29](https://github.com/rossrobino/domco/blob/main/packages/domco/src/plugin/index.ts#L29)
