@@ -46,6 +46,7 @@ export const configPlugin = async (
 				publicDir: isSsrBuild
 					? false
 					: path.join(process.cwd(), dirNames.public),
+				envDir: process.cwd(),
 				appType: "custom",
 				ssr: {
 					target: adapter?.target,
