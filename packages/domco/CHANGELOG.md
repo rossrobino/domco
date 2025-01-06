@@ -1,5 +1,11 @@
 # domco
 
+## 2.2.2
+
+### Patch Changes
+
+- f545aa5: fix: sets `envDir` to cwd by default
+
 ## 2.2.1
 
 ### Patch Changes
