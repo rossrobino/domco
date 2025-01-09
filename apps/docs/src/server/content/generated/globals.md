@@ -83,7 +83,7 @@ The HTML string.
 
 > **body**(`tags`, `method`): [`Injector`](globals.md#injector)
 
-Defined in: [injector/index.ts:196](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L196)
+Defined in: [injector/index.ts:200](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L200)
 
 Inject tags into the `body` element.
 
@@ -113,7 +113,7 @@ The Injector instance.
 
 > **comment**(`text`, `tags`): [`Injector`](globals.md#injector)
 
-Defined in: [injector/index.ts:140](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L140)
+Defined in: [injector/index.ts:144](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L144)
 
 Replace comments with tags.
 
@@ -143,9 +143,39 @@ The Injector instance.
 
 > **head**(`tags`, `method`): [`Injector`](globals.md#injector)
 
-Defined in: [injector/index.ts:170](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L170)
+Defined in: [injector/index.ts:174](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L174)
 
 Inject tags into the `head` element.
+
+###### Parameters
+
+###### tags
+
+[`TagInput`](globals.md#taginput)
+
+Tags to inject.
+
+###### method
+
+[`InjectMethod`](globals.md#injectmethod) = `"append"`
+
+Add tags at the end, beginning, or replace. - defaults to `"append"`
+
+###### Returns
+
+[`Injector`](globals.md#injector)
+
+The Injector instance.
+
+<a id="main"></a>
+
+##### main()
+
+> **main**(`tags`, `method`): [`Injector`](globals.md#injector)
+
+Defined in: [injector/index.ts:221](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L221)
+
+Inject tags into the `main` element, appends `main` + tags to `body` if not found.
 
 ###### Parameters
 
@@ -173,7 +203,7 @@ The Injector instance.
 
 > **title**(`text`): [`Injector`](globals.md#injector)
 
-Defined in: [injector/index.ts:155](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L155)
+Defined in: [injector/index.ts:159](https://github.com/rossrobino/domco/blob/main/packages/domco/src/injector/index.ts#L159)
 
 Set or change the document's title element.
 
@@ -618,11 +648,11 @@ The tagName of the element.
 
 ### TagInput
 
-> **TagInput**: `string` \| [`TagDescriptor`](globals.md#tagdescriptor)[]
+> **TagInput**: `string` \| [`TagDescriptor`](globals.md#tagdescriptor) \| [`TagDescriptor`](globals.md#tagdescriptor)[]
 
 Defined in: [types/index.ts:172](https://github.com/rossrobino/domco/blob/main/packages/domco/src/types/index.ts#L172)
 
-Tags can be a string, or an array of TagDescriptors.
+Tags can be a `string`, a `TagDescriptor`, or an array of `TagDescriptors`.
 
 ## Functions
 

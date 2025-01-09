@@ -29,8 +29,8 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"@clack/prompts": "^0.9.0",
-		"domco": "^2.2.0",
+		"@clack/prompts": "^0.9.1",
+		"domco": "^2.2.2",
 		"prettier": "^3.4.2",
 		"which-pm-runs": "^1.1.0"
 	},

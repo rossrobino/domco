@@ -168,8 +168,8 @@ export type TagDescriptor = {
 	children?: TagInput;
 };
 
-/** Tags can be a string, or an array of TagDescriptors. */
-export type TagInput = string | TagDescriptor[];
+/** Tags can be a `string`, a `TagDescriptor`, or an array of `TagDescriptors`. */
+export type TagInput = string | TagDescriptor | TagDescriptor[];
 
 /** How to inject tags into the HTML string. */
 export type InjectMethod = "append" | "prepend" | "replace";

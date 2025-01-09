@@ -21,11 +21,11 @@
 		"@robino/md": "^1.0.1",
 		"@robino/prettier": "^0.1.1",
 		"@robino/tsconfig": "^0.2.2",
-		"hono": "^4.6.15",
+		"hono": "^4.6.16",
 		"prettier": "^3.4.2",
 		"prettier-plugin-tailwindcss": "^0.6.9",
 		"turbo": "^2.3.3",
-		"typescript": "^5.7.2",
-		"vite": "^6.0.6"
+		"typescript": "^5.7.3",
+		"vite": "^6.0.7"
 	}
 }

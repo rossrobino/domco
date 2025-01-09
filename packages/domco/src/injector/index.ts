@@ -86,9 +86,13 @@ export class Injector {
 	static serializeTags(tags: TagDescriptor["children"]): string {
 		if (tags instanceof Array) {
 			return tags.map((tag) => this.#serializeTag(tag)).join("");
+		} else if (typeof tags === "string") {
+			return tags;
+		} else if (tags) {
+			return this.#serializeTag(tags);
 		}
 
-		return tags ?? "";
+		return "";
 	}
 
 	/**
@@ -156,7 +160,7 @@ export class Injector {
 		try {
 			return this.#inject("title", text, "replace");
 		} catch {
-			return this.head([{ name: "title", children: text }]);
+			return this.head({ name: "title", children: text });
 		}
 	}
 
@@ -176,7 +180,7 @@ export class Injector {
 				// try to prepend a new head element to html
 				return this.#inject(
 					"html",
-					[{ name: "head", children: tags }],
+					{ name: "head", children: tags },
 					"prepend",
 				);
 			} catch {
@@ -195,16 +199,30 @@ export class Injector {
 	 */
 	body(tags: TagInput, method: InjectMethod = "append") {
 		try {
-			// try to inject into body
 			return this.#inject("body", tags, method);
 		} catch {
 			try {
-				// try to append a new body element to html
-				return this.#inject("html", [{ name: "body", children: tags }]);
+				// append a new body element to html
+				return this.#inject("html", { name: "body", children: tags });
 			} catch {
 				this.#html += Injector.serializeTags(tags);
 				return this;
 			}
+		}
+	}
+
+	/**
+	 * Inject tags into the `main` element, appends `main` + tags to `body` if not found.
+	 *
+	 * @param tags Tags to inject.
+	 * @param method Add tags at the end, beginning, or replace. - defaults to `"append"`
+	 * @returns The Injector instance.
+	 */
+	main(tags: TagInput, method: InjectMethod = "append") {
+		try {
+			return this.#inject("main", tags, method);
+		} catch {
+			return this.body({ name: "main", children: tags }, "append");
 		}
 	}
 }
