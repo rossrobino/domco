@@ -22,7 +22,46 @@ If you are not using an [adapter](#adapters), you can import `handler` from the 
 
 The `dist/client/` directory holds client assets. JS and CSS assets with hashed file names will be output to `dist/client/_immutable/`, you can serve this path with immutable cache headers. Other assets like prerendered HTML files are processed and included in `dist/client/` directly.
 
-Check out the [deployment examples](/examples#deployment) to see how to do this.
+### Node server
+
+Here's an example of how to serve your application using the result of your build with `node:http`, [`sirv`](https://github.com/lukeed/sirv/tree/master/packages/sirv), and [`domco/listener`](https://github.com/rossrobino/domco/blob/main/packages/domco/src/listener/index.ts).
+
+```ts
+// server.js
+// import the `handler` from the build output
+import { handler } from "./dist/server/func.js";
+// converts web handler to a Node compatible request listener
+import { nodeListener } from "domco/listener";
+import { createServer } from "node:http";
+// `sirv` serves static assets
+import sirv from "sirv";
+
+const assets = sirv("dist/client", {
+	etag: true,
+	setHeaders: (res, pathname) => {
+		// serve `dist/client/_immutable/*` with immutable headers
+		if (pathname.startsWith("/_immutable/")) {
+			res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+		}
+	},
+});
+
+const server = createServer((req, res) =>
+	// first, look for a static asset
+	assets(req, res, () =>
+		// fallthrough to the handler if static asset is not found
+		nodeListener(handler)(req, res),
+	),
+);
+
+server.listen(3000);
+```
+
+Run this module to start your server and navigate to http://localhost:3000/ to view your application.
+
+```bash
+node server.js
+```
 
 ## Adapters
 
