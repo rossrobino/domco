@@ -1,5 +1,11 @@
 # domco
 
+## 2.3.0
+
+### Minor Changes
+
+- 8428e9a: feat: [Injector] adds `main` method to inject into the `main` element. A single `TagDescriptor` can now be provided instead of an array into injection methods.
+
 ## 2.2.2
 
 ### Patch Changes

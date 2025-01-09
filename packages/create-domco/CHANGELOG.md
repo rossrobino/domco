@@ -1,5 +1,13 @@
 # create-domco
 
+## 2.0.13
+
+### Patch Changes
+
+- fe6d39e: Update dependencies
+- Updated dependencies [8428e9a]
+  - domco@2.3.0
+
 ## 2.0.12
 
 ### Patch Changes
