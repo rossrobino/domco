@@ -16,7 +16,7 @@ import type { TagInput, TagDescriptor, InjectMethod } from "../types/index.js";
  * 	.title("My Title")
  * 	// pass a TagDescriptor
  * 	.head([{ name: "script", attrs: { type: "module", src: "./script.js" } }])
- * 	// pass a string of text
+ * 	// or a string of text
  * 	.body("Prepended to the body! ", "prepend")
  * 	// replace comments
  * 	.comment("comment", "My comment")
