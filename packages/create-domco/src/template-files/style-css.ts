@@ -6,15 +6,19 @@ export const styleFileName = {
 } as const;
 
 const getTemplateFiles: GetTemplateFile = ({ tailwind }) => {
+	if (tailwind) {
+		return [
+			{
+				name: `src/${styleFileName.tailwind}`,
+				contents: `@import "tailwindcss";\n`,
+			},
+		];
+	}
+
 	return [
 		{
-			name: `src/${tailwind ? styleFileName.tailwind : styleFileName.base}`,
-			contents: tailwind
-				? `@tailwind base;
-@tailwind components;
-@tailwind utilities;
-`
-				: ``,
+			name: `src/${styleFileName.base}`,
+			contents: "",
 		},
 	];
 };

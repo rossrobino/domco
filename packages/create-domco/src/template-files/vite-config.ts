@@ -6,16 +6,10 @@ const getTemplateFiles: GetTemplateFile = ({ lang, tailwind }) => {
 			name: `vite.config.${lang}`,
 			contents: `import { defineConfig } from "vite";
 import { domco } from "domco";
-${
-	tailwind
-		? `import tailwindcss from "tailwindcss"; import autoprefixer from "autoprefixer";`
-		: ``
-}
+${tailwind ? `import tailwindcss from "@tailwindcss/vite";` : ``}
 
 export default defineConfig({
-	plugins: [domco()],${
-		tailwind ? `css: {postcss: {plugins: [tailwindcss(), autoprefixer()]}}` : ``
-	}
+	plugins: [domco()${tailwind ? ", tailwindcss()" : ""}],
 });
 `,
 		},

@@ -8,7 +8,6 @@ import packageJson from "./template-files/package-json.js";
 import pageHtml from "./template-files/page-html.js";
 import prettier from "./template-files/prettier.js";
 import styleCss from "./template-files/style-css.js";
-import tailwind from "./template-files/tailwind.js";
 import tsconfigJson from "./template-files/tsconfig-json.js";
 import viteConfig from "./template-files/vite-config.js";
 import * as p from "@clack/prompts";
@@ -142,7 +141,6 @@ const getAllTemplateFiles: GetTemplateFile = async (options) => {
 		pageHtml,
 		prettier,
 		styleCss,
-		tailwind,
 		tsconfigJson,
 		viteConfig,
 	];

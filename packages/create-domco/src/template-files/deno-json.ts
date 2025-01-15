@@ -22,14 +22,14 @@ const getTemplateFiles: GetTemplateFile = ({
 		}
 	},
 	"nodeModulesDir": "manual",
-	"imports": {
+	"imports": {${tailwind ? `"@tailwindcss/vite": "npm:@tailwindcss/vite@^${dependencies.tailwind}",` : ""}
 		"domco": "npm:domco@^${dependencies.domco}",${prettier ? `\n\t\t"prettier": "npm:prettier@^${dependencies.prettier}",` : ""}${
 			prettier && tailwind
 				? `\n\t\t"prettier-plugin-tailwindcss": "npm:prettier-plugin-tailwindcss@^${dependencies.prettierTailwind}",`
 				: ""
 		}${
 			tailwind
-				? `\n\t\t"tailwindcss": "npm:tailwindcss@^${dependencies.tailwind}",\n\t\t"autoprefixer": "npm:autoprefixer@^${dependencies.autoprefixer}",`
+				? `\n\t\t"tailwindcss": "npm:tailwindcss@^${dependencies.tailwind}",`
 				: ""
 		}
 		"vite": "npm:vite@^${dependencies.vite}"

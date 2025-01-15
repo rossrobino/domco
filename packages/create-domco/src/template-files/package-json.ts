@@ -24,16 +24,14 @@ const getTemplateFiles: GetTemplateFile = ({
 		"preview": "vite preview"
 		${prettier ? `,"format": "prettier --write ."` : ""}
 	},
-	"devDependencies": {
+	"devDependencies": {${tailwind ? `"@tailwindcss/vite": "^${dependencies.tailwind}",` : ""}
 		"domco": "^${dependencies.domco}",${prettier ? `"prettier": "^${dependencies.prettier}",` : ""}
 		${
 			prettier && tailwind
 				? `"prettier-plugin-tailwindcss": "^${dependencies.prettierTailwind}",`
 				: ""
 		}${
-			tailwind
-				? `"tailwindcss": "^${dependencies.tailwind}","autoprefixer": "^${dependencies.autoprefixer}",`
-				: ""
+			tailwind ? `"tailwindcss": "^${dependencies.tailwind}",` : ""
 		}"typescript": "^${dependencies.typescript}",
 		"vite": "^${dependencies.vite}"
 	}
