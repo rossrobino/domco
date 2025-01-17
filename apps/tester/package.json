@@ -10,8 +10,8 @@
 		"preview": "vite preview"
 	},
 	"devDependencies": {
-		"@types/react": "^19.0.4",
-		"@types/react-dom": "^19.0.2",
+		"@types/react": "^19.0.7",
+		"@types/react-dom": "^19.0.3",
 		"@vitejs/plugin-react": "^4.3.4",
 		"domco": "*",
 		"react": "^19.0.0",

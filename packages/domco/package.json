@@ -79,7 +79,7 @@
 	"devDependencies": {
 		"typedoc": "^0.27.6",
 		"typedoc-plugin-markdown": "^4.4.1",
-		"vitest": "^2.1.8"
+		"vitest": "^3.0.2"
 	},
 	"peerDependencies": {
 		"vite": "^5.4.0 || ^6.0.0"
