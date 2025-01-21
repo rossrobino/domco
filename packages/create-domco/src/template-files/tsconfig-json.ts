@@ -35,7 +35,7 @@ const getTemplateFiles: GetTemplateFile = ({ pm, lang, prettier }) => {
 			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["vite.config.${lang},${prettier ? ` "${prettierConfigFileName}",` : ""} "src"]
+	"include": ["vite.config.${lang}",${prettier ? ` "${prettierConfigFileName}",` : ""} "src"]
 }
 `,
 		},
