@@ -1,6 +1,6 @@
 import { version } from "domco/version";
 
-export const getDependencies = async () => {
+export const getDependencies = () => {
 	return {
 		domco: version,
 		prettier: "3.4.2",

@@ -116,7 +116,7 @@ export const createDomco = async () => {
 		tailwind: extras.includes("tailwind"),
 		pm: getPackageManager(),
 		projectName: getProjectName(dir),
-		dependencies: await getDependencies(),
+		dependencies: getDependencies(),
 	};
 
 	await writeTemplateFiles(dir, await getAllTemplateFiles(options));
@@ -155,16 +155,20 @@ const getAllTemplateFiles: GetTemplateFile = async (options) => {
 		// format files with prettier
 		const ext = path.extname(templateFile.name).slice(1);
 
-		if (["html", "css", "json", "md"].includes(ext)) {
-			templateFile.contents = await format(templateFile.contents, {
-				parser: ext,
-				useTabs: true,
-			});
-		} else if (["ts", "js"].includes(ext)) {
-			templateFile.contents = await format(templateFile.contents, {
-				parser: "babel-ts",
-				useTabs: true,
-			});
+		try {
+			if (["html", "css", "json", "md"].includes(ext)) {
+				templateFile.contents = await format(templateFile.contents, {
+					parser: ext,
+					useTabs: true,
+				});
+			} else if (["ts", "js"].includes(ext)) {
+				templateFile.contents = await format(templateFile.contents, {
+					parser: "babel-ts",
+					useTabs: true,
+				});
+			}
+		} catch (error) {
+			p.log.error(`Error formatting ${templateFile.name}:\n\n${error}\n`);
 		}
 	}
 
