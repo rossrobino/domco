@@ -1,6 +1,7 @@
 import type { GetTemplateFile } from "../index.js";
+import { prettierConfigFileName } from "./prettier.js";
 
-const getTemplateFiles: GetTemplateFile = ({ pm }) => {
+const getTemplateFiles: GetTemplateFile = ({ pm, lang, prettier }) => {
 	if (pm === "deno") return [];
 
 	return [
@@ -34,7 +35,7 @@ const getTemplateFiles: GetTemplateFile = ({ pm }) => {
 			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["src"]
+	"include": ["vite.config.${lang},${prettier ? ` "${prettierConfigFileName}",` : ""} "src"]
 }
 `,
 		},

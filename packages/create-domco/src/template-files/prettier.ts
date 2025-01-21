@@ -1,11 +1,13 @@
 import type { GetTemplateFile } from "../index.js";
 
+export const prettierConfigFileName = "prettier.config.js";
+
 const getTemplateFiles: GetTemplateFile = ({ prettier, tailwind }) => {
 	if (!prettier) return [];
 
 	return [
 		{
-			name: "prettier.config.js",
+			name: prettierConfigFileName,
 			contents: `/** @import { Config } from "prettier" */
 
 /** @type {Config} */
