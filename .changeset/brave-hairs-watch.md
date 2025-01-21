@@ -2,4 +2,4 @@
 "create-domco": patch
 ---
 
-update to tailwindcss v4 beta
+update to tailwindcss v4
