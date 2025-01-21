@@ -1,5 +1,11 @@
 # create-domco
 
+## 2.0.15
+
+### Patch Changes
+
+- 4ad341f: include vite/prettier configs in tsconfig
+
 ## 2.0.14
 
 ### Patch Changes
