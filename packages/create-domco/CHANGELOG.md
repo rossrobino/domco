@@ -1,5 +1,12 @@
 # create-domco
 
+## 2.0.14
+
+### Patch Changes
+
+- 7ab1dd4: update to tailwindcss v4
+- e110f06: css - light dark color-scheme
+
 ## 2.0.13
 
 ### Patch Changes
