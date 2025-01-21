@@ -1,5 +1,11 @@
 # create-domco
 
+## 2.0.16
+
+### Patch Changes
+
+- 48ffdbc: fix: prettier tsconfig error, adds better error handling
+
 ## 2.0.15
 
 ### Patch Changes
