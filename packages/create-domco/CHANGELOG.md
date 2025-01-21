@@ -1,5 +1,11 @@
 # create-domco
 
+## 2.0.17
+
+### Patch Changes
+
+- 9767187: fix: actually push the fix!
+
 ## 2.0.16
 
 ### Patch Changes
