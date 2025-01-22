@@ -1,5 +1,37 @@
 # domco
 
+## 3.0.0
+
+### Major Changes
+
+- 51ccc90: Creates separate adapter packages for each adapter. These changes reduces the size of the core package and ensures users only install what is needed.
+
+  If you are using an adapter, install the corresponding package `@domcojs/...`. For example, to install the Vercel adapter and update the import statements in your `vite.config` file:
+
+  ```bash
+  npm i -D @domcojs/vercel
+  ```
+
+  ```diff
+  - import { adapter } from "domco/adapter/vercel";
+  + import { adapter } from "@domcojs/vercel";
+  ```
+
+- 1611dc5: Moves `Injector` to a separate package - `@robino/html`
+
+  This change reduces the size of the core package, not all users need this helper.
+
+  If you are using the `Injector` class, install the `@robino/html` package and update your import statements accordingly.
+
+  ```bash
+  npm i @robino/html
+  ```
+
+  ```diff
+  - import { Injector } from "domco/injector";
+  + import { Injector } from "@robino/html";
+  ```
+
 ## 2.3.0
 
 ### Minor Changes

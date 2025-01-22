@@ -1,7 +1,7 @@
 {
 	"name": "create-domco",
 	"description": "Create a new domco project",
-	"version": "2.0.17",
+	"version": "2.0.18",
 	"type": "module",
 	"types": "./dist/index.d.ts",
 	"main": "./dist/index.js",
@@ -30,7 +30,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@clack/prompts": "^0.9.1",
-		"domco": "^2.3.0",
+		"domco": "^3.0.0",
 		"prettier": "^3.4.2",
 		"which-pm-runs": "^1.1.0"
 	},
