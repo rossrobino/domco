@@ -65,15 +65,19 @@ node server.js
 
 ## Adapters
 
-Add a deployment adapter within your Vite config to output your application to a different target with no additional configuration.
+Install and add a deployment adapter within your Vite config to output your application to a different target with no additional configuration.
 
 ### Example
 
+```bash
+npm i -D @domcojs/vercel
+```
+
 ```ts {4,11-13}
 // vite.config
-import { domco } from "domco";
 // import adapter
-import { adapter } from "domco/adapter/vercel";
+import { adapter } from "@domcojs/vercel";
+import { domco } from "domco";
 import { defineConfig } from "vite";
 
 export default defineConfig({
@@ -90,6 +94,10 @@ export default defineConfig({
 
 ### Cloudflare
 
+```bash
+npm i -D @domcojs/cloudflare
+```
+
 The [Cloudflare](https://cloudflare.com) adapter outputs your application to run on [Cloudflare Pages](https://pages.cloudflare.com/).
 
 - Function runs on [workerd](https://github.com/cloudflare/workerd).
@@ -99,6 +107,10 @@ The [Cloudflare](https://cloudflare.com) adapter outputs your application to run
 
 ### Deno
 
+```bash
+npm i -D @domcojs/deno
+```
+
 The [Deno](https://deno.com) adapter outputs your application to run on [Deno Deploy](https://deno.com/deploy). You do not have to use Deno to build your func to use this adapter.
 
 - Function runs on Deno.
@@ -107,6 +119,10 @@ The [Deno](https://deno.com) adapter outputs your application to run on [Deno De
 <img loading="lazy" src="/_vercel/image?url=/images/deno/build-settings.png&w=1280&q=100" alt='A screenshot of the Deno Deploy Project Configuration UI. Set the Framework Preset field to "None", set the build command to "deno run -A npm:vite build", and the entry point to "dist/server/main.js".' />
 
 ### Vercel
+
+```bash
+npm i -D @domcojs/vercel
+```
 
 The [Vercel](https://vercel.com) adapter outputs your application to the [Build Output API](https://vercel.com/docs/build-output-api/v3) specification.
 
@@ -120,7 +136,7 @@ The [Vercel](https://vercel.com) adapter outputs your application to the [Build 
 
 If you'd like to deploy a domco application to a different provider, and you need many configuration steps for this to take place you can create an adapter.
 
-Check out the [current adapters](https://github.com/rossrobino/domco/tree/main/packages/domco/src/adapter) to see how to make your own.
+Check out the [current adapters](https://github.com/rossrobino/domco/tree/main/packages) to see how to make your own.
 
 Adapters take care of these deployment steps.
 
