@@ -1,8 +1,8 @@
 import App from "@/client/react/App";
+import { Injector } from "@robino/html";
 import { html } from "client:page";
 import { html as reactHtml } from "client:page/react";
 import type { Handler, Prerender } from "domco";
-import { Injector } from "domco/injector";
 import { Hono } from "hono";
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";

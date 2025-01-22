@@ -188,10 +188,6 @@ For the export above, domco would request each path and generate the following f
 
 If you are using an [adapter](/deploy#adapters), these static files will be served in front of your request handler. So when an `index.html` file is found for the route, it is served directly without hitting your handler.
 
-## Manipulating HTML Strings
-
-You might often find yourself modifying a string of HTML on the server. domco provides a helper [`Injector`](/api-reference#injector) class to inject tags into an HTML string where you need them. This class is useful to inject server rendered content into an HTML page.
-
 ## That's It!
 
 domco has a minimal API surface area and tries to get out of your way during development.

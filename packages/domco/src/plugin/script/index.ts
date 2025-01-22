@@ -1,6 +1,4 @@
 import { dirNames, fileNames } from "../../constants/index.js";
-import { Injector } from "../../injector/index.js";
-import type { TagDescriptor } from "../../types/index.js";
 import { findFiles, toAllScriptEndings, toPosix } from "../../util/fs/index.js";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -39,7 +37,7 @@ export const scriptPlugin = (): Plugin => {
 
 				if (!pathName) pathName = "/";
 
-				const tags: TagDescriptor[] = [];
+				let tags = "";
 
 				if (!prod) {
 					const scriptFiles = await findFiles({
@@ -54,10 +52,7 @@ export const scriptPlugin = (): Plugin => {
 
 					if (!src) this.warn(`No client module found for ${pathName}`);
 
-					tags.push({
-						name: "script",
-						attrs: { type: "module", src },
-					});
+					tags += `<script type="module" src="${src}"></script>`;
 				} else {
 					// read from manifest
 					const manifest: Manifest = JSON.parse(
@@ -72,10 +67,10 @@ export const scriptPlugin = (): Plugin => {
 						),
 					);
 
-					tags.push(...getTags({ manifest, pathName, error: this.error }));
+					tags += getTags({ manifest, pathName, error: this.error });
 				}
 
-				return `export const tags = ${JSON.stringify(Injector.serializeTags(tags))};`;
+				return `export const tags = ${JSON.stringify(tags)};`;
 			}
 		},
 	};
@@ -133,51 +128,37 @@ const getTags = (options: {
 
 	if (!chunk) {
 		error(`No tags found in manifest for \`${pathName}\``);
-		return [];
+		return "";
 	}
 
-	const tags: TagDescriptor[] = [];
+	let tags = "";
 
 	if (!imp) {
-		// push the entry file name
-		tags.push({
-			name: "script",
-			attrs: { type: "module", src: `/${chunk.file}` },
-		});
+		`<script type="module" src="/${chunk.file}"></script>`;
+		// the entry file name
+		tags += `<script type="module" src="/${chunk.file}"></script>`;
 	} else {
-		// push a modulepreload link to get the script ready but don't execute immediately
+		// a modulepreload link to get the script ready but don't execute immediately
 		// this is required to flatten the request waterfall if you are using manual chunks for example
-		tags.push({
-			name: "link",
-			attrs: {
-				rel: "modulepreload",
-				crossorigin: "",
-				href: `/${chunk.file}`,
-			},
-		});
+		tags += `<link rel="modulepreload" crossorigin href="/${chunk.file}">`;
 	}
 
 	if (chunk.css) {
 		// need to also do this for `imports` since css does not actually link in the code
 		for (const cssFile of chunk.css) {
-			tags.push({
-				name: "link",
-				attrs: { rel: "stylesheet", href: `/${cssFile}` },
-			});
+			tags += `<link rel="stylesheet" href="/${cssFile}">`;
 		}
 	}
 
 	if (chunk.imports) {
 		// recursively call on imports
 		for (const impPathName of chunk.imports) {
-			tags.push(
-				...getTags({
-					manifest,
-					pathName: impPathName,
-					imp: true,
-					error,
-				}),
-			);
+			tags += getTags({
+				manifest,
+				pathName: impPathName,
+				imp: true,
+				error,
+			});
 		}
 	}
 

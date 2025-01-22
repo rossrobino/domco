@@ -46,10 +46,6 @@
 		"./env": {
 			"types": "./dist/types/env.d.ts"
 		},
-		"./injector": {
-			"types": "./dist/injector/index.d.ts",
-			"default": "./dist/injector/index.js"
-		},
 		"./listener": {
 			"types": "./dist/listener/index.d.ts",
 			"default": "./dist/listener/index.js"
