@@ -1,17 +1,13 @@
-import { dirNames, headers } from "../../constants/index.js";
-import type {
-	AdapterBuilder,
-	AdapterEntry,
-	AdapterMiddleware,
-} from "../../types/index.js";
-import { clearDir, copyClient, copyServer } from "../../util/fs/index.js";
-import { version } from "../../version/index.js";
 import type {
 	PrerenderFunctionConfig,
 	OutputConfig,
 	RequiredOptions,
 	VercelAdapterOptions,
 } from "./types.js";
+import type { AdapterBuilder, AdapterEntry, AdapterMiddleware } from "domco";
+import { dirNames, headers } from "domco/constants";
+import { clearDir, copyClient, copyServer } from "domco/util";
+import { version } from "domco/version";
 import fs from "node:fs/promises";
 import path from "node:path";
 
@@ -88,8 +84,8 @@ export default handler;
  * @example
  *
  * ```ts
+ * import { adapter } from "@domcojs/vercel";
  * import { domco } from "domco";
- * import { adapter } from "domco/adapter/vercel";
  * import { defineConfig } from "vite";
  *
  * export default defineConfig({

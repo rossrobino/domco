@@ -1,6 +1,6 @@
+import { adapter } from "@domcojs/vercel";
 import react from "@vitejs/plugin-react";
 import { domco } from "domco";
-import { adapter } from "domco/adapter/vercel";
 import { defineConfig } from "vite";
 
 export default defineConfig({

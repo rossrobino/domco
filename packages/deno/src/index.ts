@@ -1,5 +1,5 @@
-import { dirNames } from "../../constants/index.js";
-import type { AdapterBuilder } from "../../types/index.js";
+import type { AdapterBuilder } from "domco";
+import { dirNames } from "domco/constants";
 
 /**
  * Creates a Deno Deploy build.
@@ -10,8 +10,8 @@ import type { AdapterBuilder } from "../../types/index.js";
  * @example
  *
  * ```ts
+ * import { adapter } from "@domcojs/deno";
  * import { domco } from "domco";
- * import { adapter } from "domco/adapter/deno";
  * import { defineConfig } from "vite";
  *
  * export default defineConfig({

@@ -1,11 +1,6 @@
-import { dirNames, headers } from "../../constants/index.js";
-import type { AdapterBuilder } from "../../types/index.js";
-import {
-	clearDir,
-	copyClient,
-	copyServer,
-	toPosix,
-} from "../../util/fs/index.js";
+import type { AdapterBuilder } from "domco";
+import { dirNames, headers } from "domco/constants";
+import { clearDir, copyClient, copyServer, toPosix } from "domco/util";
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
@@ -19,8 +14,8 @@ import process from "node:process";
  * @example
  *
  * ```ts
+ * import { adapter } from "@domcojs/cloudflare";
  * import { domco } from "domco";
- * import { adapter } from "domco/adapter/cloudflare";
  * import { defineConfig } from "vite";
  *
  * export default defineConfig({

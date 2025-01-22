@@ -1,0 +1,29 @@
+{
+	"name": "@domcojs/vercel",
+	"description": "domco Vercel adapter",
+	"version": "0.0.1",
+	"license": "MIT",
+	"type": "module",
+	"sideEffects": false,
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"scripts": {
+		"dev": "tsc --watch",
+		"build:clean": "rm -rf ./dist",
+		"build:js": "tsc",
+		"build": "npm run build:clean && npm run build:js"
+	},
+	"dependencies": {
+		"domco": "^2.3.0"
+	}
+}

@@ -11,6 +11,7 @@
 		"preview:wrangler": "wrangler pages dev .cloudflare"
 	},
 	"devDependencies": {
+		"@domcojs/cloudflare": "*",
 		"domco": "*"
 	}
 }
