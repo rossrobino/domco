@@ -1,11 +1,11 @@
 import { adapter } from "@domcojs/vercel";
-import autoprefixer from "autoprefixer";
+import tailwindcss from "@tailwindcss/vite";
 import { domco } from "domco";
-import tailwindcss from "tailwindcss";
 import { defineConfig } from "vite";
 
 export default defineConfig({
 	plugins: [
+		tailwindcss(),
 		domco({
 			adapter: adapter({
 				config: {
@@ -19,9 +19,4 @@ export default defineConfig({
 			}),
 		}),
 	],
-	css: {
-		postcss: {
-			plugins: [tailwindcss(), autoprefixer()],
-		},
-	},
 });
