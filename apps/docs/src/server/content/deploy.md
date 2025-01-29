@@ -111,7 +111,7 @@ The [Cloudflare](https://cloudflare.com) adapter outputs your application to run
 npm i -D @domcojs/deno
 ```
 
-The [Deno](https://deno.com) adapter outputs your application to run on [Deno Deploy](https://deno.com/deploy). You do not have to use Deno to build your func to use this adapter.
+The [Deno](https://deno.com) adapter outputs your application to run on [Deno Deploy](https://deno.com/deploy). You do not have to use Deno to build your function to use this adapter.
 
 - Function runs on Deno.
 - Static files are served with [`@std/http/file-server`](https://jsr.io/@std/http).
