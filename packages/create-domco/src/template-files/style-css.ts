@@ -17,7 +17,7 @@ const getTemplateFiles: GetTemplateFile = ({ tailwind }) => {
 		return [
 			{
 				name: `src/${styleFileName.tailwind}`,
-				contents: `@import "tailwindcss";\n\n${contents}`,
+				contents: `@import "tailwindcss";\n@source "../";\n\n${contents}`,
 			},
 		];
 	}
