@@ -1,5 +1,11 @@
 # domco
 
+## 3.0.1
+
+### Patch Changes
+
+- f75a50e: update `nodeListener`
+
 ## 3.0.0
 
 ### Major Changes
