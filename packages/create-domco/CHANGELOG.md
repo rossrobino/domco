@@ -1,5 +1,11 @@
 # create-domco
 
+## 2.0.19
+
+### Patch Changes
+
+- 3d80cd6: fix: tailwind v4 setup - source identification during build requires source to be set
+
 ## 2.0.18
 
 ### Patch Changes
