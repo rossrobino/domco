@@ -17,9 +17,7 @@ import process from "node:process";
 import { format } from "prettier";
 import whichPmRuns from "which-pm-runs";
 
-type PackageManager =
-	| ("npm" | "bun" | "pnpm" | "yarn" | "deno")
-	| (string & {});
+type PackageManager = "npm" | "bun" | "pnpm" | "yarn" | "deno" | (string & {});
 
 type TemplateFile = { name: string; contents: string };
 
