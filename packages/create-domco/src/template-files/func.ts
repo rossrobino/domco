@@ -8,7 +8,7 @@ const getTemplateFiles: GetTemplateFile = ({ lang }) => {
 			contents: `${isTs ? `import type { Handler } from "domco";` : `/** @import { Handler } from "domco" */`}
 import { html } from "client:page";
 ${isTs ? "" : "\n/** @type {Handler} */"}
-export const handler${isTs ? ": Handler" : ""} = (req) => {
+export const handler${isTs ? ": Handler" : ""} = async (req) => {
 	const { pathname } = new URL(req.url);
 
 	if (pathname === "/") {

@@ -52,7 +52,7 @@ const isrEntry: AdapterEntry = ({ funcId }) => {
 		code: `
 import { handler } from "${funcId}";
 import { nodeListener } from "domco/listener";
-import { getUrl } from "domco/adapter/vercel";
+import { getUrl } from "@domcojs/vercel";
 
 const isrHandler = async (req) => handler(new Request(getUrl(req)));
 
