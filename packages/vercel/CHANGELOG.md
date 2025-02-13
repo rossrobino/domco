@@ -1,5 +1,11 @@
 # @domcojs/vercel
 
+## 1.0.2
+
+### Patch Changes
+
+- 5aaa6ce: fix: allow pathname query when user sets a different pathname
+
 ## 1.0.1
 
 ### Patch Changes
