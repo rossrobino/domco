@@ -1,5 +1,11 @@
 # @domcojs/vercel
 
+## 1.0.1
+
+### Patch Changes
+
+- 67a9726: fix: isr import
+
 ## 1.0.0
 
 ### Major Changes
