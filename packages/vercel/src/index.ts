@@ -12,6 +12,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 const entryId = "main";
+const pathnameParam = "__pathname";
 
 /** Use when runtime is set to node. */
 const nodeEntry: AdapterEntry = ({ funcId }) => {
@@ -36,7 +37,6 @@ export const getUrl = (req: Request) => {
 	const url = new URL(req.url);
 	const params = new URLSearchParams(url.search);
 
-	const pathnameParam = "__pathname";
 	const pathname = `/${params.get(pathnameParam) ?? ""}`;
 
 	params.delete(pathnameParam);
@@ -45,7 +45,7 @@ export const getUrl = (req: Request) => {
 	return url;
 };
 
-/** Use when runtime is set to node and ISR. */
+/** Use when runtime is set to node + ISR. */
 const isrEntry: AdapterEntry = ({ funcId }) => {
 	return {
 		id: entryId,
@@ -201,7 +201,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 					// falls back to function, this reroutes everything
 					{
 						src: "^/(.*)$",
-						dest: `/${fnName}?__pathname=$1`,
+						dest: `/${fnName}?${pathnameParam}=$1`,
 					},
 				],
 			};
@@ -209,12 +209,6 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 			if (resolvedOptions.images) {
 				outputConfig.images = resolvedOptions.images;
 			}
-
-			const defaultIsr: Partial<PrerenderFunctionConfig> = {
-				allowQuery: ["__pathname"],
-				group: 1,
-				passQuery: true,
-			};
 
 			await clearDir(outDir);
 
@@ -245,6 +239,25 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 			];
 
 			if (resolvedOptions.isr) {
+				const defaultIsr: Partial<PrerenderFunctionConfig> = {
+					allowQuery: [],
+					group: 1,
+					passQuery: true,
+				};
+
+				const mergedIsr: PrerenderFunctionConfig = Object.assign(
+					defaultIsr,
+					resolvedOptions.isr,
+				);
+
+				// must allow the pathname param otherwise all pages will be
+				// directed to "/"
+				if (mergedIsr.allowQuery) {
+					mergedIsr.allowQuery.push(pathnameParam);
+				} else {
+					mergedIsr.allowQuery = [pathnameParam];
+				}
+
 				tasks.push(
 					// write prerender-config
 					fs.writeFile(
