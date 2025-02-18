@@ -1,5 +1,11 @@
 # domco
 
+## 3.0.2
+
+### Patch Changes
+
+- 4f30877: fix: TypeError for undefined entries occuring on first dev run
+
 ## 3.0.1
 
 ### Patch Changes

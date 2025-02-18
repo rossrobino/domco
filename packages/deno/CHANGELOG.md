@@ -1,5 +1,13 @@
 # @domcojs/deno
 
+## 1.0.1
+
+### Patch Changes
+
+- 15a6723: dep: bump @std/http
+- Updated dependencies [4f30877]
+  - domco@3.0.2
+
 ## 1.0.0
 
 ### Major Changes
