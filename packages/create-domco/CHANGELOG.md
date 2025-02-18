@@ -1,5 +1,15 @@
 # create-domco
 
+## 2.1.0
+
+### Minor Changes
+
+- 8ad35b8: feat: add adapter from the create script
+
+### Patch Changes
+
+- edb07ce: informative warning if directory is not empty
+
 ## 2.0.20
 
 ### Patch Changes
