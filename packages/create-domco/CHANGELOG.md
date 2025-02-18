@@ -1,5 +1,13 @@
 # create-domco
 
+## 2.0.20
+
+### Patch Changes
+
+- 2cf8615: update func template, update template dependencies
+- Updated dependencies [4f30877]
+  - domco@3.0.2
+
 ## 2.0.19
 
 ### Patch Changes
