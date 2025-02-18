@@ -17,11 +17,14 @@ import process from "node:process";
 import { format } from "prettier";
 import whichPmRuns from "which-pm-runs";
 
+const cancelMessage = "Operation cancelled";
+
 type PackageManager = "npm" | "bun" | "pnpm" | "yarn" | "deno" | (string & {});
 
 type TemplateFile = { name: string; content: string };
 
 type GetTemplateFileOptions = {
+	adapter: null | "cloudflare" | "deno" | "vercel";
 	dir: string;
 	pm: PackageManager;
 	lang: string;
@@ -48,7 +51,7 @@ export const createDomco = async () => {
 	});
 
 	if (p.isCancel(dir)) {
-		p.cancel("Operation cancelled.");
+		p.cancel(cancelMessage);
 		process.exit(0);
 	}
 
@@ -58,7 +61,7 @@ export const createDomco = async () => {
 		});
 
 		if (existingFiles.length) {
-			p.log.warn("WARNING: existing files could be overwritten");
+			p.log.warn("WARNING: Existing files could be overwritten.");
 
 			p.note(
 				`${dir}/${existingFiles
@@ -85,7 +88,7 @@ export const createDomco = async () => {
 			});
 
 			if (!proceed || p.isCancel(proceed)) {
-				p.cancel("Operation cancelled.");
+				p.cancel(cancelMessage);
 				process.exit(0);
 			}
 		}
@@ -94,35 +97,74 @@ export const createDomco = async () => {
 	}
 
 	const lang = await p.select({
-		message: "Select language",
+		message: "Language (arrow keys + enter)",
+		initialValue: "ts",
 		options: [
 			{ label: "TypeScript", value: "ts" },
-			{ label: "JavaScript", value: "js" },
+			{
+				label: "JavaScript",
+				value: "js",
+				hint: "remove `tsconfig.json` to disable type checking",
+			},
 		],
 	});
 
 	if (p.isCancel(lang)) {
-		p.cancel("Operation cancelled.");
+		p.cancel(cancelMessage);
+		process.exit(0);
+	}
+
+	const adapter = await p.select({
+		message: "Deployment adapter",
+		initialValue: null,
+		options: [
+			{
+				value: null,
+				label: "none",
+				hint: "you can add one later - https://domco.robino.dev/deploy#adapters",
+			},
+			{
+				value: "cloudflare",
+				label: "cloudflare",
+				hint: "https://domco.robino.dev/deploy#cloudflare",
+			},
+			{
+				value: "deno",
+				label: "deno",
+				hint: "https://domco.robino.dev/deploy#deno",
+			},
+			{
+				value: "vercel",
+				label: "vercel",
+				hint: "https://domco.robino.dev/deploy#vercel",
+			},
+		],
+	});
+
+	if (p.isCancel(adapter)) {
+		p.cancel(cancelMessage);
 		process.exit(0);
 	}
 
 	const extras = await p.multiselect({
-		message: "Select additional options (use arrow keys/space bar)",
+		message: "Additional options (space bar / a)",
 		required: false,
 		options: [
 			{
 				value: "prettier",
 				label: "Add Prettier for formatting",
+				hint: "https://prettier.io/",
 			},
 			{
 				value: "tailwind",
 				label: "Add TailwindCSS for styling",
+				hint: "https://tailwindcss.com/",
 			},
 		],
 	});
 
 	if (p.isCancel(extras)) {
-		p.cancel("Operation cancelled.");
+		p.cancel(cancelMessage);
 		process.exit(0);
 	}
 
@@ -132,6 +174,7 @@ export const createDomco = async () => {
 
 	const options: GetTemplateFileOptions = {
 		dir,
+		adapter,
 		lang: String(lang),
 		prettier: extras.includes("prettier"),
 		tailwind: extras.includes("tailwind"),
