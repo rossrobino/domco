@@ -9,9 +9,9 @@ const getTemplateFiles: GetTemplateFile = ({ lang }) => {
 import { html } from "client:page";
 ${isTs ? "" : "\n/** @type {Handler} */"}
 export const handler${isTs ? ": Handler" : ""} = async (req) => {
-	const { pathname } = new URL(req.url);
+	const url = new URL(req.url);
 
-	if (pathname === "/") {
+	if (url.pathname === "/") {
 		return new Response(html, {
 			headers: {
 				"Content-Type": "text/html",

@@ -3,10 +3,10 @@ import { version } from "domco/version";
 export const getDependencies = () => {
 	return {
 		domco: version,
-		prettier: "3.4.2",
-		prettierTailwind: "0.6.10",
-		tailwind: "4.0.0",
+		prettier: "3.5.1",
+		prettierTailwind: "0.6.11",
+		tailwind: "4.0.6",
 		typescript: "5.7.3",
-		vite: "6.0.11",
+		vite: "6.1.0",
 	};
 };
