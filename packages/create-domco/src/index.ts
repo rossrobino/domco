@@ -53,11 +53,34 @@ export const createDomco = async () => {
 	}
 
 	try {
-		const existingFiles = await fs.readdir(dir);
+		const existingFiles = await fs.readdir(dir, {
+			withFileTypes: true,
+		});
 
 		if (existingFiles.length) {
+			p.log.warn("WARNING: existing files could be overwritten");
+
+			p.note(
+				`${dir}/${existingFiles
+					.map((file, i) => {
+						let fileName = path.relative(
+							dir,
+							path.join(file.parentPath, file.name),
+						);
+
+						if (!file.isFile()) fileName += "/...";
+
+						if (i === existingFiles.length - 1) {
+							return `\n└── ${fileName}`;
+						}
+
+						return `\n├── ${fileName}`;
+					})
+					.join("")}`,
+			);
+
 			const proceed = await p.confirm({
-				message: `The \`${dir}\` directory is not empty, continue?`,
+				message: `The \`${dir}/\` directory is not empty, continue?`,
 				initialValue: false,
 			});
 
