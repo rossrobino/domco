@@ -8,7 +8,7 @@ const getTemplateFiles: GetTemplateFile = ({ prettier, tailwind }) => {
 	return [
 		{
 			name: prettierConfigFileName,
-			contents: `/** @import { Config } from "prettier" */
+			content: `/** @import { Config } from "prettier" */
 
 /** @type {Config} */
 export default {useTabs: true,${
@@ -17,7 +17,7 @@ export default {useTabs: true,${
 		},
 		{
 			name: ".prettierignore",
-			contents: `.DS_Store
+			content: `.DS_Store
 node_modules
 /dist
 package-lock.json

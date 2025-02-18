@@ -6,7 +6,7 @@ const getTemplateFiles: GetTemplateFile = () => {
 	return [
 		{
 			name: `public/${faviconFileName}`,
-			contents: `<svg
+			content: `<svg
 	xmlns="http://www.w3.org/2000/svg"
 	width="24"
 	height="24"

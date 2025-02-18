@@ -11,7 +11,7 @@ const getTemplateFiles: GetTemplateFile = ({
 	return [
 		{
 			name: "deno.json",
-			contents: `{
+			content: `{
 	"version": "0.0.0",
 	"tasks": {
 		"dev": "deno run -A npm:vite",

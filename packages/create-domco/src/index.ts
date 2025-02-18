@@ -19,7 +19,7 @@ import whichPmRuns from "which-pm-runs";
 
 type PackageManager = "npm" | "bun" | "pnpm" | "yarn" | "deno" | (string & {});
 
-type TemplateFile = { name: string; contents: string };
+type TemplateFile = { name: string; content: string };
 
 type GetTemplateFileOptions = {
 	dir: string;
@@ -155,12 +155,12 @@ const getAllTemplateFiles: GetTemplateFile = async (options) => {
 
 		try {
 			if (["html", "css", "json", "md"].includes(ext)) {
-				templateFile.contents = await format(templateFile.contents, {
+				templateFile.content = await format(templateFile.content, {
 					parser: ext,
 					useTabs: true,
 				});
 			} else if (["ts", "js"].includes(ext)) {
-				templateFile.contents = await format(templateFile.contents, {
+				templateFile.content = await format(templateFile.content, {
 					parser: "babel-ts",
 					useTabs: true,
 				});
@@ -185,7 +185,7 @@ const writeTemplateFiles = async (
 	templateFiles: TemplateFile[],
 ) => {
 	return Promise.all(
-		templateFiles.map(async ({ name, contents }) => {
+		templateFiles.map(async ({ name, content: contents }) => {
 			const filePath = path.join(dir, name);
 			const fileDirectory = path.dirname(filePath);
 

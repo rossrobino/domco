@@ -12,7 +12,7 @@ const getTemplateFiles: GetTemplateFile = ({
 	return [
 		{
 			name: "package.json",
-			contents: `{
+			content: `{
 	"name": "${projectName}",
 	"private": true,
 	"version": "0.0.0",

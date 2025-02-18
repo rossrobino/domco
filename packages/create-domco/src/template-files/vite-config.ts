@@ -4,7 +4,7 @@ const getTemplateFiles: GetTemplateFile = ({ lang, tailwind }) => {
 	return [
 		{
 			name: `vite.config.${lang}`,
-			contents: `import { defineConfig } from "vite";
+			content: `import { defineConfig } from "vite";
 import { domco } from "domco";
 ${tailwind ? `import tailwindcss from "@tailwindcss/vite";` : ``}
 

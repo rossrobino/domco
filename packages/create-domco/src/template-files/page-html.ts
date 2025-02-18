@@ -6,7 +6,7 @@ const getTemplateFiles: GetTemplateFile = ({ tailwind, projectName }) => {
 	return [
 		{
 			name: "src/client/+page.html",
-			contents: `<!doctype html>
+			content: `<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />

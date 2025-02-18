@@ -4,7 +4,7 @@ const getTemplateFiles: GetTemplateFile = () => {
 	return [
 		{
 			name: "src/env.d.ts",
-			contents: `/// <reference types="vite/client" />\n/// <reference types="domco/env" />`,
+			content: `/// <reference types="vite/client" />\n/// <reference types="domco/env" />`,
 		},
 	];
 };

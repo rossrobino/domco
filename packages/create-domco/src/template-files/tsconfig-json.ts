@@ -7,7 +7,7 @@ const getTemplateFiles: GetTemplateFile = ({ pm, lang, prettier }) => {
 	return [
 		{
 			name: "tsconfig.json",
-			contents: `{
+			content: `{
 	"compilerOptions": {
 		"target": "ESNext",
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],

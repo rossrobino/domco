@@ -5,7 +5,7 @@ const getTemplateFiles: GetTemplateFile = ({ lang }) => {
 	return [
 		{
 			name: `src/server/+func.${lang}`,
-			contents: `${isTs ? `import type { Handler } from "domco";` : `/** @import { Handler } from "domco" */`}
+			content: `${isTs ? `import type { Handler } from "domco";` : `/** @import { Handler } from "domco" */`}
 import { html } from "client:page";
 ${isTs ? "" : "\n/** @type {Handler} */"}
 export const handler${isTs ? ": Handler" : ""} = async (req) => {

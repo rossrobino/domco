@@ -4,7 +4,7 @@ const getTemplateFiles: GetTemplateFile = () => {
 	return [
 		{
 			name: ".gitignore",
-			contents: `logs
+			content: `logs
 *.log
 npm-debug.log*
 yarn-debug.log*
