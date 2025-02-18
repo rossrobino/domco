@@ -52,6 +52,10 @@ export const configPlugin = async (
 					target: adapter?.target,
 					noExternal: build ? adapter?.noExternal : undefined,
 				},
+				optimizeDeps: {
+					// fixes TypeError when this is left undefined
+					entries: [],
+				},
 				build: {
 					manifest: !isSsrBuild,
 					target: "es2022",
