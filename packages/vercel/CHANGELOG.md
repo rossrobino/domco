@@ -1,5 +1,15 @@
 # @domcojs/vercel
 
+## 1.1.0
+
+### Minor Changes
+
+- 832e25b: feat: add `trailingSlash` option to adapter config
+
+  With this option, users will not have to set this value in a `vercel.json`.
+
+  see - https://vercel.com/docs/projects/project-configuration#trailingslash
+
 ## 1.0.2
 
 ### Patch Changes
