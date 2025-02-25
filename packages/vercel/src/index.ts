@@ -3,6 +3,7 @@ import type {
 	OutputConfig,
 	RequiredOptions,
 	VercelAdapterOptions,
+	Route,
 } from "./types.js";
 import type { AdapterBuilder, AdapterEntry, AdapterMiddleware } from "domco";
 import { dirNames, headers } from "domco/constants";
@@ -128,6 +129,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	// could be undefined
 	resolvedOptions.isr = options?.isr;
 	resolvedOptions.images = options?.images;
+	resolvedOptions.trailingSlash = options?.trailingSlash;
 
 	let entry = nodeEntry;
 	if (isEdge) entry = edgeEntry;
@@ -180,30 +182,53 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 			const fnName = "fn";
 			const fnDir = path.join(outDir, "functions", `${fnName}.func`);
 
+			const routes: Route[] = [
+				{
+					src: `/${dirNames.out.client.immutable}/.+`,
+					headers: {
+						"cache-control": headers.cacheControl.immutable,
+					},
+				},
+				// required for static files, checks this first
+				{
+					methods: ["GET"],
+					handle: "filesystem",
+				},
+				// falls back to function, this reroutes everything
+				{
+					src: "^/(.*)$",
+					dest: `/${fnName}?${pathnameParam}=$1`,
+				},
+			];
+
+			if (resolvedOptions.trailingSlash === true) {
+				routes.push(
+					{
+						src: "^/((?:[^/]+/)*[^/\\.]+)$",
+						headers: { Location: "/$1/" },
+						status: 308,
+					},
+					{
+						src: "^/((?:[^/]+/)*[^/]+\\.\\w+)/$",
+						headers: { Location: "/$1" },
+						status: 308,
+					},
+				);
+			} else if (resolvedOptions.trailingSlash === false) {
+				routes.push({
+					src: "^/(.*)\\/$",
+					headers: { Location: "/$1" },
+					status: 308,
+				});
+			}
+
 			const outputConfig: OutputConfig = {
 				version: 3,
 				framework: {
 					slug: "domco",
 					version,
 				},
-				routes: [
-					{
-						src: `/${dirNames.out.client.immutable}/.+`,
-						headers: {
-							"cache-control": headers.cacheControl.immutable,
-						},
-					},
-					// required for static files, checks this first
-					{
-						methods: ["GET"],
-						handle: "filesystem",
-					},
-					// falls back to function, this reroutes everything
-					{
-						src: "^/(.*)$",
-						dest: `/${fnName}?${pathnameParam}=$1`,
-					},
-				],
+				routes,
 			};
 
 			if (resolvedOptions.images) {

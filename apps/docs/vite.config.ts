@@ -16,6 +16,7 @@ export default defineConfig({
 					sizes: [1280],
 					formats: ["image/avif"],
 				},
+				trailingSlash: false,
 			}),
 		}),
 	],

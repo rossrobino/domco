@@ -149,7 +149,7 @@ export type OutputConfig = {
 	framework?: Framework;
 };
 
-type Route = Source | Handler;
+export type Route = Source | Handler;
 
 type Source = {
 	src: string;
@@ -289,7 +289,7 @@ export type RequiredOptions = (
 			isr?: PrerenderFunctionConfig;
 	  }
 	| { config: EdgeFunctionConfig; isr?: never }
-) & { images?: ImagesConfig };
+) & { images?: ImagesConfig; trailingSlash?: boolean };
 
 export type VercelAdapterOptions = (
 	| {
@@ -369,4 +369,6 @@ export type VercelAdapterOptions = (
 	 * ```
 	 */
 	images?: ImagesConfig;
+
+	trailingSlash?: boolean;
 };
