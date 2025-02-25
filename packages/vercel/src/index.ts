@@ -182,24 +182,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 			const fnName = "fn";
 			const fnDir = path.join(outDir, "functions", `${fnName}.func`);
 
-			const routes: Route[] = [
-				{
-					src: `/${dirNames.out.client.immutable}/.+`,
-					headers: {
-						"cache-control": headers.cacheControl.immutable,
-					},
-				},
-				// required for static files, checks this first
-				{
-					methods: ["GET"],
-					handle: "filesystem",
-				},
-				// falls back to function, this reroutes everything
-				{
-					src: "^/(.*)$",
-					dest: `/${fnName}?${pathnameParam}=$1`,
-				},
-			];
+			const routes: Route[] = [];
 
 			if (resolvedOptions.trailingSlash === true) {
 				routes.push(
@@ -221,6 +204,25 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 					status: 308,
 				});
 			}
+
+			routes.push(
+				{
+					src: `/${dirNames.out.client.immutable}/.+`,
+					headers: {
+						"cache-control": headers.cacheControl.immutable,
+					},
+				},
+				// required for static files, checks this first
+				{
+					methods: ["GET"],
+					handle: "filesystem",
+				},
+				// falls back to function, this reroutes everything
+				{
+					src: "^/(.*)$",
+					dest: `/${fnName}?${pathnameParam}=$1`,
+				},
+			);
 
 			const outputConfig: OutputConfig = {
 				version: 3,
