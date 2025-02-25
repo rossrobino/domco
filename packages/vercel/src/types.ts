@@ -347,7 +347,9 @@ export type VercelAdapterOptions = (
 	 * | w   | Integer | Yes      | `200`            | The width (in pixels) that the source image should be resized to. Must match a value defined in the sizes configuration.                |
 	 * | q   | Integer | Yes      | `75`             | The quality that the source image should be reduced to. Must be between 1 (lowest quality) to 100 (highest quality).                    |
 	 *
-	 * https://vercel.com/docs/build-output-api/v3/configuration#images
+	 * [Reference](https://vercel.com/docs/build-output-api/v3/configuration#images)
+	 *
+	 * @default undefined
 	 *
 	 * @example
 	 *
@@ -370,5 +372,14 @@ export type VercelAdapterOptions = (
 	 */
 	images?: ImagesConfig;
 
+	/**
+	 * - `false` - pathnames that end with slash will redirect to the same path without
+	 * - `true` - pathnames that do not end with slash will redirect to the same path with a slash
+	 * - `undefined` - no redirect (can be bad for SEO)
+	 *
+	 * @default undefined
+	 *
+	 * [Reference](https://vercel.com/docs/projects/project-configuration#trailingslash)
+	 */
 	trailingSlash?: boolean;
 };
