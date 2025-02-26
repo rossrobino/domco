@@ -6,11 +6,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
 	plugins: [
 		domco({
-			adapter: adapter({
-				config: {
-					runtime: "nodejs20.x",
-				},
-			}),
+			adapter: adapter(),
 		}),
 		react(),
 	],

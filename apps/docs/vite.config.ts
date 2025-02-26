@@ -8,9 +8,6 @@ export default defineConfig({
 		tailwindcss(),
 		domco({
 			adapter: adapter({
-				config: {
-					runtime: "edge",
-				},
 				images: {
 					domains: [],
 					sizes: [1280],
