@@ -11,9 +11,9 @@ export type ServerlessFunctionConfig = {
 	 * Specifies which "runtime" will be used to execute the Serverless Function.
 	 * See [Runtimes](https://vercel.com/docs/functions/serverless-functions/runtimes) for more information.
 	 *
-	 * @default "nodejs20.x"
+	 * @default "nodejs22.x"
 	 */
-	runtime: "nodejs20.x";
+	runtime: string;
 
 	/**
 	 * Amount of memory (RAM in MB) that will be allocated to the Serverless Function.

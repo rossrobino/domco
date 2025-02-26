@@ -117,7 +117,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		resolvedOptions = {
 			config: {
 				handler: `${entryId}.js`,
-				runtime: "nodejs20.x",
+				runtime: "nodejs22.x",
 				launcherType: "Nodejs",
 			},
 		};
