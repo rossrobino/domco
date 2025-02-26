@@ -1,5 +1,11 @@
 # @domcojs/vercel
 
+## 1.1.1
+
+### Patch Changes
+
+- 448e023: fix: allow other node versions, bump default to 22
+
 ## 1.1.0
 
 ### Minor Changes
