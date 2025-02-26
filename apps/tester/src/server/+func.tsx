@@ -1,5 +1,5 @@
 import App from "@/client/react/App";
-import { Injector } from "@robino/html";
+import { Page } from "@robino/html";
 import { html } from "client:page";
 import { html as reactHtml } from "client:page/react";
 import type { Handler, Prerender } from "domco";
@@ -24,15 +24,11 @@ app.all("/", async (c) => {
 
 		if (typeof userInput === "string" && userInput.length) {
 			return c.html(
-				new Injector(html)
-					.comment("result", [{ name: "div", children: "success" }])
-					.toString(),
+				new Page(html).body([{ name: "div", children: "success" }]).toString(),
 			);
 		} else {
 			return c.html(
-				new Injector(html)
-					.comment("result", [{ name: "div", children: "invalid" }])
-					.toString(),
+				new Page(html).body([{ name: "div", children: "invalid" }]).toString(),
 			);
 		}
 	}

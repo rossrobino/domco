@@ -23,7 +23,7 @@
 		"build:js": "tsc",
 		"build": "npm run build:clean && npm run build:js"
 	},
-	"dependencies": {
+	"peerDependencies": {
 		"domco": "^3.0.0"
 	}
 }

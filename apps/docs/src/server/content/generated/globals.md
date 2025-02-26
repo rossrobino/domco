@@ -318,7 +318,7 @@ export const prerender: Prerender = ["/", "/post-1", "/post-2"];
 
 ### domco()
 
-> **domco**(`domcoConfig`): `Promise`\<`Plugin`[]\>
+> **domco**(`domcoConfig`): `Promise`\<`Plugin`\<`any`\>[]\>
 
 Defined in: [plugin/index.ts:30](https://github.com/rossrobino/domco/blob/main/packages/domco/src/plugin/index.ts#L30)
 
@@ -335,7 +335,7 @@ Your domco config object.
 
 #### Returns
 
-`Promise`\<`Plugin`[]\>
+`Promise`\<`Plugin`\<`any`\>[]\>
 
 The domco Vite plugin.
 

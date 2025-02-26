@@ -27,16 +27,12 @@ headings.forEach((heading) => {
 	}
 });
 
-const drabDetails = document.createElement("drab-details");
-drabDetails.classList.add("contents");
-drabDetails.setAttribute("animation-keyframe-from-grid-template-rows", "0fr");
-drabDetails.setAttribute("animation-keyframe-to-grid-template-rows", "1fr");
-
 const details = document.createElement("details");
-details.classList.add("group", "overflow-hidden", "border-b", "p-4");
+details.classList.add("group", "w-full", "border-b", "px-4", "pt-4", "pb-2");
 
 const summary = document.createElement("summary");
 summary.classList.add(
+	"link",
 	"flex",
 	"list-none",
 	"items-center",
@@ -80,7 +76,6 @@ content.append(tocUl);
 
 details.append(summary);
 details.append(content);
-drabDetails.append(details);
 
 let onThisPage = document.querySelector("on-this-page");
 
@@ -93,4 +88,4 @@ if (!onThisPage) {
 	h1?.insertAdjacentElement("afterend", onThisPage);
 }
 
-onThisPage.append(drabDetails);
+onThisPage.append(details);

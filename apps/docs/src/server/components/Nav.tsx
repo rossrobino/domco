@@ -26,7 +26,7 @@ type NavLinkProps = {
 const SideBar: FC = () => {
 	return (
 		<nav class="bg-muted-background sticky top-0 hidden h-screen w-[20vw] min-w-56 justify-end overflow-y-auto lg:flex">
-			<div class="flex flex-col py-6 pl-6 pr-12">
+			<div class="flex flex-col py-6 pr-12 pl-6">
 				<div class="pb-6">
 					<HomeLink />
 				</div>

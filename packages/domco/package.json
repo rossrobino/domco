@@ -65,13 +65,13 @@
 		"test:dev": "vitest",
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc",
-		"build": "node scripts/version && npm run build:clean && npm run build:js && cp src/types/env.d.ts dist/types/env.d.ts",
+		"build": "node scripts/version && npm run build:js && cp src/types/env.d.ts dist/types/env.d.ts",
 		"doc": "typedoc --options typedoc.config.js"
 	},
 	"devDependencies": {
-		"typedoc": "^0.27.6",
-		"typedoc-plugin-markdown": "^4.4.1",
-		"vitest": "^3.0.3"
+		"typedoc": "^0.27.9",
+		"typedoc-plugin-markdown": "^4.4.2",
+		"vitest": "^3.0.7"
 	},
 	"peerDependencies": {
 		"vite": "^5.4.0 || ^6.0.0"

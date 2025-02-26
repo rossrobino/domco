@@ -1,7 +1,7 @@
 @layer theme, base, components, utilities;
 
+@import "uico";
 @import "tailwindcss/theme.css" layer(theme);
-@import "uico" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
 
 @source "../";
@@ -31,6 +31,39 @@
 	--color-accent-foreground: var(--accent-foreground);
 	--color-secondary-background: var(--secondary-background);
 	--color-destructive-foreground: var(--secondary-foreground);
+
+	--font-sans: var(--font-family-sans);
+	--font-mono: var(--font-family-mono);
+
+	--text-xs: var(--font-size-1);
+	--text-xs--line-height: var(--line-height-1);
+	--text-xs--letter-spacing: var(--letter-spacing-1);
+	--text-sm: var(--font-size-2);
+	--text-sm--line-height: var(--line-height-2);
+	--text-base: var(--font-size-3);
+	--text-base--line-height: ar(--line-height-3);
+	--text-lg: var(--font-size-4);
+	--text-lg--line-height: var(--line-height-4);
+	--text-xl: var(--font-size-5);
+	--text-xl--line-height: var(--line-height-5);
+	--text-2xl: var(--font-size-6);
+	--text-2xl--line-height: var(--line-height-6);
+	--text-3xl: var(--font-size-7);
+	--text-3xl--line-height: var(--line-height-6);
+	--text-4xl: var(--font-size-8);
+	--text-4xl--line-height: var(--line-height-9);
+	--text-5xl: var(--font-size-9);
+	--text-5xl--line-height: var(--line-height-10);
+	--text-6xl: var(--font-size-10);
+
+	--radius-xs: calc(var(--border-radius) / 3);
+	--radius-sm: calc(var(--border-radius) / 1.5);
+	--radius-md: var(--border-radius);
+	--radius-lg: calc(var(--border-radius) * 1.33);
+	--radius-xl: calc(var(--border-radius) * 2);
+	--radius-2xl: calc(var(--border-radius) * 2.66);
+	--radius-3xl: calc(var(--border-radius) * 4);
+	--radius-4xl: calc(var(--border-radius) * 5.33);
 }
 
 @layer base {
@@ -39,19 +72,19 @@
 		--accent: var(--color-teal-700);
 		--destructive: var(--color-rose-700);
 
-		pre {
-			--shiki-foreground: var(--color-base-200);
-			--shiki-background: var(--color-base-900);
-			--shiki-token-constant: var(--color-base-50);
-			--shiki-token-string: var(--color-sky-200);
-			--shiki-token-comment: var(--color-base-400);
-			--shiki-token-keyword: var(--color-teal-300);
-			--shiki-token-parameter: var(--color-base-300);
-			--shiki-token-function: var(--color-violet-300);
-			--shiki-token-string-expression: var(--color-sky-300);
-			--shiki-token-punctuation: var(--color-base-300);
-			--shiki-token-link: var(--color-base-300);
+		--shiki-foreground: var(--color-base-200);
+		--shiki-background: var(--color-base-900);
+		--shiki-token-constant: var(--color-base-50);
+		--shiki-token-string: var(--color-sky-200);
+		--shiki-token-comment: var(--color-base-400);
+		--shiki-token-keyword: var(--color-teal-300);
+		--shiki-token-parameter: var(--color-base-300);
+		--shiki-token-function: var(--color-violet-300);
+		--shiki-token-string-expression: var(--color-sky-300);
+		--shiki-token-punctuation: var(--color-base-300);
+		--shiki-token-link: var(--color-base-300);
 
+		pre {
 			margin-inline: -1.5rem;
 			border-radius: 0;
 			padding-inline: 0;
@@ -82,8 +115,8 @@
 	}
 
 	body {
-		font-family: Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro,
-			sans-serif;
+		font-family:
+			Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro, sans-serif;
 	}
 
 	* {
@@ -106,9 +139,24 @@
 		font-size: var(--text-sm);
 	}
 
-	/* for safari */
-	summary::-webkit-details-marker {
-		display: none;
+	details {
+		@media (prefers-reduced-motion: no-preference) {
+			interpolate-size: allow-keywords;
+		}
+		/* for safari */
+		summary::-webkit-details-marker {
+			display: none;
+		}
+		&::details-content {
+			transition:
+				content-visibility 300ms allow-discrete,
+				block-size 300ms;
+			block-size: 0;
+			overflow-y: clip;
+		}
+		&[open]::details-content {
+			block-size: auto;
+		}
 	}
 
 	img {

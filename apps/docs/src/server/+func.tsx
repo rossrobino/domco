@@ -33,7 +33,7 @@ app.use(async (c, next) => {
 	await next();
 });
 
-const previewHtml = raw(mdProcessor.process(preview).html);
+const previewHtml = raw((await mdProcessor.process(preview)).html);
 
 app.get("/", async (c) => {
 	return c.render(
@@ -61,7 +61,10 @@ for (const [fileName, md] of Object.entries(content)) {
 
 	if (slug && !slug.startsWith("_")) {
 		const html = raw(
-			mdProcessor.process(md).html.replaceAll("__CREATE_VERSION__", version),
+			(await mdProcessor.process(md)).html.replaceAll(
+				"__CREATE_VERSION__",
+				version,
+			),
 		);
 
 		const pathName = `/${slug}`;
@@ -84,7 +87,7 @@ for (const [fileName, md] of Object.entries(content)) {
 }
 
 const apiReferenceHtml = raw(
-	mdProcessor.process(apiReference.replaceAll("globals.md#", "#")).html,
+	(await mdProcessor.process(apiReference.replaceAll("globals.md#", "#"))).html,
 );
 
 app.get("/api-reference", async (c) => {
