@@ -65,7 +65,7 @@
 		"test:dev": "vitest",
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc",
-		"build": "node scripts/version && npm run build:js && cp src/types/env.d.ts dist/types/env.d.ts",
+		"build": "node scripts/version && npm run build:clean && npm run build:js && cp src/types/env.d.ts dist/types/env.d.ts",
 		"doc": "typedoc --options typedoc.config.js"
 	},
 	"devDependencies": {
