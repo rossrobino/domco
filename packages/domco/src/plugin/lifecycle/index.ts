@@ -2,6 +2,7 @@ import { dirNames, fileNames } from "../../constants/index.js";
 import type { Adapter, FuncModule, Handler } from "../../types/index.js";
 import { codeSize } from "../../util/code-size/index.js";
 import { findFiles, removeEmptyDirs, toPosix } from "../../util/fs/index.js";
+import { funcExports } from "../../util/func-exports/index.js";
 import { getMaxLengths } from "../../util/get-max-lengths/index.js";
 import { getTime } from "../../util/perf/index.js";
 import { style } from "../../util/style/index.js";
@@ -140,12 +141,14 @@ const prerender = async () => {
 
 	console.log(`${domcoTag} ${style.green("prerendering static pages...")}`);
 
-	let { handler, prerender } = (await import(
+	const mod = (await import(
 		/* @vite-ignore */
 		url.pathToFileURL(
 			path.join(dirNames.out.base, dirNames.out.ssr, fileNames.out.entry.func),
 		).href
 	)) as FuncModule;
+
+	let { handler, prerender } = funcExports(mod);
 
 	console.log(
 		style.dim(

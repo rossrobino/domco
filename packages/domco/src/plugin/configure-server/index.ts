@@ -2,6 +2,7 @@ import { dirNames, fileNames } from "../../constants/index.js";
 import { nodeListener } from "../../listener/index.js";
 import type { Adapter, FuncModule } from "../../types/index.js";
 import { findFiles } from "../../util/fs/index.js";
+import { funcExports } from "../../util/func-exports/index.js";
 import path from "node:path";
 import process from "node:process";
 import url from "node:url";
@@ -28,20 +29,22 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 					nodeListener(
 						// Copied from https://github.com/honojs/vite-plugins/blob/main/packages/dev-server/src/dev-server.ts
 						async (request) => {
-							const { handler } = (await devServer.ssrLoadModule(
+							const mod: FuncModule = await devServer.ssrLoadModule(
 								path.join(
 									process.cwd(),
 									dirNames.src.base,
 									dirNames.src.server,
 									fileNames.func,
 								),
-							)) as FuncModule;
+							);
+
+							const { handler } = funcExports(mod);
 
 							const res = await handler(request);
 
 							if (!(res instanceof Response)) throw res;
 
-							if (res.headers.get("Content-Type")?.startsWith("text/html")) {
+							if (res.headers.get("content-type")?.startsWith("text/html")) {
 								return injectViteClient(res);
 							}
 
@@ -114,7 +117,7 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 				}
 
 				// import from dist
-				const { handler } = (await import(
+				const mod = (await import(
 					url.pathToFileURL(
 						path.join(
 							process.cwd(),
@@ -124,6 +127,8 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 						),
 					).href
 				)) as FuncModule;
+
+				const { handler } = funcExports(mod);
 
 				previewServer.middlewares.use(nodeListener(handler));
 			};

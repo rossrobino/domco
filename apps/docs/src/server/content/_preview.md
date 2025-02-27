@@ -4,9 +4,7 @@ import { html } from "client:page";
 export const handler = async (req) => {
 	return new Response(
 		html, // bundled client application
-		{
-			headers: { "Content-Type": "text/html" },
-		},
+		{ headers: { "content-type": "text/html" } },
 	);
 };
 ```
@@ -27,7 +25,7 @@ One of the main goals of domco is to be able to create full-stack applications u
 
 If you need a UI framework, you can still use any [Vite plugin](https://vitejs.dev/plugins/) as you would in a traditional Vite application. These plugins will also work on the server.
 
-domco is compatible with any server-side JavaScript framework that provides a web request handler taking a `Request` argument and returning a `Response`. Check out the [examples](/examples) to see how to use popular server frameworks with domco.
+domco is compatible with any server-side JavaScript framework that provides a web request handler taking a `Request` argument and returning a `Response`. Check out the [examples](/examples) to see how to use different routers with domco.
 
 ## Build with Web APIs
 

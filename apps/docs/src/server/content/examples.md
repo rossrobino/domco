@@ -34,9 +34,9 @@ export const handler: Handler = (req) => {
 
 	// serve the html based on the pathname
 	if (pathname === "/bar") {
-		return new Response(bar, { headers: { "Content-Type": "text/html" } });
+		return new Response(bar, { headers: { "content-type": "text/html" } });
 	} else if (pathname === "/foo") {
-		return new Response(foo, { headers: { "Content-Type": "text/html" } });
+		return new Response(foo, { headers: { "content-type": "text/html" } });
 	}
 
 	return new Response("Not found", { status: 404 });
@@ -46,7 +46,25 @@ export const handler: Handler = (req) => {
 export const prerender: Prerender = ["/bar", "/foo"];
 ```
 
-## Server Frameworks
+## Routers
+
+### @robino/router
+
+A [lightweight](https://bundlephobia.com/package/@robino/router) radix [trie](https://en.wikipedia.org/wiki/Radix_tree) routing library.
+
+```ts
+// src/server/+func.ts
+import { Router } from "@robino/router";
+import { html } from "client:page";
+
+const app = new Router();
+
+app.get("/", (c) => {
+	return new Response(html, { headers: { "content-type": "text/html" } });
+});
+
+export const handler = app.fetch;
+```
 
 ### Hono
 
@@ -91,7 +109,7 @@ import { Elysia } from "elysia";
 
 const app = new Elysia().get("/", () => {
 	return new Response(html, {
-		headers: { "Content-Type": "text/html" },
+		headers: { "content-type": "text/html" },
 	});
 });
 
@@ -107,13 +125,9 @@ export const handler = app.handle;
 }
 ```
 
-## Routers
-
-If you just want to add a router, and create your own context for each route, here's an example.
-
 ### Trouter
 
-[Trouter](https://github.com/lukeed/trouter) is a fast, small-but-mighty, familiar ~~fish~~ router.
+[Trouter](https://github.com/lukeed/trouter) is a fast, small-but-mighty, familiar ~~fish~~ router. If you just want to add a router, and create your own context for each route, here's an example.
 
 ```ts
 // src/server/+func.ts
@@ -136,14 +150,14 @@ router
 	.get("/", async (_c) => {
 		return new Response(html, {
 			headers: {
-				"Content-Type": "text/html",
+				"content-type": "text/html",
 			},
 		});
 	})
 	.get("/api/:id", async ({ params }) => {
 		return new Response(JSON.stringify({ id: params.id }), {
 			headers: {
-				"Content-Type": "application/json",
+				"content-type": "application/json",
 			},
 		});
 	});

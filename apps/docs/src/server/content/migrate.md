@@ -121,7 +121,7 @@ export const handler = async (req: Request) => {
 				),
 			),
 			{
-				headers: { "Content-Type": "text/html" },
+				headers: { "content-type": "text/html" },
 			},
 		);
 	}

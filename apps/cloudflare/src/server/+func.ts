@@ -7,7 +7,7 @@ export const handler: Handler = (req) => {
 	if (pathname === "/") {
 		return new Response(html, {
 			headers: {
-				"Content-Type": "text/html",
+				"content-type": "text/html",
 			},
 		});
 	}

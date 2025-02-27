@@ -14,7 +14,7 @@ export const handler${isTs ? ": Handler" : ""} = async (req) => {
 	if (url.pathname === "/") {
 		return new Response(html, {
 			headers: {
-				"Content-Type": "text/html",
+				"content-type": "text/html",
 			},
 		});
 	}

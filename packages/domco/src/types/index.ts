@@ -5,8 +5,8 @@ export type MaybePromise<T> = T | Promise<T>;
 
 /** Exports from the SSR `+func` entry point. */
 export type FuncModule = {
-	handler: Handler;
-	prerender: Prerender;
+	handler?: Handler;
+	prerender?: Prerender;
 };
 
 /**

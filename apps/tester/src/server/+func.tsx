@@ -38,7 +38,7 @@ app.all("/", async (c) => {
 
 app.get("/static.json", (c) => c.json({ prerender: Date.now() }));
 app.get("/static.css", (c) => {
-	return c.text("h1 { color: blue }", 200, { "Content-Type": "text/css" });
+	return c.text("h1 { color: blue }", 200, { "content-type": "text/css" });
 });
 
 app.get("/static-page", (c) =>

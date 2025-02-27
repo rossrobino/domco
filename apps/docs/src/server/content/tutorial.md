@@ -53,7 +53,7 @@ export const handler = async (req: Request) => {
 };
 ```
 
-From here, it's up to you. For example, you could route different requests to different responses, based on the [`req.url`](https://developer.mozilla.org/en-US/docs/Web/API/Request/url).
+From here, you could route different requests to different responses, based on the [`req.url`](https://developer.mozilla.org/en-US/docs/Web/API/Request/url).
 
 ```ts
 // src/server/+func.ts
@@ -70,7 +70,7 @@ export const handler = async (req: Request) => {
 };
 ```
 
-Or [add a framework](/examples#server-frameworks) like [Hono](/examples#hono) to do your routing and more.
+Or check out the examples and [add a router](/examples#routers).
 
 ### +page
 
@@ -119,7 +119,7 @@ export const handler = async (req: Request) => {
 	return new Response(
 		html, // bundled client application
 		{
-			headers: { "Content-Type": "text/html" },
+			headers: { "content-type": "text/html" },
 		},
 	);
 };
@@ -151,7 +151,7 @@ export const handler = async (req: Request) => {
 			...
 		</html>`,
 		{
-			headers: { "Content-Type": "text/html" },
+			headers: { "content-type": "text/html" },
 		},
 	);
 };
