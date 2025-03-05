@@ -300,7 +300,7 @@ export type VercelAdapterOptions = (
 			 *
 			 * {
 			 * 	handler: "index.mjs",
-			 * 	runtime: "nodejs20.x",
+			 * 	runtime: "nodejs22.x",
 			 * 	launcherType: "Nodejs",
 			 * }
 			 */
