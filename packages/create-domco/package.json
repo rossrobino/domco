@@ -31,7 +31,7 @@
 	"dependencies": {
 		"@clack/prompts": "^0.10.0",
 		"domco": "^3.0.2",
-		"prettier": "^3.5.2",
+		"prettier": "^3.5.3",
 		"which-pm-runs": "^1.1.0"
 	},
 	"devDependencies": {
