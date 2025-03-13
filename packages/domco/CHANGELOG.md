@@ -1,5 +1,11 @@
 # domco
 
+## 3.0.3
+
+### Patch Changes
+
+- c1e8925: better export error handling
+
 ## 3.0.2
 
 ### Patch Changes
