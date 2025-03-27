@@ -1,5 +1,4 @@
 import App from "@/client/react/App";
-import { Page } from "@robino/html";
 import { html } from "client:page";
 import { html as reactHtml } from "client:page/react";
 import type { Prerender } from "domco";
@@ -23,13 +22,9 @@ app.all("/", async (c) => {
 		const userInput = formData.get("test");
 
 		if (typeof userInput === "string" && userInput.length) {
-			return c.html(
-				new Page(html).body([{ name: "div", children: "success" }]).toString(),
-			);
+			return c.html(html.replace("</body>", (m) => "<div>success</div>" + m));
 		} else {
-			return c.html(
-				new Page(html).body([{ name: "div", children: "invalid" }]).toString(),
-			);
+			return c.html(html.replace("</body>", (m) => "<div>invalid</div>" + m));
 		}
 	}
 
