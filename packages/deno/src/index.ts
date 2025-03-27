@@ -38,10 +38,10 @@ export const adapter: AdapterBuilder = async () => {
 				/**
 				 * Need to first serve static, deno's file server will redirect if there
 				 * is a directory with the pathname, so that needs to be tried first before
-				 * falling back to the handler.
+				 * falling back to the fetch handler.
 				 */
 				code: `
-					import { handler } from "${funcId}";
+					import app from "${funcId}";
 					import { serveDir } from "https://jsr.io/@std/http/1.0.13/file_server.ts";
 
 					const getStatic = (req) => {
@@ -64,7 +64,7 @@ export const adapter: AdapterBuilder = async () => {
 							}
 						}
 
-						return handler(req);
+						return app.fetch(req);
 					};
 					
 					Deno.serve(denoHandler);

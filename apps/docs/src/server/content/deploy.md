@@ -18,7 +18,7 @@ dist/
 
 ## Manual deployment
 
-If you are not using an [adapter](#adapters), you can import `handler` from the `func.js` module and configure your func to use in another environment.
+If you are not using an [adapter](#adapters), you can import `default.fetch` from the `func.js` module and configure your func to use in another environment.
 
 The `dist/client/` directory holds client assets. JS and CSS assets with hashed file names will be output to `dist/client/_immutable/`, you can serve this path with immutable cache headers. Other assets like prerendered HTML files are processed and included in `dist/client/` directly.
 
@@ -28,9 +28,9 @@ Here's an example of how to serve your application using the result of your buil
 
 ```ts
 // server.js
-// import the `handler` from the build output
-import { handler } from "./dist/server/func.js";
-// converts web handler to a Node compatible request listener
+// import from the build output
+import app from "./dist/server/func.js";
+// converts web fetch handler to a Node compatible request listener
 import { nodeListener } from "domco/listener";
 import { createServer } from "node:http";
 // `sirv` serves static assets
@@ -49,8 +49,8 @@ const assets = sirv("dist/client", {
 const server = createServer((req, res) =>
 	// first, look for a static asset
 	assets(req, res, () =>
-		// fallthrough to the handler if static asset is not found
-		nodeListener(handler)(req, res),
+		// fallthrough to the fetch handler if static asset is not found
+		nodeListener(app.fetch)(req, res),
 	),
 );
 
@@ -141,7 +141,7 @@ Check out the [current adapters](https://github.com/rossrobino/domco/tree/main/p
 Adapters take care of these deployment steps.
 
 1. Set [`ssr`](https://vitejs.dev/config/ssr-options.html) options if changes are needed, for example if you are deploying to an edge function, set this to `"web worker"`.
-2. Create an entry point for the target environment by using the `handler` from `dist/server/func.js`. This could be reexporting it as a different export, or applying to a node server.
-3. Within the entry point, serve the `dist/client/*` directory as static assets, and the `dist/client/_immutable/*` directory with immutable cache headers. Static assets must be hit before the `handler` to take advantage of prerendering. When an asset is not found, the request needs to fallthrough to the `handler`.
+2. Create an entry point for the target environment by using `default.fetch` from `dist/server/func.js`. This could be reexporting it as a different export, or applying to a node server.
+3. Within the entry point, serve the `dist/client/*` directory as static assets, and the `dist/client/_immutable/*` directory with immutable cache headers. Static assets must be hit before `default.fetch` to take advantage of prerendering. When an asset is not found, the request needs to fallthrough to `default.fetch`.
 
 If you think others might benefit from your adapter you can [create an issue](https://github.com/rossrobino/domco/issues) or pull request to propose a new adapter. Adapters should be created for zero configuration deployments for deployment providers, not specific to JavaScript runtimes.

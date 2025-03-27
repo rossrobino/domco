@@ -1,6 +1,6 @@
 // Adapted from https://github.com/mjackson/remix-the-web/blob/main/packages/node-fetch-server
 // to use as Vite middleware: https://github.com/mjackson/remix-the-web/issues/13
-import type { Handler, MaybePromise } from "../types/index.js";
+import type { FetchHandler, MaybePromise } from "../types/index.js";
 import type {
 	IncomingMessage,
 	RequestListener,
@@ -12,7 +12,7 @@ import type {
  * `http.createServer()` or `https.createServer()`.
  */
 export const nodeListener = (
-	handler: Handler,
+	fetchHandler: FetchHandler,
 	options?: {
 		/**
 		 * A function that handles an error that occurred during request handling.
@@ -28,7 +28,7 @@ export const nodeListener = (
 
 		let response: Response;
 		try {
-			response = await handler(request);
+			response = await fetchHandler(request);
 		} catch (error) {
 			const errorResponse = await onError(error);
 			if (!errorResponse) {

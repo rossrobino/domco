@@ -5,22 +5,23 @@ const getTemplateFiles: GetTemplateFile = ({ lang }) => {
 	return [
 		{
 			name: `src/server/+func.${lang}`,
-			content: `${isTs ? `import type { Handler } from "domco";` : `/** @import { Handler } from "domco" */`}
-import { html } from "client:page";
-${isTs ? "" : "\n/** @type {Handler} */"}
-export const handler${isTs ? ": Handler" : ""} = async (req) => {
-	const url = new URL(req.url);
+			content: `import { html } from "client:page";
 
-	if (url.pathname === "/") {
-		return new Response(html, {
-			headers: {
-				"content-type": "text/html",
-			},
-		});
+export default {
+	fetch(req${isTs ? ": Request" : ""}) {
+		const url = new URL(req.url);
+
+		if (url.pathname === "/") {
+			return new Response(html, {
+				headers: {
+					"content-type": "text/html",
+				},
+			});
+		}
+
+		return new Response("Not found", { status: 404 });
 	}
-
-	return new Response("Not found", { status: 404 });
-};
+}
 `,
 		},
 	];

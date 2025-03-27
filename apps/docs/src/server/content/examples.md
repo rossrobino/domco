@@ -27,19 +27,21 @@ Import the pages and send them in a `Response` based on the `pathname`.
 import { html as bar } from "client:page/bar";
 // transformed src/client/foo/+page.html
 import { html as foo } from "client:page/foo";
-import type { Handler, Prerender } from "domco";
+import type { Prerender } from "domco";
 
-export const handler: Handler = (req) => {
-	const { pathname } = new URL(req.url); // get the pathname from the request
+export default {
+	fetch(req) {
+		const { pathname } = new URL(req.url); // get the pathname from the request
 
-	// serve the html based on the pathname
-	if (pathname === "/bar") {
-		return new Response(bar, { headers: { "content-type": "text/html" } });
-	} else if (pathname === "/foo") {
-		return new Response(foo, { headers: { "content-type": "text/html" } });
-	}
+		// serve the html based on the pathname
+		if (pathname === "/bar") {
+			return new Response(bar, { headers: { "content-type": "text/html" } });
+		} else if (pathname === "/foo") {
+			return new Response(foo, { headers: { "content-type": "text/html" } });
+		}
 
-	return new Response("Not found", { status: 404 });
+		return new Response("Not found", { status: 404 });
+	},
 };
 
 // if you want to prerender the routes to static pages during build
@@ -47,24 +49,6 @@ export const prerender: Prerender = ["/bar", "/foo"];
 ```
 
 ## Routers
-
-### @robino/router
-
-A [lightweight](https://bundlephobia.com/package/@robino/router) radix [trie](https://en.wikipedia.org/wiki/Radix_tree) routing library.
-
-```ts
-// src/server/+func.ts
-import { Router } from "@robino/router";
-import { html } from "client:page";
-
-const app = new Router();
-
-app.get("/", (c) => {
-	return new Response(html, { headers: { "content-type": "text/html" } });
-});
-
-export const handler = app.fetch;
-```
 
 ### Hono
 
@@ -79,7 +63,7 @@ const app = new Hono();
 
 app.get("/", (c) => c.html(html));
 
-export const handler = app.fetch;
+export default app;
 ```
 
 ### h3
@@ -95,7 +79,9 @@ const app = createApp();
 
 app.use(eventHandler(() => html));
 
-export const handler = toWebHandler(app);
+export default {
+	fetch: toWebHandler(app),
+};
 ```
 
 ### Elysia
@@ -113,7 +99,9 @@ const app = new Elysia().get("/", () => {
 	});
 });
 
-export const handler = app.handle;
+export default {
+	fetch: app.handle,
+};
 ```
 
 ```json {4}
@@ -132,7 +120,6 @@ export const handler = app.handle;
 ```ts
 // src/server/+func.ts
 import { html } from "client:page";
-import type { Handler } from "domco";
 import { Trouter, type Methods } from "trouter";
 
 // custom context variable
@@ -162,23 +149,25 @@ router
 		});
 	});
 
-export const handler: Handler = async (req) => {
-	const { pathname } = new URL(req.url);
+export default {
+	async fetch(req: Request) {
+		const { pathname } = new URL(req.url);
 
-	const { handlers, params } = router.find(req.method as Methods, pathname);
+		const { handlers, params } = router.find(req.method as Methods, pathname);
 
-	for (const h of handlers) {
-		// create context
-		const context: Context = { req, params };
+		for (const h of handlers) {
+			// create context
+			const context: Context = { req, params };
 
-		// pass into handler
-		const res = await h(context);
+			// pass into handler
+			const res = await h(context);
 
-		if (res instanceof Response) {
-			return res;
+			if (res instanceof Response) {
+				return res;
+			}
 		}
-	}
 
-	return new Response("Not found", { status: 404 });
+		return new Response("Not found", { status: 404 });
+	},
 };
 ```

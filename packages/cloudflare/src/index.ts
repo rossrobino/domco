@@ -39,9 +39,8 @@ export const adapter: AdapterBuilder = async () => {
 			return {
 				id: "_worker",
 				code: `
-					import { handler } from "${funcId}";
-					
-					export default { fetch: handler };
+					import app from "${funcId}";
+					export default app;
 				`,
 			};
 		},

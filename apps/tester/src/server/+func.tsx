@@ -2,7 +2,7 @@ import App from "@/client/react/App";
 import { Page } from "@robino/html";
 import { html } from "client:page";
 import { html as reactHtml } from "client:page/react";
-import type { Handler, Prerender } from "domco";
+import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
@@ -64,4 +64,4 @@ app.get("/react", (c) => {
 	);
 });
 
-export const handler: Handler = app.fetch;
+export default app;

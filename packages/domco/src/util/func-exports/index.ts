@@ -1,13 +1,9 @@
-import type { FuncModule, Handler } from "../../types/index.js";
+import type { FuncModule } from "../../types/index.js";
 
 export const funcExports = (mod: FuncModule) => {
-	let handler: Handler | undefined;
-
-	if (mod.handler) {
-		handler = mod.handler;
-	} else {
-		throw new Error("No request `handler` export found.");
+	if (!mod.default?.fetch) {
+		throw new Error("No request `default.fetch` export found.");
 	}
-
-	return { handler, prerender: mod.prerender };
+	
+	return { fetch: mod.default.fetch, prerender: mod.prerender };
 };

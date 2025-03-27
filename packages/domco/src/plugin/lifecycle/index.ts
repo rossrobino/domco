@@ -1,5 +1,5 @@
 import { dirNames, fileNames } from "../../constants/index.js";
-import type { Adapter, FuncModule, Handler } from "../../types/index.js";
+import type { Adapter, FuncModule, FetchHandler } from "../../types/index.js";
 import { codeSize } from "../../util/code-size/index.js";
 import { findFiles, removeEmptyDirs, toPosix } from "../../util/fs/index.js";
 import { funcExports } from "../../util/func-exports/index.js";
@@ -148,7 +148,7 @@ const prerender = async () => {
 		).href
 	)) as FuncModule;
 
-	let { handler, prerender } = funcExports(mod);
+	let exports = funcExports(mod);
 
 	console.log(
 		style.dim(
@@ -156,30 +156,30 @@ const prerender = async () => {
 		),
 	);
 
-	if (!prerender) return;
+	if (!exports.prerender) return;
 
-	if (typeof prerender === "function") {
-		prerender = await prerender();
+	if (typeof exports.prerender === "function") {
+		exports.prerender = await exports.prerender();
 	}
 
-	if (prerender instanceof Set) {
+	if (exports.prerender instanceof Set) {
 		// convert to array (can't sort a set)
-		prerender = Array.from(prerender);
+		exports.prerender = Array.from(exports.prerender);
 	}
 
 	// sort for logs
-	prerender.sort();
+	exports.prerender.sort();
 
 	const staticFilePromises: Promise<StaticFile>[] = [];
 
-	for (const staticPath of prerender) {
+	for (const staticPath of exports.prerender) {
 		if (!staticPath.startsWith("/")) {
 			throw Error(
 				`Prerender path \`${staticPath}\` does not start with \`"/"\`.`,
 			);
 		}
 
-		staticFilePromises.push(generateRoute(staticPath, handler));
+		staticFilePromises.push(generateRoute(staticPath, exports.fetch));
 	}
 
 	// Generate static files in parallel.
@@ -233,16 +233,18 @@ const prerender = async () => {
  * in parallel.
  *
  * @param staticPath path to prerender
- * @param handler request handler
+ * @param fetchHandler request handler
  * @returns Information about the prerendered files.
  */
 const generateRoute = async (
 	staticPath: string,
-	handler: Handler,
+	fetchHandler: FetchHandler,
 ): Promise<StaticFile> => {
 	const startTime = performance.now();
 
-	const res = await handler(new Request(`http://0.0.0.0:4545${staticPath}`));
+	const res = await fetchHandler(
+		new Request(`http://0.0.0.0:4545${staticPath}`),
+	);
 
 	if (res.status === 404) {
 		throw new Error(

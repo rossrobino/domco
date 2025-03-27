@@ -20,10 +20,10 @@ const nodeEntry: AdapterEntry = ({ funcId }) => {
 	return {
 		id: entryId,
 		code: `
-import { handler } from "${funcId}";
+import app from "${funcId}";
 import { nodeListener } from "domco/listener";
 
-export default nodeListener(handler);
+export default nodeListener(app.fetch);
 `,
 	};
 };
@@ -51,11 +51,11 @@ const isrEntry: AdapterEntry = ({ funcId }) => {
 	return {
 		id: entryId,
 		code: `
-import { handler } from "${funcId}";
+import app from "${funcId}";
 import { nodeListener } from "domco/listener";
 import { getUrl } from "@domcojs/vercel";
 
-const isrHandler = async (req) => handler(new Request(getUrl(req)));
+const isrHandler = async (req) => app.fetch(new Request(getUrl(req)));
 
 export default nodeListener(isrHandler);
 `,
@@ -67,9 +67,9 @@ const edgeEntry: AdapterEntry = ({ funcId }) => {
 	return {
 		id: entryId,
 		code: `
-import { handler } from "${funcId}";
+import app from "${funcId}";
 
-export default handler;
+export default app.fetch;
 `,
 	};
 };

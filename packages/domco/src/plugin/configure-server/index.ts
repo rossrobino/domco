@@ -38,9 +38,9 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 								),
 							);
 
-							const { handler } = funcExports(mod);
+							const exports = funcExports(mod);
 
-							const res = await handler(request);
+							const res = await exports.fetch(request);
 
 							if (!(res instanceof Response)) throw res;
 
@@ -128,9 +128,9 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 					).href
 				)) as FuncModule;
 
-				const { handler } = funcExports(mod);
+				const exports = funcExports(mod);
 
-				previewServer.middlewares.use(nodeListener(handler));
+				previewServer.middlewares.use(nodeListener(exports.fetch));
 			};
 		},
 	};
@@ -151,20 +151,17 @@ const injectViteClient = (res: Response) => {
 
 	const reader = res.body.getReader();
 
-	const stream = new ReadableStream({
+	const stream = new ReadableStream<Uint8Array<ArrayBufferLike>>({
 		async start(controller) {
 			controller.enqueue(viteClient);
 
 			while (true) {
-				const result = await reader.read();
-
-				if (result.done) {
-					controller.close();
-					break;
-				}
-
-				controller.enqueue(result.value);
+				const { done, value } = await reader.read();
+				if (done) break;
+				controller.enqueue(value);
 			}
+
+			controller.close();
 		},
 	});
 

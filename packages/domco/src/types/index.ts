@@ -5,23 +5,14 @@ export type MaybePromise<T> = T | Promise<T>;
 
 /** Exports from the SSR `+func` entry point. */
 export type FuncModule = {
-	handler?: Handler;
+	default?: {
+		fetch?: FetchHandler;
+	};
 	prerender?: Prerender;
 };
 
-/**
- * Request handler, takes a web request and returns a web response.
- *
- * ```ts
- * // src/server/+func.ts
- * import type { Handler } from "domco";
- *
- * export const handler: Handler = async (req) => {
- * 	return new Response("Hello world");
- * };
- * ```
- */
-export type Handler = (req: Request) => MaybePromise<Response>;
+/** Fetch handler, takes a web request and returns a web response. */
+export type FetchHandler = (req: Request) => MaybePromise<Response>;
 
 /**
  * Paths to prerender at build time.
@@ -45,7 +36,7 @@ export type AdapterMiddleware = Connect.NextHandleFunction;
 
 /** A function that returns an additional entry point to include in the SSR build. */
 export type AdapterEntry = (AdapterEntryOptions: {
-	/** The function entry point to import `handler` from. */
+	/** The function entry point to import from. */
 	funcId: string;
 }) => {
 	/**

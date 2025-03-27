@@ -100,4 +100,4 @@ app.get("/:slug", (c) => {
 	);
 });
 
-export const handler = app.fetch;
+export default app;
