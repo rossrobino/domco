@@ -23,7 +23,7 @@ app.use(async (c, next) => {
 	await next();
 });
 
-app.get("/", async (c) => {
+app.get("/", (c) => {
 	return c.render(
 		{ title: "domco" },
 		<>
