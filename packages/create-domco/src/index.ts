@@ -1,5 +1,4 @@
 import { getDependencies } from "./dependencies/index.js";
-import denoJson from "./template-files/deno-json.js";
 import envTypes from "./template-files/env-types.js";
 import favicon from "./template-files/favicon.js";
 import func from "./template-files/func.js";
@@ -24,6 +23,7 @@ type PackageManager = "npm" | "bun" | "pnpm" | "yarn" | "deno" | (string & {});
 type TemplateFile = { name: string; content: string };
 
 type GetTemplateFileOptions = {
+	framework: null | "ovr" | "hono";
 	adapter: null | "cloudflare" | "deno" | "vercel";
 	dir: string;
 	pm: PackageManager;
@@ -114,6 +114,32 @@ export const createDomco = async () => {
 		process.exit(0);
 	}
 
+	const framework = await p.select({
+		message: "Framework",
+		initialValue: null,
+		options: [
+			{
+				value: null,
+				label: "none",
+			},
+			{
+				value: "hono",
+				label: "hono",
+				hint: "https://hono.dev",
+			},
+			{
+				value: "ovr",
+				label: "ovr",
+				hint: "https://github.com/rossrobino/ovr",
+			},
+		],
+	});
+
+	if (p.isCancel(framework)) {
+		p.cancel(cancelMessage);
+		process.exit(0);
+	}
+
 	const adapter = await p.select({
 		message: "Deployment adapter",
 		initialValue: null,
@@ -173,13 +199,14 @@ export const createDomco = async () => {
 	s.start("Creating project");
 
 	const options: GetTemplateFileOptions = {
+		projectName: getProjectName(dir),
 		dir,
+		lang,
+		framework,
 		adapter,
-		lang: String(lang),
 		prettier: extras.includes("prettier"),
 		tailwind: extras.includes("tailwind"),
 		pm: getPackageManager(),
-		projectName: getProjectName(dir),
 		dependencies: getDependencies(),
 	};
 
@@ -197,7 +224,6 @@ export const createDomco = async () => {
 const getAllTemplateFiles: GetTemplateFile = async (options) => {
 	const getTemplateFileFunctions = [
 		func,
-		denoJson,
 		favicon,
 		gitignore,
 		envTypes,

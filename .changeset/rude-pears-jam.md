@@ -5,4 +5,4 @@
 "@domcojs/deno": patch
 ---
 
-Reflect major changes in domco.
+Reflect major changes in `domco`.

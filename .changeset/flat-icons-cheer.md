@@ -2,7 +2,7 @@
 "domco": major
 ---
 
-Update server exports
+Update server exports.
 
 Instead of exporting a `handler`, you must now export a `default` object with a `fetch` method. This aligns domco with Bun, Deno, and Cloudflare's APIs.
 

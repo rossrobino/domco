@@ -2,14 +2,22 @@ import { version } from "domco/version";
 
 export const getDependencies = () => {
 	return {
-		domco: version,
-		prettier: "3.5.1",
-		prettierTailwind: "0.6.11",
-		tailwind: "4.0.6",
-		typescript: "5.7.3",
-		vite: "6.1.0",
+		domco: `${version.split(".").at(0)}.0.0`,
+		typescript: "5.8.0",
+		vite: "6.0.0",
+
+		// framework
+		hono: "4.0.0",
+		ovr: "0.1.0",
+
+		// adapter
 		cloudflare: "1.0.0",
-		deno: "1.0.1",
-		vercel: "1.0.2",
-	};
+		deno: "1.0.0",
+		vercel: "1.0.0",
+
+		// extras
+		prettier: "3.0.0",
+		prettierTailwind: "0.6.0",
+		tailwind: "4.0.0",
+	} as const;
 };
