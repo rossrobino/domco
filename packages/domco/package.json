@@ -16,8 +16,7 @@
 		"vite",
 		"vite-plugin",
 		"SSR",
-		"SSG",
-		"vanilla-js"
+		"SSG"
 	],
 	"type": "module",
 	"engines": {
@@ -59,18 +58,15 @@
 		"README.md"
 	],
 	"scripts": {
-		"dev": "tsc --watch",
 		"test": "vitest run",
 		"test:dev": "vitest",
+		"dev": "tsc --watch",
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc",
-		"build": "node scripts/version && npm run build:clean && npm run build:js && cp src/types/env.d.ts dist/types/env.d.ts",
-		"doc": "typedoc --options typedoc.config.js"
+		"build": "node scripts/version && npm run build:clean && npm run build:js && cp src/types/env.d.ts dist/types/env.d.ts"
 	},
 	"devDependencies": {
-		"typedoc": "^0.27.9",
-		"typedoc-plugin-markdown": "^4.4.2",
-		"vitest": "^3.0.8"
+		"vitest": "^3.0.9"
 	},
 	"peerDependencies": {
 		"vite": "^6.0.0"
