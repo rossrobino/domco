@@ -5,7 +5,6 @@ import { html as previewHtml } from "@/server/content/_preview.md";
 import type { Result } from "@robino/md";
 import { tags } from "client:script";
 import { version } from "create-domco/package.json";
-import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { etag } from "hono/etag";
 
@@ -43,20 +42,18 @@ const content = import.meta.glob<Result<any>>("/server/content/*.md", {
 	eager: true,
 });
 
-const contentPrerender = Object.keys(content)
-	.map((filePath) => {
-		const slug = filePath.split("/").at(-1)?.split(".").at(0);
-		if (slug?.startsWith("_")) return;
+export const prerender = ["/"];
 
-		return `/${slug}`;
-	})
-	.filter((path) => typeof path === "string");
+prerender.push(
+	...Object.keys(content)
+		.map((filePath) => {
+			const slug = filePath.split("/").at(-1)?.split(".").at(0);
+			if (slug?.startsWith("_")) return;
 
-export const prerender: Prerender = [
-	"/",
-	"/api-reference",
-	...contentPrerender,
-];
+			return `/${slug}`;
+		})
+		.filter((path) => typeof path === "string"),
+);
 
 app.get("/:slug", (c) => {
 	const slug = c.req.param("slug");
