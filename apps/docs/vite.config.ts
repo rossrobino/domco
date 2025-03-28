@@ -1,4 +1,4 @@
-import { adapter } from "@domcojs/vercel";
+// import { adapter } from "@domcojs/vercel";
 import { md } from "@robino/md";
 import tailwindcss from "@tailwindcss/vite";
 import { domco } from "domco";
@@ -12,14 +12,14 @@ export default defineConfig({
 	plugins: [
 		tailwindcss(),
 		domco({
-			adapter: adapter({
-				images: {
-					domains: [],
-					sizes: [1280],
-					formats: ["image/avif"],
-				},
-				trailingSlash: false,
-			}),
+			// adapter: adapter({
+			// 	images: {
+			// 		domains: [],
+			// 		sizes: [1280],
+			// 		formats: ["image/avif"],
+			// 	},
+			// 	trailingSlash: false,
+			// }),
 		}),
 		md({
 			highlighter: {
