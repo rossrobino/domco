@@ -1,29 +1,22 @@
-import { Edit } from "@/server/components/Edit";
-import { Hero } from "@/server/components/Hero";
-import { Layout } from "@/server/components/Layout";
+import { Edit } from "@/server/components/edit";
+import { Hero } from "@/server/components/hero";
+import { Layout } from "@/server/components/layout";
 import { html as previewHtml } from "@/server/content/_preview.md";
-import { html as apiReferenceHtml } from "@/server/content/generated/globals.md";
 import type { Result } from "@robino/md";
-import { tags as rootTags } from "client:script";
-import { tags as docTags } from "client:script/docs";
+import { tags } from "client:script";
 import { version } from "create-domco/package.json";
 import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { etag } from "hono/etag";
-import { raw } from "hono/html";
 
 const app = new Hono();
 
 app.use(etag());
 
 app.use(async (c, next) => {
-	c.setRenderer(({ title, client }, content) => {
-		const tags = [raw(rootTags)];
-		if (client) {
-			tags.push(...client);
-		}
+	c.setRenderer(({ title }, content) => {
 		return c.html(
-			<Layout title={title} client={tags}>
+			<Layout title={title} tags={tags}>
 				{content}
 			</Layout>,
 		);
@@ -36,25 +29,12 @@ app.get("/", async (c) => {
 		{ title: "domco" },
 		<>
 			<Hero />
-			<section>{raw(previewHtml)}</section>
+			<section dangerouslySetInnerHTML={{ __html: previewHtml }}></section>
 			<div class="my-16 flex justify-center">
 				<a href="/tutorial" class="button px-6 py-4 text-lg">
 					Get Started
 				</a>
 			</div>
-		</>,
-	);
-});
-
-app.get("/api-reference", async (c) => {
-	return c.render(
-		{ title: "API Reference", client: [raw(docTags)] },
-		<>
-			<section>
-				<h1>API Reference</h1>
-				{raw(apiReferenceHtml.replaceAll("globals.md#", "#"))}
-			</section>
-			<Edit />
 		</>,
 	);
 });
@@ -91,10 +71,9 @@ app.get("/:slug", (c) => {
 	return c.render(
 		{
 			title: slug.charAt(0).toUpperCase() + slug.slice(1),
-			client: [raw(docTags)],
 		},
 		<>
-			<section>{raw(html)}</section>
+			<section dangerouslySetInnerHTML={{ __html: html }}></section>
 			<Edit />
 		</>,
 	);

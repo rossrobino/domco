@@ -6,7 +6,7 @@ import type { HtmlEscapedString } from "hono/utils/html";
 declare module "hono" {
 	interface ContextRenderer {
 		(
-			props: { title: string; client?: HtmlEscapedString[] },
+			props: { title: string; tags?: string },
 			content: string | Promise<string>,
 		): Response | Promise<Response>;
 	}

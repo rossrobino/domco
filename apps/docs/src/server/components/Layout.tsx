@@ -1,7 +1,7 @@
-import { Nav } from "./Nav";
+import { Nav } from "./nav";
 import { html } from "hono/html";
+import { raw } from "hono/html";
 import type { FC, PropsWithChildren } from "hono/jsx";
-import type { HtmlEscapedString } from "hono/utils/html";
 
 const HtmlLayout: FC = ({ children }) => html`
 	<!doctype html>
@@ -10,10 +10,10 @@ const HtmlLayout: FC = ({ children }) => html`
 
 type LayoutProps = PropsWithChildren<{
 	title: string;
-	client: HtmlEscapedString[];
+	tags: string;
 }>;
 
-export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
+export const Layout: FC<LayoutProps> = ({ title, children, tags: client }) => {
 	return (
 		<HtmlLayout>
 			<html lang="en" class="motion-safe:scroll-smooth">
@@ -23,7 +23,7 @@ export const Layout: FC<LayoutProps> = ({ title, children, client }) => {
 						name="viewport"
 						content="width=device-width, initial-scale=1.0"
 					/>
-					{client.map((tags) => tags)}
+					{raw(client)}
 					<link rel="icon" type="image/svg+xml" href="/circle.svg" />
 					<meta name="description" content="Minimal Full-Stack JavaScript" />
 					<title>{title}</title>

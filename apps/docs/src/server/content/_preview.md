@@ -11,9 +11,9 @@ export default {
 };
 ```
 
-## Create Full-Stack Applications with Vite
+domco turns your [Vite](https://vitejs.dev) project into a full-stack application. You can take advantage of Vite's build pipeline, plugins, and HMR on the server using web APIs.
 
-domco turns your [Vite](https://vitejs.dev) project into a full-stack application. You can take advantage of Vite's build pipeline, plugins, and HMR on the server using web APIs. domco enables the following in addition to Vite.
+domco enables the following in addition to Vite.
 
 - Automatic [entry point configuration](/tutorial#entry-points) for client and server builds.
 - Development and preview server configuration.
@@ -36,7 +36,5 @@ Server-side JavaScript runtimes are standardizing on the Web [`Request`](https:/
 ## Minimal Dependencies
 
 domco is [lightweight](https://npmgraph.js.org/?q=domco), relying solely on Vite as its dependency. This results in quick installation times, fast build and development processes, and a reduced risk of supply chain attacks.
-
-## Open Source
 
 domco is open source under the [MIT License](https://github.com/rossrobino/domco/blob/main/LICENSE.md). Contributions are welcome, see the [contributing guide](https://github.com/rossrobino/domco/blob/main/CONTRIBUTING.md) for instructions.

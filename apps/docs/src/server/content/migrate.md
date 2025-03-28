@@ -4,7 +4,7 @@
 
 This section will show you how to server-side render an existing Vite/React single page application with domco. It will use the React template created when running `npm create vite`.
 
-You could also import the `html` and serve your single-page application without server-rendering.
+You could also import the `html` and serve your single-page application (SPA) without server-rendering, then create your backend in the same project as your SPA.
 
 ## Install
 
@@ -45,12 +45,12 @@ Add types to `/src/vite.env.d.ts`.
 /// <reference types="domco/env" />
 ```
 
-## Create `app` directory
+## App directory
 
 - Create a new `src/app/` directory to house the shared code that will run on the server and the client.
 - Move `App.tsx` into `src/app/`.
 
-## Create `client` directory
+## Client directory
 
 - Create a new `src/client/` directory to contain client side code.
 - Move `index.html`, `src/App.css`, `src/index.css`, and `src/main.tsx` into `src/client/`.
