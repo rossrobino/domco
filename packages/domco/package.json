@@ -56,8 +56,7 @@
 	},
 	"files": [
 		"dist",
-		"README.md",
-		"LICENSE.md"
+		"README.md"
 	],
 	"scripts": {
 		"dev": "tsc --watch",
