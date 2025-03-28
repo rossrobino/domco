@@ -1,6 +1,6 @@
 import { Edit } from "@/server/components/Edit";
-import { Hero } from "@/server/components/hero";
-import { Layout } from "@/server/components/layout";
+import { Hero } from "@/server/components/Hero";
+import { Layout } from "@/server/components/Layout";
 import { html as previewHtml } from "@/server/content/_preview.md";
 import type { Result } from "@robino/md";
 import { tags } from "client:script";

@@ -1,4 +1,4 @@
-import { Nav } from "./nav";
+import { Nav } from "./Nav";
 import { html } from "hono/html";
 import { raw } from "hono/html";
 import type { FC, PropsWithChildren } from "hono/jsx";
