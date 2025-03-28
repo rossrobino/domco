@@ -1,4 +1,4 @@
-import { Edit } from "@/server/components/edit";
+import { Edit } from "@/server/components/Edit";
 import { Hero } from "@/server/components/hero";
 import { Layout } from "@/server/components/layout";
 import { html as previewHtml } from "@/server/content/_preview.md";
