@@ -150,17 +150,17 @@ export const createDomco = async () => {
 			},
 			{
 				value: "cloudflare",
-				label: "cloudflare",
+				label: "Cloudflare",
 				hint: "https://domco.robino.dev/deploy#cloudflare",
 			},
 			{
 				value: "deno",
-				label: "deno",
+				label: "Deno",
 				hint: "https://domco.robino.dev/deploy#deno",
 			},
 			{
 				value: "vercel",
-				label: "vercel",
+				label: "Vercel",
 				hint: "https://domco.robino.dev/deploy#vercel",
 			},
 		],
@@ -177,12 +177,12 @@ export const createDomco = async () => {
 		options: [
 			{
 				value: "prettier",
-				label: "Add Prettier for formatting",
+				label: "Prettier",
 				hint: "https://prettier.io/",
 			},
 			{
 				value: "tailwind",
-				label: "Add TailwindCSS for styling",
+				label: "TailwindCSS",
 				hint: "https://tailwindcss.com/",
 			},
 		],
