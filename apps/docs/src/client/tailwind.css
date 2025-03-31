@@ -242,13 +242,3 @@
 	/* on this page heading links */
 	padding-block-start: var(--spacing);
 }
-
-@utility prose {
-	blockquote {
-		padding-inline-start: 0;
-		font-style: normal;
-		p {
-			padding-inline-start: 0;
-		}
-	}
-}
