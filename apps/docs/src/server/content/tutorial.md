@@ -51,15 +51,15 @@ From here, you could route different requests to different responses, based on t
 // src/server/+app
 export default {
 	fetch(req: Request) {
-		const { pathname } = new URL(req.url);
+		const url = new URL(req.url);
 
-		if (pathname === "/") {
+		if (url.pathname === "/") {
 			return new Response("Hello");
-		} else if (pathname === "/world") {
+		} else if (url.pathname === "/world") {
 			return new Response("World");
 		}
 
-		return new Response("Hello world");
+		return new Response("Not found");
 	},
 };
 ```
