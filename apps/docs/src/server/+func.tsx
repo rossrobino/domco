@@ -42,19 +42,6 @@ const content = import.meta.glob<Result<any>>("/server/content/*.md", {
 	eager: true,
 });
 
-export const prerender = ["/"];
-
-prerender.push(
-	...Object.keys(content)
-		.map((filePath) => {
-			const slug = filePath.split("/").at(-1)?.split(".").at(0);
-			if (slug?.startsWith("_")) return;
-
-			return `/${slug}`;
-		})
-		.filter((path) => typeof path === "string"),
-);
-
 app.get("/:slug", (c) => {
 	const slug = c.req.param("slug");
 	const path = `/server/content/${slug}.md`;
@@ -76,4 +63,17 @@ app.get("/:slug", (c) => {
 	);
 });
 
-export default app;
+export default {
+	fetch: app.fetch,
+	prerender: [
+		"/",
+		...Object.keys(content)
+			.map((filePath) => {
+				const slug = filePath.split("/").at(-1)?.split(".").at(0);
+				if (slug?.startsWith("_")) return;
+
+				return `/${slug}`;
+			})
+			.filter((path) => typeof path === "string"),
+	],
+};

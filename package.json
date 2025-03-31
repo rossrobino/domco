@@ -26,6 +26,6 @@
 		"prettier-plugin-tailwindcss": "^0.6.11",
 		"turbo": "^2.4.4",
 		"typescript": "^5.8.2",
-		"vite": "^6.2.3"
+		"vite": "^6.2.4"
 	}
 }

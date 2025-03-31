@@ -3,11 +3,9 @@ import type { SSRTarget, SSROptions, Connect } from "vite";
 /** Helper type for a type that could be a promise. */
 export type MaybePromise<T> = T | Promise<T>;
 
-/** Exports from the SSR `+func` entry point. */
-export type FuncModule = {
-	default?: {
-		fetch?: FetchHandler;
-	};
+/** `default` export from the SSR entry point. */
+export type Entry = {
+	fetch: FetchHandler;
 	prerender?: Prerender;
 };
 

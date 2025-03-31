@@ -1,19 +1,12 @@
 import App from "@/client/react/App";
 import { html } from "client:page";
 import { html as reactHtml } from "client:page/react";
-import type { Prerender } from "domco";
+import type { Entry } from "domco";
 import { Hono } from "hono";
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 
-export const prerender: Prerender = async () => [
-	"/static-page",
-	"/half-static/static",
-	"/static.css",
-	"/static.json",
-];
-
-export const app = new Hono();
+const app = new Hono();
 
 app.all("/", async (c) => {
 	if (c.req.method === "POST") {
@@ -59,4 +52,12 @@ app.get("/react", (c) => {
 	);
 });
 
-export default app;
+export default {
+	fetch: app.fetch,
+	prerender: async () => [
+		"/static-page",
+		"/half-static/static",
+		"/static.css",
+		"/static.json",
+	],
+} satisfies Entry;

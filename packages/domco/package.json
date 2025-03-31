@@ -66,7 +66,7 @@
 		"build": "node scripts/version && npm run build:clean && npm run build:js && cp src/types/env.d.ts dist/types/env.d.ts"
 	},
 	"devDependencies": {
-		"vitest": "^3.0.9"
+		"vitest": "^3.1.1"
 	},
 	"peerDependencies": {
 		"vite": "^6.0.0"
