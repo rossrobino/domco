@@ -123,7 +123,7 @@ export const createDomco = async () => {
 			},
 			{
 				value: "hono",
-				label: "hono",
+				label: "Hono",
 				hint: "https://hono.dev",
 			},
 			{
