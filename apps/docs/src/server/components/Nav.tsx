@@ -17,7 +17,7 @@ type NavLinkProps = {
 
 const SideBar: FC = () => {
 	return (
-		<nav class="bg-muted-background sticky top-0 hidden h-screen w-[20vw] min-w-56 justify-end overflow-y-auto lg:flex">
+		<nav class="bg-base-900 sticky top-0 hidden h-screen w-[20vw] min-w-56 justify-end overflow-y-auto scheme-dark lg:flex">
 			<div class="flex flex-col py-6 pr-12 pl-6">
 				<div class="pb-6">
 					<HomeLink />
@@ -32,7 +32,7 @@ const SideBar: FC = () => {
 };
 
 const HomeLink = () => (
-	<a class="text-xl font-bold no-underline" href="/">
+	<a class="text-base-50 text-xl font-bold no-underline" href="/">
 		domco
 	</a>
 );
@@ -72,7 +72,7 @@ const TopBar: FC = () => {
 
 			<dialog
 				data-content
-				class="bg-muted-background my-0 ml-0 h-full max-h-dvh shadow-sm backdrop:backdrop-blur"
+				class="bg-base-900 my-0 ml-0 h-full max-h-dvh scheme-dark shadow-sm backdrop:backdrop-blur"
 			>
 				<nav class="flex h-full min-w-64 flex-col p-6">
 					<div class="flex items-center justify-between pb-6">
