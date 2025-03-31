@@ -64,6 +64,23 @@ export default {
 };
 ```
 
+Alternatively, you can use a Fetch API compatible router like [Hono](https://hono.dev). Most routers provide a `fetch` or `handler` method to handle requests in production, which you can pass into the `default` export.
+
+```ts {8,12}
+// src/server/+app
+import { Hono } from "hono";
+
+const app = new Hono();
+
+// pass to the default export
+export default {
+	fetch: app.fetch,
+};
+
+// or if the method is named `fetch`, export directly
+export default app;
+```
+
 ### +page
 
 To create a page, add `+page.html` file in a directory within `src/client/`.
