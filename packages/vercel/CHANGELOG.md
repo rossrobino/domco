@@ -1,5 +1,17 @@
 # @domcojs/vercel
 
+## 2.0.0
+
+### Major Changes
+
+- 9c86ff0: Reflect major changes in `domco`.
+
+### Patch Changes
+
+- Updated dependencies [9c86ff0]
+- Updated dependencies [9c86ff0]
+  - domco@4.0.0
+
 ## 1.1.1
 
 ### Patch Changes

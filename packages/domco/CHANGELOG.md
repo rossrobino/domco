@@ -1,5 +1,39 @@
 # domco
 
+## 4.0.0
+
+### Major Changes
+
+- 9c86ff0: Drop support for vite 5.
+- 9c86ff0: Update server exports.
+
+  SSR entry filename - `+func` has been renamed to `+app`.
+
+  Instead of exporting a `handler`, you must now export a `default` object with a `fetch` method. This aligns domco with Bun, Deno, and Cloudflare's APIs.
+
+  ```ts
+  // src/server/+app
+  import type { App } from "domco";
+
+  export default {
+  	fetch(req) {
+  		return new Response("Hello world");
+  	},
+  } satisfies App;
+  ```
+
+  The `prerender` export has also moved within the `default` export.
+
+  ```ts
+  // src/server/+app
+  export default {
+  	fetch(req) {
+  		return new Response("Hello world");
+  	},
+  	prerender: ["/", "/paths..."],
+  };
+  ```
+
 ## 3.0.2
 
 ### Patch Changes
