@@ -30,7 +30,7 @@ type GetTemplateFileOptions = {
 	tailwind: boolean;
 	prettier: boolean;
 	projectName: string;
-	dependencies: Record<string, string>;
+	dependencies: ReturnType<typeof getDependencies>;
 };
 
 export type GetTemplateFile = (
