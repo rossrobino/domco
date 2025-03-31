@@ -14,8 +14,7 @@
 		}
 	},
 	"files": [
-		"dist",
-		"README.md"
+		"dist"
 	],
 	"scripts": {
 		"dev": "tsc --watch",

@@ -7,8 +7,7 @@
 	"main": "./dist/index.js",
 	"bin": "./dist/bin.js",
 	"files": [
-		"dist",
-		"README.md"
+		"dist"
 	],
 	"scripts": {
 		"test:clean": "rm -rf ./create-domco-test",

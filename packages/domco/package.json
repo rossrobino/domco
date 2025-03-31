@@ -54,8 +54,7 @@
 		}
 	},
 	"files": [
-		"dist",
-		"README.md"
+		"dist"
 	],
 	"scripts": {
 		"test": "vitest run",
