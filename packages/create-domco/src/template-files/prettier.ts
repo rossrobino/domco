@@ -18,6 +18,8 @@ dist
 	else if (pm === "pnpm") ignoreContent += "pnpm-lock.yaml";
 	else ignoreContent += `${pm}.lock`;
 
+	ignoreContent += "\n";
+
 	if (adapter === "vercel" || adapter === "cloudflare")
 		ignoreContent += `.${adapter}\n`;
 
