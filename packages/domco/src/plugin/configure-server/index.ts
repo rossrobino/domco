@@ -1,8 +1,8 @@
 import { dirNames, fileNames } from "../../constants/index.js";
 import { nodeListener } from "../../listener/index.js";
-import type { Adapter, FuncModule } from "../../types/index.js";
+import type { Adapter } from "../../types/index.js";
 import { findFiles } from "../../util/fs/index.js";
-import { funcExports } from "../../util/func-exports/index.js";
+import { validateEntry } from "../../util/validate-entry/index.js";
 import path from "node:path";
 import process from "node:process";
 import url from "node:url";
@@ -29,18 +29,18 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 					nodeListener(
 						// Copied from https://github.com/honojs/vite-plugins/blob/main/packages/dev-server/src/dev-server.ts
 						async (request) => {
-							const mod: FuncModule = await devServer.ssrLoadModule(
-								path.join(
-									process.cwd(),
-									dirNames.src.base,
-									dirNames.src.server,
-									fileNames.func,
+							const app = validateEntry(
+								await devServer.ssrLoadModule(
+									path.join(
+										process.cwd(),
+										dirNames.src.base,
+										dirNames.src.server,
+										fileNames.app,
+									),
 								),
 							);
 
-							const { handler } = funcExports(mod);
-
-							const res = await handler(request);
+							const res = await app.fetch(request);
 
 							if (!(res instanceof Response)) throw res;
 
@@ -109,28 +109,27 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 				return next();
 			});
 
+			// This must be post middleware or serve static will not work.
 			return async () => {
-				// This must be post middleware or serve static will not work.
-
 				for (const mw of adapter?.previewMiddleware ?? []) {
 					previewServer.middlewares.use(mw);
 				}
 
 				// import from dist
-				const mod = (await import(
-					url.pathToFileURL(
-						path.join(
-							process.cwd(),
-							dirNames.out.base,
-							dirNames.out.ssr,
-							fileNames.out.entry.func,
-						),
-					).href
-				)) as FuncModule;
+				const app = validateEntry(
+					await import(
+						url.pathToFileURL(
+							path.join(
+								process.cwd(),
+								dirNames.out.base,
+								dirNames.out.ssr,
+								fileNames.out.entry.app,
+							),
+						).href
+					),
+				);
 
-				const { handler } = funcExports(mod);
-
-				previewServer.middlewares.use(nodeListener(handler));
+				previewServer.middlewares.use(nodeListener(app.fetch));
 			};
 		},
 	};
@@ -151,20 +150,17 @@ const injectViteClient = (res: Response) => {
 
 	const reader = res.body.getReader();
 
-	const stream = new ReadableStream({
+	const stream = new ReadableStream<Uint8Array<ArrayBufferLike>>({
 		async start(controller) {
 			controller.enqueue(viteClient);
 
 			while (true) {
-				const result = await reader.read();
-
-				if (result.done) {
-					controller.close();
-					break;
-				}
-
-				controller.enqueue(result.value);
+				const { done, value } = await reader.read();
+				if (done) break;
+				controller.enqueue(value);
 			}
+
+			controller.close();
 		},
 	});
 

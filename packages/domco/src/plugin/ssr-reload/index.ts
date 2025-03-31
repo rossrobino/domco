@@ -8,7 +8,7 @@ import type { EnvironmentModuleNode, Plugin } from "vite";
  * This could possibly change in the future:
  * @see https://github.com/vitejs/vite/issues/19114
  *
- * @returns vite plugin
+ * @returns Vite plugin
  */
 export const ssrReloadPlugin = (): Plugin => {
 	return {

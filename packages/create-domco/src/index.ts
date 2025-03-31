@@ -1,8 +1,7 @@
 import { getDependencies } from "./dependencies/index.js";
-import denoJson from "./template-files/deno-json.js";
+import app from "./template-files/app.js";
 import envTypes from "./template-files/env-types.js";
 import favicon from "./template-files/favicon.js";
-import func from "./template-files/func.js";
 import gitignore from "./template-files/gitignore.js";
 import packageJson from "./template-files/package-json.js";
 import pageHtml from "./template-files/page-html.js";
@@ -14,24 +13,24 @@ import * as p from "@clack/prompts";
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import type { AgentName } from "package-manager-detector";
+import { getUserAgent } from "package-manager-detector/detect";
 import { format } from "prettier";
-import whichPmRuns from "which-pm-runs";
 
 const cancelMessage = "Operation cancelled";
-
-type PackageManager = "npm" | "bun" | "pnpm" | "yarn" | "deno" | (string & {});
 
 type TemplateFile = { name: string; content: string };
 
 type GetTemplateFileOptions = {
+	framework: null | "ovr" | "hono";
 	adapter: null | "cloudflare" | "deno" | "vercel";
 	dir: string;
-	pm: PackageManager;
+	pm: AgentName;
 	lang: string;
 	tailwind: boolean;
 	prettier: boolean;
 	projectName: string;
-	dependencies: Record<string, string>;
+	dependencies: ReturnType<typeof getDependencies>;
 };
 
 export type GetTemplateFile = (
@@ -114,6 +113,32 @@ export const createDomco = async () => {
 		process.exit(0);
 	}
 
+	const framework = await p.select({
+		message: "Framework",
+		initialValue: null,
+		options: [
+			{
+				value: null,
+				label: "none",
+			},
+			{
+				value: "hono",
+				label: "Hono",
+				hint: "https://hono.dev",
+			},
+			{
+				value: "ovr",
+				label: "ovr",
+				hint: "https://github.com/rossrobino/ovr",
+			},
+		],
+	});
+
+	if (p.isCancel(framework)) {
+		p.cancel(cancelMessage);
+		process.exit(0);
+	}
+
 	const adapter = await p.select({
 		message: "Deployment adapter",
 		initialValue: null,
@@ -125,17 +150,17 @@ export const createDomco = async () => {
 			},
 			{
 				value: "cloudflare",
-				label: "cloudflare",
+				label: "Cloudflare",
 				hint: "https://domco.robino.dev/deploy#cloudflare",
 			},
 			{
 				value: "deno",
-				label: "deno",
+				label: "Deno",
 				hint: "https://domco.robino.dev/deploy#deno",
 			},
 			{
 				value: "vercel",
-				label: "vercel",
+				label: "Vercel",
 				hint: "https://domco.robino.dev/deploy#vercel",
 			},
 		],
@@ -152,12 +177,12 @@ export const createDomco = async () => {
 		options: [
 			{
 				value: "prettier",
-				label: "Add Prettier for formatting",
+				label: "Prettier",
 				hint: "https://prettier.io/",
 			},
 			{
 				value: "tailwind",
-				label: "Add TailwindCSS for styling",
+				label: "TailwindCSS",
 				hint: "https://tailwindcss.com/",
 			},
 		],
@@ -172,14 +197,19 @@ export const createDomco = async () => {
 
 	s.start("Creating project");
 
+	const pm = getUserAgent();
+
+	if (!pm) throw new Error("Unable to identify package manager.");
+
 	const options: GetTemplateFileOptions = {
+		projectName: getProjectName(dir),
 		dir,
+		lang,
+		framework,
 		adapter,
-		lang: String(lang),
 		prettier: extras.includes("prettier"),
 		tailwind: extras.includes("tailwind"),
-		pm: getPackageManager(),
-		projectName: getProjectName(dir),
+		pm,
 		dependencies: getDependencies(),
 	};
 
@@ -196,8 +226,7 @@ export const createDomco = async () => {
 
 const getAllTemplateFiles: GetTemplateFile = async (options) => {
 	const getTemplateFileFunctions = [
-		func,
-		denoJson,
+		app,
 		favicon,
 		gitignore,
 		envTypes,
@@ -262,13 +291,6 @@ const writeTemplateFiles = async (
 			return fs.writeFile(filePath, contents);
 		}),
 	);
-};
-
-/** Gets the current package manager. */
-const getPackageManager = (): PackageManager => {
-	if ("Deno" in globalThis) return "deno";
-
-	return whichPmRuns()?.name || "npm";
 };
 
 /**

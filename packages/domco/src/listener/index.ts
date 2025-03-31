@@ -1,6 +1,6 @@
 // Adapted from https://github.com/mjackson/remix-the-web/blob/main/packages/node-fetch-server
 // to use as Vite middleware: https://github.com/mjackson/remix-the-web/issues/13
-import type { Handler, MaybePromise } from "../types/index.js";
+import type { FetchHandler, MaybePromise } from "../types/index.js";
 import type {
 	IncomingMessage,
 	RequestListener,
@@ -12,7 +12,7 @@ import type {
  * `http.createServer()` or `https.createServer()`.
  */
 export const nodeListener = (
-	handler: Handler,
+	fetchHandler: FetchHandler,
 	options?: {
 		/**
 		 * A function that handles an error that occurred during request handling.
@@ -28,14 +28,11 @@ export const nodeListener = (
 
 		let response: Response;
 		try {
-			response = await handler(request);
+			response = await fetchHandler(request);
 		} catch (error) {
 			const errorResponse = await onError(error);
-			if (!errorResponse) {
-				// handled by the user, in this case - Vite middleware via `next(error)`
-				return;
-			}
-			console.log("test");
+			if (!errorResponse) return; // handled by the user, in this case - Vite middleware via `next(error)`
+
 			response = errorResponse;
 		}
 
@@ -57,25 +54,19 @@ export const nodeListener = (
 
 		res.writeHead(response.status, headers);
 
-		if (response.body != null && req.method !== "HEAD") {
-			for await (const chunk of readStream(response.body)) {
-				res.write(chunk);
+		if (response.body && req.method !== "HEAD") {
+			const reader = response.body.getReader();
+
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) break;
+				res.write(value);
 			}
 		}
 
 		res.end();
 	};
 };
-
-async function* readStream(stream: ReadableStream<Uint8Array>) {
-	const reader = stream.getReader();
-
-	while (true) {
-		const { done, value } = await reader.read();
-		if (done) break;
-		yield value;
-	}
-}
 
 const defaultErrorHandler = (error: unknown) => {
 	console.error(error);
@@ -111,6 +102,7 @@ const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 	// However, this property is not defined in the TypeScript types for RequestInit, so we have
 	// to cast it here in order to set it without a type error.
 	// See https://fetch.spec.whatwg.org/#dom-requestinit-duplex
+	// https://github.com/mdn/content/issues/31735
 	const init: RequestInit & { duplex?: "half" } = {
 		method,
 		headers,

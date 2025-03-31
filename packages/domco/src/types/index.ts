@@ -3,38 +3,16 @@ import type { SSRTarget, SSROptions, Connect } from "vite";
 /** Helper type for a type that could be a promise. */
 export type MaybePromise<T> = T | Promise<T>;
 
-/** Exports from the SSR `+func` entry point. */
-export type FuncModule = {
-	handler?: Handler;
+/** `default` export from the SSR entry point. */
+export type App = {
+	fetch: FetchHandler;
 	prerender?: Prerender;
 };
 
-/**
- * Request handler, takes a web request and returns a web response.
- *
- * ```ts
- * // src/server/+func.ts
- * import type { Handler } from "domco";
- *
- * export const handler: Handler = async (req) => {
- * 	return new Response("Hello world");
- * };
- * ```
- */
-export type Handler = (req: Request) => MaybePromise<Response>;
+/** Fetch handler, takes a web request and returns a web response. */
+export type FetchHandler = (req: Request) => MaybePromise<Response>;
 
-/**
- * Paths to prerender at build time.
- *
- * @example
- *
- * ```ts
- * // src/server/+func.ts
- * import type { Prerender } from "domco";
- *
- * export const prerender: Prerender = ["/", "/post-1", "/post-2"];
- * ```
- */
+/** Paths to prerender at build time. */
 export type Prerender =
 	| Array<string>
 	| Set<string>
@@ -45,8 +23,8 @@ export type AdapterMiddleware = Connect.NextHandleFunction;
 
 /** A function that returns an additional entry point to include in the SSR build. */
 export type AdapterEntry = (AdapterEntryOptions: {
-	/** The function entry point to import `handler` from. */
-	funcId: string;
+	/** SSR entry point to import from. */
+	appId: string;
 }) => {
 	/**
 	 * The name of the entry point without extension.
@@ -98,7 +76,7 @@ export type AdapterBuilder<AdapterOptions = never> = (
  * domco Config
  *
  * Use if you want to create a separate object for your domco config.
- * Pass the config into the `domco` vite plugin.
+ * Pass the config into the `domco` Vite plugin.
  *
  * @example
  *

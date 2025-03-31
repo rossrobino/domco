@@ -4,11 +4,11 @@ import { describe, expect, test } from "vitest";
 describe("fs tests", () => {
 	test("findFiles", async () => {
 		const files = await findFiles({
-			dir: "src",
+			dir: "packages",
 			checkEndings: ["test.ts"],
 		});
 
-		expect(files).toHaveProperty("/util/fs");
+		expect(files).toHaveProperty("/domco/src/util/fs");
 
 		for (const [k, v] of Object.entries(files)) {
 			const keyCheck = v.startsWith("/") || v.startsWith("\\");

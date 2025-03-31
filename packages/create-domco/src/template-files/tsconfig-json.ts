@@ -1,8 +1,17 @@
 import type { GetTemplateFile } from "../index.js";
 import { prettierConfigFileName } from "./prettier.js";
 
-const getTemplateFiles: GetTemplateFile = ({ pm, lang, prettier }) => {
+const getTemplateFiles: GetTemplateFile = ({
+	pm,
+	lang,
+	prettier,
+	framework,
+}) => {
 	if (pm === "deno") return [];
+
+	let jsxSource: string | undefined;
+	if (framework === "ovr") jsxSource = "ovr";
+	else if (framework === "hono") jsxSource = "hono/jsx";
 
 	return [
 		{
@@ -12,8 +21,6 @@ const getTemplateFiles: GetTemplateFile = ({ pm, lang, prettier }) => {
 		"target": "ESNext",
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"skipLibCheck": true,
-		"allowJs": true,
-		"checkJs": true,
 		"module": "Preserve",
 		"moduleResolution": "Bundler",
 		"verbatimModuleSyntax": true,
@@ -21,13 +28,19 @@ const getTemplateFiles: GetTemplateFile = ({ pm, lang, prettier }) => {
 		"resolveJsonModule": true,
 		"moduleDetection": "force",
 		"noEmit": true,
+		"allowJs": true,
+		"checkJs": true,
 
-		/* Linting */
+		/* JSX */
+		"jsx": "react-jsx",${jsxSource ? `\n\t\t"jsxImportSource": "${jsxSource}",` : ""}
+
+		/* Strict */
 		"strict": true,
 		"noUnusedLocals": true,
+		"noImplicitOverride": true,
 		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
+		"noFallthroughCasesInSwitch": true,
 
 		/* Aliases */
 		"paths": {

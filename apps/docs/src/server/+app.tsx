@@ -2,28 +2,20 @@ import { Edit } from "@/server/components/Edit";
 import { Hero } from "@/server/components/Hero";
 import { Layout } from "@/server/components/Layout";
 import { html as previewHtml } from "@/server/content/_preview.md";
-import { html as apiReferenceHtml } from "@/server/content/generated/globals.md";
 import type { Result } from "@robino/md";
-import { tags as rootTags } from "client:script";
-import { tags as docTags } from "client:script/docs";
+import { tags } from "client:script";
 import { version } from "create-domco/package.json";
-import type { Prerender } from "domco";
 import { Hono } from "hono";
 import { etag } from "hono/etag";
-import { raw } from "hono/html";
 
 const app = new Hono();
 
 app.use(etag());
 
 app.use(async (c, next) => {
-	c.setRenderer(({ title, client }, content) => {
-		const tags = [raw(rootTags)];
-		if (client) {
-			tags.push(...client);
-		}
+	c.setRenderer(({ title }, content) => {
 		return c.html(
-			<Layout title={title} client={tags}>
+			<Layout title={title} tags={tags}>
 				{content}
 			</Layout>,
 		);
@@ -31,12 +23,12 @@ app.use(async (c, next) => {
 	await next();
 });
 
-app.get("/", async (c) => {
+app.get("/", (c) => {
 	return c.render(
 		{ title: "domco" },
 		<>
 			<Hero />
-			<section>{raw(previewHtml)}</section>
+			<section dangerouslySetInnerHTML={{ __html: previewHtml }}></section>
 			<div class="my-16 flex justify-center">
 				<a href="/tutorial" class="button px-6 py-4 text-lg">
 					Get Started
@@ -46,37 +38,9 @@ app.get("/", async (c) => {
 	);
 });
 
-app.get("/api-reference", async (c) => {
-	return c.render(
-		{ title: "API Reference", client: [raw(docTags)] },
-		<>
-			<section>
-				<h1>API Reference</h1>
-				{raw(apiReferenceHtml.replaceAll("globals.md#", "#"))}
-			</section>
-			<Edit />
-		</>,
-	);
-});
-
 const content = import.meta.glob<Result<any>>("/server/content/*.md", {
 	eager: true,
 });
-
-const contentPrerender = Object.keys(content)
-	.map((filePath) => {
-		const slug = filePath.split("/").at(-1)?.split(".").at(0);
-		if (slug?.startsWith("_")) return;
-
-		return `/${slug}`;
-	})
-	.filter((path) => typeof path === "string");
-
-export const prerender: Prerender = [
-	"/",
-	"/api-reference",
-	...contentPrerender,
-];
 
 app.get("/:slug", (c) => {
 	const slug = c.req.param("slug");
@@ -91,13 +55,25 @@ app.get("/:slug", (c) => {
 	return c.render(
 		{
 			title: slug.charAt(0).toUpperCase() + slug.slice(1),
-			client: [raw(docTags)],
 		},
 		<>
-			<section>{raw(html)}</section>
+			<section dangerouslySetInnerHTML={{ __html: html }}></section>
 			<Edit />
 		</>,
 	);
 });
 
-export const handler = app.fetch;
+export default {
+	fetch: app.fetch,
+	prerender: [
+		"/",
+		...Object.keys(content)
+			.map((filePath) => {
+				const slug = filePath.split("/").at(-1)?.split(".").at(0);
+				if (slug?.startsWith("_")) return;
+
+				return `/${slug}`;
+			})
+			.filter((path) => typeof path === "string"),
+	],
+};

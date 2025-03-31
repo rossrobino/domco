@@ -16,14 +16,14 @@ const entryId = "main";
 const pathnameParam = "__pathname";
 
 /** Use when runtime is set to node. */
-const nodeEntry: AdapterEntry = ({ funcId }) => {
+const nodeEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
 		code: `
-import { handler } from "${funcId}";
+import app from "${appId}";
 import { nodeListener } from "domco/listener";
 
-export default nodeListener(handler);
+export default nodeListener(app.fetch);
 `,
 	};
 };
@@ -47,15 +47,15 @@ export const getUrl = (req: Request) => {
 };
 
 /** Use when runtime is set to node + ISR. */
-const isrEntry: AdapterEntry = ({ funcId }) => {
+const isrEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
 		code: `
-import { handler } from "${funcId}";
+import app from "${appId}";
 import { nodeListener } from "domco/listener";
 import { getUrl } from "@domcojs/vercel";
 
-const isrHandler = async (req) => handler(new Request(getUrl(req)));
+const isrHandler = async (req) => app.fetch(new Request(getUrl(req)));
 
 export default nodeListener(isrHandler);
 `,
@@ -63,13 +63,13 @@ export default nodeListener(isrHandler);
 };
 
 /** Use when runtime is edge. */
-const edgeEntry: AdapterEntry = ({ funcId }) => {
+const edgeEntry: AdapterEntry = ({ appId }) => {
 	return {
 		id: entryId,
 		code: `
-import { handler } from "${funcId}";
+import app from "${appId}";
 
-export default handler;
+export default app.fetch;
 `,
 	};
 };

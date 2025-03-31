@@ -1,20 +1,12 @@
 import App from "@/client/react/App";
-import { Page } from "@robino/html";
 import { html } from "client:page";
 import { html as reactHtml } from "client:page/react";
-import type { Handler, Prerender } from "domco";
+import type { Entry } from "domco";
 import { Hono } from "hono";
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 
-export const prerender: Prerender = async () => [
-	"/static-page",
-	"/half-static/static",
-	"/static.css",
-	"/static.json",
-];
-
-export const app = new Hono();
+const app = new Hono();
 
 app.all("/", async (c) => {
 	if (c.req.method === "POST") {
@@ -23,13 +15,9 @@ app.all("/", async (c) => {
 		const userInput = formData.get("test");
 
 		if (typeof userInput === "string" && userInput.length) {
-			return c.html(
-				new Page(html).body([{ name: "div", children: "success" }]).toString(),
-			);
+			return c.html(html.replace("</body>", (m) => "<div>success</div>" + m));
 		} else {
-			return c.html(
-				new Page(html).body([{ name: "div", children: "invalid" }]).toString(),
-			);
+			return c.html(html.replace("</body>", (m) => "<div>invalid</div>" + m));
 		}
 	}
 
@@ -64,4 +52,12 @@ app.get("/react", (c) => {
 	);
 });
 
-export const handler: Handler = app.fetch;
+export default {
+	fetch: app.fetch,
+	prerender: async () => [
+		"/static-page",
+		"/half-static/static",
+		"/static.css",
+		"/static.json",
+	],
+} satisfies Entry;

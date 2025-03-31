@@ -7,6 +7,7 @@ const getTemplateFiles: GetTemplateFile = ({
 	projectName,
 	dependencies,
 	adapter,
+	framework,
 }) => {
 	if (pm === "deno") return [];
 
@@ -24,10 +25,13 @@ const getTemplateFiles: GetTemplateFile = ({
 		"build": "vite build",
 		"preview": "vite preview"
 		${prettier ? `,"format": "prettier --write ."` : ""}
-	},
-	"devDependencies": {${adapter ? `"@domcojs/${adapter}": "^${dependencies[adapter]}",` : ""}
-		${tailwind ? `"@tailwindcss/vite": "^${dependencies.tailwind}",` : ""}
-		"domco": "^${dependencies.domco}",${prettier ? `"prettier": "^${dependencies.prettier}",` : ""}
+	},${
+		framework
+			? `"dependencies": {
+			"${framework}": "^${dependencies[framework]}"
+	},`
+			: ""
+	}"devDependencies": {${adapter ? `"@domcojs/${adapter}": "^${dependencies[adapter]}",` : ""}${tailwind ? `"@tailwindcss/vite": "^${dependencies.tailwind}",` : ""}"domco": "^${dependencies.domco}",${prettier ? `"prettier": "^${dependencies.prettier}",` : ""}
 		${
 			prettier && tailwind
 				? `"prettier-plugin-tailwindcss": "^${dependencies.prettierTailwind}",`

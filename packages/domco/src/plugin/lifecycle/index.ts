@@ -1,11 +1,11 @@
 import { dirNames, fileNames } from "../../constants/index.js";
-import type { Adapter, FuncModule, Handler } from "../../types/index.js";
+import type { Adapter, FetchHandler } from "../../types/index.js";
 import { codeSize } from "../../util/code-size/index.js";
 import { findFiles, removeEmptyDirs, toPosix } from "../../util/fs/index.js";
-import { funcExports } from "../../util/func-exports/index.js";
 import { getMaxLengths } from "../../util/get-max-lengths/index.js";
 import { getTime } from "../../util/perf/index.js";
 import { style } from "../../util/style/index.js";
+import { validateEntry } from "../../util/validate-entry/index.js";
 import { version } from "../../version/index.js";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -22,26 +22,11 @@ import { build, type Plugin } from "vite";
 export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 	let ssr: boolean | undefined;
 
-	/** If prerender script should be run. */
-	let shouldPrerender = false;
-
 	return {
 		name: "domco:lifecycle",
 		apply: "build",
 		async config(_config, { isSsrBuild }) {
 			ssr = isSsrBuild;
-		},
-
-		writeBundle(_options, bundle) {
-			if (ssr) {
-				const funcChunk = bundle[fileNames.out.entry.func];
-
-				if (funcChunk?.type === "chunk") {
-					// Only prerender if there's a named export "prerender" from function chunk.
-					// This prevents having to import the func if it is not needed for prerendering.
-					shouldPrerender = funcChunk.exports.includes("prerender");
-				}
-			}
 		},
 
 		async closeBundle() {
@@ -57,11 +42,7 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 			} else {
 				const outDir = `${dirNames.out.base}/${dirNames.out.client.base}`;
 
-				const tasks: Promise<any>[] = [removeHtml(outDir)];
-
-				if (shouldPrerender) tasks.push(prerender());
-
-				await Promise.all(tasks);
+				await Promise.all([removeHtml(outDir), prerender()]);
 
 				await removeEmptyDirs(outDir);
 
@@ -116,9 +97,7 @@ const runAdapter = async (adapter: Adapter) => {
 		`${domcoTag} ${style.green(`running ${adapter.name} adapter...`)}`,
 	);
 
-	if (adapter.run) {
-		await adapter.run();
-	}
+	if (adapter.run) await adapter.run();
 
 	console.log(`${style.green("✓")} adapter executed.`);
 
@@ -133,7 +112,7 @@ const runAdapter = async (adapter: Adapter) => {
 
 type StaticFile = { path: string; kB: string; gzip: string; time: string };
 
-/** Prerenders static routes provided by the user's `prerender` export. */
+/** Prerenders static routes provided by the user's `default.prerender` export. */
 const prerender = async () => {
 	console.log();
 
@@ -141,45 +120,48 @@ const prerender = async () => {
 
 	console.log(`${domcoTag} ${style.green("prerendering static pages...")}`);
 
-	const mod = (await import(
-		/* @vite-ignore */
-		url.pathToFileURL(
-			path.join(dirNames.out.base, dirNames.out.ssr, fileNames.out.entry.func),
-		).href
-	)) as FuncModule;
-
-	let { handler, prerender } = funcExports(mod);
-
-	console.log(
-		style.dim(
-			`imported function in ${getTime(prerenderStart, performance.now())}`,
+	const app = validateEntry(
+		await import(
+			/* @vite-ignore */
+			url.pathToFileURL(
+				path.join(dirNames.out.base, dirNames.out.ssr, fileNames.out.entry.app),
+			).href
 		),
 	);
 
-	if (!prerender) return;
+	console.log(
+		style.dim(
+			`imported application in ${getTime(prerenderStart, performance.now())}`,
+		),
+	);
 
-	if (typeof prerender === "function") {
-		prerender = await prerender();
+	if (!app.prerender) {
+		console.log("no prerender paths provided.");
+		return;
 	}
 
-	if (prerender instanceof Set) {
+	if (typeof app.prerender === "function") {
+		app.prerender = await app.prerender();
+	}
+
+	if (app.prerender instanceof Set) {
 		// convert to array (can't sort a set)
-		prerender = Array.from(prerender);
+		app.prerender = Array.from(app.prerender);
 	}
 
 	// sort for logs
-	prerender.sort();
+	app.prerender.sort();
 
 	const staticFilePromises: Promise<StaticFile>[] = [];
 
-	for (const staticPath of prerender) {
+	for (const staticPath of app.prerender) {
 		if (!staticPath.startsWith("/")) {
 			throw Error(
 				`Prerender path \`${staticPath}\` does not start with \`"/"\`.`,
 			);
 		}
 
-		staticFilePromises.push(generateRoute(staticPath, handler));
+		staticFilePromises.push(generateRoute(staticPath, app.fetch));
 	}
 
 	// Generate static files in parallel.
@@ -233,16 +215,18 @@ const prerender = async () => {
  * in parallel.
  *
  * @param staticPath path to prerender
- * @param handler request handler
+ * @param fetchHandler request handler
  * @returns Information about the prerendered files.
  */
 const generateRoute = async (
 	staticPath: string,
-	handler: Handler,
+	fetchHandler: FetchHandler,
 ): Promise<StaticFile> => {
 	const startTime = performance.now();
 
-	const res = await handler(new Request(`http://0.0.0.0:4545${staticPath}`));
+	const res = await fetchHandler(
+		new Request(`http://0.0.0.0:4545${staticPath}`),
+	);
 
 	if (res.status === 404) {
 		throw new Error(

@@ -33,15 +33,14 @@ export const adapter: AdapterBuilder = async () => {
 		target: "webworker",
 		noExternal: true,
 		message:
-			"created Cloudflare Pages build .cloudflare/\ninstall wrangler and run `wrangler pages dev .cloudflare` to preview your build\nhttps://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler#installation\nhttps://developers.cloudflare.com/workers/wrangler/commands/#pages",
+			"created Cloudflare Pages build .cloudflare/\ninstall wrangler and run `wrangler pages dev .cloudflare` to preview your build\nhttps://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler\nhttps://developers.cloudflare.com/workers/wrangler/commands/#pages",
 
-		entry: ({ funcId }) => {
+		entry: ({ appId }) => {
 			return {
 				id: "_worker",
 				code: `
-					import { handler } from "${funcId}";
-					
-					export default { fetch: handler };
+					import app from "${appId}";
+					export default app;
 				`,
 			};
 		},

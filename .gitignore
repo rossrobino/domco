@@ -1,24 +1,13 @@
-# Logs
+.DS_Store
 logs
 *.log
 npm-debug.log*
-
 node_modules
 dist
 .vercel
 .cloudflare
 build
-dist-ssr
 *.local
 .turbo
-
-# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?

@@ -114,11 +114,6 @@
 		}
 	}
 
-	body {
-		font-family:
-			Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro, sans-serif;
-	}
-
 	* {
 		scroll-padding-block-start: calc(var(--spacing) * 20);
 		@media (min-width: 1024px) {
@@ -127,16 +122,11 @@
 	}
 
 	pre,
-	blockquote,
 	.copy-text {
 		cursor: copy;
 		&:active {
 			cursor: default;
 		}
-	}
-
-	pre {
-		font-size: var(--text-sm);
 	}
 
 	details {
@@ -161,17 +151,6 @@
 
 	img {
 		border: var(--border);
-		width: auto;
-		height: auto;
-	}
-
-	/* For youtube embeds */
-	iframe {
-		border: 2px solid var(--color-muted-foreground);
-		border-radius: var(--radius-sm);
-		background-color: var(--color-muted-foreground);
-		aspect-ratio: 16 / 9;
-		width: 100%;
 	}
 }
 
@@ -241,14 +220,4 @@
 @utility level-2 {
 	/* on this page heading links */
 	padding-block-start: var(--spacing);
-}
-
-@utility prose {
-	blockquote {
-		padding-inline-start: 0;
-		font-style: normal;
-		p {
-			padding-inline-start: 0;
-		}
-	}
 }

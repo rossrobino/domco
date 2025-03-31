@@ -4,7 +4,7 @@
 
 This section will show you how to server-side render an existing Vite/React single page application with domco. It will use the React template created when running `npm create vite`.
 
-You could also import the `html` and serve your single-page application without server-rendering.
+You could also import the `html` and serve your single-page application (SPA) without server-rendering, then create your backend in the same project as your SPA.
 
 ## Install
 
@@ -45,12 +45,12 @@ Add types to `/src/vite.env.d.ts`.
 /// <reference types="domco/env" />
 ```
 
-## Create `app` directory
+## App directory
 
 - Create a new `src/app/` directory to house the shared code that will run on the server and the client.
 - Move `App.tsx` into `src/app/`.
 
-## Create `client` directory
+## Client directory
 
 - Create a new `src/client/` directory to contain client side code.
 - Move `index.html`, `src/App.css`, `src/index.css`, and `src/main.tsx` into `src/client/`.
@@ -96,10 +96,10 @@ hydrateRoot(
 
 ## Add a server entry point
 
-Create a server entry `src/server/+func.tsx` file.
+Create a server entry `src/server/+app.tsx` file.
 
 ```tsx
-// /src/server/+func.tsx
+// /src/server/+app.tsx
 // import your App
 import App from "../app/App";
 // import the HTML page
@@ -107,30 +107,32 @@ import { html } from "client:page";
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 
-export const handler = async (req: Request) => {
-	const { pathname } = new URL(req.url);
+export default {
+	fetch(req: Request) {
+		const { pathname } = new URL(req.url);
 
-	if (pathname === "/") {
-		return new Response(
-			html.replace(
-				"%root%", // replace the text "%root%" with the React App
-				renderToString(
-					<StrictMode>
-						<App />
-					</StrictMode>,
+		if (pathname === "/") {
+			return new Response(
+				html.replace(
+					"%root%", // replace the text "%root%" with the React App
+					renderToString(
+						<StrictMode>
+							<App />
+						</StrictMode>,
+					),
 				),
-			),
-			{
-				headers: { "content-type": "text/html" },
-			},
-		);
-	}
+				{
+					headers: { "content-type": "text/html" },
+				},
+			);
+		}
 
-	return new Response("Not found", { status: 404 });
+		return new Response("Not found", { status: 404 });
+	},
 };
 ```
 
-`handler` is now an API route serving your React SSR application!
+`default.fetch` is now an API route serving your React SSR application!
 
 ## Directory tree reference
 
@@ -146,6 +148,6 @@ src/
 │   ├── index.css
 │   └── main.tsx
 ├── server/
-│   └── +func.tsx
+│   └── +app.tsx
 └── vite-env.d.ts
 ```
