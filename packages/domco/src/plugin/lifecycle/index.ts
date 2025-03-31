@@ -136,7 +136,7 @@ const prerender = async () => {
 	);
 
 	if (!app.prerender) {
-		console.log("No prerender paths provided.");
+		console.log("no prerender paths provided.");
 		return;
 	}
 
