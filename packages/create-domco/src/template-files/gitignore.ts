@@ -1,27 +1,23 @@
 import type { GetTemplateFile } from "../index.js";
 
-const getTemplateFiles: GetTemplateFile = () => {
-	return [
-		{
-			name: ".gitignore",
-			content: `logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+const getTemplateFiles: GetTemplateFile = ({ adapter }) => {
+	let content = `.DS_Store
 node_modules
 dist
 .env
 .env.*
+logs
+*.log
 *.local
-.vscode/*
-!.vscode/extensions.json
-.DS_Store
-.vercel
-.cloudflare
-`,
+`;
+
+	if (adapter === "vercel" || adapter === "cloudflare")
+		content += `.${adapter}\n`;
+
+	return [
+		{
+			name: ".gitignore",
+			content,
 		},
 	];
 };

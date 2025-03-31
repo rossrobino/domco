@@ -13,12 +13,11 @@ import * as p from "@clack/prompts";
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import type { AgentName } from "package-manager-detector";
+import { getUserAgent } from "package-manager-detector/detect";
 import { format } from "prettier";
-import whichPmRuns from "which-pm-runs";
 
 const cancelMessage = "Operation cancelled";
-
-type PackageManager = "npm" | "bun" | "pnpm" | "yarn" | "deno" | (string & {});
 
 type TemplateFile = { name: string; content: string };
 
@@ -26,7 +25,7 @@ type GetTemplateFileOptions = {
 	framework: null | "ovr" | "hono";
 	adapter: null | "cloudflare" | "deno" | "vercel";
 	dir: string;
-	pm: PackageManager;
+	pm: AgentName;
 	lang: string;
 	tailwind: boolean;
 	prettier: boolean;
@@ -198,6 +197,10 @@ export const createDomco = async () => {
 
 	s.start("Creating project");
 
+	const pm = getUserAgent();
+
+	if (!pm) throw new Error("Unable to identify package manager.");
+
 	const options: GetTemplateFileOptions = {
 		projectName: getProjectName(dir),
 		dir,
@@ -206,7 +209,7 @@ export const createDomco = async () => {
 		adapter,
 		prettier: extras.includes("prettier"),
 		tailwind: extras.includes("tailwind"),
-		pm: getPackageManager(),
+		pm,
 		dependencies: getDependencies(),
 	};
 
@@ -288,13 +291,6 @@ const writeTemplateFiles = async (
 			return fs.writeFile(filePath, contents);
 		}),
 	);
-};
-
-/** Gets the current package manager. */
-const getPackageManager = (): PackageManager => {
-	if ("Deno" in globalThis) return "deno";
-
-	return whichPmRuns()?.name || "npm";
 };
 
 /**

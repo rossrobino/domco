@@ -34,7 +34,7 @@ const getTemplateFiles: GetTemplateFile = ({
 		/* JSX */
 		"jsx": "react-jsx",${jsxSource ? `\n\t\t"jsxImportSource": "${jsxSource}",` : ""}
 
-		/* Linting */
+		/* Strict */
 		"strict": true,
 		"noUnusedLocals": true,
 		"noImplicitOverride": true,
