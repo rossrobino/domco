@@ -8,8 +8,7 @@
 	"bin": "./dist/bin.js",
 	"files": [
 		"dist",
-		"README.md",
-		"LICENSE.md"
+		"README.md"
 	],
 	"scripts": {
 		"test:clean": "rm -rf ./create-domco-test",
