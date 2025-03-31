@@ -70,8 +70,6 @@ const TopBar: FC = () => {
 				</svg>
 			</button>
 
-			<HomeLink />
-
 			<dialog
 				data-content
 				class="bg-muted-background my-0 ml-0 h-full max-h-dvh shadow-sm backdrop:backdrop-blur"

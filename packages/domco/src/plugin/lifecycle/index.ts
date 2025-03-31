@@ -130,7 +130,9 @@ const prerender = async () => {
 	);
 
 	console.log(
-		style.dim(`imported app in ${getTime(prerenderStart, performance.now())}`),
+		style.dim(
+			`imported application in ${getTime(prerenderStart, performance.now())}`,
+		),
 	);
 
 	if (!app.prerender) {
