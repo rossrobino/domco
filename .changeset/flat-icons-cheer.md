@@ -4,10 +4,12 @@
 
 Update server exports.
 
+SSR entry filename - `+func` has been renamed to `+app`.
+
 Instead of exporting a `handler`, you must now export a `default` object with a `fetch` method. This aligns domco with Bun, Deno, and Cloudflare's APIs.
 
 ```ts
-// src/server/+func
+// src/server/+app
 import type { Entry } from "domco";
 
 export default {
@@ -20,7 +22,7 @@ export default {
 The `prerender` export has also moved within the `default` export.
 
 ```ts
-// src/server/+func
+// src/server/+app
 export default {
 	fetch(req) {
 		return new Response("Hello world");

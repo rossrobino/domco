@@ -96,10 +96,10 @@ hydrateRoot(
 
 ## Add a server entry point
 
-Create a server entry `src/server/+func.tsx` file.
+Create a server entry `src/server/+app.tsx` file.
 
 ```tsx
-// /src/server/+func.tsx
+// /src/server/+app.tsx
 // import your App
 import App from "../app/App";
 // import the HTML page
@@ -148,6 +148,6 @@ src/
 │   ├── index.css
 │   └── main.tsx
 ├── server/
-│   └── +func.tsx
+│   └── +app.tsx
 └── vite-env.d.ts
 ```

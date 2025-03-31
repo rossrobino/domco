@@ -1,6 +1,6 @@
 export const fileNames = {
-	/** Function file name without extension. */
-	func: "+func",
+	/** SSR entry file name without extension. */
+	app: "+app",
 
 	/** Page file name with extension. */
 	page: "+page.html",
@@ -12,7 +12,7 @@ export const fileNames = {
 	out: {
 		/** names of the output entry points */
 		entry: {
-			func: "func.js",
+			app: "app.js",
 		},
 	},
 } as const;
@@ -40,8 +40,8 @@ export const headers = {
 } as const;
 
 export const ids = {
-	/** Function entry point ID. */
-	func: `/${dirNames.src.server}/${fileNames.func}`,
+	/** SSR entry point ID. */
+	app: `/${dirNames.src.server}/${fileNames.app}`,
 
 	/** Adapter entry ID for the entry point provided by the adapter. */
 	adapter: "domco:adapter",

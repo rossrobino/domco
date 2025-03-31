@@ -12,7 +12,7 @@ dist/
 │	├── (_immutable/) - any JS/CSS/immutable assets
 │	└── (index.html) - prerendered pages
 └── server/
-	├── func.js - server entry point
+	├── app.js - server entry point
 	└── (adapter-entry.js) - if using an adapter
 ```
 
@@ -49,7 +49,7 @@ npm i -D @domcojs/cloudflare
 
 The [Cloudflare](https://cloudflare.com) adapter outputs your application to run on [Cloudflare Pages](https://pages.cloudflare.com/).
 
-- Function runs on [workerd](https://github.com/cloudflare/workerd).
+- Runs on [workerd](https://github.com/cloudflare/workerd).
 - Outputs public assets to be served on Cloudflare's CDN.
 
 <img loading="lazy" src="/_vercel/image?url=/images/cloudflare/build-settings.png&w=1280&q=100" alt='A screenshot of the Cloudflare Build Settings UI. Set the Framework Preset field to "None", set the build command to "npm run build", and the build output directory to ".cloudflare".' />
@@ -62,7 +62,7 @@ npm i -D @domcojs/deno
 
 The [Deno](https://deno.com) adapter outputs your application to run on [Deno Deploy](https://deno.com/deploy). You do not have to use Deno for development to use this adapter.
 
-- Function runs on Deno.
+- Runs on Deno.
 - Static files are served with [`@std/http/file-server`](https://jsr.io/@std/http).
 
 <img loading="lazy" src="/_vercel/image?url=/images/deno/build-settings.png&w=1280&q=100" alt='A screenshot of the Deno Deploy Project Configuration UI. Set the Framework Preset field to "None", set the build command to "deno run -A npm:vite build", and the entry point to "dist/server/main.js".' />
@@ -75,7 +75,7 @@ npm i -D @domcojs/vercel
 
 The [Vercel](https://vercel.com) adapter outputs your application to the [Build Output API](https://vercel.com/docs/build-output-api/v3) specification.
 
-- Function runs on [Node.js](https://vercel.com/docs/functions/runtimes#node.js), [Node.js with ISR](https://vercel.com/docs/incremental-static-regeneration), or [Edge Runtime](https://vercel.com/docs/functions/runtimes/edge-runtime).
+- Runs on [Node.js](https://vercel.com/docs/functions/runtimes#node.js), [Node.js with ISR](https://vercel.com/docs/incremental-static-regeneration), or [Edge Runtime](https://vercel.com/docs/functions/runtimes/edge-runtime).
 - Outputs public assets to be served on Vercel's [Edge Network](https://vercel.com/docs/edge-network/overview).
 - Supports on demand [Image Optimization](https://vercel.com/docs/image-optimization) when configured in the adapter config.
   - Set the `src` attribute of an image using the `/_vercel/image/...` [optimized URL format](https://vercel.com/docs/image-optimization#optimized-url-format). In `dev` and `preview` modes, domco will redirect to the original image.
@@ -84,7 +84,7 @@ The [Vercel](https://vercel.com) adapter outputs your application to the [Build 
 
 ## Manual deployment
 
-If you are not using an [adapter](#adapters), you can import `default.fetch` from the `func.js` module and configure your func to use in another environment.
+If you are not using an [adapter](#adapters), you can import `default.fetch` from the `app.js` module and configure your application to use in another environment.
 
 The `dist/client/` directory holds client assets. JS and CSS assets with hashed file names will be output to `dist/client/_immutable/`, you can serve this path with immutable cache headers. Other assets like prerendered HTML files are processed and included in `dist/client/` directly.
 
@@ -95,7 +95,7 @@ Here's an example of how to serve your application using the result of your buil
 ```ts
 // server.js
 // import from the build output
-import app from "./dist/server/func.js";
+import app from "./dist/server/app.js";
 // converts web fetch handler to a Node compatible request listener
 import { nodeListener } from "domco/listener";
 import { createServer } from "node:http";
@@ -138,7 +138,7 @@ Check out the [current adapters](https://github.com/rossrobino/domco/tree/main/p
 Adapters take care of these deployment steps.
 
 1. Set [`ssr`](https://vitejs.dev/config/ssr-options.html) options if changes are needed, for example if you are deploying to a runtime that doesn't support Node APIs, set this to `"web worker"`.
-2. Create an entry point for the target environment by using `default.fetch` from `dist/server/func.js`. This could be reexporting it as a different export, or applying to a Node server.
+2. Create an entry point for the target environment by using `default.fetch` from `dist/server/app.js`. This could be reexporting it as a different export, or applying to a Node server.
 3. Within the entry point, serve the `dist/client/*` directory as static assets, and the `dist/client/_immutable/*` directory with immutable cache headers. Static assets must be hit before `default.fetch` to take advantage of prerendering. When an asset is not found, the request needs to fallthrough to `default.fetch`.
 
 If you think others might benefit from your adapter you can [create an issue](https://github.com/rossrobino/domco/issues) or pull request to propose a new adapter. Adapters should be created for zero configuration deployments for deployment providers, not specific to JavaScript runtimes.

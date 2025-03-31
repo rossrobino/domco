@@ -43,7 +43,7 @@ export default app;
 
 	return [
 		{
-			name: `src/server/+func.${lang}`,
+			name: `src/server/+app.${lang}`,
 			content,
 		},
 	];

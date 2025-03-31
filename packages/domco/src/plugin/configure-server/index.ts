@@ -35,7 +35,7 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 										process.cwd(),
 										dirNames.src.base,
 										dirNames.src.server,
-										fileNames.func,
+										fileNames.app,
 									),
 								),
 							);
@@ -123,7 +123,7 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 								process.cwd(),
 								dirNames.out.base,
 								dirNames.out.ssr,
-								fileNames.out.entry.func,
+								fileNames.out.entry.app,
 							),
 						).href
 					),

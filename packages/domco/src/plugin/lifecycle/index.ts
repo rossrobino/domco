@@ -124,19 +124,13 @@ const prerender = async () => {
 		await import(
 			/* @vite-ignore */
 			url.pathToFileURL(
-				path.join(
-					dirNames.out.base,
-					dirNames.out.ssr,
-					fileNames.out.entry.func,
-				),
+				path.join(dirNames.out.base, dirNames.out.ssr, fileNames.out.entry.app),
 			).href
 		),
 	);
 
 	console.log(
-		style.dim(
-			`imported function in ${getTime(prerenderStart, performance.now())}`,
-		),
+		style.dim(`imported app in ${getTime(prerenderStart, performance.now())}`),
 	);
 
 	if (!app.prerender) {
