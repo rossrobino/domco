@@ -9,8 +9,9 @@ import { ssrReloadPlugin } from "./ssr-reload/index.js";
 import type { Plugin } from "vite";
 
 /**
- * Creates domco Vite plugin, add to your `plugins` array within your `vite.config`
- * to start using domco.
+ * Creates domco Vite plugin.
+ *
+ * Add to your `plugins` array within your `vite.config` to start using domco.
  *
  * @param domcoConfig domco config object
  * @returns domco Vite plugin

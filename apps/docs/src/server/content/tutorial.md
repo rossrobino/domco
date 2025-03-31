@@ -75,7 +75,7 @@ src/
 ├── client/
 │	└── +page.html
 └── server/
-	└── +func.ts
+	└── +app.ts
 ```
 
 ### +script
@@ -87,7 +87,7 @@ src/
 ├── client/
 │	└── +script.ts
 └── server/
-	└── +func.ts
+	└── +app.ts
 ```
 
 ## Virtual modules
