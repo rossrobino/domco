@@ -6,7 +6,7 @@
 
 ## Create a new project
 
-To get started, you'll need to have [Node](https://nodejs.org), [Bun](https://bun.sh/), or [Deno](https://deno.com) or installed on your computer. Then run the [`create-domco`](https://github.com/rossrobino/domco/tree/main/packages/create-domco) script to create a new project. If you already have an existing client-side Vite project check out the [migration instructions](/migrate).
+To get started, you'll need to have [Node](https://nodejs.org), [Bun](https://bun.sh/), or [Deno](https://deno.com) or installed on your computer. Then run the [`create-domco`](https://github.com/rossrobino/domco/tree/main/packages/create-domco) script to create a new project. If you already have an existing client-side Vite project you would like to add a server to, check out the [migration instructions](/migrate).
 
 ```bash
 npm create domco@__CREATE_VERSION__
@@ -20,7 +20,7 @@ bun create domco@__CREATE_VERSION__
 deno run -A npm:create-domco@__CREATE_VERSION__
 ```
 
-## Entry Points
+## Entry points
 
 domco identifies the entry points of your application by file name. These entry points are prefixed with `+` so they are easily identifiable.
 
@@ -90,7 +90,7 @@ src/
 	└── +func.ts
 ```
 
-## Virtual Modules
+## Virtual modules
 
 One challenging aspect of full-stack development and server-side rendering is managing the client files correctly during development and production. In development, you need to link directly to source files to benefit from features like TypeScript support and Hot Module Replacement (HMR). In production, the build process transforms each file and applies a hash to the filename for caching purposes.
 
@@ -181,7 +181,7 @@ For the export above, domco would request each path and generate the following f
 
 If you are using an [adapter](/deploy#adapters), these static files will be served in front of your `fetch` handler. So when an `index.html` file is found for the route, it is served directly without hitting your fetch handler.
 
-## That's It!
+## That's it!
 
 domco has a minimal API surface area and tries to get out of your way during development.
 
