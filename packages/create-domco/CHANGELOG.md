@@ -1,5 +1,22 @@
 # create-domco
 
+## 3.0.0
+
+### Major Changes
+
+- 9c86ff0: Reflect major changes in `domco`.
+- 9c86ff0: Remove `deno.json` config since deno supports `package.json`.
+
+### Minor Changes
+
+- 9c86ff0: feat: Add server frameworks - `hono` and `ovr`.
+
+### Patch Changes
+
+- Updated dependencies [9c86ff0]
+- Updated dependencies [9c86ff0]
+  - domco@4.0.0
+
 ## 2.1.0
 
 ### Minor Changes
