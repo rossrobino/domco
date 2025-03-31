@@ -10,13 +10,13 @@ Instead of exporting a `handler`, you must now export a `default` object with a 
 
 ```ts
 // src/server/+app
-import type { Entry } from "domco";
+import type { App } from "domco";
 
 export default {
 	fetch(req) {
 		return new Response("Hello world");
 	},
-} satisfies Entry;
+} satisfies App;
 ```
 
 The `prerender` export has also moved within the `default` export.

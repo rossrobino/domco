@@ -1,5 +1,9 @@
-import type { Entry } from "../../types/index.js";
+import type { App } from "../../types/index.js";
 
+/**
+ * @param mod Entry module to validate
+ * @returns Validated default export
+ */
 export const validateEntry = (mod: Record<string, unknown>) => {
 	if (mod.prerender)
 		throw new Error(
@@ -14,5 +18,5 @@ export const validateEntry = (mod: Record<string, unknown>) => {
 	if (!("fetch" in mod.default))
 		throw new Error("No `fetch` method found on `default` export.");
 
-	return mod.default as Entry;
+	return mod.default as App;
 };
