@@ -19,9 +19,6 @@
 		"SSG"
 	],
 	"type": "module",
-	"engines": {
-		"node": ">=20"
-	},
 	"sideEffects": false,
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -57,15 +54,10 @@
 		"dist"
 	],
 	"scripts": {
-		"test": "vitest run",
-		"test:dev": "vitest",
 		"dev": "tsc --watch",
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc",
 		"build": "node scripts/version && npm run build:clean && npm run build:js && cp src/types/env.d.ts dist/types/env.d.ts"
-	},
-	"devDependencies": {
-		"vitest": "^3.1.1"
 	},
 	"peerDependencies": {
 		"vite": "^6.0.0"

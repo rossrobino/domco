@@ -8,6 +8,8 @@
 		"apps/*"
 	],
 	"scripts": {
+		"test": "vitest run",
+		"test:dev": "vitest",
 		"check": "turbo check",
 		"format": "prettier --write .",
 		"build": "turbo build",
@@ -21,11 +23,11 @@
 		"@robino/md": "^3.2.1",
 		"@robino/prettier": "^1.0.2",
 		"@robino/tsconfig": "^1.0.2",
-		"hono": "^4.7.5",
 		"prettier": "^3.5.3",
 		"prettier-plugin-tailwindcss": "^0.6.11",
 		"turbo": "^2.4.4",
 		"typescript": "^5.8.2",
-		"vite": "^6.2.4"
+		"vite": "^6.2.4",
+		"vitest": "^3.1.1"
 	}
 }

@@ -14,7 +14,10 @@
 		"@types/react": "^19.0.10",
 		"@types/react-dom": "^19.0.4",
 		"@vitejs/plugin-react": "^4.3.4",
-		"domco": "*",
+		"domco": "*"
+	},
+	"dependencies": {
+		"hono": "^4.7.5",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"uico": "^0.6.3"
