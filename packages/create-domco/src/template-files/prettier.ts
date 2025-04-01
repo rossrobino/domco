@@ -14,7 +14,7 @@ const getTemplateFiles: GetTemplateFile = ({
 node_modules
 dist
 `;
-	if (pm === "npm" || pm === "deno") ignoreContent += "package-lock.json";
+	if (pm === "npm") ignoreContent += "package-lock.json";
 	else if (pm === "pnpm") ignoreContent += "pnpm-lock.yaml";
 	else ignoreContent += `${pm}.lock`;
 
