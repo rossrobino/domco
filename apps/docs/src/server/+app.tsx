@@ -4,7 +4,6 @@ import { Layout } from "@/server/components/Layout";
 import { html as previewHtml } from "@/server/content/_preview.md";
 import type { Result } from "@robino/md";
 import { tags } from "client:script";
-import { version } from "create-domco/package.json";
 import { Hono } from "hono";
 import { etag } from "hono/etag";
 
