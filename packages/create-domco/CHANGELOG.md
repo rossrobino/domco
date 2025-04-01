@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.0.0
+
+### Major Changes
+
+- bde8959: bump to be the same major as domco, fix adapter versions
+
 ## 3.0.0
 
 ### Major Changes
