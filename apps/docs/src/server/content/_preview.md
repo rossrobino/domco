@@ -11,7 +11,7 @@ export default {
 };
 ```
 
-domco seamlessly integrates a server into your [Vite](https://vitejs.dev) application, allowing you to easily add an API or enable server-side rendering. domco shares the standard default [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) export API---just like [Cloudflare](), [Bun](), and [Deno](https://docs.deno.com/runtime/fundamentals/http_server/#default-fetch-export)---while giving you access to Vite's build pipeline, plugin ecosystem, and live reloading out of the box.
+domco seamlessly integrates a server into your [Vite](https://vitejs.dev) application, allowing you to easily add an API or enable server-side rendering. domco shares the standard default [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) export API---just like [Cloudflare](https://developers.cloudflare.com/workers/runtime-apis/fetch/#syntax), [Bun](https://bun.sh/docs/api/http#export-default-syntax), and [Deno](https://docs.deno.com/runtime/fundamentals/http_server/#default-fetch-export)---while giving you access to Vite's build pipeline, plugin ecosystem, and live reloading out of the box.
 
 ## Feature overview
 
