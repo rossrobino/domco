@@ -50,14 +50,12 @@ app.get("/:slug", (c) => {
 
 	if (!result) return c.notFound();
 
-	const html = result.html.replaceAll("__CREATE_VERSION__", version);
-
 	return c.render(
 		{
 			title: slug.charAt(0).toUpperCase() + slug.slice(1),
 		},
 		<>
-			<section dangerouslySetInnerHTML={{ __html: html }}></section>
+			<section dangerouslySetInnerHTML={{ __html: result.html }}></section>
 			<Edit />
 		</>,
 	);

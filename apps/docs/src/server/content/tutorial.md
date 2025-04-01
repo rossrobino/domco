@@ -6,18 +6,10 @@
 
 ## Create a new project
 
-To get started, you'll need to have [Node](https://nodejs.org), [Bun](https://bun.sh/), or [Deno](https://deno.com) or installed on your computer. Then run the [`create-domco`](https://github.com/rossrobino/domco/tree/main/packages/create-domco) script to create a new project. If you already have an existing client-side Vite project you would like to add a server to, check out the [migration instructions](/migrate).
+To get started, you'll need to have [Node](https://nodejs.org), [Bun](https://bun.sh/), or [Deno](https://deno.com) or installed on your computer. Then run the `create` script below to create a new project. If you already have an existing client-side Vite project you would like to add a server to, check out the [migration instructions](/migrate).
 
 ```bash
-npm create domco@__CREATE_VERSION__
-```
-
-```bash
-bun create domco@__CREATE_VERSION__
-```
-
-```bash
-deno run -A npm:create-domco@__CREATE_VERSION__
+npm create domco@latest
 ```
 
 ## Entry points
