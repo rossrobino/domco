@@ -4,8 +4,6 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
 
-@source "../";
-
 @theme {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
