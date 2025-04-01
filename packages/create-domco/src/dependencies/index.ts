@@ -11,9 +11,9 @@ export const getDependencies = () => {
 		ovr: "1.0.0",
 
 		// adapter
-		cloudflare: "1.0.0",
-		deno: "1.0.0",
-		vercel: "1.0.0",
+		cloudflare: "2.0.0",
+		deno: "2.0.0",
+		vercel: "2.0.0",
 
 		// extras
 		prettier: "3.0.0",
