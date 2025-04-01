@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.0.1
+
+### Patch Changes
+
+- c137d0b: fix: tailwind source no longer required - auto detected
+
 ## 4.0.0
 
 ### Major Changes
