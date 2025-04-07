@@ -1,5 +1,11 @@
 # domco
 
+## 4.1.1
+
+### Patch Changes
+
+- bf78350: export extra file util fns
+
 ## 4.1.0
 
 ### Minor Changes
