@@ -7,7 +7,8 @@ declare module "client:page*" {
 
 declare module "client:script*" {
 	/**
-	 * Import the tags for a client entry point if you want to add client-side JS without adding an HTML page.
+	 * Import the `tags` for a client entry point if you want to add client-side JS without 
+	 * adding an HTML page.
 	 *
 	 * **Development**
 	 *
@@ -21,5 +22,27 @@ declare module "client:script*" {
 	 */
 	const tags: string;
 
-	export { tags };
+	/**
+	 * Import the `src` for a client entry point to get all of the linked resources for the script.
+	 * 
+	 * **Development**
+	 *
+	 * `src.module[0]` contains the `src` path of the client entry point.
+	 *
+	 * **Production**
+	 * 
+	 * `src` contains arrays of the hashed related paths for the entry point.
+	 */
+	const src: { 
+		/** Add each as the `src` of a `<script type="module">`. */
+		module: string[];
+
+		/** Add each as the `href` of a `<link rel="modulepreload" crossorigin>` */
+		preload: string[];
+		
+		/** Add each as the `href` of a `<link rel="stylesheet">` */
+		style: string[]
+	};
+	
+	export { tags, src };
 }

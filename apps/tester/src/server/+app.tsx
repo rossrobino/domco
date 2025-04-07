@@ -1,7 +1,6 @@
 import App from "@/client/react/App";
 import { html } from "client:page";
 import { html as reactHtml } from "client:page/react";
-import type { Entry } from "domco";
 import { Hono } from "hono";
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
@@ -60,4 +59,4 @@ export default {
 		"/static.css",
 		"/static.json",
 	],
-} satisfies Entry;
+};

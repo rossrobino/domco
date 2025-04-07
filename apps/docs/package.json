@@ -11,9 +11,9 @@
 	},
 	"devDependencies": {
 		"@domcojs/vercel": "*",
-		"@tailwindcss/vite": "^4.1.0",
+		"@tailwindcss/vite": "^4.1.3",
 		"domco": "*",
-		"tailwindcss": "^4.1.0"
+		"tailwindcss": "^4.1.3"
 	},
 	"dependencies": {
 		"create-domco": "*",
