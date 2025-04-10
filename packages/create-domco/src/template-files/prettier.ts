@@ -33,10 +33,7 @@ export default {useTabs: true,${
 				tailwind ? `plugins: ["prettier-plugin-tailwindcss"],` : ""
 			}};`,
 		},
-		{
-			name: ".prettierignore",
-			content: ignoreContent,
-		},
+		{ name: ".prettierignore", content: ignoreContent },
 	];
 };
 

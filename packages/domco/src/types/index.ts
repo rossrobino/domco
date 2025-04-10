@@ -4,10 +4,7 @@ import type { SSRTarget, SSROptions, Connect } from "vite";
 export type MaybePromise<T> = T | Promise<T>;
 
 /** `default` export from the SSR entry point. */
-export type App = {
-	fetch: FetchHandler;
-	prerender?: Prerender;
-};
+export type App = { fetch: FetchHandler; prerender?: Prerender };
 
 /** Fetch handler, takes a web request and returns a web response. */
 export type FetchHandler = (req: Request) => MaybePromise<Response>;

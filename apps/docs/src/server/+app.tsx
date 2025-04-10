@@ -50,9 +50,7 @@ app.get("/:slug", (c) => {
 	if (!result) return c.notFound();
 
 	return c.render(
-		{
-			title: slug.charAt(0).toUpperCase() + slug.slice(1),
-		},
+		{ title: slug.charAt(0).toUpperCase() + slug.slice(1) },
 		<>
 			<section dangerouslySetInnerHTML={{ __html: result.html }}></section>
 			<Edit />

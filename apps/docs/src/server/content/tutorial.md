@@ -65,9 +65,7 @@ import { Hono } from "hono";
 const app = new Hono();
 
 // pass to the default export
-export default {
-	fetch: app.fetch,
-};
+export default { fetch: app.fetch };
 
 // or if the method is named `fetch`, export directly
 export default app;
@@ -120,9 +118,7 @@ export default {
 	fetch(req: Request) {
 		return new Response(
 			html, // bundled client application
-			{
-				headers: { "content-type": "text/html" },
-			},
+			{ headers: { "content-type": "text/html" } },
 		);
 	},
 };
@@ -158,9 +154,7 @@ export default {
 				</head>
 				...
 			</html>`,
-			{
-				headers: { "content-type": "text/html" },
-			},
+			{ headers: { "content-type": "text/html" } },
 		);
 	},
 };

@@ -55,9 +55,7 @@ export const createDomco = async () => {
 	}
 
 	try {
-		const existingFiles = await fs.readdir(dir, {
-			withFileTypes: true,
-		});
+		const existingFiles = await fs.readdir(dir, { withFileTypes: true });
 
 		if (existingFiles.length) {
 			p.log.warn("WARNING: Existing files could be overwritten.");
@@ -117,20 +115,9 @@ export const createDomco = async () => {
 		message: "Framework",
 		initialValue: null,
 		options: [
-			{
-				value: null,
-				label: "none",
-			},
-			{
-				value: "hono",
-				label: "Hono",
-				hint: "https://hono.dev",
-			},
-			{
-				value: "ovr",
-				label: "ovr",
-				hint: "https://github.com/rossrobino/ovr",
-			},
+			{ value: null, label: "none" },
+			{ value: "hono", label: "Hono", hint: "https://hono.dev" },
+			{ value: "ovr", label: "ovr", hint: "https://github.com/rossrobino/ovr" },
 		],
 	});
 
@@ -175,11 +162,7 @@ export const createDomco = async () => {
 		message: "Additional options (space bar / a)",
 		required: false,
 		options: [
-			{
-				value: "prettier",
-				label: "Prettier",
-				hint: "https://prettier.io/",
-			},
+			{ value: "prettier", label: "Prettier", hint: "https://prettier.io/" },
 			{
 				value: "tailwind",
 				label: "TailwindCSS",

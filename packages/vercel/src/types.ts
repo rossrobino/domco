@@ -169,33 +169,15 @@ type Source = {
 	middlewarePath?: string;
 };
 
-type Locale = {
-	redirect?: Record<string, string>;
-	cookie?: string;
-};
+type Locale = { redirect?: Record<string, string>; cookie?: string };
 
-type HostHasField = {
-	type: "host";
-	value: string;
-};
+type HostHasField = { type: "host"; value: string };
 
-type HeaderHasField = {
-	type: "header";
-	key: string;
-	value?: string;
-};
+type HeaderHasField = { type: "header"; key: string; value?: string };
 
-type CookieHasField = {
-	type: "cookie";
-	key: string;
-	value?: string;
-};
+type CookieHasField = { type: "cookie"; key: string; value?: string };
 
-type QueryHasField = {
-	type: "query";
-	key: string;
-	value?: string;
-};
+type QueryHasField = { type: "query"; key: string; value?: string };
 
 type HandleValue =
 	| "rewrite"
@@ -253,41 +235,26 @@ export type ImagesConfig = {
 	contentDispositionType?: string;
 };
 
-type WildCard = {
-	domain: string;
-	value: string;
-};
+type WildCard = { domain: string; value: string };
 
 type WildcardConfig = Array<WildCard>;
 
-type Override = {
-	path?: string;
-	contentType?: string;
-};
+type Override = { path?: string; contentType?: string };
 
 type OverrideConfig = Record<string, Override>;
 
 type Cache = string[];
 
-type Framework = {
-	slug: string;
-	version: string;
-};
+type Framework = { slug: string; version: string };
 
-type Cron = {
-	path: string;
-	schedule: string;
-};
+type Cron = { path: string; schedule: string };
 
 type CronsConfig = Cron[];
 
 // two separate types are required because we do not want the user to
 // be able to set some of the values that are required.
 export type RequiredOptions = (
-	| {
-			config: NodejsServerlessFunctionConfig;
-			isr?: PrerenderFunctionConfig;
-	  }
+	| { config: NodejsServerlessFunctionConfig; isr?: PrerenderFunctionConfig }
 	| { config: EdgeFunctionConfig; isr?: never }
 ) & { images?: ImagesConfig; trailingSlash?: boolean };
 

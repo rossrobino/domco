@@ -107,10 +107,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 	if (isEdge) {
 		resolvedOptions = {
-			config: {
-				entrypoint: `${entryId}.js`,
-				runtime: "edge",
-			},
+			config: { entrypoint: `${entryId}.js`, runtime: "edge" },
 		};
 	} else {
 		// node default
@@ -208,28 +205,17 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 			routes.push(
 				{
 					src: `/${dirNames.out.client.immutable}/.+`,
-					headers: {
-						"cache-control": headers.cacheControl.immutable,
-					},
+					headers: { "cache-control": headers.cacheControl.immutable },
 				},
 				// required for static files, checks this first
-				{
-					methods: ["GET"],
-					handle: "filesystem",
-				},
+				{ methods: ["GET"], handle: "filesystem" },
 				// falls back to function, this reroutes everything
-				{
-					src: "^/(.*)$",
-					dest: `/${fnName}?${pathnameParam}=$1`,
-				},
+				{ src: "^/(.*)$", dest: `/${fnName}?${pathnameParam}=$1` },
 			);
 
 			const outputConfig: OutputConfig = {
 				version: 3,
-				framework: {
-					slug: "domco",
-					version,
-				},
+				framework: { slug: "domco", version },
 				routes,
 			};
 

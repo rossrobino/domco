@@ -14,12 +14,7 @@ logs
 	if (adapter === "vercel" || adapter === "cloudflare")
 		content += `.${adapter}\n`;
 
-	return [
-		{
-			name: ".gitignore",
-			content,
-		},
-	];
+	return [{ name: ".gitignore", content }];
 };
 
 export default getTemplateFiles;

@@ -8,10 +8,7 @@ const HtmlLayout: FC = ({ children }) => html`
 	${children}
 `;
 
-type LayoutProps = PropsWithChildren<{
-	title: string;
-	tags: string;
-}>;
+type LayoutProps = PropsWithChildren<{ title: string; tags: string }>;
 
 export const Layout: FC<LayoutProps> = ({ title, children, tags: client }) => {
 	return (

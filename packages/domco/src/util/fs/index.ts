@@ -39,20 +39,14 @@ export const findFiles = async (options: {
 
 	const paths: Record<string, string> = {};
 
-	const files = await fs.readdir(dir, {
-		withFileTypes: true,
-	});
+	const files = await fs.readdir(dir, { withFileTypes: true });
 
 	const subDirPromises: Promise<Record<string, string>>[] = [];
 
 	for (const file of files) {
 		if (file.isDirectory()) {
 			subDirPromises.push(
-				findFiles({
-					dir: path.join(dir, file.name),
-					checkEndings,
-					root,
-				}),
+				findFiles({ dir: path.join(dir, file.name), checkEndings, root }),
 			);
 		} else if (checkEnding({ checkEndings, fileName: file.name })) {
 			const relativePath = path.relative(root, dir);

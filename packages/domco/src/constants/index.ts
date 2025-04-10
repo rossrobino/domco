@@ -11,9 +11,7 @@ export const fileNames = {
 	/** output files */
 	out: {
 		/** names of the output entry points */
-		entry: {
-			app: "app.js",
-		},
+		entry: { app: "app.js" },
 	},
 } as const;
 

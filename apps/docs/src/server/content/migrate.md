@@ -121,9 +121,7 @@ export default {
 						</StrictMode>,
 					),
 				),
-				{
-					headers: { "content-type": "text/html" },
-				},
+				{ headers: { "content-type": "text/html" } },
 			);
 		}
 

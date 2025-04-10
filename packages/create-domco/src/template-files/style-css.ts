@@ -22,12 +22,7 @@ const getTemplateFiles: GetTemplateFile = ({ tailwind }) => {
 		];
 	}
 
-	return [
-		{
-			name: `src/${styleFileName.base}`,
-			content: contents,
-		},
-	];
+	return [{ name: `src/${styleFileName.base}`, content: contents }];
 };
 
 export default getTemplateFiles;

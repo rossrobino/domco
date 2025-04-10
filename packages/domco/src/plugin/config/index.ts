@@ -35,12 +35,7 @@ export const configPlugin = async (
 			return {
 				customLogger,
 				resolve: {
-					alias: [
-						{
-							find: "@",
-							replacement: path.resolve(dirNames.src.base),
-						},
-					],
+					alias: [{ find: "@", replacement: path.resolve(dirNames.src.base) }],
 				},
 				root: dirNames.src.base,
 				publicDir: isSsrBuild

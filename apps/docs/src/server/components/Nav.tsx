@@ -10,10 +10,7 @@ export const Nav: FC = () => {
 	);
 };
 
-type NavLinkProps = {
-	title: string;
-	Icon: FC;
-};
+type NavLinkProps = { title: string; Icon: FC };
 
 const SideBar: FC = () => {
 	return (
@@ -95,14 +92,8 @@ export const InternalLinks: FC = () => {
 	const items: NavLinkProps[] = [
 		{ title: "Overview", Icon: HomeSvg },
 		{ title: "Tutorial", Icon: BookSvg },
-		{
-			title: "Deploy",
-			Icon: EarthSvg,
-		},
-		{
-			title: "Migrate",
-			Icon: PlugSvg,
-		},
+		{ title: "Deploy", Icon: EarthSvg },
+		{ title: "Migrate", Icon: PlugSvg },
 	];
 
 	return (

@@ -41,12 +41,7 @@ export default app;
 `;
 	}
 
-	return [
-		{
-			name: `src/server/+app.${lang}`,
-			content,
-		},
-	];
+	return [{ name: `src/server/+app.${lang}`, content }];
 };
 
 export default getTemplateFiles;

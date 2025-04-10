@@ -13,22 +13,14 @@ export default defineConfig({
 		tailwindcss(),
 		domco({
 			adapter: adapter({
-				images: {
-					domains: [],
-					sizes: [1280],
-					formats: ["image/avif"],
-				},
+				images: { domains: [], sizes: [1280], formats: ["image/avif"] },
 				trailingSlash: false,
 			}),
 		}),
 		md({
 			highlighter: {
 				langs: [langTsx, langBash, langJson, langHtml],
-				langAlias: {
-					ts: "tsx",
-					js: "tsx",
-					jsx: "tsx",
-				},
+				langAlias: { ts: "tsx", js: "tsx", jsx: "tsx" },
 			},
 		}),
 	],

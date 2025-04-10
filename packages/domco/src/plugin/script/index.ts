@@ -143,14 +143,7 @@ const getMeta = (options: {
 		}
 	}
 
-	const meta: Meta = {
-		tags: "",
-		src: {
-			module: [],
-			preload: [],
-			style: [],
-		},
-	};
+	const meta: Meta = { tags: "", src: { module: [], preload: [], style: [] } };
 
 	if (!chunk) {
 		error(`No tags found in manifest for \`${pathName}\``);

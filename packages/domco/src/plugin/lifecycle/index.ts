@@ -34,11 +34,7 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 				console.log();
 
 				// initiate SSR build
-				await build({
-					build: {
-						ssr: true,
-					},
-				});
+				await build({ build: { ssr: true } });
 			} else {
 				const outDir = `${dirNames.out.base}/${dirNames.out.client.base}`;
 
@@ -70,10 +66,7 @@ const domcoTag = style.cyan(`domco v${version}`);
  * contain what it needs from virtual module imports.
  */
 const removeHtml = async (dir: string) => {
-	const pageFiles = await findFiles({
-		dir,
-		checkEndings: [fileNames.page],
-	});
+	const pageFiles = await findFiles({ dir, checkEndings: [fileNames.page] });
 
 	const promises = [];
 
