@@ -1,5 +1,11 @@
 # @domcojs/vercel
 
+## 2.0.1
+
+### Patch Changes
+
+- e443709: fix: isr request creation
+
 ## 2.0.0
 
 ### Major Changes
