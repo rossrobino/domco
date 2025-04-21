@@ -190,6 +190,6 @@ If you are using an [adapter](/deploy#adapters), these static files will be serv
 
 ## That's it!
 
-domco has a minimal API surface area and tries to get out of your way during development.
+domco has a minimal API surface area and tries to get out of your way during development. For more examples (framework, library) check out the [domco-examples](https://github.com/rossrobino/domco-examples) repository.
 
 Next, learn how to [deploy](/deploy) your application.
