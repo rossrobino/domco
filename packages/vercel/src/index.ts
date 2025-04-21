@@ -34,7 +34,7 @@ export default nodeListener(app.fetch);
  * Gets the `__pathname` query param and sets the url pathname
  * to it. See `allowQuery` in config.
  */
-export const getUrl = (req: Request) => {
+export const getRequest = (req: Request) => {
 	const url = new URL(req.url);
 	const params = new URLSearchParams(url.search);
 
@@ -43,7 +43,11 @@ export const getUrl = (req: Request) => {
 	params.delete(pathnameParam);
 	url.pathname = pathname;
 
-	return url;
+	return new Request(url, {
+		method: req.method,
+		headers: req.headers,
+		body: req.body,
+	});
 };
 
 /** Use when runtime is set to node + ISR. */
@@ -53,9 +57,9 @@ const isrEntry: AdapterEntry = ({ appId }) => {
 		code: `
 import app from "${appId}";
 import { nodeListener } from "domco/listener";
-import { getUrl } from "@domcojs/vercel";
+import { getRequest } from "@domcojs/vercel";
 
-const isrHandler = async (req) => app.fetch(new Request(getUrl(req)));
+const isrHandler = (req) => app.fetch(getRequest(req));
 
 export default nodeListener(isrHandler);
 `,
