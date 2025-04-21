@@ -1,12 +1,20 @@
-```js {1,6}
+```ts {1,9,13}
 import { html } from "client:page";
 
 export default {
-	fetch(req) {
-		return new Response(
-			html, // bundled client application
-			{ headers: { "content-type": "text/html" } },
-		);
+	fetch(req: Request) {
+		const url = new URL(req.url);
+
+		if (url.pathname === "/") {
+			return new Response(
+				html, // bundled client application
+				{ headers: { "content-type": "text/html; charset=utf-8" } },
+			);
+		} else if (url.pathname === "/api") {
+			return Response.json({ hello: "world" }); // api route
+		}
+
+		return new Response("Not found", { status: 404 });
 	},
 };
 ```
