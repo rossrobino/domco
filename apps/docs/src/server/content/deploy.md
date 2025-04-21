@@ -20,9 +20,7 @@ dist/
 
 Install and add a deployment adapter within your Vite config to output your application to a different target with no additional configuration.
 
-### Example
-
-```ts {4,11-13}
+```ts {3,10-13}
 // vite.config
 // import adapter
 import { adapter } from "@domcojs/{adapter-name}";
