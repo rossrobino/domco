@@ -31,15 +31,17 @@ import type { Plugin } from "vite";
 export const domco = async (
 	domcoConfig: DomcoConfig = {},
 ): Promise<Plugin[]> => {
-	const adapter = await domcoConfig.adapter;
+	if (domcoConfig.adapter instanceof Promise) {
+		domcoConfig.adapter = await domcoConfig.adapter;
+	}
 
 	return Promise.all([
 		configPlugin(domcoConfig),
-		configureServerPlugin(adapter),
+		configureServerPlugin(domcoConfig.adapter),
 		ssrReloadPlugin(),
 		pagePlugin(),
 		scriptPlugin(),
-		lifecyclePlugin(adapter),
-		adapterPlugin(adapter),
+		lifecyclePlugin(domcoConfig.adapter),
+		adapterPlugin(domcoConfig.adapter),
 	]);
 };
