@@ -11,14 +11,14 @@
 	},
 	"devDependencies": {
 		"@domcojs/vercel": "*",
-		"@tailwindcss/vite": "^4.1.3",
+		"@tailwindcss/vite": "^4.1.5",
 		"domco": "*",
-		"tailwindcss": "^4.1.3"
+		"tailwindcss": "^4.1.5"
 	},
 	"dependencies": {
 		"create-domco": "*",
-		"drab": "^6.1.0",
-		"hono": "^4.7.5",
-		"uico": "^0.7.0"
+		"drab": "^7.0.0",
+		"hono": "^4.7.8",
+		"uico": "^0.10.1"
 	}
 }
