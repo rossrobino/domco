@@ -90,7 +90,12 @@ const runAdapter = async (adapter: Adapter) => {
 		`${domcoTag} ${style.green(`running ${adapter.name} adapter...`)}`,
 	);
 
-	if (adapter.run) await adapter.run();
+	try {
+		if (adapter.run) await adapter.run();
+	} catch (error) {
+		console.error(`Error: Failed to run ${adapter.name} adapter`);
+		console.error(error);
+	}
 
 	console.log(`${style.green("✓")} adapter executed.`);
 
@@ -121,8 +126,10 @@ const prerender = async () => {
 		await import(
 			/* @vite-ignore */
 			entryPath
-		).catch(() => {
-			console.error("Error: Failed to import: " + entryPath);
+		).catch((error) => {
+			console.error(`Error: Failed to import: ${entryPath}`);
+			console.error(error);
+
 			return { default: { fetch: () => {} } };
 		}),
 	);
