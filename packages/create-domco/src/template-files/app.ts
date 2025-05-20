@@ -5,11 +5,13 @@ const getTemplateFiles: GetTemplateFile = ({ lang, framework }) => {
 
 	let content = `import { html } from "client:page";`;
 	if (framework === "ovr") {
-		content += `\nimport { Router } from "ovr";
+		content += `\nimport { App } from "ovr";
 
-const app = new Router();
+const app = new App();
 
-app.get("/", (c) => c.html(html));
+app.base = html;
+
+app.get("/", () => "hello world");
 
 export default app;
 `;
