@@ -113,25 +113,30 @@ const prerender = async () => {
 
 	console.log(`${domcoTag} ${style.green("prerendering static pages...")}`);
 
+	const entryPath = url.pathToFileURL(
+		path.join(dirNames.out.base, dirNames.out.ssr, fileNames.out.entry.app),
+	).href;
+
 	const app = validateEntry(
 		await import(
 			/* @vite-ignore */
-			url.pathToFileURL(
-				path.join(dirNames.out.base, dirNames.out.ssr, fileNames.out.entry.app),
-			).href
-		),
-	);
-
-	console.log(
-		style.dim(
-			`imported application in ${getTime(prerenderStart, performance.now())}`,
-		),
+			entryPath
+		).catch(() => {
+			console.error("Error: Failed to import: " + entryPath);
+			return { default: { fetch: () => {} } };
+		}),
 	);
 
 	if (!app.prerender) {
 		console.log("no prerender paths provided.");
 		return;
 	}
+
+	console.log(
+		style.dim(
+			`imported application in ${getTime(prerenderStart, performance.now())}`,
+		),
+	);
 
 	if (typeof app.prerender === "function") {
 		app.prerender = await app.prerender();
