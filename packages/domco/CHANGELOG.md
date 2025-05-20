@@ -1,5 +1,11 @@
 # domco
 
+## 4.1.3
+
+### Patch Changes
+
+- a39cebd: fix: catch errors during adapter run
+
 ## 4.1.2
 
 ### Patch Changes
