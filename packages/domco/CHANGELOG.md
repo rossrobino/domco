@@ -1,5 +1,11 @@
 # domco
 
+## 4.1.2
+
+### Patch Changes
+
+- ba741ed: fix: catch prerendering import error so build does not fail
+
 ## 4.1.1
 
 ### Patch Changes
