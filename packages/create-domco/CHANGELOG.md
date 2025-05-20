@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.0.2
+
+### Patch Changes
+
+- 2460d8f: update ovr template
+
 ## 4.0.1
 
 ### Patch Changes
