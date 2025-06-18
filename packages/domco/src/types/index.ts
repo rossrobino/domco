@@ -1,4 +1,4 @@
-import type { SSRTarget, SSROptions, Connect } from "vite";
+import type { Connect, SSROptions, SSRTarget } from "vite";
 
 /** Helper type for a type that could be a promise. */
 export type MaybePromise<T> = T | Promise<T>;

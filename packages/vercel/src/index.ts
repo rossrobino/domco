@@ -1,9 +1,9 @@
 import type {
-	PrerenderFunctionConfig,
 	OutputConfig,
+	PrerenderFunctionConfig,
 	RequiredOptions,
-	VercelAdapterOptions,
 	Route,
+	VercelAdapterOptions,
 } from "./types.js";
 import type { AdapterBuilder, AdapterEntry, AdapterMiddleware } from "domco";
 import { dirNames, headers } from "domco/constants";

@@ -133,10 +133,10 @@ In development, domco links the scripts to the source. In production, domco [rea
 ```ts {4,19}
 // src/server/+app
 import {
-	// string of <script> and <link> tags for related resources
-	tags,
 	// arrays of the hashed related paths for the entry point.
 	src,
+	// string of <script> and <link> tags for related resources
+	tags,
 } from "client:script";
 // `src/client/other/+script.ts`
 import { tags as otherTags } from "client:script/other";

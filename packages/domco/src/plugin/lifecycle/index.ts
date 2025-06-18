@@ -11,7 +11,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
 import url from "node:url";
-import { build, type Plugin } from "vite";
+import { type Plugin, build } from "vite";
 
 /**
  * Runs logs and scripts throughout the build lifecycle.
