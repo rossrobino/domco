@@ -14,7 +14,9 @@
 		}
 	},
 	"files": [
-		"dist"
+		"dist",
+		"src",
+		"!src/**/*.test.ts"
 	],
 	"scripts": {
 		"dev": "tsc --watch",

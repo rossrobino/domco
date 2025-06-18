@@ -17,15 +17,11 @@ const getTemplateFiles: GetTemplateFile = ({ tailwind, projectName }) => {
 		<meta name="description" content="${projectName}" />
 	</head>
 	<body>
-		<header></header>
-		<main>
-			<h1${tailwind ? ` class="text-3xl"` : ""}>${projectName}</h1>
-			<ul>
-				<li><a${tailwind ? ` class="underline"` : ""} href="https://vitejs.dev">Vite</a></li>
-				<li><a${tailwind ? ` class="underline"` : ""} href="https://domco.robino.dev">domco</a></li>
-			</ul>
-		</main>
-		<footer></footer>
+		<h1${tailwind ? ` class="text-3xl"` : ""}>${projectName}</h1>
+		<ul>
+			<li><a${tailwind ? ` class="underline"` : ""} href="https://vitejs.dev">Vite docs</a></li>
+			<li><a${tailwind ? ` class="underline"` : ""} href="https://domco.robino.dev">domco docs</a></li>
+		</ul>
 	</body>
 </html>
 `,

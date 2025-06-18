@@ -1,17 +1,27 @@
 import type { GetTemplateFile } from "../index.js";
 
-const getTemplateFiles: GetTemplateFile = ({ lang, framework }) => {
+const getTemplateFiles: GetTemplateFile = ({ lang, framework, tailwind }) => {
 	const isTs = lang === "ts";
+
+	if (framework === "ovr") lang += "x"; // jsx || tsx
 
 	let content = `import { html } from "client:page";`;
 	if (framework === "ovr") {
-		content += `\nimport { App } from "ovr";
+		content += `\nimport { App, Page } from "ovr";
 
 const app = new App();
 
 app.base = html;
 
-app.get("/", () => "hello world");
+const page = new Page("/", () => {
+	return (
+		<a href="https://ovr.robino.dev"${tailwind ? ` class="underline"` : ""}>
+			ovr docs
+		</a>
+	);
+});
+
+app.add(page);
 
 export default app;
 `;

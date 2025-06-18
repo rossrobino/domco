@@ -6,7 +6,7 @@ export const styleFileName = {
 } as const;
 
 const getTemplateFiles: GetTemplateFile = ({ tailwind }) => {
-	const contents = `@layer base {
+	const content = `@layer base {
 	:root {
 		color-scheme: light dark;
 	}
@@ -17,12 +17,12 @@ const getTemplateFiles: GetTemplateFile = ({ tailwind }) => {
 		return [
 			{
 				name: `src/${styleFileName.tailwind}`,
-				content: `@import "tailwindcss";\n\n${contents}`,
+				content: `@import "tailwindcss";\n\n${content}`,
 			},
 		];
 	}
 
-	return [{ name: `src/${styleFileName.base}`, content: contents }];
+	return [{ name: `src/${styleFileName.base}`, content }];
 };
 
 export default getTemplateFiles;
