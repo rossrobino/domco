@@ -1,5 +1,11 @@
 # @domcojs/vercel
 
+## 2.0.2
+
+### Patch Changes
+
+- 7be5824: chore: Publish declaration maps and source for TypeScript go to definition.
+
 ## 2.0.1
 
 ### Patch Changes
