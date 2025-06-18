@@ -1,5 +1,12 @@
 # create-domco
 
+## 4.0.3
+
+### Patch Changes
+
+- 7be5824: update template to ovr v3
+- 7be5824: chore: Publish declaration maps and source for TypeScript go to definition.
+
 ## 4.0.2
 
 ### Patch Changes
