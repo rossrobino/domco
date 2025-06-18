@@ -5,6 +5,6 @@
 	"fixed": [],
 	"access": "public",
 	"baseBranch": "main",
-	"updateInternalDependencies": "patch",
+	"updateInternalDependencies": "minor",
 	"ignore": ["domco-docs", "domco-tester", "domco-cloudflare"]
 }
