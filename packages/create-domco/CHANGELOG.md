@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.0.4
+
+### Patch Changes
+
+- bc2520e: chore: update ovr version
+
 ## 4.0.3
 
 ### Patch Changes
