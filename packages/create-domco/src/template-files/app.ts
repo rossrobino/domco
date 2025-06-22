@@ -7,13 +7,13 @@ const getTemplateFiles: GetTemplateFile = ({ lang, framework, tailwind }) => {
 
 	let content = `import { html } from "client:page";`;
 	if (framework === "ovr") {
-		content += `\nimport { App, Page } from "ovr";
+		content += `\nimport { App, Get } from "ovr";
 
 const app = new App();
 
 app.base = html;
 
-const page = new Page("/", () => {
+const page = new Get("/", () => {
 	return (
 		<a href="https://ovr.robino.dev"${tailwind ? ` class="underline"` : ""}>
 			ovr docs

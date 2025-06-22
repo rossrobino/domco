@@ -8,7 +8,7 @@ export const getDependencies = () => {
 
 		// framework
 		hono: "4.0.0",
-		ovr: "3.0.0",
+		ovr: "4.0.0",
 
 		// adapter
 		cloudflare: "2.0.0",
