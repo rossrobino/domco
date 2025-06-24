@@ -1,5 +1,11 @@
 # domco
 
+## 4.1.5
+
+### Patch Changes
+
+- 5a70917: chore: support Vite v7
+
 ## 4.1.4
 
 ### Patch Changes
@@ -137,7 +143,6 @@
 ### Patch Changes
 
 - ef5ff15: Vite 6 maintenance
-
   - Fixes auto-reload for SSR only HTML responses - see [issue](https://github.com/vitejs/vite/issues/19114)
   - `create-domco` template defaults to use v6.
   - Updates project dependencies
@@ -149,7 +154,6 @@
 - 5088e8d: HTML `Injector`
 
   Easily manipulate HTML on the server with the `Injector` helper.
-
   - Stabilizes the HTML `Injector` helper
   - Adds `Injector` tests
 
@@ -277,7 +281,6 @@
 ### Patch Changes
 
 - f498a79: fix: tags import chunks not found error
-
   - Preloads modules that are imported into entry points in case of manual chunks are used.
 
 ## 0.13.2
@@ -303,7 +306,6 @@
   This makes domco have no dependencies other than Vite. You can now build your app with vanilla JS without any external libraries. You can now use any server framework like Hono that provides a function that handles a web `Request` and returns a `Response`. This update also simplifies domco's API and refactors much of the codebase to make it smaller and builds faster.
 
   ## Overview of Changes
-
   - `+server` renamed to `+app`
   - `+client` renamed to `+script`
   - Instead of exporting the `app` as the default export, you now must export `app.fetch` as a named `handler` export.
@@ -369,7 +371,6 @@
 ### Minor Changes
 
 - aa4e711: Adds the ability paths to `CreateAppMiddleware`.
-
   - This is breaking if you are using a custom setup and passing middleware into `createApp`, you now need to specify the `path` in addition to the `handler` passed in. [See example here](https://domco.robino.dev/deploy#example)
 
 ## 0.10.0
@@ -377,7 +378,6 @@
 ### Minor Changes
 
 - 07901b2: Adds request listener in place of `@hono/node-server`.
-
   - This change removes the last remaining dependency for the project other than `vite` and `hono`.
   - Removes `serveStatic` option for `createApp`, use `middleware` instead, see [example](https://domco.robino.dev/deploy#example).
 

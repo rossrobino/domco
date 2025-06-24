@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.0.5
+
+### Patch Changes
+
+- 5a70917: chore: support Vite v7
+
 ## 4.0.4
 
 ### Patch Changes
@@ -118,7 +124,6 @@
 ### Patch Changes
 
 - ef5ff15: Vite 6 maintenance
-
   - Fixes auto-reload for SSR only HTML responses - see [issue](https://github.com/vitejs/vite/issues/19114)
   - `create-domco` template defaults to use v6.
   - Updates project dependencies
@@ -245,7 +250,6 @@
 ### Patch Changes
 
 - aa4e711: Adds the ability paths to `CreateAppMiddleware`.
-
   - This is breaking if you are using a custom setup and passing middleware into `createApp`, you now need to specify the `path` in addition to the `handler` passed in. [See example here](https://domco.robino.dev/deploy#example)
 
 ## 0.1.12
@@ -259,7 +263,6 @@
 ### Patch Changes
 
 - 07901b2: Adds request listener in place of `@hono/node-server`.
-
   - This change removes the last remaining dependency for the project other than `vite` and `hono`.
   - Removes `serveStatic` option for `createApp`, use `middleware` instead, see [example](https://domco.robino.dev/deploy#example).
 
