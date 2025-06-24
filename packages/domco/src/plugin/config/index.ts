@@ -53,14 +53,11 @@ export const configPlugin = async (
 				},
 				build: {
 					manifest: !isSsrBuild,
-					target: "es2022",
-					outDir: isSsrBuild
-						? path.join(process.cwd(), dirNames.out.base, dirNames.out.ssr)
-						: path.join(
-								process.cwd(),
-								dirNames.out.base,
-								dirNames.out.client.base,
-							),
+					outDir: path.join(
+						process.cwd(),
+						dirNames.out.base,
+						isSsrBuild ? dirNames.out.ssr : dirNames.out.client.base,
+					),
 					emptyOutDir: true,
 					rollupOptions: {
 						input: isSsrBuild ? serverEntry(adapter) : await clientEntry(),

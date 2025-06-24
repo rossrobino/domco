@@ -3,8 +3,8 @@ import { version } from "domco/version";
 export const getDependencies = () => {
 	return {
 		domco: `${version.split(".").at(0)}.0.0`,
-		typescript: "5.8.0",
-		vite: "6.0.0",
+		typescript: "5.8.0", // typescript does not follow semver
+		vite: "7.0.0",
 
 		// framework
 		hono: "4.0.0",
@@ -17,7 +17,7 @@ export const getDependencies = () => {
 
 		// extras
 		prettier: "3.0.0",
-		prettierTailwind: "0.6.0",
+		prettierTailwind: "0.6.0", // minor since pre v1
 		tailwind: "4.0.0",
 	} as const;
 };
