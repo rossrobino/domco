@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.1.0
+
+### Minor Changes
+
+- 5ade05f: feat: Add `mono-jsx` to framework options
+
 ## 4.0.5
 
 ### Patch Changes
