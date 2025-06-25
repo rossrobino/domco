@@ -1,13 +1,18 @@
 import type { GetTemplateFile } from "../index.js";
+import { htmlTemplate } from "./entry.js";
 
-const getTemplateFiles: GetTemplateFile = ({ lang, framework, tailwind }) => {
+const getTemplateFiles: GetTemplateFile = (options) => {
+	let { lang, framework, tailwind } = options;
+
 	const isTs = lang === "ts";
 
-	if (framework === "ovr") lang += "x"; // jsx || tsx
+	if (framework === "ovr" || framework === "mono-jsx") lang += "x"; // jsx || tsx
 
-	let content = `import { html } from "client:page";`;
+	let content: string;
+
 	if (framework === "ovr") {
-		content += `\nimport { App, Get } from "ovr";
+		content = `import { html } from "client:page";
+import { App, Get } from "ovr";
 
 const app = new App();
 
@@ -26,7 +31,8 @@ app.add(page);
 export default app;
 `;
 	} else if (framework === "hono") {
-		content += `\nimport { Hono } from "hono";
+		content = `import { html } from "client:page";
+import { Hono } from "hono";
 
 const app = new Hono();
 
@@ -34,8 +40,21 @@ app.get("/", (c) => c.html(html));
 
 export default app;
 `;
+	} else if (framework === "mono-jsx") {
+		content = `import { tags } from "client:script";
+
+export default {
+	fetch() {
+		return (
+			${htmlTemplate(options)}
+		);
+	},
+};
+`;
 	} else {
-		content += `\n\nexport default {
+		content = `import { html } from "client:page";
+
+export default {${isTs ? "" : `\n\t/** @param {Request} req */`}
 	fetch(req${isTs ? ": Request" : ""}) {
 		const url = new URL(req.url);
 

@@ -9,6 +9,7 @@ export const getDependencies = () => {
 		// framework
 		hono: "4.0.0",
 		ovr: "4.0.0",
+		"mono-jsx": "0.6.0", // minor since pre v1
 
 		// adapter
 		cloudflare: "2.0.0",

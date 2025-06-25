@@ -1,10 +1,10 @@
 import { getDependencies } from "./dependencies/index.js";
 import app from "./template-files/app.js";
+import entry from "./template-files/entry.js";
 import envTypes from "./template-files/env-types.js";
 import favicon from "./template-files/favicon.js";
 import gitignore from "./template-files/gitignore.js";
 import packageJson from "./template-files/package-json.js";
-import pageHtml from "./template-files/page-html.js";
 import prettier from "./template-files/prettier.js";
 import styleCss from "./template-files/style-css.js";
 import tsconfigJson from "./template-files/tsconfig-json.js";
@@ -21,8 +21,8 @@ const cancelMessage = "Operation cancelled";
 
 type TemplateFile = { name: string; content: string };
 
-type GetTemplateFileOptions = {
-	framework: null | "ovr" | "hono";
+export type GetTemplateFileOptions = {
+	framework: null | "ovr" | "hono" | "mono-jsx";
 	adapter: null | "cloudflare" | "deno" | "vercel";
 	dir: string;
 	pm: AgentName;
@@ -117,6 +117,11 @@ export const createDomco = async () => {
 		options: [
 			{ value: null, label: "none" },
 			{ value: "hono", label: "Hono", hint: "https://hono.dev" },
+			{
+				value: "mono-jsx",
+				label: "mono-jsx",
+				hint: "https://github.com/ije/mono-jsx",
+			},
 			{ value: "ovr", label: "ovr", hint: "https://github.com/rossrobino/ovr" },
 		],
 	});
@@ -214,7 +219,7 @@ const getAllTemplateFiles: GetTemplateFile = async (options) => {
 		gitignore,
 		envTypes,
 		packageJson,
-		pageHtml,
+		entry,
 		prettier,
 		styleCss,
 		tsconfigJson,
@@ -237,7 +242,7 @@ const getAllTemplateFiles: GetTemplateFile = async (options) => {
 					parser: ext,
 					useTabs: true,
 				});
-			} else if (["ts", "js"].includes(ext)) {
+			} else if (["ts", "js", "tsx", "jsx"].includes(ext)) {
 				templateFile.content = await format(templateFile.content, {
 					parser: "babel-ts",
 					useTabs: true,

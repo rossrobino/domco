@@ -12,6 +12,7 @@ const getTemplateFiles: GetTemplateFile = ({
 	let jsxSource: string | undefined;
 	if (framework === "ovr") jsxSource = "ovr";
 	else if (framework === "hono") jsxSource = "hono/jsx";
+	else if (framework === "mono-jsx") jsxSource = "mono-jsx";
 
 	return [
 		{
