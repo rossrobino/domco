@@ -1,5 +1,11 @@
 # domco
 
+## 4.1.6
+
+### Patch Changes
+
+- f0c5947: chore: internal refactors
+
 ## 4.1.5
 
 ### Patch Changes
