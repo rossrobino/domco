@@ -27,6 +27,7 @@ export const nodeListener = (
 		const request = createRequest(req, res);
 
 		let response: Response;
+
 		try {
 			response = await fetchHandler(request);
 		} catch (error) {
@@ -40,6 +41,7 @@ export const nodeListener = (
 		// These would incorrectly be merged into a single header if we tried to use
 		// `Object.fromEntries(response.headers.entries())`.
 		const headers: Record<string, string | string[]> = {};
+
 		for (const [key, value] of response.headers) {
 			if (key in headers) {
 				if (Array.isArray(headers[key])) {
@@ -57,10 +59,12 @@ export const nodeListener = (
 		if (response.body && req.method !== "HEAD") {
 			const reader = response.body.getReader();
 
+			let result: ReadableStreamReadResult<Uint8Array<ArrayBufferLike>>;
+
 			while (true) {
-				const { done, value } = await reader.read();
-				if (done) break;
-				res.write(value);
+				result = await reader.read();
+				if (result.done) break;
+				res.write(result.value);
 			}
 		}
 
@@ -79,9 +83,8 @@ const defaultErrorHandler = (error: unknown) => {
 
 const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 	const controller = new AbortController();
-	res.on("close", () => {
-		controller.abort();
-	});
+
+	res.on("close", () => controller.abort());
 
 	const method = req.method ?? "GET";
 
@@ -109,15 +112,10 @@ const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 
 	if (method !== "GET" && method !== "HEAD") {
 		init.body = new ReadableStream({
-			start(controller) {
-				req.on("data", (chunk) => {
-					controller.enqueue(
-						new Uint8Array(chunk.buffer, chunk.byteOffset, chunk.byteLength),
-					);
-				});
-				req.on("end", () => {
-					controller.close();
-				});
+			start(c) {
+				req.on("data", (chunk: Buffer) => c.enqueue(chunk));
+				req.on("end", () => c.close());
+				req.on("error", (error) => c.error(error));
 			},
 		});
 

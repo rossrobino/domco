@@ -1,4 +1,4 @@
-import zlib from "zlib";
+import zlib from "node:zlib";
 
 /**
  * Gets the size and gzip size of a string.

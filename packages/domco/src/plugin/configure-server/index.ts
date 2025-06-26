@@ -57,12 +57,10 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 								if (e instanceof Error) {
 									error = e;
 									devServer.ssrFixStacktrace(error);
-								} else if (typeof e === "string") {
-									error = new Error(
-										`The response is not an instance of "Response".\n\nServer returned:\n\n${e}`,
-									);
 								} else {
-									error = new Error(`Unknown error: ${e}`);
+									error = new Error(
+										`The response is not an instance of \`Response\`.\n\nServer returned:\n\n${e}`,
+									);
 								}
 
 								next(error);
@@ -135,37 +133,38 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 	};
 };
 
+const viteClient = '<script type="module" src="/@vite/client"></script>';
+const encoder = new TextEncoder();
+
 /**
- * Injects the vite client script into the response body for refresh in dev.
+ * Injects the vite client script at the end of the response body
+ * for refresh during development.
  *
- * @param res
- * @returns the modified response
+ * @param res Original response
+ * @returns Modified response
  */
 const injectViteClient = (res: Response) => {
 	if (!res.body) return res;
 
-	const viteClient = new TextEncoder().encode(
-		'<script type="module" src="/@vite/client"></script>',
-	);
-
-	const reader = res.body.getReader();
-
-	const stream = new ReadableStream<Uint8Array<ArrayBufferLike>>({
-		async start(controller) {
-			controller.enqueue(viteClient);
-
-			while (true) {
-				const { done, value } = await reader.read();
-				if (done) break;
-				controller.enqueue(value);
-			}
-
-			controller.close();
-		},
-	});
-
 	const headers = new Headers(res.headers);
 	headers.delete("Content-Length");
 
-	return new Response(stream, { headers, status: res.status });
+	const reader = res.body.getReader();
+	let result: ReadableStreamReadResult<Uint8Array<ArrayBufferLike>>;
+
+	return new Response(
+		new ReadableStream<Uint8Array<ArrayBufferLike>>({
+			async pull(c) {
+				result = await reader.read();
+
+				if (!result.done) {
+					c.enqueue(result.value);
+				} else {
+					c.enqueue(encoder.encode(viteClient));
+					c.close();
+				}
+			},
+		}),
+		{ headers, status: res.status },
+	);
 };

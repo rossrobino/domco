@@ -10,10 +10,10 @@ import path from "node:path";
  * @returns An object, keys are relative paths, values are file paths.
  */
 export const findFiles = async (options: {
-	/** directory to search */
+	/** Directory to search */
 	dir: string;
 
-	/** endings names to search for */
+	/** Endings names to search for */
 	checkEndings?: string[];
 
 	/**
@@ -26,7 +26,7 @@ export const findFiles = async (options: {
 	root?: string;
 
 	/**
-	 * directories to not look into
+	 * Directories to not look into
 	 *
 	 * @default ["dist"]
 	 */
@@ -73,6 +73,7 @@ const checkEnding = (options: { checkEndings: string[]; fileName: string }) => {
 	for (const name of options.checkEndings) {
 		if (options.fileName.endsWith(name)) return true;
 	}
+
 	return false;
 };
 
