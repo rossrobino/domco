@@ -12,12 +12,13 @@
 		"!src/**/*.test.ts"
 	],
 	"scripts": {
-		"test:clean": "rm -rf ./create-domco-test",
-		"test": "npm run build && echo 'Create your project in `create-domco-test`\n\n' && node ./dist/bin.js",
+		"test:prepare": "rm -rf ./create-domco-test && npm run build",
+		"test": "npm run test:prepare && node ./dist/bin.js create-domco-test",
+		"test:args": "npm run test:prepare && node ./dist/bin.js create-domco-test --framework=ovr --adapter=vercel",
 		"dev": "tsc --watch",
 		"build:clean": "rm -rf ./dist",
 		"build:js": "tsc",
-		"build": "npm run test:clean & npm run build:clean & wait && npm run build:js"
+		"build": "npm run build:clean & wait && npm run build:js"
 	},
 	"author": {
 		"name": "Ross Robino",
@@ -31,6 +32,7 @@
 	"dependencies": {
 		"@clack/prompts": "^0.11.0",
 		"domco": "^4.0.0",
+		"mri": "^1.2.0",
 		"package-manager-detector": "^1.3.0",
 		"prettier": "^3.6.1"
 	}

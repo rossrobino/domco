@@ -10,6 +10,7 @@ import styleCss from "./template-files/style-css.js";
 import tsconfigJson from "./template-files/tsconfig-json.js";
 import viteConfig from "./template-files/vite-config.js";
 import * as p from "@clack/prompts";
+import mri from "mri";
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
@@ -43,11 +44,17 @@ export type GetTemplateFile = (
 export const createDomco = async () => {
 	p.intro("Welcome to domco");
 
-	const dir = await p.text({
-		message: "Where should your project be created?",
-		defaultValue: ".",
-		placeholder: "(Enter for current directory)",
-	});
+	const argv = process.argv.slice(2);
+
+	const parsed = mri(argv);
+
+	const dir =
+		parsed._[0] ??
+		(await p.text({
+			message: "Where should your project be created?",
+			defaultValue: ".",
+			placeholder: "(Enter for current directory)",
+		}));
 
 	if (p.isCancel(dir)) {
 		p.cancel(cancelMessage);
@@ -93,70 +100,80 @@ export const createDomco = async () => {
 		// will throw if dir doesn't exist - OK, should proceed
 	}
 
-	const lang = await p.select({
-		message: "Language (arrow keys + enter)",
-		initialValue: "ts",
-		options: [
-			{ label: "TypeScript", value: "ts" },
-			{
-				label: "JavaScript",
-				value: "js",
-				hint: "remove `tsconfig.json` to disable type checking",
-			},
-		],
-	});
+	const lang =
+		parsed.lang ??
+		(await p.select({
+			message: "Language (arrow keys + enter)",
+			initialValue: "ts",
+			options: [
+				{ label: "TypeScript", value: "ts" },
+				{
+					label: "JavaScript",
+					value: "js",
+					hint: "remove `tsconfig.json` to disable type checking",
+				},
+			],
+		}));
 
 	if (p.isCancel(lang)) {
 		p.cancel(cancelMessage);
 		process.exit(0);
 	}
 
-	const framework = await p.select({
-		message: "Framework",
-		initialValue: null,
-		options: [
-			{ value: null, label: "none" },
-			{ value: "hono", label: "Hono", hint: "https://hono.dev" },
-			{
-				value: "mono-jsx",
-				label: "mono-jsx",
-				hint: "https://github.com/ije/mono-jsx",
-			},
-			{ value: "ovr", label: "ovr", hint: "https://github.com/rossrobino/ovr" },
-		],
-	});
+	const framework =
+		parsed.framework ??
+		(await p.select({
+			message: "Framework",
+			initialValue: null,
+			options: [
+				{ value: null, label: "none" },
+				{ value: "hono", label: "Hono", hint: "https://hono.dev" },
+				{
+					value: "mono-jsx",
+					label: "mono-jsx",
+					hint: "https://github.com/ije/mono-jsx",
+				},
+				{
+					value: "ovr",
+					label: "ovr",
+					hint: "https://github.com/rossrobino/ovr",
+				},
+			],
+		}));
 
 	if (p.isCancel(framework)) {
 		p.cancel(cancelMessage);
 		process.exit(0);
 	}
 
-	const adapter = await p.select({
-		message: "Deployment adapter",
-		initialValue: null,
-		options: [
-			{
-				value: null,
-				label: "none",
-				hint: "you can add one later - https://domco.robino.dev/deploy#adapters",
-			},
-			{
-				value: "cloudflare",
-				label: "Cloudflare",
-				hint: "https://domco.robino.dev/deploy#cloudflare",
-			},
-			{
-				value: "deno",
-				label: "Deno",
-				hint: "https://domco.robino.dev/deploy#deno",
-			},
-			{
-				value: "vercel",
-				label: "Vercel",
-				hint: "https://domco.robino.dev/deploy#vercel",
-			},
-		],
-	});
+	const adapter =
+		parsed.adapter ??
+		(await p.select({
+			message: "Deployment adapter",
+			initialValue: null,
+			options: [
+				{
+					value: null,
+					label: "none",
+					hint: "you can add one later - https://domco.robino.dev/deploy#adapters",
+				},
+				{
+					value: "cloudflare",
+					label: "Cloudflare",
+					hint: "https://domco.robino.dev/deploy#cloudflare",
+				},
+				{
+					value: "deno",
+					label: "Deno",
+					hint: "https://domco.robino.dev/deploy#deno",
+				},
+				{
+					value: "vercel",
+					label: "Vercel",
+					hint: "https://domco.robino.dev/deploy#vercel",
+				},
+			],
+		}));
 
 	if (p.isCancel(adapter)) {
 		p.cancel(cancelMessage);
@@ -181,13 +198,7 @@ export const createDomco = async () => {
 		process.exit(0);
 	}
 
-	const s = p.spinner();
-
-	s.start("Creating project");
-
-	const pm = getUserAgent();
-
-	if (!pm) throw new Error("Unable to identify package manager.");
+	const pm = getUserAgent() ?? "npm";
 
 	const options: GetTemplateFileOptions = {
 		projectName: getProjectName(dir),
@@ -201,9 +212,15 @@ export const createDomco = async () => {
 		dependencies: getDependencies(),
 	};
 
-	await writeTemplateFiles(dir, await getAllTemplateFiles(options));
-
-	s.stop("Files created");
+	await p.tasks([
+		{
+			title: "Creating project",
+			task: async () => {
+				await writeTemplateFiles(dir, await getAllTemplateFiles(options));
+				return "Files created";
+			},
+		},
+	]);
 
 	p.note(getNote(options), "Next steps");
 
