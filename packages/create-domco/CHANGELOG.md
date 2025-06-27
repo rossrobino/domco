@@ -1,5 +1,17 @@
 # create-domco
 
+## 4.2.0
+
+### Minor Changes
+
+- 5bb8ce8: feat: Pass args into the cli.
+
+  Example:
+
+  ```bash
+  npm create domco@latest ./hono-vercel-project --framework=hono --adapter=vercel --lang=ts
+  ```
+
 ## 4.1.0
 
 ### Minor Changes
