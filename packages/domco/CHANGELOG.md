@@ -1,5 +1,11 @@
 # domco
 
+## 4.1.7
+
+### Patch Changes
+
+- 2026118: fix: Set `highWaterMark: Infinity` on Vite client inject stream to let downstream streams determine limits.
+
 ## 4.1.6
 
 ### Patch Changes
