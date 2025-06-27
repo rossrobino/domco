@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.2.1
+
+### Patch Changes
+
+- e03e7d1: chore: Update Vercel adapter version.
+
 ## 4.2.0
 
 ### Minor Changes
