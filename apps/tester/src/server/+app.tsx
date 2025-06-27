@@ -1,10 +1,7 @@
-import App from "@/client/react/App";
 import { checkBotId } from "botid/server";
 import { html } from "client:page";
 import { html as reactHtml } from "client:page/react";
 import { Hono } from "hono";
-import { StrictMode } from "react";
-import { renderToString } from "react-dom/server";
 
 const app = new Hono();
 
@@ -48,7 +45,7 @@ app.post("/api/sensitive", async () => {
 		return Response.json({ error: "Access denied" }, { status: 403 });
 	}
 
-	return new Response("Not a bot!");
+	return Response.json({ success: "Not a bot!" });
 });
 
 export default {
