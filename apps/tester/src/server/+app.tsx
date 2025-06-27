@@ -1,4 +1,5 @@
 import App from "@/client/react/App";
+import { checkBotId } from "botid/server";
 import { html } from "client:page";
 import { html as reactHtml } from "client:page/react";
 import { Hono } from "hono";
@@ -38,17 +39,16 @@ app.get("/half-static/*", (c) => c.html(new Date().toUTCString()));
 
 app.get("/api", (c) => c.json({ hello: "world" }));
 
-app.get("/react", (c) => {
-	return c.html(
-		reactHtml.replace(
-			"%root%",
-			renderToString(
-				<StrictMode>
-					<App />
-				</StrictMode>,
-			),
-		),
-	);
+app.get("/react", (c) => c.html(reactHtml));
+
+app.post("/api/sensitive", async () => {
+	const verification = await checkBotId();
+
+	if (verification.isBot) {
+		return Response.json({ error: "Access denied" }, { status: 403 });
+	}
+
+	return new Response("Not a bot!");
 });
 
 export default {

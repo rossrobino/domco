@@ -17,6 +17,7 @@
 		"domco": "*"
 	},
 	"dependencies": {
+		"botid": "^1.4.0",
 		"hono": "^4.8.0",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",

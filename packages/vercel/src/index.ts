@@ -66,22 +66,10 @@ export default nodeListener(isrHandler);
 	};
 };
 
-/** Use when runtime is edge. */
-const edgeEntry: AdapterEntry = ({ appId }) => {
-	return {
-		id: entryId,
-		code: `
-import app from "${appId}";
-
-export default app.fetch;
-`,
-	};
-};
-
 /**
  * Creates a [Vercel](https://vercel.com) build according to the build output API spec.
  *
- * - Supports Serverless, Serverless with ISR, and Edge.
+ * - Supports Serverless and Serverless with ISR.
  *
  * @param options adapter options - configure runtime, ISR, etc.
  * @returns Vercel domco adapter.
@@ -105,36 +93,21 @@ export default app.fetch;
 export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	options,
 ) => {
-	const isEdge = options?.config?.runtime === "edge";
-
-	let resolvedOptions: RequiredOptions;
-
-	if (isEdge) {
-		resolvedOptions = {
-			config: { entrypoint: `${entryId}.js`, runtime: "edge" },
-		};
-	} else {
-		// node default
-		resolvedOptions = {
-			config: {
-				handler: `${entryId}.js`,
-				runtime: "nodejs22.x",
-				launcherType: "Nodejs",
-			},
-		};
-	}
+	const resolvedOptions: RequiredOptions = {
+		config: {
+			handler: `${entryId}.js`,
+			runtime: "nodejs22.x",
+			launcherType: "Nodejs",
+		},
+	};
 
 	// can't do this at top level or it will override the defaults set above
 	Object.assign(resolvedOptions.config, options?.config);
 
-	// could be undefined
 	resolvedOptions.isr = options?.isr;
 	resolvedOptions.images = options?.images;
 	resolvedOptions.trailingSlash = options?.trailingSlash;
-
-	let entry = nodeEntry;
-	if (isEdge) entry = edgeEntry;
-	else if (options?.isr) entry = isrEntry;
+	resolvedOptions.botId = options?.botId;
 
 	/**
 	 * This is applied in `dev` and `preview` so users can see the src images.
@@ -171,10 +144,10 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 	return {
 		name: "vercel",
-		target: isEdge ? "webworker" : "node",
-		noExternal: true,
+		target: "node",
+		noExternal: true, // bundle server code with Vite
 		message: `created ${resolvedOptions.config.runtime} build .vercel/`,
-		entry,
+		entry: resolvedOptions.isr ? isrEntry : nodeEntry,
 		devMiddleware: [imageMiddleware],
 		previewMiddleware: [imageMiddleware],
 
@@ -185,6 +158,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 			const routes: Route[] = [];
 
+			// `undefined` = no redirects
 			if (resolvedOptions.trailingSlash === true) {
 				routes.push(
 					{
@@ -209,13 +183,35 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 			routes.push(
 				{
 					src: `/${dirNames.out.client.immutable}/.+`,
-					headers: { "cache-control": headers.cacheControl.immutable },
+					headers: { "Cache-Control": headers.cacheControl.immutable },
 				},
 				// required for static files, checks this first
 				{ methods: ["GET"], handle: "filesystem" },
 				// falls back to function, this reroutes everything
 				{ src: "^/(.*)$", dest: `/${fnName}?${pathnameParam}=$1` },
 			);
+
+			if (resolvedOptions.botId) {
+				// https://vercel.com/docs/botid#configure-redirects
+				const botIdRoutes: Route[] = [
+					{
+						handle: "rewrite",
+						src: "/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/a-4-a/c.js",
+						dest: "https://api.vercel.com/bot-protection/v1/challenge",
+					},
+					{
+						handle: "rewrite",
+						src: "/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/:path*",
+						dest: "https://api.vercel.com/bot-protection/v1/proxy/:path*",
+					},
+					{
+						src: "/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/:path*",
+						headers: { "X-Frame-Options": "SAMEORIGIN" },
+					},
+				];
+
+				routes.unshift(...botIdRoutes);
+			}
 
 			const outputConfig: OutputConfig = {
 				version: 3,

@@ -115,29 +115,6 @@ export type PrerenderFunctionConfig = {
 	passQuery?: boolean;
 };
 
-export type EdgeFunctionConfig = {
-	/**
-	 * The runtime: "edge" property is required to indicate that this directory represents an Edge Function.
-	 */
-	runtime: "edge";
-
-	/**
-	 * Indicates the initial file where code will be executed for the Edge Function.
-	 */
-	entrypoint: string;
-
-	/**
-	 * List of environment variable names that will be available for the Edge Function to utilize.
-	 */
-	envVarsInUse?: string[];
-
-	/**
-	 * List of regions or a specific region that the edge function will be available in, defaults to all.
-	 * [View regions](https://vercel.com/docs/edge-network/regions#region-list)
-	 */
-	regions?: "all" | string | string[];
-};
-
 export type OutputConfig = {
 	version: 3;
 	routes?: Route[];
@@ -253,56 +230,46 @@ type CronsConfig = Cron[];
 
 // two separate types are required because we do not want the user to
 // be able to set some of the values that are required.
-export type RequiredOptions = (
-	| { config: NodejsServerlessFunctionConfig; isr?: PrerenderFunctionConfig }
-	| { config: EdgeFunctionConfig; isr?: never }
-) & { images?: ImagesConfig; trailingSlash?: boolean };
+export type RequiredOptions = {
+	config: NodejsServerlessFunctionConfig;
+	isr?: PrerenderFunctionConfig;
+	images?: ImagesConfig;
+	trailingSlash?: boolean;
+	botId?: boolean;
+};
 
-export type VercelAdapterOptions = (
-	| {
-			/**
-			 * Serverless function config.
-			 *
-			 * @default
-			 *
-			 * {
-			 * 	handler: "main.js",
-			 * 	runtime: "nodejs22.x",
-			 * 	launcherType: "Nodejs",
-			 * }
-			 */
-			config?: Partial<
-				Omit<NodejsServerlessFunctionConfig, "handler" | "launcherType">
-			>;
+export type VercelAdapterOptions = {
+	/**
+	 * Serverless function config.
+	 *
+	 * @default
+	 *
+	 * {
+	 * 	handler: "main.js",
+	 * 	runtime: "nodejs22.x",
+	 * 	launcherType: "Nodejs",
+	 * }
+	 */
+	config?: Partial<
+		Omit<NodejsServerlessFunctionConfig, "handler" | "launcherType">
+	>;
 
-			/**
-			 * ISR config.
-			 *
-			 * Use [Incremental Static Regeneration](https://vercel.com/docs/concepts/incremental-static-regeneration/overview)
-			 * to cache the result of a serverless function as a static asset for a given timeframe.
-			 *
-			 * For example, to refresh the page every minute, set the `expiration` to `60` seconds.
-			 *
-			 * Recommended to not use [Hono ETag middleware](https://hono.dev/docs/middleware/builtin/etag) if using ISR. If response is marked as STALE by Vercel but the content hasn't changed, edge server will send request to node server and it will respond 304 NOT MODIFIED. Vercel will never update the edge cache again with the new content and will continue to be STALE. This will result in a new request to the node server every time instead of getting the advantage ISR provides. User can easily apply etag within app if needed instead.
-			 *
-			 * @default undefined
-			 *
-			 * @example isr: { expiration: 60 }
-			 */
-			isr?: Omit<PrerenderFunctionConfig, "fallback" | "group">;
-	  }
-	| {
-			/**
-			 * Edge function config.
-			 */
-			config?: Omit<EdgeFunctionConfig, "entrypoint">;
+	/**
+	 * ISR config.
+	 *
+	 * Use [Incremental Static Regeneration](https://vercel.com/docs/concepts/incremental-static-regeneration/overview)
+	 * to cache the result of a serverless function as a static asset for a given timeframe.
+	 *
+	 * For example, to refresh the page every minute, set the `expiration` to `60` seconds.
+	 *
+	 * Recommended to not use [Hono ETag middleware](https://hono.dev/docs/middleware/builtin/etag) if using ISR. If response is marked as STALE by Vercel but the content hasn't changed, edge server will send request to node server and it will respond 304 NOT MODIFIED. Vercel will never update the edge cache again with the new content and will continue to be STALE. This will result in a new request to the node server every time instead of getting the advantage ISR provides. User can easily apply etag within app if needed instead.
+	 *
+	 * @default undefined
+	 *
+	 * @example isr: { expiration: 60 }
+	 */
+	isr?: Omit<PrerenderFunctionConfig, "fallback" | "group">;
 
-			/**
-			 * ISR is not available for edge functions. Change `config.runtime` to "nodejs20.x" to use ISR.
-			 */
-			isr?: never;
-	  }
-) & {
 	/**
 	 * When the `images` property is defined, the Image Optimization API will be available by visiting the `/_vercel/image` path. When the images property is undefined, visiting the `/_vercel/image` path will respond with 404 Not Found.
 	 *
@@ -349,4 +316,11 @@ export type VercelAdapterOptions = (
 	 * [Reference](https://vercel.com/docs/projects/project-configuration#trailingslash)
 	 */
 	trailingSlash?: boolean;
+
+	/**
+	 * Add [BotID](https://vercel.com/docs/botid) redirects.
+	 *
+	 * Use this together with the `botid` package on the client and server.
+	 */
+	botId?: boolean;
 };
