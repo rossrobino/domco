@@ -107,7 +107,6 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	resolvedOptions.isr = options?.isr;
 	resolvedOptions.images = options?.images;
 	resolvedOptions.trailingSlash = options?.trailingSlash;
-	resolvedOptions.botId = options?.botId;
 
 	/**
 	 * This is applied in `dev` and `preview` so users can see the src images.
@@ -190,28 +189,6 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 				// falls back to function, this reroutes everything
 				{ src: "^/(.*)$", dest: `/${fnName}?${pathnameParam}=$1` },
 			);
-
-			if (resolvedOptions.botId) {
-				// https://vercel.com/docs/botid#configure-redirects
-				const botIdRoutes: Route[] = [
-					{
-						handle: "rewrite",
-						src: "/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/a-4-a/c.js",
-						dest: "https://api.vercel.com/bot-protection/v1/challenge",
-					},
-					{
-						handle: "rewrite",
-						src: "/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/:path*",
-						dest: "https://api.vercel.com/bot-protection/v1/proxy/:path*",
-					},
-					{
-						src: "/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/:path*",
-						headers: { "X-Frame-Options": "SAMEORIGIN" },
-					},
-				];
-
-				routes.unshift(...botIdRoutes);
-			}
 
 			const outputConfig: OutputConfig = {
 				version: 3,

@@ -1,4 +1,3 @@
-import { BotIdClient } from "botid/client";
 import { useState } from "react";
 
 export default function App() {
@@ -8,8 +7,6 @@ export default function App() {
 			<title>React</title>
 
 			<h1>React</h1>
-
-			<BotIdClient protect={[{ path: "/api/sensitive", method: "POST" }]} />
 
 			<p>
 				<button onClick={() => setCount(count + 1)}>Increment {count}</button>

@@ -235,7 +235,6 @@ export type RequiredOptions = {
 	isr?: PrerenderFunctionConfig;
 	images?: ImagesConfig;
 	trailingSlash?: boolean;
-	botId?: boolean;
 };
 
 export type VercelAdapterOptions = {
@@ -316,11 +315,4 @@ export type VercelAdapterOptions = {
 	 * [Reference](https://vercel.com/docs/projects/project-configuration#trailingslash)
 	 */
 	trailingSlash?: boolean;
-
-	/**
-	 * Add [BotID](https://vercel.com/docs/botid) redirects.
-	 *
-	 * Use this together with the `botid` package on the client and server.
-	 */
-	botId?: boolean;
 };
