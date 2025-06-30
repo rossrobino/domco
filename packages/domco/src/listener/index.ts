@@ -1,4 +1,6 @@
-// Adapted from https://github.com/mjackson/remix-the-web/blob/main/packages/node-fetch-server
+// Adapted from:
+// https://github.com/mjackson/remix-the-web/blob/main/packages/node-fetch-server
+// https://github.com/sveltejs/kit/blob/main/packages/kit/src/exports/node/index.js
 // to use as Vite middleware: https://github.com/mjackson/remix-the-web/issues/13
 import type { FetchHandler, MaybePromise } from "../types/index.js";
 import type {
@@ -12,7 +14,7 @@ import type {
  * `http.createServer()` or `https.createServer()`.
  */
 export const nodeListener = (
-	fetchHandler: FetchHandler,
+	fetch: FetchHandler,
 	options?: {
 		/**
 		 * A function that handles an error that occurred during request handling.
@@ -26,64 +28,97 @@ export const nodeListener = (
 	return async (req, res) => {
 		const request = createRequest(req, res);
 
-		let response: Response;
+		let web: Response;
 
 		try {
-			response = await fetchHandler(request);
+			web = await fetch(request);
 		} catch (error) {
 			const errorResponse = await onError(error);
 			if (!errorResponse) return; // handled by the user, in this case - Vite middleware via `next(error)`
 
-			response = errorResponse;
+			web = errorResponse;
 		}
 
-		// Iterate over response.headers so we are sure to send multiple Set-Cookie headers correctly.
-		// These would incorrectly be merged into a single header if we tried to use
-		// `Object.fromEntries(response.headers.entries())`.
-		const headers: Record<string, string | string[]> = {};
-
-		for (const [key, value] of response.headers) {
-			if (key in headers) {
-				if (Array.isArray(headers[key])) {
-					headers[key].push(value);
-				} else {
-					headers[key] = [headers[key]!, value];
-				}
-			} else {
-				headers[key] = value;
-			}
-		}
-
-		res.writeHead(response.status, headers);
-
-		if (response.body && req.method !== "HEAD") {
-			const reader = response.body.getReader();
-
-			let result: ReadableStreamReadResult<Uint8Array<ArrayBufferLike>>;
-
-			while (true) {
-				result = await reader.read();
-				if (result.done) break;
-				res.write(result.value);
-			}
-		}
-
-		res.end();
+		setResponse(res, web);
 	};
 };
 
-const defaultErrorHandler = (error: unknown) => {
-	console.error(error);
+const setResponse = (res: ServerResponse, web: Response) => {
+	// Iterate over response.headers so we are sure to send multiple Set-Cookie headers correctly.
+	// These would incorrectly be merged into a single header if we tried to use
+	// `Object.fromEntries(response.headers.entries())`.
+	const headers: Record<string, string | string[]> = {};
 
-	return new Response("Internal Server Error", {
-		status: 500,
-		headers: { "content-type": "text/plain" },
-	});
+	for (const [key, value] of web.headers) {
+		if (key in headers) {
+			if (Array.isArray(headers[key])) {
+				headers[key].push(value);
+			} else {
+				headers[key] = [headers[key]!, value];
+			}
+		} else {
+			headers[key] = value;
+		}
+	}
+
+	res.writeHead(web.status, headers);
+
+	if (!web.body) {
+		res.end();
+		return;
+	}
+
+	if (web.body.locked) {
+		res.end(
+			"Fatal error: Response body is locked. " +
+				"This can happen when the response was already read (for example through 'response.json()' or 'response.text()').",
+		);
+		return;
+	}
+
+	const reader = web.body.getReader();
+
+	if (res.destroyed) {
+		reader.cancel();
+		return;
+	}
+
+	const cancel = (error?: Error) => {
+		res.off("close", cancel);
+		res.off("error", cancel);
+
+		reader.cancel(error).catch(() => {});
+		if (error) res.destroy(error);
+	};
+
+	res.on("close", cancel);
+	res.on("error", cancel);
+
+	const next = async () => {
+		try {
+			while (true) {
+				const result = await reader.read();
+
+				if (result.done) break;
+
+				if (!res.write(result.value)) {
+					// wait for drain, then run again
+					res.once("drain", next);
+					return;
+				}
+			}
+
+			res.end();
+		} catch (error) {
+			cancel(error instanceof Error ? error : new Error(String(error)));
+		}
+	};
+
+	next();
 };
 
 const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 	const controller = new AbortController();
-
 	res.on("close", () => controller.abort());
 
 	const method = req.method ?? "GET";
@@ -104,18 +139,40 @@ const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 	// to cast it here in order to set it without a type error.
 	// See https://fetch.spec.whatwg.org/#dom-requestinit-duplex
 	// https://github.com/mdn/content/issues/31735
-	const init: RequestInit & { duplex?: "half" } = {
-		method,
-		headers,
-		signal: controller.signal,
-	};
+	const init: RequestInit & { duplex?: "half" } = { method, headers };
 
 	if (method !== "GET" && method !== "HEAD") {
+		let cancelled = false;
+
 		init.body = new ReadableStream({
 			start(c) {
-				req.on("data", (chunk: Buffer) => c.enqueue(chunk));
-				req.on("end", () => c.close());
-				req.on("error", (error) => c.error(error));
+				req.on("data", (chunk: Buffer) => {
+					if (cancelled) return;
+
+					c.enqueue(chunk);
+
+					if (c.desiredSize === null || c.desiredSize <= 0) {
+						req.pause();
+					}
+				});
+
+				req.on("end", () => {
+					if (cancelled) return;
+
+					c.close();
+				});
+
+				req.on("error", (error) => {
+					cancelled = true;
+					c.error(error);
+				});
+			},
+			pull() {
+				req.resume();
+			},
+			cancel(reason) {
+				cancelled = true;
+				req.destroy(reason);
 			},
 		});
 
@@ -123,4 +180,13 @@ const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 	}
 
 	return new Request(url, init);
+};
+
+const defaultErrorHandler = (error: unknown) => {
+	console.error(error);
+
+	return new Response("Internal Server Error", {
+		status: 500,
+		headers: { "Content-Type": "text/plain" },
+	});
 };

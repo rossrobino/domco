@@ -150,28 +150,23 @@ const injectViteClient = (res: Response) => {
 	headers.delete("Content-Length");
 
 	const reader = res.body.getReader();
-	let result: ReadableStreamReadResult<Uint8Array>;
 
 	return new Response(
-		new ReadableStream<Uint8Array>(
-			{
-				async pull(c) {
-					result = await reader.read();
+		new ReadableStream<Uint8Array>({
+			async pull(c) {
+				const result = await reader.read();
 
-					if (result.done) {
-						c.enqueue(encoder.encode(viteClient));
-						return c.close();
-					}
+				if (result.done) {
+					c.enqueue(encoder.encode(viteClient));
+					return c.close();
+				}
 
-					c.enqueue(result.value);
-				},
-				cancel() {
-					return reader.cancel();
-				},
+				c.enqueue(result.value);
 			},
-			// let the user's stream determine the high water mark
-			{ highWaterMark: Infinity },
-		),
+			cancel() {
+				return reader.cancel();
+			},
+		}),
 		{ headers, status: res.status },
 	);
 };
