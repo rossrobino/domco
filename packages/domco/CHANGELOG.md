@@ -1,5 +1,11 @@
 # domco
 
+## 4.1.8
+
+### Patch Changes
+
+- e06df82: fix: Properly handle backpressure in nodejs streams.
+
 ## 4.1.7
 
 ### Patch Changes
