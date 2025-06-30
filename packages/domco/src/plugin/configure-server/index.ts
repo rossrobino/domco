@@ -51,7 +51,7 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 							return res;
 						},
 						{
-							onError: (e) => {
+							onError(e) {
 								let error: Error;
 
 								if (e instanceof Error) {
@@ -62,6 +62,11 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 										`The response is not an instance of \`Response\`.\n\nServer returned:\n\n${e}`,
 									);
 								}
+
+								next(error);
+							},
+							onStreamError(error) {
+								if (error instanceof Error) devServer.ssrFixStacktrace(error);
 
 								next(error);
 							},

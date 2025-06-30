@@ -9,19 +9,34 @@ import type {
 	ServerResponse,
 } from "node:http";
 
+type NodeListenerOptions = {
+	/**
+	 * Handles an error that occurred during request handling.
+	 * May return a `Response` to send to the client, or `void` which creates an early return.
+	 *
+	 * @param error
+	 * @returns A substitute `Response` when an error occurs.
+	 */
+	onError?: (error: unknown) => MaybePromise<Response | void>;
+
+	/**
+	 * A function to perform any cleanup or forward errors that occur during the
+	 * response stream, in which case it's too late to send a different `Response`.
+	 *
+	 * For example in the dev server, it's used to forward the `Error` to Vite.
+	 *
+	 * @param error
+	 */
+	onStreamError?: (error: unknown) => any;
+};
+
 /**
  * Wraps a fetch handler in a Node.js `http.RequestListener` that can be used with
  * `http.createServer()` or `https.createServer()`.
  */
 export const nodeListener = (
 	fetch: FetchHandler,
-	options?: {
-		/**
-		 * A function that handles an error that occurred during request handling.
-		 * May return a response to send to the client, or `void` which creates an early return.
-		 */
-		onError?: (error: unknown) => MaybePromise<Response | void>;
-	},
+	options?: NodeListenerOptions,
 ): RequestListener => {
 	const onError = options?.onError ?? defaultErrorHandler;
 
@@ -39,11 +54,15 @@ export const nodeListener = (
 			web = errorResponse;
 		}
 
-		setResponse(res, web);
+		setResponse(res, web, options?.onStreamError);
 	};
 };
 
-const setResponse = (res: ServerResponse, web: Response) => {
+const setResponse = (
+	res: ServerResponse,
+	web: Response,
+	onStreamError?: NodeListenerOptions["onStreamError"],
+) => {
 	// Iterate over response.headers so we are sure to send multiple Set-Cookie headers correctly.
 	// These would incorrectly be merged into a single header if we tried to use
 	// `Object.fromEntries(response.headers.entries())`.
@@ -88,7 +107,11 @@ const setResponse = (res: ServerResponse, web: Response) => {
 		res.off("error", cancel);
 
 		reader.cancel(error).catch(() => {});
-		if (error) res.destroy(error);
+
+		if (error) {
+			res.destroy(error);
+			if (onStreamError) onStreamError(error);
+		}
 	};
 
 	res.on("close", cancel);
