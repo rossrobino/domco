@@ -124,6 +124,14 @@ export default {
 };
 ```
 
+You can also import the `chunk` information for the linked JS entry point to a page. This holds the same data [`client:script`](#client%3Ascript) provides.
+
+```ts
+import { chunk } from "client:page";
+
+chunk.src.assets; // ex: assets might contain a font path you want to preload
+```
+
 ### client:script
 
 You can also easily get the `<script>` and related `<link>` tags for any `+script` module on the server as well. These tags can be accessed via the `client:script` virtual module. They can be included in an HTML string, or inside of JSX.

@@ -1,4 +1,6 @@
 import { dirNames, fileNames } from "../../constants/index.js";
+import { getChunk } from "../../util/manifest/index.js";
+import type { Chunk } from "client:page";
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { Plugin, ViteDevServer } from "vite";
@@ -26,25 +28,42 @@ export const pagePlugin = (): Plugin => {
 
 		resolveId(id) {
 			if (id.startsWith(pageId)) {
-				// Don't return the resolved id here, needs to be the full path.
+				// don't return the resolved id here, needs to be the full path.
 				return `\0${id}`;
 			}
 		},
 
 		async load(id, _options) {
 			if (id.startsWith(resolvedPageId)) {
-				const pathName = id.slice(resolvedPageId.length);
+				let pathName = id.slice(resolvedPageId.length);
 
+				// remove trailing slash
+				if (pathName.endsWith("/")) pathName = pathName.slice(0, -1);
+				if (!pathName) pathName = "/";
+
+				let chunk: Chunk;
 				let html: string;
 
 				if (devServer) {
 					// read from src and transform
-					const filePath = path.join(
-						dirNames.src.base,
-						dirNames.src.client,
-						pathName,
-						fileNames.page,
-					);
+					const src = path.join(dirNames.src.client, pathName, fileNames.page);
+
+					chunk = {
+						tags: "",
+						src: {
+							// src relative to src/
+							src, // this is the html file in prod
+							file: "", // this is a js file in prod, so empty here instead of the html
+							assets: [],
+							module: [],
+							preload: [],
+							style: [],
+							dynamic: [],
+						},
+					};
+
+					// add base
+					const filePath = path.join(dirNames.src.base, src);
 
 					if (!watched.has(filePath)) {
 						// add listeners if they are not already there
@@ -71,19 +90,25 @@ export const pagePlugin = (): Plugin => {
 						}
 					}
 				} else {
-					// read from client output
-					const filePath = path.join(
-						dirNames.out.base,
-						dirNames.out.client.base,
-						dirNames.src.client,
-						pathName,
-						fileNames.page,
-					);
+					chunk = await getChunk({ pathName, error: this.error, page: true });
 
-					html = await fs.readFile(filePath, "utf-8");
+					// read from client output
+					html = await fs.readFile(
+						path.join(
+							dirNames.out.base,
+							dirNames.out.client.base,
+							dirNames.src.client,
+							pathName,
+							fileNames.page,
+						),
+						"utf-8",
+					);
 				}
 
-				return `export const html = ${JSON.stringify(html)};`;
+				return (
+					`export const html = ${JSON.stringify(html)};\n` +
+					`export const chunk = ${JSON.stringify(chunk)}\n`
+				);
 			}
 		},
 	};
