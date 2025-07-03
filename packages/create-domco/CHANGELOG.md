@@ -1,5 +1,21 @@
 # create-domco
 
+## 4.3.0
+
+### Minor Changes
+
+- 72af2d6: feat: Adds `h3` and `elysia` to `create-domco` template.
+
+  Select the option or pass the your preferred framework into the `--framework` argument of the CLI:
+
+  ```bash
+  npx create-domco@latest --framework=h3
+  ```
+
+  ```bash
+  npx create-domco@latest --framework=elysia
+  ```
+
 ## 4.2.1
 
 ### Patch Changes
