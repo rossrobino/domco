@@ -40,6 +40,27 @@ app.get("/", (c) => c.html(html));
 
 export default app;
 `;
+	} else if (framework === "h3") {
+		content = `import { html } from "client:page";
+import { H3 } from "h3";
+
+const app = new H3();
+
+app.get("/", () => html);
+
+export default app;
+`;
+	} else if (framework === "elysia") {
+		content = `import * as page from "client:page";
+import { Elysia } from "elysia";
+import { html } from "@elysiajs/html";
+
+const app = new Elysia();
+
+app.use(html()).get("/", () => page.html);
+
+export default app;
+`;
 	} else if (framework === "mono-jsx") {
 		content = `import { tags } from "client:script";
 

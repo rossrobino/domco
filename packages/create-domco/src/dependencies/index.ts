@@ -9,6 +9,9 @@ export const getDependencies = () => {
 		// framework
 		hono: "4.0.0",
 		ovr: "4.0.0",
+		h3: "2.0.0-beta.1",
+		elysia: "1.0.0",
+		elysiaHtml: "1.0.0",
 		"mono-jsx": "0.6.0", // minor since pre v1
 
 		// adapter

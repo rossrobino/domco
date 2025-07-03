@@ -23,7 +23,7 @@ const cancelMessage = "Operation cancelled";
 type TemplateFile = { name: string; content: string };
 
 export type GetTemplateFileOptions = {
-	framework: null | "ovr" | "hono" | "mono-jsx";
+	framework: null | "ovr" | "hono" | "mono-jsx" | "h3" | "elysia";
 	adapter: null | "cloudflare" | "deno" | "vercel";
 	dir: string;
 	pm: AgentName;
@@ -127,17 +127,15 @@ export const createDomco = async () => {
 			initialValue: null,
 			options: [
 				{ value: null, label: "none" },
+				{ value: "elysia", label: "Elysia", hint: "https://elysiajs.com" },
+				{ value: "h3", label: "H3", hint: "https://h3.dev" },
 				{ value: "hono", label: "Hono", hint: "https://hono.dev" },
 				{
 					value: "mono-jsx",
 					label: "mono-jsx",
 					hint: "https://github.com/ije/mono-jsx",
 				},
-				{
-					value: "ovr",
-					label: "ovr",
-					hint: "https://github.com/rossrobino/ovr",
-				},
+				{ value: "ovr", label: "ovr", hint: "https://ovr.robino.dev" },
 			],
 		}));
 
