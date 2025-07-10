@@ -37,6 +37,14 @@ With domco, it's easy to achieve the same developer experience as other framewor
 
 If you need a UI framework, you can still use any [Vite plugin](https://vitejs.dev/plugins/) as you would in a traditional Vite application. These plugins will also work on the server.
 
+The `create` script also comes with templates for the following server frameworks:
+
+- [Elysia](https://elysiajs.com)
+- [h3](https://h3.dev)
+- [hono](https://hono.dev)
+- [mono-jsx](https://github.com/ije/mono-jsx)
+- [ovr](https://ovr.robino.dev)
+
 ## Only what you need
 
 domco is [lightweight](https://npmgraph.js.org/?q=domco), relying solely on Vite as its dependency. This results in quick installation times, fast build and development processes, and a reduced risk of supply chain attacks.
