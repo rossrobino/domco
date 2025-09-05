@@ -51,7 +51,7 @@ export default {
 			return new Response("World");
 		}
 
-		return new Response("Not found");
+		return new Response("Not found", { status: 404 });
 	},
 };
 ```
