@@ -1,5 +1,4 @@
 ---
-"@domcojs/vercel": patch
 "domco": patch
 ---
 
