@@ -84,8 +84,8 @@ const serverEntry = (adapter?: Adapter) => {
 		[fileNames.out.entry.app.split(".")[0]!]: ids.app,
 	};
 
-	// only create an adapter entry point if there's an adapter
-	if (adapter) {
+	// only create an adapter entry point if there's an adapter with entry
+	if (adapter?.entry) {
 		entry[adapter.entry({ appId: ids.app }).id] = ids.adapter;
 	}
 

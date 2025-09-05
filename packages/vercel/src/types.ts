@@ -310,9 +310,9 @@ export type VercelAdapterOptions = {
 	 * - `true` - pathnames that do not end with slash will redirect to the same path with a slash
 	 * - `undefined` - no redirect (can be bad for SEO)
 	 *
-	 * @default undefined
-	 *
 	 * [Reference](https://vercel.com/docs/projects/project-configuration#trailingslash)
+	 *
+	 * @default undefined
 	 */
 	trailingSlash?: boolean;
 };

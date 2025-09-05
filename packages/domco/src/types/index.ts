@@ -45,8 +45,8 @@ export type Adapter = {
 	/** Message to log when the build is complete. */
 	message: string;
 
-	/** Entry point for the server application. */
-	entry: AdapterEntry;
+	/** Optional entry point for the server application. */
+	entry: AdapterEntry | null;
 
 	/** Passed into Vite `config.ssr.target`. */
 	target?: SSRTarget;
