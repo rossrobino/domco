@@ -6,14 +6,27 @@ import type {
 	VercelAdapterOptions,
 } from "./types.js";
 import type { AdapterBuilder, AdapterEntry, AdapterMiddleware } from "domco";
-import { dirNames, fileNames, headers } from "domco/constants";
+import { dirNames, headers } from "domco/constants";
 import { clearDir, copyClient, copyServer } from "domco/util";
 import { version } from "domco/version";
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const isrId = "isr";
+const entryId = "main";
 const pathnameParam = "__pathname";
+
+/** Use when runtime is set to node. */
+const nodeEntry: AdapterEntry = ({ appId }) => {
+	return {
+		id: entryId,
+		code: `
+import app from "${appId}";
+import { nodeListener } from "domco/listener";
+
+export default nodeListener(app.fetch);
+`,
+	};
+};
 
 /**
  * This function is required for ISR.
@@ -40,12 +53,15 @@ export const getRequest = (req: Request) => {
 /** Use when runtime is set to node + ISR. */
 const isrEntry: AdapterEntry = ({ appId }) => {
 	return {
-		id: isrId,
+		id: entryId,
 		code: `
 import app from "${appId}";
+import { nodeListener } from "domco/listener";
 import { getRequest } from "@domcojs/vercel";
 
-export default { fetch: (req) => app.fetch(getRequest(req)) };
+const isrHandler = (req) => app.fetch(getRequest(req));
+
+export default nodeListener(isrHandler);
 `,
 	};
 };
@@ -79,7 +95,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 ) => {
 	const resolvedOptions: RequiredOptions = {
 		config: {
-			handler: options?.isr ? `${isrId}.js` : fileNames.out.entry.app,
+			handler: `${entryId}.js`,
 			runtime: "nodejs22.x",
 			launcherType: "Nodejs",
 		},
@@ -130,7 +146,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		target: "node",
 		noExternal: true, // bundle server code with Vite
 		message: `created ${resolvedOptions.config.runtime} build .vercel/`,
-		entry: resolvedOptions.isr ? isrEntry : null, // null means to use the default instead
+		entry: resolvedOptions.isr ? isrEntry : nodeEntry,
 		devMiddleware: [imageMiddleware],
 		previewMiddleware: [imageMiddleware],
 
@@ -190,16 +206,20 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 			const tasks = [
 				copyClient(path.join(outDir, "static")),
+
 				copyServer(fnDir),
+
 				fs.writeFile(
 					path.join(outDir, "config.json"),
 					JSON.stringify(outputConfig, null, "\t"),
 				),
+
 				// write vc.config
 				fs.writeFile(
 					path.join(outDir, "functions", `${fnName}.func`, ".vc-config.json"),
 					JSON.stringify(resolvedOptions.config, null, "\t"),
 				),
+
 				// write package.json
 				// otherwise have to output mjs, either way works
 				fs.writeFile(
