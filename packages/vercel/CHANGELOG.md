@@ -1,5 +1,11 @@
 # @domcojs/vercel
 
+## 3.0.2
+
+### Patch Changes
+
+- 28ed323: fix: undo Vercel adapter changes in `v3.0.1` due to issue supporting `AsyncLocalStorage` when using the `fetch` export.
+
 ## 3.0.1
 
 ### Patch Changes
