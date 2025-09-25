@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.3.1
+
+### Patch Changes
+
+- af048cc: patch: Bump `create-domco` dependencies.
+
 ## 4.3.0
 
 ### Minor Changes
