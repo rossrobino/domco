@@ -1,8 +1,8 @@
-```ts {1,9,13}
+```js {1,9,13}
 import { html } from "client:page";
 
 export default {
-	fetch(req: Request) {
+	fetch(req) {
 		const url = new URL(req.url);
 
 		if (url.pathname === "/") {
@@ -23,7 +23,7 @@ domco seamlessly integrates a server into your [Vite](https://vitejs.dev) applic
 
 With domco, you can develop and deploy using Node.js, providing the flexibility to stay within a familiar environment, while also supporting other runtimes. Additionally, you gain access to Vite’s build pipeline, plugin ecosystem, and live reloading out of the box.
 
-## Feature overview
+## Features
 
 - Automatic [entry point configuration](/tutorial#entry-points) for client and server builds.
 - Development and preview server configuration.
@@ -33,7 +33,7 @@ With domco, you can develop and deploy using Node.js, providing the flexibility 
 
 ## Add a framework, or don't
 
-With domco, it's easy to achieve the same developer experience as other frameworks that are based around a UI library, without having to pull in additional dependencies. By default, domco only bundles only the code you write, making it efficient and straightforward.
+Achieve the same developer experience as other frameworks that are based around a UI library, without having to pull in additional dependencies. By default, domco only bundles only the code you write, making it efficient and straightforward.
 
 If you need a UI framework, you can still use any [Vite plugin](https://vitejs.dev/plugins/) as you would in a traditional Vite application. These plugins will also work on the server.
 

@@ -1,7 +1,7 @@
 import { BookSvg, EarthSvg, HomeSvg, PlugSvg, XSvg } from "./svg";
 import type { FC } from "hono/jsx";
 
-export const Nav: FC = () => {
+export const Nav = () => {
 	return (
 		<>
 			<SideBar />
@@ -12,7 +12,7 @@ export const Nav: FC = () => {
 
 type NavLinkProps = { title: string; Icon: FC };
 
-const SideBar: FC = () => {
+const SideBar = () => {
 	return (
 		<nav class="bg-base-900 sticky top-0 hidden h-screen w-[20vw] min-w-56 justify-end overflow-y-auto scheme-dark lg:flex">
 			<div class="flex flex-col py-6 pr-12 pl-6">
@@ -34,7 +34,7 @@ const HomeLink = () => (
 	</a>
 );
 
-const TopBar: FC = () => {
+const TopBar = () => {
 	return (
 		<drab-dialog
 			class="sticky top-0 z-10 flex items-center gap-3 p-3 backdrop-blur-md lg:hidden"
@@ -47,7 +47,7 @@ const TopBar: FC = () => {
 				data-trigger
 				aria-label="Open navigation"
 				type="button"
-				class="ghost"
+				class="ghost icon"
 				id="dialog-trigger"
 			>
 				<svg
@@ -88,7 +88,7 @@ const TopBar: FC = () => {
 	);
 };
 
-export const InternalLinks: FC = () => {
+export const InternalLinks = () => {
 	const items: NavLinkProps[] = [
 		{ title: "Overview", Icon: HomeSvg },
 		{ title: "Tutorial", Icon: BookSvg },
@@ -106,7 +106,7 @@ export const InternalLinks: FC = () => {
 				return (
 					<li>
 						<a
-							class="flex items-center gap-3 py-1.5 no-underline data-[current]:font-bold"
+							class="flex items-center gap-3 py-2 no-underline data-[current]:underline"
 							href={href}
 						>
 							<Icon />
@@ -119,7 +119,7 @@ export const InternalLinks: FC = () => {
 	);
 };
 
-const ExternalLinks: FC = () => {
+const ExternalLinks = () => {
 	return (
 		<div class="flex items-center gap-1">
 			<RepoLink />
@@ -128,7 +128,7 @@ const ExternalLinks: FC = () => {
 	);
 };
 
-const RepoLink: FC = () => {
+const RepoLink = () => {
 	return (
 		<a
 			href="https://github.com/rossrobino/domco"
@@ -153,7 +153,7 @@ const RepoLink: FC = () => {
 	);
 };
 
-const NpmLink: FC = () => {
+const NpmLink = () => {
 	return (
 		<a href="https://www.npmjs.com/package/domco" class="button ghost icon">
 			<svg

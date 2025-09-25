@@ -89,7 +89,7 @@
 
 			@media (min-width: 640px) {
 				margin-inline: 0;
-				border-radius: var(--radius-xs);
+				border-radius: var(--radius-sm);
 			}
 
 			& > code {
@@ -103,13 +103,21 @@
 			& .line,
 			& p {
 				padding-inline: calc(var(--spacing) * 6);
-				height: 2.8ch;
+				height: 2.5ch;
+
+				&:not(:first-of-type) {
+					margin-block-start: calc(var(--spacing) * 0.5);
+				}
 
 				&.highlighted {
 					background-color: var(--color-base-800);
 				}
 			}
 		}
+	}
+
+	p code {
+		@apply border-secondary-background border shadow-xs;
 	}
 
 	* {
