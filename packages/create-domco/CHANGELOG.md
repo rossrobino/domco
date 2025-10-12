@@ -1,5 +1,20 @@
 # create-domco
 
+## 4.4.0
+
+### Minor Changes
+
+- 2c11da1: feat: Adds `@remix-run/fetch-router` to template server options.
+
+  ```bash
+  npx create-domco@latest --framework=remix
+  ```
+
+### Patch Changes
+
+- Updated dependencies [f71576f]
+  - domco@4.4.0
+
 ## 4.3.1
 
 ### Patch Changes
