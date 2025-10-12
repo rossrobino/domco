@@ -1,6 +1,11 @@
 import { html } from "client:page";
 import { html as reactHtml } from "client:page/react";
+import { Elysia } from "elysia";
 import { Hono } from "hono";
+
+// TEST LONG RUNNING PROCESS EXIT
+const elysia = new Elysia();
+await elysia.fetch(new Request("http://localhost:4545/"));
 
 const app = new Hono();
 
