@@ -1,5 +1,13 @@
 # domco
 
+## 4.4.0
+
+### Minor Changes
+
+- f71576f: feat: Run prerender in a child process and exit the process after prerendering.
+
+  Before, if a user's server had a long running process that doesn't end after prerendering, then the build would hang. Now a child process is used for prerendering and exits whe complete.
+
 ## 4.3.1
 
 ### Patch Changes
