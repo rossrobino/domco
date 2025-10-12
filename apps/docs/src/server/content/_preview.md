@@ -41,8 +41,9 @@ The `create` script also comes with templates for the following server framework
 
 - [Elysia](https://elysiajs.com)
 - [h3](https://h3.dev)
-- [hono](https://hono.dev)
+- [Hono](https://hono.dev)
 - [mono-jsx](https://github.com/ije/mono-jsx)
+- [Remix](https://github.com/remix-run/remix/tree/main/packages/fetch-router)
 - [ovr](https://ovr.robino.dev)
 
 ## Only what you need

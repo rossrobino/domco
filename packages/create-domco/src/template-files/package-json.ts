@@ -28,7 +28,7 @@ const getTemplateFiles: GetTemplateFile = ({
 	},${
 		framework
 			? `"dependencies": {
-			"${framework}": "^${dependencies[framework]}"${framework === "elysia" ? `,"@elysiajs/html": "^${dependencies.elysiaHtml}"` : ``}
+			"${framework === "remix" ? "@remix-run/fetch-router" : framework}": "^${dependencies[framework]}"${framework === "elysia" ? `,"@elysiajs/html": "^${dependencies.elysiaHtml}"` : ``}
 	},`
 			: ""
 	}"devDependencies": {${adapter ? `"@domcojs/${adapter}": "^${dependencies[adapter]}",` : ""}${tailwind ? `"@tailwindcss/vite": "^${dependencies.tailwind}",` : ""}"domco": "^${dependencies.domco}",${prettier ? `"prettier": "^${dependencies.prettier}",` : ""}

@@ -23,7 +23,7 @@ const cancelMessage = "Operation cancelled";
 type TemplateFile = { name: string; content: string };
 
 export type GetTemplateFileOptions = {
-	framework: null | "ovr" | "hono" | "mono-jsx" | "h3" | "elysia";
+	framework: null | "ovr" | "hono" | "mono-jsx" | "h3" | "elysia" | "remix";
 	adapter: null | "cloudflare" | "deno" | "vercel";
 	dir: string;
 	pm: AgentName;
@@ -58,7 +58,7 @@ export const createDomco = async () => {
 
 	if (p.isCancel(dir)) {
 		p.cancel(cancelMessage);
-		process.exit(0);
+		process.exit();
 	}
 
 	try {
@@ -93,7 +93,7 @@ export const createDomco = async () => {
 
 			if (!proceed || p.isCancel(proceed)) {
 				p.cancel(cancelMessage);
-				process.exit(0);
+				process.exit();
 			}
 		}
 	} catch {
@@ -117,7 +117,7 @@ export const createDomco = async () => {
 
 	if (p.isCancel(lang)) {
 		p.cancel(cancelMessage);
-		process.exit(0);
+		process.exit();
 	}
 
 	const framework =
@@ -135,13 +135,18 @@ export const createDomco = async () => {
 					label: "mono-jsx",
 					hint: "https://github.com/ije/mono-jsx",
 				},
+				{
+					value: "remix",
+					label: "Remix",
+					hint: "https://github.com/remix-run/remix/tree/main/packages/fetch-router",
+				},
 				{ value: "ovr", label: "ovr", hint: "https://ovr.robino.dev" },
 			],
 		}));
 
 	if (p.isCancel(framework)) {
 		p.cancel(cancelMessage);
-		process.exit(0);
+		process.exit();
 	}
 
 	const adapter =
@@ -175,7 +180,7 @@ export const createDomco = async () => {
 
 	if (p.isCancel(adapter)) {
 		p.cancel(cancelMessage);
-		process.exit(0);
+		process.exit();
 	}
 
 	const extras = await p.multiselect({
@@ -193,7 +198,7 @@ export const createDomco = async () => {
 
 	if (p.isCancel(extras)) {
 		p.cancel(cancelMessage);
-		process.exit(0);
+		process.exit();
 	}
 
 	const pm = getUserAgent() ?? "npm";
@@ -224,7 +229,7 @@ export const createDomco = async () => {
 
 	p.outro(`https://github.com/rossrobino/domco`);
 
-	process.exit(0);
+	process.exit();
 };
 
 const getAllTemplateFiles: GetTemplateFile = async (options) => {

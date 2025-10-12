@@ -13,6 +13,7 @@ export const getDependencies = () => {
 		elysia: "1.0.0",
 		elysiaHtml: "1.0.0",
 		"mono-jsx": "0.6.0", // minor since pre v1
+		remix: "0.6.0",
 
 		// adapter
 		cloudflare: "2.0.0",
