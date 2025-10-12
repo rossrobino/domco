@@ -108,84 +108,85 @@ const prerender = async () => {
 
 	if (!app.prerender) {
 		console.log("no prerender paths provided.");
-	} else {
-		console.log(
-			style.dim(
-				`imported application in ${getTime(prerenderStart, performance.now())}`,
-			),
-		);
+		return;
+	}
 
-		if (typeof app.prerender === "function") {
-			app.prerender = await app.prerender();
-		}
+	console.log(
+		style.dim(
+			`imported application in ${getTime(prerenderStart, performance.now())}`,
+		),
+	);
 
-		if (app.prerender instanceof Set) {
-			// convert to array (can't sort a set)
-			app.prerender = Array.from(app.prerender);
-		}
+	if (typeof app.prerender === "function") {
+		app.prerender = await app.prerender();
+	}
 
-		// sort for logs
-		app.prerender.sort();
+	if (app.prerender instanceof Set) {
+		// convert to array (can't sort a set)
+		app.prerender = Array.from(app.prerender);
+	}
 
-		const staticFilePromises: Promise<StaticFile>[] = [];
+	// sort for logs
+	app.prerender.sort();
 
-		for (const staticPath of app.prerender) {
-			if (!staticPath.startsWith("/")) {
-				throw Error(
-					`Prerender path \`${staticPath}\` does not start with \`"/"\`.`,
-				);
-			}
+	const staticFilePromises: Promise<StaticFile>[] = [];
 
-			staticFilePromises.push(generateRoute(staticPath, app.fetch));
-		}
-
-		// Generate static files in parallel.
-		const staticResults = await Promise.allSettled(staticFilePromises);
-
-		const staticFiles: StaticFile[] = [];
-		let failureReasons = "";
-
-		for (const result of staticResults) {
-			if (result.status === "fulfilled") {
-				staticFiles.push(result.value);
-			} else {
-				failureReasons += `${result.reason}\n`;
-			}
-		}
-
-		if (failureReasons) {
-			throw new Error(
-				`The following errors occurred during prerendering:\n\n${failureReasons}`,
+	for (const staticPath of app.prerender) {
+		if (!staticPath.startsWith("/")) {
+			throw Error(
+				`Prerender path \`${staticPath}\` does not start with \`"/"\`.`,
 			);
 		}
 
-		if (staticFiles?.length) {
-			console.log(
-				`${style.green("✓")} ${staticFiles.length} file${staticFiles.length > 1 ? "s" : ""} generated.`,
-			);
+		staticFilePromises.push(generateRoute(staticPath, app.fetch));
+	}
 
-			const maxLengths = getMaxLengths(staticFiles);
+	// Generate static files in parallel.
+	const staticResults = await Promise.allSettled(staticFilePromises);
 
-			for (const file of staticFiles) {
-				const filePath = file.path.padEnd((maxLengths.path ?? 0) + 2);
-				const kB = file.kB.padStart(maxLengths.kB ?? 0) + " kB";
-				const gzip = ` │ gzip: ${file.gzip.padStart(maxLengths.gzip ?? 0)} kB │ `;
-				const time = file.time.padStart(maxLengths.time ?? 0);
+	const staticFiles: StaticFile[] = [];
+	let failureReasons = "";
 
-				console.log(
-					`${filePath}${style.dim(style.bold(kB))}${style.dim(gzip)}${style.dim(time)}`,
-				);
-			}
-
-			console.log(
-				style.green(
-					`✓ prerendered in ${getTime(prerenderStart, performance.now())}`,
-				),
-			);
+	for (const result of staticResults) {
+		if (result.status === "fulfilled") {
+			staticFiles.push(result.value);
+		} else {
+			failureReasons += `${result.reason}\n`;
 		}
 	}
 
-	process.exit(); // exit child process
+	if (failureReasons) {
+		throw new Error(
+			`The following errors occurred during prerendering:\n\n${failureReasons}`,
+		);
+	}
+
+	if (staticFiles?.length) {
+		console.log(
+			`${style.green("✓")} ${staticFiles.length} file${staticFiles.length > 1 ? "s" : ""} generated.`,
+		);
+
+		const maxLengths = getMaxLengths(staticFiles);
+
+		for (const file of staticFiles) {
+			const filePath = file.path.padEnd((maxLengths.path ?? 0) + 2);
+			const kB = file.kB.padStart(maxLengths.kB ?? 0) + " kB";
+			const gzip = ` │ gzip: ${file.gzip.padStart(maxLengths.gzip ?? 0)} kB │ `;
+			const time = file.time.padStart(maxLengths.time ?? 0);
+
+			console.log(
+				`${filePath}${style.dim(style.bold(kB))}${style.dim(gzip)}${style.dim(time)}`,
+			);
+		}
+
+		console.log(
+			style.green(
+				`✓ prerendered in ${getTime(prerenderStart, performance.now())}`,
+			),
+		);
+	}
 };
 
 await prerender();
+
+process.exit(); // exit child process
