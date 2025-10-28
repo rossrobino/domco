@@ -1,6 +1,11 @@
 import { dirNames, fileNames } from "../../constants/index.js";
 import type { Adapter } from "../../types/index.js";
-import { findFiles, removeEmptyDirs } from "../../util/fs/index.js";
+import {
+	copyDir,
+	findFiles,
+	removeDir,
+	removeEmptyDirs,
+} from "../../util/fs/index.js";
 import { getTime } from "../../util/perf/index.js";
 import { style } from "../../util/style/index.js";
 import { version } from "../../version/index.js";
@@ -34,8 +39,24 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 				await build({ build: { ssr: true } });
 			} else {
 				const outDir = `${dirNames.out.base}/${dirNames.out.client.base}`;
+				const clientAssetDir = path.join(outDir, dirNames.out.client.immutable);
+				const ssrAssetDir = path.join(
+					dirNames.out.base,
+					dirNames.out.ssr,
+					dirNames.out.client.immutable,
+				);
 
-				await removeHtml(outDir);
+				await Promise.all([
+					removeHtml(outDir),
+					// copy ssr assets into client asset dir to serve
+					// https://vite.dev/config/build-options.html#build-emitassets
+					copyDir(ssrAssetDir, clientAssetDir),
+				]);
+
+				await Promise.all([
+					removeDir(ssrAssetDir), // remove the ssr assets dir since it has been copied into client
+					removeEmptyDirs(outDir),
+				]);
 
 				const prerenderProcess = fork(
 					path.join(import.meta.dirname, "prerender.process.js"),
@@ -43,8 +64,6 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 				);
 
 				prerenderProcess.on("exit", async () => {
-					await removeEmptyDirs(outDir);
-
 					console.log();
 
 					if (adapter) await runAdapter(adapter);
