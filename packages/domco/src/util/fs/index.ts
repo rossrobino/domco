@@ -108,40 +108,50 @@ export const toAllScriptEndings = (s: string) => {
 };
 
 /**
+ * Safe, recursive remove if dir exists
+ *
+ * @param dir directory to remove
+ */
+export const removeDir = async (dir: string) => {
+	if (await fileExists(dir)) return fs.rm(dir, { recursive: true });
+};
+
+/**
  * Removes a directory and all of its contents,
  * then makes an empty dir with the same name.
  *
- * @param dir
+ * @param dir directory to clear.
  */
 export const clearDir = async (dir: string) => {
-	if (await fileExists(dir)) {
-		await fs.rm(dir, { recursive: true });
-	}
+	await removeDir(dir);
+	return fs.mkdir(dir, { recursive: true });
+};
 
-	await fs.mkdir(dir, { recursive: true });
+/**
+ * Helper with options for `fs.cp`
+ *
+ * @param source
+ * @param destination
+ */
+export const copyDir = async (source: string, destination: string) => {
+	if (await fileExists(source)) {
+		return fs.cp(source, destination, { recursive: true, errorOnExist: false });
+	}
 };
 
 /**
  * Copies all client files into a directory.
- * @param outDir target directory
+ * @param destination target directory
  */
-export const copyClient = async (outDir: string) => {
-	return fs.cp(path.join(dirNames.out.base, dirNames.out.client.base), outDir, {
-		recursive: true,
-		errorOnExist: false,
-	});
-};
+export const copyClient = (destination: string) =>
+	copyDir(path.join(dirNames.out.base, dirNames.out.client.base), destination);
 
 /**
  * Copies all server files into a directory.
- * @param outDir target directory
+ * @param destination target directory
  */
-export const copyServer = async (outDir: string) => {
-	return fs.cp(path.join(dirNames.out.base, dirNames.out.ssr), outDir, {
-		recursive: true,
-		errorOnExist: false,
-	});
-};
+export const copyServer = (destination: string) =>
+	copyDir(path.join(dirNames.out.base, dirNames.out.ssr), destination);
 
 /**
  * Recursively removes empty directories from a directory.

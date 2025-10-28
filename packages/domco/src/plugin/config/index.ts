@@ -58,6 +58,7 @@ export const configPlugin = async (
 						dirNames.out.base,
 						isSsrBuild ? dirNames.out.ssr : dirNames.out.client.base,
 					),
+					emitAssets: true, // ensures assets are emitted by default during ssr
 					emptyOutDir: true,
 					rollupOptions: {
 						input: isSsrBuild ? serverEntry(adapter) : await clientEntry(),
@@ -66,7 +67,7 @@ export const configPlugin = async (
 								if (name.startsWith("/")) name = name.slice(1);
 								return `${isSsrBuild ? "" : dirNames.out.client.immutable + "/"}${name}${isSsrBuild ? "" : ".[hash]"}.js`;
 							},
-							assetFileNames: `${isSsrBuild ? "" : dirNames.out.client.immutable + "/"}assets/[name].[hash][extname]`,
+							assetFileNames: `${dirNames.out.client.immutable}/assets/[name].[hash][extname]`,
 							chunkFileNames: `${isSsrBuild ? "" : dirNames.out.client.immutable + "/"}chunks/[name].[hash].js`,
 						},
 					},

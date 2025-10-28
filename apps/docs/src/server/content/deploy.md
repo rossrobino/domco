@@ -9,12 +9,14 @@ Run [`vite build`](https://vitejs.dev/guide/cli.html#vite-build) to build your a
 ```
 dist/
 ├── client/
-│	├── (_immutable/) - any JS/CSS/immutable assets
+│	├── (_immutable/) - any JS/CSS/immutable assets from client and server builds
 │	└── (index.html) - prerendered pages
 └── server/
 	├── app.js - server entry point
 	└── (adapter-entry.js) - if using an adapter
 ```
+
+> Any assets such as images or fonts ([see full list](https://github.com/vitejs/vite/blob/main/packages/vite/src/node/constants.ts#L145)) imported in the **server** and **client** builds will be available **publicly** at a unique URL when utilizing a domco adapter.
 
 ## Adapters
 
