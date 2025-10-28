@@ -1,5 +1,11 @@
 # domco
 
+## 4.4.1
+
+### Patch Changes
+
+- b8c6791: fix: fixes issue with `getChunks` where lazy imports could cause infinte loops
+
 ## 4.4.0
 
 ### Minor Changes
