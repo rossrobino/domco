@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.4.1
+
+### Patch Changes
+
+- 6a4e9b0: Adds `bunx --bun` prefix to scripts if pm is Bun.
+
 ## 4.4.0
 
 ### Minor Changes

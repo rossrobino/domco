@@ -1,5 +1,11 @@
 # domco
 
+## 4.5.1
+
+### Patch Changes
+
+- 6a4e9b0: Update logs
+
 ## 4.5.0
 
 ### Minor Changes
