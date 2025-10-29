@@ -102,7 +102,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	};
 
 	if (options?.config?.bunVersion) {
-		resolvedOptions.config.runtime = "bun";
+		resolvedOptions.config.runtime = "bun1.x";
 		delete resolvedOptions.config.launcherType;
 	}
 
