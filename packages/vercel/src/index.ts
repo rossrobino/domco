@@ -28,6 +28,16 @@ export default nodeListener(app.fetch);
 	};
 };
 
+const bunEntry: AdapterEntry = ({ appId }) => {
+	return {
+		id: entryId,
+		code: `
+import app from "${appId}";
+export default app;
+`,
+	};
+};
+
 /**
  * This function is required for ISR.
  *
@@ -141,12 +151,21 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		return next();
 	};
 
+	let entry: AdapterEntry;
+	if (resolvedOptions.config.runtime.startsWith("bun")) {
+		entry = bunEntry;
+	} else if (resolvedOptions.isr) {
+		entry = isrEntry;
+	} else {
+		entry = nodeEntry;
+	}
+
 	return {
 		name: "vercel",
 		target: "node",
 		noExternal: true, // bundle server code with Vite
 		message: `created ${resolvedOptions.config.runtime} build .vercel/`,
-		entry: resolvedOptions.isr ? isrEntry : nodeEntry,
+		entry,
 		devMiddleware: [imageMiddleware],
 		previewMiddleware: [imageMiddleware],
 
