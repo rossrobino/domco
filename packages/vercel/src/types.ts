@@ -13,7 +13,7 @@ export type ServerlessFunctionConfig = {
 	 *
 	 * @default "nodejs22.x"
 	 */
-	runtime?: string;
+	runtime: string;
 
 	/**
 	 * Amount of memory (RAM in MB) that will be allocated to the Serverless Function.
