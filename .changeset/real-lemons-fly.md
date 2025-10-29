@@ -1,0 +1,5 @@
+---
+"domco": patch
+---
+
+Update logs

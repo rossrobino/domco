@@ -70,9 +70,7 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 
 					console.log(
 						style.italic(
-							style.dim(
-								"run `vite preview` to preview your application with Vite and Node.js.",
-							),
+							style.dim("run `vite preview` to test your production build"),
 						),
 					);
 
