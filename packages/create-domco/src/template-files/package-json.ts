@@ -11,6 +11,10 @@ const getTemplateFiles: GetTemplateFile = ({
 }) => {
 	if (pm === "deno") return [];
 
+	// required for vite to run using bun
+	// https://bun.com/docs/pm/bunx#shebangs
+	const maybeBunPrefix = pm === "bun" ? "bunx --bun " : "";
+
 	return [
 		{
 			name: "package.json",
@@ -20,11 +24,11 @@ const getTemplateFiles: GetTemplateFile = ({
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
-		"check": "tsc",
-		"build": "vite build",
-		"preview": "vite preview"
-		${prettier ? `,"format": "prettier --write ."` : ""}
+		"dev": "${maybeBunPrefix}vite",
+		"check": "${maybeBunPrefix}tsc",
+		"build": "${maybeBunPrefix}vite build",
+		"preview": "${maybeBunPrefix}vite preview"
+		${prettier ? `,"format": "${maybeBunPrefix}prettier --write ."` : ""}
 	},${
 		framework
 			? `"dependencies": {
