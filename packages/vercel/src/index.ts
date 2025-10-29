@@ -1,4 +1,5 @@
 import type {
+	NodejsServerlessFunctionConfig,
 	OutputConfig,
 	PrerenderFunctionConfig,
 	RequiredOptions,
@@ -16,27 +17,15 @@ const entryId = "main";
 const pathnameParam = "__pathname";
 
 /** Use when runtime is set to node. */
-const nodeEntry: AdapterEntry = ({ appId }) => {
-	return {
-		id: entryId,
-		code: `
+const nodeEntry: AdapterEntry = ({ appId }) => ({
+	id: entryId,
+	code: `
 import app from "${appId}";
 import { nodeListener } from "domco/listener";
 
 export default nodeListener(app.fetch);
 `,
-	};
-};
-
-const bunEntry: AdapterEntry = ({ appId }) => {
-	return {
-		id: entryId,
-		code: `
-import app from "${appId}";
-export default app;
-`,
-	};
-};
+});
 
 /**
  * This function is required for ISR.
@@ -61,20 +50,25 @@ export const getRequest = (req: Request) => {
 };
 
 /** Use when runtime is set to node + ISR. */
-const isrEntry: AdapterEntry = ({ appId }) => {
-	return {
-		id: entryId,
-		code: `
+const isrEntry: AdapterEntry = ({ appId }) => ({
+	id: entryId,
+	code: `
 import app from "${appId}";
 import { nodeListener } from "domco/listener";
 import { getRequest } from "@domcojs/vercel";
 
-const isrHandler = (req) => app.fetch(getRequest(req));
-
-export default nodeListener(isrHandler);
+export default nodeListener((req) => app.fetch(getRequest(req)));
 `,
-	};
-};
+});
+
+/** Use when runtime is set to node. */
+const bunEntry: AdapterEntry = ({ appId }) => ({
+	id: entryId,
+	code: `
+import app from "${appId}";
+export default app;
+`,
+});
 
 /**
  * Creates a [Vercel](https://vercel.com) build according to the build output API spec.
@@ -104,15 +98,16 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	options,
 ) => {
 	const resolvedOptions: RequiredOptions = {
-		config: {
-			handler: `${entryId}.js`,
-			runtime: "nodejs22.x",
-			launcherType: "Nodejs",
-		},
+		config: { handler: `${entryId}.js`, runtime: "nodejs22.x" },
 	};
 
 	// can't do this at top level or it will override the defaults set above
 	Object.assign(resolvedOptions.config, options?.config);
+
+	if (resolvedOptions.config.runtime.startsWith("nodejs")) {
+		(resolvedOptions.config as NodejsServerlessFunctionConfig).launcherType =
+			"Nodejs";
+	}
 
 	resolvedOptions.isr = options?.isr;
 	resolvedOptions.images = options?.images;

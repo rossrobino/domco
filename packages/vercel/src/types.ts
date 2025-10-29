@@ -8,14 +8,6 @@ export type ServerlessFunctionConfig = {
 	handler: string;
 
 	/**
-	 * Specifies which "runtime" will be used to execute the Serverless Function.
-	 * See [Runtimes](https://vercel.com/docs/functions/serverless-functions/runtimes) for more information.
-	 *
-	 * @default "nodejs22.x"
-	 */
-	runtime: "nodejs22.x" | "bun1.x" | (string & {});
-
-	/**
 	 * Amount of memory (RAM in MB) that will be allocated to the Serverless Function.
 	 * See [size limits](https://vercel.com/docs/functions/serverless-functions/runtimes#size-limits) for more information.
 	 */
@@ -48,11 +40,17 @@ export type ServerlessFunctionConfig = {
 	 * When true, the Serverless Function will stream the response to the client.
 	 */
 	supportsResponseStreaming?: boolean;
-
-	bunVersion?: string;
 };
 
 export type NodejsServerlessFunctionConfig = ServerlessFunctionConfig & {
+	/**
+	 * Specifies which "runtime" will be used to execute the Serverless Function.
+	 * See [Runtimes](https://vercel.com/docs/functions/serverless-functions/runtimes) for more information.
+	 *
+	 * @default "nodejs22.x"
+	 */
+	runtime: "nodejs22.x" | (string & {});
+
 	/**
 	 * Specifies which launcher to use. Currently only "Nodejs" is supported.
 	 *
@@ -73,6 +71,10 @@ export type NodejsServerlessFunctionConfig = ServerlessFunctionConfig & {
 	 * @default false
 	 */
 	shouldAddSourceMapSupport?: boolean;
+};
+
+export type BunServerlessFunctionConfig = ServerlessFunctionConfig & {
+	runtime: "bun1.x" | (string & {});
 };
 
 export type PrerenderFunctionConfig = {
@@ -233,7 +235,7 @@ type CronsConfig = Cron[];
 // two separate types are required because we do not want the user to
 // be able to set some of the values that are required.
 export type RequiredOptions = {
-	config: NodejsServerlessFunctionConfig;
+	config: NodejsServerlessFunctionConfig | BunServerlessFunctionConfig;
 	isr?: PrerenderFunctionConfig;
 	images?: ImagesConfig;
 	trailingSlash?: boolean;
@@ -252,7 +254,10 @@ export type VercelAdapterOptions = {
 	 * }
 	 */
 	config?: Partial<
-		Omit<NodejsServerlessFunctionConfig, "handler" | "launcherType">
+		Omit<
+			NodejsServerlessFunctionConfig | BunServerlessFunctionConfig,
+			"handler" | "launcherType"
+		>
 	>;
 
 	/**
