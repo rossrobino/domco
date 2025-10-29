@@ -13,7 +13,7 @@ export type ServerlessFunctionConfig = {
 	 *
 	 * @default "nodejs22.x"
 	 */
-	runtime: string;
+	runtime?: string;
 
 	/**
 	 * Amount of memory (RAM in MB) that will be allocated to the Serverless Function.
@@ -48,6 +48,8 @@ export type ServerlessFunctionConfig = {
 	 * When true, the Serverless Function will stream the response to the client.
 	 */
 	supportsResponseStreaming?: boolean;
+
+	bunVersion?: string;
 };
 
 export type NodejsServerlessFunctionConfig = ServerlessFunctionConfig & {
@@ -56,7 +58,7 @@ export type NodejsServerlessFunctionConfig = ServerlessFunctionConfig & {
 	 *
 	 * @default "Nodejs"
 	 */
-	launcherType: "Nodejs";
+	launcherType?: "Nodejs";
 
 	/**
 	 * Enables request and response helpers methods.
