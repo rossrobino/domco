@@ -75,7 +75,7 @@ npm i -D @domcojs/vercel
 
 The [Vercel](https://vercel.com) adapter outputs your application to the [Build Output API](https://vercel.com/docs/build-output-api/v3) specification.
 
-- Runs on [Node.js](https://vercel.com/docs/functions/runtimes#node.js) or [Node.js with ISR](https://vercel.com/docs/incremental-static-regeneration).
+- Runs on [Node.js](https://vercel.com/docs/functions/runtimes/node-js), [Node.js with ISR](https://vercel.com/docs/incremental-static-regeneration) or [Bun](https://vercel.com/docs/functions/runtimes/bun).
 - Outputs public assets to be served on Vercel's [Edge Network](https://vercel.com/docs/edge-network/overview).
 - Supports on demand [Image Optimization](https://vercel.com/docs/image-optimization) when configured in the adapter config.
   - Set the `src` attribute of an image using the `/_vercel/image/...` [optimized URL format](https://vercel.com/docs/image-optimization#optimized-url-format). In `dev` and `preview` modes, domco will redirect to the original image.
