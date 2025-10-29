@@ -5,7 +5,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
 	plugins: [
-		domco({ adapter: adapter({ config: { bunVersion: "1.x" } }) }),
+		domco({ adapter: adapter({ config: { runtime: "bun1.x" } }) }),
 		react(),
 	],
 });

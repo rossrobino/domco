@@ -101,11 +101,6 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 		},
 	};
 
-	if (options?.config?.bunVersion) {
-		resolvedOptions.config.runtime = "bun1.x";
-		// delete resolvedOptions.config.launcherType;
-	}
-
 	// can't do this at top level or it will override the defaults set above
 	Object.assign(resolvedOptions.config, options?.config);
 
