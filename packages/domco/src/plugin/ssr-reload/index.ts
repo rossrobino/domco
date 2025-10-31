@@ -46,6 +46,8 @@ export const ssrReloadPlugin = (): Plugin => {
 				modules.length === 0
 			) {
 				server.ws.send({ type: "full-reload" });
+
+				return []; // skip Vite's invalidation since it's handled above
 			}
 		},
 	};
