@@ -1,5 +1,11 @@
 # @domcojs/vercel
 
+## 3.1.1
+
+### Patch Changes
+
+- e6966a1: fix: set `supportsResponseStreaming` to true by default for Bun streaming
+
 ## 3.1.0
 
 ### Minor Changes
