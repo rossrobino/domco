@@ -1,5 +1,11 @@
 # domco
 
+## 4.5.2
+
+### Patch Changes
+
+- 53703ca: fix: hotUpdate return empty array to skip vite validation
+
 ## 4.5.1
 
 ### Patch Changes
