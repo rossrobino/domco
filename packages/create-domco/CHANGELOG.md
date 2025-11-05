@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.4.2
+
+### Patch Changes
+
+- 842d85a: update dependencies
+
 ## 4.4.1
 
 ### Patch Changes
