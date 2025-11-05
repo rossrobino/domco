@@ -8,12 +8,12 @@ export const getDependencies = () => {
 
 		// framework
 		hono: "4.0.0",
-		ovr: "4.0.0",
-		h3: "2.0.1-rc.2",
+		ovr: "5.0.0",
+		h3: "2.0.1-rc.5",
 		elysia: "1.0.0",
 		elysiaHtml: "1.0.0",
 		"mono-jsx": "0.7.0", // minor since pre v1
-		remix: "0.6.0", // actually @remix-run/fetch-router
+		remix: "0.8.0", // actually @remix-run/fetch-router
 
 		// adapter
 		cloudflare: "2.0.0",

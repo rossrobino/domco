@@ -16,7 +16,10 @@ import { App, Get } from "ovr";
 
 const app = new App();
 
-app.base = html;
+app.use((c, next) => {
+	c.base = html;
+	return next();
+});
 
 const page = new Get("/", () => {
 	return (
