@@ -7,15 +7,16 @@ export const htmlTemplate = ({
 	tailwind,
 	framework,
 }: GetTemplateFileOptions) => {
-	const isMonoJsx = framework === "mono-jsx";
+	const mono = framework === "mono-jsx";
+	const ovr = framework === "ovr";
 
-	return `${isMonoJsx ? "" : "<!doctype html>"}
+	return `${mono || ovr ? "" : "<!doctype html>"}
 <html lang="en">
 	<head>
-		<meta char${isMonoJsx ? "S" : "s"}et="UTF-8" />
+		<meta char${mono ? "S" : "s"}et="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/${faviconFileName}" />
-		${isMonoJsx ? `{html(tags)}` : `<link rel="stylesheet" href="/${tailwind ? styleFileName.tailwind : styleFileName.base}" />`}
+		${mono ? `{html(tags)}` : ovr ? `{Render.html(tags)}` : `<link rel="stylesheet" href="/${tailwind ? styleFileName.tailwind : styleFileName.base}" />`}
 		<title>${projectName}</title>
 	</head>
 	<body>
@@ -33,7 +34,7 @@ const getTemplateFiles: GetTemplateFile = (options) => {
 	const { lang, tailwind, framework } = options;
 
 	return [
-		framework !== "mono-jsx"
+		framework !== "mono-jsx" && framework !== "ovr"
 			? { name: "src/client/+page.html", content: htmlTemplate(options) }
 			: {
 					name: "src/client/+script." + lang,

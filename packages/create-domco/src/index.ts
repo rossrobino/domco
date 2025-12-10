@@ -46,6 +46,8 @@ export const createDomco = async () => {
 
 	const argv = process.argv.slice(2);
 
+	// TODO need to parse args and see if the first is `create` npx vs npm create
+
 	const parsed = mri(argv);
 
 	const dir =
