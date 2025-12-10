@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.4.3
+
+### Patch Changes
+
+- aa4eea2: chore: update `create-domco` template dependencies
+
 ## 4.4.2
 
 ### Patch Changes
