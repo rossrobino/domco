@@ -60,7 +60,7 @@ export const configPlugin = async (
 					),
 					emitAssets: true, // ensures assets are emitted by default during ssr
 					emptyOutDir: true,
-					rollupOptions: {
+					rolldownOptions: {
 						input: isSsrBuild ? serverEntry(adapter) : await clientEntry(),
 						output: {
 							entryFileNames({ name }) {
@@ -124,7 +124,7 @@ const clientEntry = async () => {
 	const scriptsEntry: Record<string, string> = {};
 
 	for (const [key, value] of Object.entries(scripts)) {
-		scriptsEntry[`/_script${key}`] = value.slice(1); // remove "/"
+		scriptsEntry[`_script${key}`] = value.slice(1); // remove "/"
 	}
 
 	return Object.assign(pages, scriptsEntry);

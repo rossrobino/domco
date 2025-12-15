@@ -62,6 +62,6 @@
 		"build": "node scripts/version && npm run build:clean && npm run build:js && cp src/types/env.d.ts dist/types/env.d.ts"
 	},
 	"peerDependencies": {
-		"vite": "^6.0.0 || ^7.0.0"
+		"vite": "8.0.0-beta.2"
 	}
 }
