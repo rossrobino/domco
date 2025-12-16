@@ -30,7 +30,7 @@ app.get("/", (c) => {
 			<Hero />
 			<section dangerouslySetInnerHTML={{ __html: preview.html }}></section>
 			<div class="my-16 flex justify-center">
-				<a href="/tutorial" class="button px-6 py-4 text-lg">
+				<a href="/tutorial" class="button p-6 text-lg">
 					Get Started
 				</a>
 			</div>
