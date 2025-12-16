@@ -94,7 +94,7 @@ const serverEntry = (adapter?: Adapter) => {
 };
 
 const clientEntry = async () => {
-	const [pages, scripts] = await Promise.all([
+	const [pages, scripts, styles] = await Promise.all([
 		findFiles({
 			dir: path.join(dirNames.src.base, dirNames.src.client),
 			checkEndings: [fileNames.page],
@@ -103,19 +103,36 @@ const clientEntry = async () => {
 			dir: path.join(dirNames.src.base, dirNames.src.client),
 			checkEndings: toAllScriptEndings(fileNames.script),
 		}),
+		findFiles({
+			dir: path.join(dirNames.src.base, dirNames.src.client),
+			checkEndings: [fileNames.style],
+		}),
 	]);
 
 	const entry: Record<string, string> = {};
 
-	// pages and scripts have to start with "src/" instead of just "/client"
+	// paths have to start with "src/" instead of just "/client"
 	// for builds to work on Windows
-	for (let [key, value] of Object.entries({ ...pages, ...scripts })) {
+	for (let [key, value] of [
+		...Object.entries(pages),
+		...Object.entries(scripts),
+		...Object.entries(styles),
+	]) {
 		// remove leading "/"
 		key = key.slice(1);
 		value = value.slice(1);
 
-		// prefix script entries to not overlap with pages
-		if (value.includes(fileNames.script)) key = "_script" + key;
+		// suffix entries to not overlap others with the same path
+		// for example `/client/react/+page.html` and `/client/react/+script.ts`
+		// both would have "react" as the key
+		// so instead: `react_page` and `react_script`
+		if (value.includes(fileNames.script)) {
+			key += "_script";
+		} else if (value.includes(fileNames.style)) {
+			key += "_style";
+		} else {
+			key += "_page";
+		}
 
 		entry[key] = value;
 	}

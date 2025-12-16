@@ -40,7 +40,7 @@ export const getChunk = async ({
 	pathName,
 	error,
 	imp = false,
-	page = false,
+	type,
 }: {
 	/** @example "/react" */
 	pathName: string;
@@ -55,8 +55,8 @@ export const getChunk = async ({
 	 */
 	imp?: boolean;
 
-	/** If the entry point is a page instead of a script. */
-	page?: boolean;
+	/** Type of the entry point. */
+	type: "page" | "script" | "style";
 }): Promise<Chunk> => {
 	const manifest = await getManifest();
 
@@ -71,18 +71,22 @@ export const getChunk = async ({
 				path.join(
 					dirNames.src.client,
 					pathName,
-					page ? fileNames.page : fileNames.script,
+					type === "page"
+						? fileNames.page
+						: type === "script"
+							? fileNames.script
+							: fileNames.style,
 				),
 			);
 
 			if (id === srcPath) {
-				// pages have the .html ending
+				// pages and style have the .html/.css extension
 				// ex: "client/react/+page.html"
 				manifestChunk = value;
 				break;
 			}
 
-			if (!page) {
+			if (type === "script") {
 				// id is like this: "client/react/+script.tsx"
 				// remove leading / , try all endings
 				for (const idPath of toAllScriptEndings(srcPath)) {
@@ -118,8 +122,13 @@ export const getChunk = async ({
 
 	if (!imp) {
 		// the entry file name
-		chunk.tags += `<script type="module" src="/${manifestChunk.file}"></script>`;
-		chunk.src.module.push("/" + manifestChunk.file);
+		if (type === "style") {
+			chunk.tags += `<link rel="stylesheet" href="/${manifestChunk.file}">`;
+			chunk.src.style.push("/" + manifestChunk.file);
+		} else {
+			chunk.tags += `<script type="module" src="/${manifestChunk.file}"></script>`;
+			chunk.src.module.push("/" + manifestChunk.file);
+		}
 	} else {
 		// a modulepreload link to get the script ready but don't execute immediately
 		// this is required to flatten the request waterfall if you are using manual chunks for example
@@ -150,6 +159,7 @@ export const getChunk = async ({
 				pathName: impPathName,
 				imp: true,
 				error,
+				type: "script",
 			});
 
 			// dynamic chunks are not added to tags or flattened
@@ -166,6 +176,7 @@ export const getChunk = async ({
 				pathName: impPathName,
 				imp: true,
 				error,
+				type: "script",
 			});
 
 			chunk.tags += impChunk.tags;
@@ -178,4 +189,15 @@ export const getChunk = async ({
 	}
 
 	return chunk;
+};
+
+/**
+ * @param chunk
+ * @returns string of module code with `tags` and `src`
+ */
+export const getModule = (chunk: Chunk) => {
+	return (
+		`export const tags = ${JSON.stringify(chunk.tags)};\n` +
+		`export const src = ${JSON.stringify(chunk.src)};\n`
+	);
 };

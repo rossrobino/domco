@@ -93,7 +93,7 @@ export const pagePlugin = (): Plugin => {
 						}
 					}
 				} else {
-					chunk = await getChunk({ pathName, error: this.error, page: true });
+					chunk = await getChunk({ pathName, error: this.error, type: "page" });
 
 					// read from client output
 					html = await fs.readFile(

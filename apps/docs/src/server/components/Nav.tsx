@@ -1,5 +1,4 @@
-import { BookSvg, EarthSvg, HomeSvg, PlugSvg, XSvg } from "./svg";
-import type { FC } from "hono/jsx";
+import { XSvg } from "./svg";
 
 export const Nav = () => {
 	return (
@@ -9,8 +8,6 @@ export const Nav = () => {
 		</>
 	);
 };
-
-type NavLinkProps = { title: string; Icon: FC };
 
 const SideBar = () => {
 	return (
@@ -89,27 +86,25 @@ const TopBar = () => {
 };
 
 export const InternalLinks = () => {
-	const items: NavLinkProps[] = [
-		{ title: "Overview", Icon: HomeSvg },
-		{ title: "Tutorial", Icon: BookSvg },
-		{ title: "Deploy", Icon: EarthSvg },
-		{ title: "Migrate", Icon: PlugSvg },
-	];
+	const items = ["Tutorial", "Deploy", "Examples"];
 
 	return (
 		<ul class="min-w-36">
-			{items.map(({ title, Icon }) => {
-				const href =
-					title === "Overview"
-						? "/"
-						: `/${title.split(" ").join("-").toLowerCase()}`;
+			{items.map((title) => {
+				let href: string;
+
+				if (title === "Examples") {
+					href = "https://github.com/rossrobino/domco-examples";
+				} else {
+					href = `/${title.toLowerCase()}`;
+				}
+
 				return (
 					<li>
 						<a
-							class="flex items-center gap-3 py-2 no-underline data-[current]:underline"
+							class="flex py-2 no-underline data-current:underline"
 							href={href}
 						>
-							<Icon />
 							{title}
 						</a>
 					</li>

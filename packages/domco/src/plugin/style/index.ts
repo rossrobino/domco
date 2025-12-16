@@ -1,28 +1,28 @@
 import { dirNames, fileNames } from "../../constants/index.js";
-import { findFiles, toAllScriptEndings } from "../../util/fs/index.js";
+import { findFiles } from "../../util/fs/index.js";
 import { getChunk, getModule } from "../../util/manifest/index.js";
 import { resolveId } from "../../util/resolve-id/index.js";
 import type { Plugin } from "vite";
 
 /**
- * Creates the `client:script` virtual module.
+ * Creates the `client:style` virtual module.
  *
  * @returns Vite plugin
  */
-export const scriptPlugin = (): Plugin => {
-	const scriptId = "client:script";
-	const resolvedScriptId = resolveId(scriptId);
+export const stylePlugin = (): Plugin => {
+	const styleId = "client:style";
+	const resolvedScriptId = resolveId(styleId);
 
 	let prod: boolean | undefined;
 
 	return {
-		name: `domco:${scriptId}`,
+		name: `domco:${styleId}`,
 		config(_config, env) {
 			prod = env.mode === "production";
 		},
 
 		resolveId: {
-			filter: { id: new RegExp(`^${scriptId}`) },
+			filter: { id: new RegExp(`^${styleId}`) },
 			handler(id) {
 				// don't return the resolved id here, needs to be the full path.
 				return resolveId(id);
@@ -39,29 +39,29 @@ export const scriptPlugin = (): Plugin => {
 				if (!pathName) pathName = "/";
 
 				if (!prod) {
-					const scriptFiles = await findFiles({
+					const styleFiles = await findFiles({
 						dir: `${dirNames.src.base}/${dirNames.src.client}`,
-						checkEndings: toAllScriptEndings(fileNames.script),
+						checkEndings: [fileNames.style],
 					});
 
-					// link the script from src
-					let src = scriptFiles[pathName]?.slice(
+					// link the style from source
+					let href = styleFiles[pathName]?.slice(
 						`/${dirNames.src.base}`.length,
 					);
 
-					if (!src) {
+					if (!href) {
 						this.warn(`No client module found for ${pathName}`);
-						src = "";
+						href = "";
 					}
 
 					return getModule({
-						tags: `<script type="module" src="${src}"></script>`,
+						tags: `<link rel="stylesheet" href="${href}">`,
 						src: {
-							src,
-							file: src, // in dev, link to the src
-							module: [src],
+							src: href,
+							file: href,
+							module: [],
 							preload: [],
-							style: [],
+							style: [href],
 							assets: [],
 							dynamic: [],
 						},
@@ -70,7 +70,7 @@ export const scriptPlugin = (): Plugin => {
 
 				// prod
 				return getModule(
-					await getChunk({ pathName, error: this.error, type: "script" }),
+					await getChunk({ pathName, error: this.error, type: "style" }),
 				);
 			},
 		},

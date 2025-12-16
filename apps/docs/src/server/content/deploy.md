@@ -4,7 +4,7 @@
 
 ## Build
 
-Run [`vite build`](https://vitejs.dev/guide/cli.html#vite-build) to build your application into `dist/`. Vite will build both the client and server builds, then domco will prerender any static routes and [run the adapter](#adapters) if set.
+Run [`vite build`](https://vitejs.dev/guide/cli.html#vite-build) to build your application into `dist/`. Vite will build both the client and server builds, then domco will [prerender](/tutorial#prerender) any static routes and [run the adapter](#adapters) if set.
 
 ```
 dist/
@@ -18,11 +18,58 @@ dist/
 
 > Any assets such as images or fonts ([see full list](https://github.com/vitejs/vite/blob/main/packages/vite/src/node/constants.ts#L145)) imported in the **server** and **client** builds will be available **publicly** at a unique URL when utilizing a domco adapter.
 
+## Production
+
+If you are not using a vendor [adapter](#adapters), you can import `default.fetch` from the `app.js` module and configure your application to use in production.
+
+The `dist/client/` directory holds client assets. JS and CSS assets with hashed file names will be output to `dist/client/_immutable/`, you can serve this path with immutable cache headers. Other assets like prerendered HTML files are processed and included in `dist/client/` directly.
+
+### Node server
+
+Here's an example of how to serve your application using the result of your build with `node:http`, [`sirv`](https://github.com/lukeed/sirv/tree/master/packages/sirv), and [`domco/listener`](https://github.com/rossrobino/domco/blob/main/packages/domco/src/listener/index.ts).
+
+```ts
+// server.js
+// import from the build output
+import app from "./dist/server/app.js";
+// converts web fetch handler to a Node compatible request listener
+import { nodeListener } from "domco/listener";
+import { createServer } from "node:http";
+// `sirv` serves static assets
+import sirv from "sirv";
+
+const assets = sirv("dist/client", {
+	etag: true,
+	setHeaders: (res, pathname) => {
+		// serve `dist/client/_immutable/*` with immutable headers
+		if (pathname.startsWith("/_immutable/")) {
+			res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+		}
+	},
+});
+
+const server = createServer((req, res) =>
+	// first, look for a static asset
+	assets(req, res, () =>
+		// fallthrough to the fetch handler if static asset is not found
+		nodeListener(app.fetch)(req, res),
+	),
+);
+
+server.listen(3000);
+```
+
+Run this module to start your server and navigate to http://localhost:3000/ to view your application.
+
+```bash
+node server.js
+```
+
 ## Adapters
 
 Install and add a deployment adapter within your Vite config to output your application to a different target with no additional configuration.
 
-```ts {3,10-13}
+```ts {3,11-13}
 // vite.config
 // import adapter
 import { adapter } from "@domcojs/{adapter-name}";
@@ -81,53 +128,6 @@ The [Vercel](https://vercel.com) adapter outputs your application to the [Build 
   - Set the `src` attribute of an image using the `/_vercel/image/...` [optimized URL format](https://vercel.com/docs/image-optimization#optimized-url-format). In `dev` and `preview` modes, domco will redirect to the original image.
 
 <img loading="lazy" src="/_vercel/image?url=/images/vercel/build-settings.png&w=1280&q=100" alt='A screenshot of the Vercel Build and Development Settings UI. Set the Framework Preset field to "Other" and leave all of the other options blank.' />
-
-## Manual deployment
-
-If you are not using an [adapter](#adapters), you can import `default.fetch` from the `app.js` module and configure your application to use in another environment.
-
-The `dist/client/` directory holds client assets. JS and CSS assets with hashed file names will be output to `dist/client/_immutable/`, you can serve this path with immutable cache headers. Other assets like prerendered HTML files are processed and included in `dist/client/` directly.
-
-### Node server
-
-Here's an example of how to serve your application using the result of your build with `node:http`, [`sirv`](https://github.com/lukeed/sirv/tree/master/packages/sirv), and [`domco/listener`](https://github.com/rossrobino/domco/blob/main/packages/domco/src/listener/index.ts).
-
-```ts
-// server.js
-// import from the build output
-import app from "./dist/server/app.js";
-// converts web fetch handler to a Node compatible request listener
-import { nodeListener } from "domco/listener";
-import { createServer } from "node:http";
-// `sirv` serves static assets
-import sirv from "sirv";
-
-const assets = sirv("dist/client", {
-	etag: true,
-	setHeaders: (res, pathname) => {
-		// serve `dist/client/_immutable/*` with immutable headers
-		if (pathname.startsWith("/_immutable/")) {
-			res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-		}
-	},
-});
-
-const server = createServer((req, res) =>
-	// first, look for a static asset
-	assets(req, res, () =>
-		// fallthrough to the fetch handler if static asset is not found
-		nodeListener(app.fetch)(req, res),
-	),
-);
-
-server.listen(3000);
-```
-
-Run this module to start your server and navigate to http://localhost:3000/ to view your application.
-
-```bash
-node server.js
-```
 
 ## Creating an adapter
 
