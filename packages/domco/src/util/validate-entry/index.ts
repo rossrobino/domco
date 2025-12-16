@@ -5,9 +5,14 @@ import type { App } from "../../types/index.js";
  * @returns Validated default export
  */
 export const validateEntry = (mod: Record<string, unknown>) => {
+	if (mod.fetch)
+		throw new Error(
+			"`fetch` must be exported as a method on the `default` export.",
+		);
+
 	if (mod.prerender)
 		throw new Error(
-			"`prerender` must be exported as a property of the `default` export.",
+			"`prerender` must be exported as a property on the `default` export.",
 		);
 
 	if (typeof mod.default !== "object" || mod.default == null)
