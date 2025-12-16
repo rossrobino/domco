@@ -1,5 +1,15 @@
 # @domcojs/cloudflare
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies [d8ff775]
+- Updated dependencies [d8ff775]
+- Updated dependencies [d8ff775]
+- Updated dependencies [d8ff775]
+  - domco@5.0.0
+
 ## 2.0.1
 
 ### Patch Changes

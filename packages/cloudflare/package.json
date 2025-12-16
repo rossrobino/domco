@@ -1,7 +1,7 @@
 {
 	"name": "@domcojs/cloudflare",
 	"description": "domco Cloudflare adapter",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"license": "MIT",
 	"type": "module",
 	"sideEffects": false,
@@ -25,6 +25,6 @@
 		"build": "npm run build:clean && npm run build:js"
 	},
 	"dependencies": {
-		"domco": "^4.0.0"
+		"domco": "^5.0.0"
 	}
 }

@@ -1,5 +1,15 @@
 # create-domco
 
+## 4.4.4
+
+### Patch Changes
+
+- Updated dependencies [d8ff775]
+- Updated dependencies [d8ff775]
+- Updated dependencies [d8ff775]
+- Updated dependencies [d8ff775]
+  - domco@5.0.0
+
 ## 4.4.3
 
 ### Patch Changes
