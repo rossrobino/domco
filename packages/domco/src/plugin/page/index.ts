@@ -1,5 +1,6 @@
 import { dirNames, fileNames } from "../../constants/index.js";
 import { getChunk } from "../../util/manifest/index.js";
+import { resolveId } from "../../util/resolve-id/index.js";
 import type { Chunk } from "client:page";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -12,7 +13,7 @@ import type { Plugin, ViteDevServer } from "vite";
  */
 export const pagePlugin = (): Plugin => {
 	const pageId = "client:page";
-	const resolvedPageId = `\0${pageId}`;
+	const resolvedPageId = resolveId(pageId);
 
 	let devServer: ViteDevServer;
 
@@ -26,15 +27,17 @@ export const pagePlugin = (): Plugin => {
 			devServer = server;
 		},
 
-		resolveId(id) {
-			if (id.startsWith(pageId)) {
+		resolveId: {
+			filter: { id: new RegExp(`^${pageId}`) },
+			handler(id) {
 				// don't return the resolved id here, needs to be the full path.
-				return `\0${id}`;
-			}
+				return resolveId(id);
+			},
 		},
 
-		async load(id, _options) {
-			if (id.startsWith(resolvedPageId)) {
+		load: {
+			filter: { id: new RegExp(`^${resolvedPageId}`) },
+			async handler(id, _options) {
 				let pathName = id.slice(resolvedPageId.length);
 
 				// remove trailing slash
@@ -90,7 +93,7 @@ export const pagePlugin = (): Plugin => {
 						}
 					}
 				} else {
-					chunk = await getChunk({ pathName, error: this.error, page: true });
+					chunk = await getChunk({ pathName, error: this.error, type: "page" });
 
 					// read from client output
 					html = await fs.readFile(
@@ -109,7 +112,7 @@ export const pagePlugin = (): Plugin => {
 					`export const html = ${JSON.stringify(html)};\n` +
 					`export const chunk = ${JSON.stringify(chunk)}\n`
 				);
-			}
+			},
 		},
 	};
 };

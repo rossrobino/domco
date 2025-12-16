@@ -8,6 +8,9 @@ export const fileNames = {
 	/** Script file name without extension. */
 	script: "+script",
 
+	/** Style file name with extension. */
+	style: "+style.css",
+
 	/** output files */
 	out: {
 		/** names of the output entry points */

@@ -1,9 +1,10 @@
 import { Edit } from "@/server/components/Edit";
 import { Hero } from "@/server/components/Hero";
 import { Layout } from "@/server/components/Layout";
-import { html as previewHtml } from "@/server/content/_preview.md";
+import * as preview from "@/server/content/_preview.md";
 import type { Result } from "@robino/md";
-import { tags } from "client:script";
+import * as script from "client:script";
+import * as style from "client:style";
 import { Hono } from "hono";
 import { etag } from "hono/etag";
 
@@ -14,7 +15,7 @@ app.use(etag());
 app.use(async (c, next) => {
 	c.setRenderer(({ title }, content) => {
 		return c.html(
-			<Layout title={title} tags={tags}>
+			<Layout title={title} tags={script.tags + style.tags}>
 				{content}
 			</Layout>,
 		);
@@ -27,9 +28,9 @@ app.get("/", (c) => {
 		{ title: "domco" },
 		<>
 			<Hero />
-			<section dangerouslySetInnerHTML={{ __html: previewHtml }}></section>
+			<section dangerouslySetInnerHTML={{ __html: preview.html }}></section>
 			<div class="my-16 flex justify-center">
-				<a href="/tutorial" class="button px-6 py-4 text-lg">
+				<a href="/tutorial" class="button p-6 text-lg">
 					Get Started
 				</a>
 			</div>
@@ -58,6 +59,10 @@ app.get("/:slug", (c) => {
 	);
 });
 
+app.get("/migrate", (c) =>
+	c.redirect("https://github.com/rossrobino/domco-examples", 301),
+);
+
 export default {
 	fetch: app.fetch,
 	prerender: [
@@ -69,6 +74,6 @@ export default {
 
 				return `/${slug}`;
 			})
-			.filter((path) => typeof path === "string"),
+			.filter(Boolean),
 	],
 };

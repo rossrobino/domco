@@ -2,7 +2,7 @@
 	"name": "domco-monorepo",
 	"private": true,
 	"type": "module",
-	"packageManager": "npm@10.9.2",
+	"packageManager": "npm@11.7.0",
 	"workspaces": [
 		"packages/*",
 		"apps/*"
@@ -19,15 +19,15 @@
 		"release": "npm run build:packages && changeset publish"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.29.7",
-		"@robino/md": "^4.0.3",
-		"@robino/prettier": "^2.0.2",
-		"@robino/tsconfig": "^1.1.0",
-		"prettier": "^3.6.2",
-		"prettier-plugin-tailwindcss": "^0.6.14",
-		"turbo": "^2.5.8",
+		"@changesets/cli": "^2.29.8",
+		"@robino/md": "^5.0.0",
+		"@robino/prettier": "^2.0.3",
+		"@robino/tsconfig": "^1.1.1",
+		"prettier": "^3.7.4",
+		"prettier-plugin-tailwindcss": "^0.7.2",
+		"turbo": "^2.6.3",
 		"typescript": "^5.9.3",
-		"vite": "^7.1.9",
-		"vitest": "^3.2.4"
+		"vite": "^7.3.0",
+		"vitest": "^4.0.15"
 	}
 }

@@ -6,6 +6,7 @@ import { lifecyclePlugin } from "./lifecycle/index.js";
 import { pagePlugin } from "./page/index.js";
 import { scriptPlugin } from "./script/index.js";
 import { ssrReloadPlugin } from "./ssr-reload/index.js";
+import { stylePlugin } from "./style/index.js";
 import type { Plugin } from "vite";
 
 /**
@@ -41,6 +42,7 @@ export const domco = async (
 		ssrReloadPlugin(),
 		pagePlugin(),
 		scriptPlugin(),
+		stylePlugin(),
 		lifecyclePlugin(domcoConfig.adapter),
 		adapterPlugin(domcoConfig.adapter),
 	]);

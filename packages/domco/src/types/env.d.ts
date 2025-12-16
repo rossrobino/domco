@@ -84,3 +84,37 @@ declare module "client:script*" {
 	 */
 	export const src: Src;
 }
+
+declare module "client:style*" {
+	export type Chunk = { tags: string; src: Src };
+
+	/**
+	 * Import the `tags` for a client entry point if you want to add
+	 * css without adding an HTML page.
+	 *
+	 * **Development**
+	 *
+	 * HTML `link` tag for the client entry point.
+	 *
+	 * **Production**
+	 *
+	 * HTML `link` tag for the client style and `link` tags for any
+	 * imported `.css` files. domco reads `dist/client/.vite/manifest.json`
+	 * to find the hashed names after the client build has completed.
+	 */
+	export const tags: string;
+
+	/**
+	 * Import the `src` for a client entry point to get all of the linked
+	 * resources for the script.
+	 *
+	 * **Development**
+	 *
+	 * `src` contains the path of the client entry point.
+	 *
+	 * **Production**
+	 *
+	 * `src` contains arrays of the hashed related paths for the entry point.
+	 */
+	export const src: Src;
+}
