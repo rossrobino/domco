@@ -1,5 +1,31 @@
 # domco
 
+## 5.0.0
+
+### Major Changes
+
+- d8ff775: refactor!: output file names have been updated to better match the names of the entry points.
+
+  Instead of prefixing each script with `_script/`, each entry point name is suffixed with `_page`, `_script`, or `_style`. This makes it easier to identify the original file.
+
+  For example, `/client/react/+script.tsx` now will be output as `/client/_immutable/react_script.hash.js`, while `/client/react/+style.css` outputs to `/client/_immutable/assets/react_style.hash.css`.
+
+  Root entry points directly in `/client/` are no longer renamed to `main`, they simply start with the suffix.
+
+- d8ff775: feat!: drop support for vite@6, add support for vite@8
+
+  BREAKING CHANGE: This plugin no longer supports Vite 6.
+  The supported Vite peer dependency range is now ^7.0.0 || ^8.0.0.
+  Vite 8 support has been tested against the beta release.
+
+### Minor Changes
+
+- d8ff775: feat: add support for `+style.css` entry points - easily configure a `css` entry point and import the tags/href on the server.
+
+  [See full documentation here](https://domco.robino.dev/tutorial#%2Bstyle)
+
+- d8ff775: perf: use plugin hook filters for faster builds
+
 ## 4.5.2
 
 ### Patch Changes
