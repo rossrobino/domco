@@ -1,6 +1,7 @@
 import { dirNames, fileNames } from "../../constants/index.js";
 import { findFiles, toAllScriptEndings } from "../../util/fs/index.js";
 import { getChunk } from "../../util/manifest/index.js";
+import { resolveId } from "../../util/resolve-id/index.js";
 import type { Chunk } from "client:page";
 import type { Plugin } from "vite";
 
@@ -11,7 +12,7 @@ import type { Plugin } from "vite";
  */
 export const scriptPlugin = (): Plugin => {
 	const scriptId = "client:script";
-	const resolvedScriptId = `\0${scriptId}`;
+	const resolvedScriptId = resolveId(scriptId);
 
 	let prod: boolean | undefined;
 
@@ -21,15 +22,17 @@ export const scriptPlugin = (): Plugin => {
 			prod = env.mode === "production";
 		},
 
-		resolveId(id) {
-			if (id.startsWith(scriptId)) {
+		resolveId: {
+			filter: { id: new RegExp(`^${scriptId}`) },
+			handler(id) {
 				// don't return the resolved id here, needs to be the full path.
-				return `\0${id}`;
-			}
+				return resolveId(id);
+			},
 		},
 
-		async load(id) {
-			if (id.startsWith(resolvedScriptId)) {
+		load: {
+			filter: { id: new RegExp(`^${resolvedScriptId}`) },
+			async handler(id) {
 				let pathName = id.slice(resolvedScriptId.length);
 
 				// remove trailing slash
@@ -68,7 +71,7 @@ export const scriptPlugin = (): Plugin => {
 
 				// prod
 				return getExports(await getChunk({ pathName, error: this.error }));
-			}
+			},
 		},
 	};
 };

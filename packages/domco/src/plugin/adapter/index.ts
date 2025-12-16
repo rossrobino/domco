@@ -1,5 +1,6 @@
 import { ids } from "../../constants/index.js";
 import type { Adapter } from "../../types/index.js";
+import { resolveId } from "../../util/resolve-id/index.js";
 import type { Plugin } from "vite";
 
 /**
@@ -13,19 +14,25 @@ import type { Plugin } from "vite";
  * @returns Vite plugin
  */
 export const adapterPlugin = async (adapter?: Adapter): Promise<Plugin> => {
-	const resolvedAdapterId = `\0${ids.adapter}`;
+	const resolvedAdapterId = resolveId(ids.adapter);
 
 	return {
 		name: ids.adapter,
 
-		resolveId(id) {
-			if (id === ids.adapter) return resolvedAdapterId;
+		resolveId: {
+			filter: { id: new RegExp(`^${ids.adapter}$`) },
+			handler() {
+				return resolvedAdapterId;
+			},
 		},
 
-		load(id) {
-			if (id === resolvedAdapterId && adapter?.entry) {
-				return adapter.entry({ appId: ids.app }).code;
-			}
+		load: {
+			filter: { id: new RegExp(`^${resolvedAdapterId}$`) },
+			handler() {
+				if (adapter?.entry) {
+					return adapter.entry({ appId: ids.app }).code;
+				}
+			},
 		},
 	};
 };

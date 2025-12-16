@@ -60,7 +60,7 @@ export const configPlugin = async (
 					),
 					emitAssets: true, // ensures assets are emitted by default during ssr
 					emptyOutDir: true,
-					rolldownOptions: {
+					rollupOptions: {
 						input: isSsrBuild ? serverEntry(adapter) : await clientEntry(),
 						output: {
 							entryFileNames({ name }) {
@@ -105,27 +105,20 @@ const clientEntry = async () => {
 		}),
 	]);
 
-	// rename "/" keys to main
-	if (pages["/"]) {
-		pages.main = pages["/"];
-		delete pages["/"];
-	}
-	if (scripts["/"]) {
-		scripts["/main"] = scripts["/"];
-		delete scripts["/"];
-	}
+	const entry: Record<string, string> = {};
 
 	// pages and scripts have to start with "src/" instead of just "/client"
 	// for builds to work on Windows
-	for (const [key, value] of Object.entries(pages)) {
-		pages[key] = value.slice(1); // remove "/"
+	for (let [key, value] of Object.entries({ ...pages, ...scripts })) {
+		// remove leading "/"
+		key = key.slice(1);
+		value = value.slice(1);
+
+		// prefix script entries to not overlap with pages
+		if (value.includes(fileNames.script)) key = "_script" + key;
+
+		entry[key] = value;
 	}
 
-	const scriptsEntry: Record<string, string> = {};
-
-	for (const [key, value] of Object.entries(scripts)) {
-		scriptsEntry[`_script${key}`] = value.slice(1); // remove "/"
-	}
-
-	return Object.assign(pages, scriptsEntry);
+	return entry;
 };
