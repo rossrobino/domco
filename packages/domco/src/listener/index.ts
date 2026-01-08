@@ -156,7 +156,16 @@ const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 
 	const protocol =
 		"encrypted" in req.socket && req.socket.encrypted ? "https:" : "http:";
-	const host = headers.get("Host") ?? "localhost";
+
+	let host = headers.get("Host") ?? "localhost";
+	if (
+		!host.includes(":") &&
+		(host.startsWith("localhost") || host.startsWith("127.")) &&
+		req.socket.localPort
+	) {
+		host = `${host}:${req.socket.localPort}`;
+	}
+
 	const url = new URL(req.url!, `${protocol}//${host}`);
 
 	// init.duplex = 'half' must be set when body is a ReadableStream, and Node follows the spec.
