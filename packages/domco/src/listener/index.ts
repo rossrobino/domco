@@ -149,7 +149,9 @@ const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 	const headers = new Headers();
 	const rawHeaders = req.rawHeaders;
 	for (let i = 0; i < rawHeaders.length; i += 2) {
-		headers.append(rawHeaders[i]!, rawHeaders[i + 1]!);
+		const name = rawHeaders[i]!;
+		if (name.startsWith(":")) continue;
+		headers.append(name, rawHeaders[i + 1]!);
 	}
 
 	const protocol =
