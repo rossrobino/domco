@@ -1,5 +1,12 @@
 # domco
 
+## 5.0.2
+
+### Patch Changes
+
+- f927d99: fix: include port on secure localhost
+  - Fixes issue where port was being left on on local HTTPS connection
+
 ## 5.0.1
 
 ### Patch Changes
