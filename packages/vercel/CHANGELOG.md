@@ -1,5 +1,11 @@
 # @domcojs/vercel
 
+## 3.1.3
+
+### Patch Changes
+
+- cb99978: chore: bump default node version to 24
+
 ## 3.1.2
 
 ### Patch Changes
