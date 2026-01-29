@@ -100,7 +100,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	const resolvedOptions: RequiredOptions = {
 		config: {
 			handler: `${entryId}.js`,
-			runtime: "nodejs22.x",
+			runtime: "nodejs24.x",
 			supportsResponseStreaming: true, // required for bun streaming
 		},
 	};
