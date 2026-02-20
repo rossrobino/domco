@@ -1,5 +1,14 @@
 # create-domco
 
+## 4.4.5
+
+### Patch Changes
+
+- 290324a: chore: bump template dependencies
+- 290324a: chore: update library dependencies
+- 290324a: fix: deno pm now creates package.json and tsconfig.json
+- 290324a: chore: update remix template to latest alpha using the "remix" package instead of fetch-router
+
 ## 4.4.4
 
 ### Patch Changes
