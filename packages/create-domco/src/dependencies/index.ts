@@ -9,11 +9,11 @@ export const getDependencies = () => {
 		// framework
 		hono: "4.0.0",
 		ovr: "6.0.0",
-		h3: "2.0.1-rc.6",
+		h3: "2.0.1-rc.14",
 		elysia: "1.0.0",
 		elysiaHtml: "1.0.0",
 		"mono-jsx": "0.7.0", // minor since pre v1
-		remix: "0.13.0", // actually @remix-run/fetch-router
+		remix: "3.0.0-alpha.2",
 
 		// adapter
 		cloudflare: "2.0.0",
@@ -22,7 +22,7 @@ export const getDependencies = () => {
 
 		// extras
 		prettier: "3.0.0",
-		prettierTailwind: "0.6.0", // minor since pre v1
+		prettierTailwind: "0.7.0", // minor since pre v1
 		tailwind: "4.0.0",
 	} as const;
 };

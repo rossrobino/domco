@@ -1,14 +1,7 @@
 import type { GetTemplateFile } from "../index.js";
 import { prettierConfigFileName } from "./prettier.js";
 
-const getTemplateFiles: GetTemplateFile = ({
-	pm,
-	lang,
-	prettier,
-	framework,
-}) => {
-	if (pm === "deno") return [];
-
+const getTemplateFiles: GetTemplateFile = ({ lang, prettier, framework }) => {
 	let jsxSource: string | undefined;
 	if (framework === "ovr") jsxSource = "ovr";
 	else if (framework === "hono") jsxSource = "hono/jsx";

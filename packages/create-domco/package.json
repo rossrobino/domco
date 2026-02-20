@@ -30,10 +30,10 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"@clack/prompts": "^0.11.0",
-		"domco": "^5.0.0",
+		"@clack/prompts": "^1.0.1",
+		"domco": "^5.0.2",
 		"mri": "^1.2.0",
-		"package-manager-detector": "^1.4.0",
-		"prettier": "^3.6.2"
+		"package-manager-detector": "^1.6.0",
+		"prettier": "^3.8.1"
 	}
 }

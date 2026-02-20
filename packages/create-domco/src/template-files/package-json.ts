@@ -9,8 +9,6 @@ const getTemplateFiles: GetTemplateFile = ({
 	adapter,
 	framework,
 }) => {
-	if (pm === "deno") return [];
-
 	// required for vite to run using bun
 	// https://bun.com/docs/pm/bunx#shebangs
 	const maybeBunPrefix = pm === "bun" ? "bunx --bun " : "";
@@ -32,7 +30,7 @@ const getTemplateFiles: GetTemplateFile = ({
 	},${
 		framework
 			? `"dependencies": {
-			"${framework === "remix" ? "@remix-run/fetch-router" : framework}": "^${dependencies[framework]}"${framework === "elysia" ? `,"@elysiajs/html": "^${dependencies.elysiaHtml}"` : ``}
+			"${framework}": "^${dependencies[framework]}"${framework === "elysia" ? `,"@elysiajs/html": "^${dependencies.elysiaHtml}"` : ``}
 	},`
 			: ""
 	}"devDependencies": {${adapter ? `"@domcojs/${adapter}": "^${dependencies[adapter]}",` : ""}${tailwind ? `"@tailwindcss/vite": "^${dependencies.tailwind}",` : ""}"domco": "^${dependencies.domco}",${prettier ? `"prettier": "^${dependencies.prettier}",` : ""}

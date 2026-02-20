@@ -69,14 +69,14 @@ export default {
 };
 `;
 	} else if (framework === "remix") {
-		content = `import { createRouter, createRoutes, html } from "@remix-run/fetch-router";
-import * as page from "client:page";
+		content = `import * as page from "client:page";
+import { createHtmlResponse, createRouter, createRoutes } from "remix";
 
 const routes = createRoutes({ home: "/" });
 
 const router = createRouter();
 
-router.get(routes.home, () => html(page.html));
+router.get(routes.home, () => createHtmlResponse(page.html));
 
 export default router;
 `;
