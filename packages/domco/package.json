@@ -56,12 +56,15 @@
 		"!src/**/*.test.ts"
 	],
 	"scripts": {
-		"dev": "tsc --watch",
+		"dev": "tsc --watch -p tsconfig.build.json",
 		"build:clean": "rm -rf ./dist",
-		"build:js": "tsc",
+		"build:js": "tsc -p tsconfig.build.json",
 		"build": "node scripts/version && npm run build:clean && npm run build:js && cp src/types/env.d.ts dist/types/env.d.ts"
 	},
 	"peerDependencies": {
 		"vite": "^7.0.0 || ^8.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^25.5.0"
 	}
 }

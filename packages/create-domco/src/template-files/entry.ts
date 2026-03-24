@@ -16,7 +16,7 @@ export const htmlTemplate = ({
 		<meta char${mono ? "S" : "s"}et="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/${faviconFileName}" />
-		${mono ? `{html(tags)}` : ovr ? `{Render.html(tags)}` : `<link rel="stylesheet" href="/${tailwind ? styleFileName.tailwind : styleFileName.base}" />`}
+		${mono ? `{html(script.tags)}` : ovr ? `{Render.html(script.tags)}` : `<link rel="stylesheet" href="/${tailwind ? styleFileName.tailwind : styleFileName.base}" />`}
 		<title>${projectName}</title>
 	</head>
 	<body>

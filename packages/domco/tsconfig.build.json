@@ -1,4 +1,4 @@
 {
-	"extends": "@robino/tsconfig/check.json",
+	"extends": "@robino/tsconfig/tsc.json",
 	"compilerOptions": { "types": ["node"] }
 }

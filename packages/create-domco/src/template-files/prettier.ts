@@ -1,31 +1,16 @@
 import type { GetTemplateFile } from "../index.js";
 
-export const prettierConfigFileName = "prettier.config.js";
-
-const getTemplateFiles: GetTemplateFile = ({
-	prettier,
-	tailwind,
-	pm,
-	adapter,
-}) => {
+const getTemplateFiles: GetTemplateFile = ({ prettier, tailwind, pm }) => {
 	if (!prettier) return [];
 
-	let ignoreContent = `.DS_Store
-node_modules
-dist
-`;
-	if (pm === "npm") ignoreContent += "package-lock.json";
-	else if (pm === "pnpm") ignoreContent += "pnpm-lock.yaml";
-	else ignoreContent += `${pm}.lock`;
-
-	ignoreContent += "\n";
-
-	if (adapter === "vercel" || adapter === "cloudflare")
-		ignoreContent += `.${adapter}\n`;
+	let ignoreContent: string;
+	if (pm === "npm") ignoreContent = "package-lock.json\n";
+	else if (pm === "pnpm") ignoreContent = "pnpm-lock.yaml\n";
+	else ignoreContent = `${pm}.lock\n`;
 
 	return [
 		{
-			name: prettierConfigFileName,
+			name: "prettier.config.js",
 			content: `/** @import { Config } from "prettier" */
 
 /** @type {Config} */

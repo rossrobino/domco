@@ -1,7 +1,6 @@
 import type { GetTemplateFile } from "../index.js";
-import { prettierConfigFileName } from "./prettier.js";
 
-const getTemplateFiles: GetTemplateFile = ({ lang, prettier, framework }) => {
+const getTemplateFiles: GetTemplateFile = ({ framework }) => {
 	let jsxSource: string | undefined;
 	if (framework === "ovr") jsxSource = "ovr";
 	else if (framework === "hono") jsxSource = "hono/jsx";
@@ -12,8 +11,9 @@ const getTemplateFiles: GetTemplateFile = ({ lang, prettier, framework }) => {
 			name: "tsconfig.json",
 			content: `{
 	"compilerOptions": {
+		"rootDir": "\${configDir}",
 		"target": "ESNext",
-		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		"lib": ["ESNext", "DOM"],
 		"skipLibCheck": true,
 		"module": "Preserve",
 		"moduleResolution": "Bundler",
@@ -24,25 +24,20 @@ const getTemplateFiles: GetTemplateFile = ({ lang, prettier, framework }) => {
 		"noEmit": true,
 		"allowJs": true,
 		"checkJs": true,
-
-		/* JSX */
 		"jsx": "react-jsx",${jsxSource ? `\n\t\t"jsxImportSource": "${jsxSource}",` : ""}
-
-		/* Strict */
-		"strict": true,
 		"noUnusedLocals": true,
 		"noImplicitOverride": true,
 		"noUnusedParameters": true,
 		"noUncheckedIndexedAccess": true,
 		"noFallthroughCasesInSwitch": true,
-
-		/* Aliases */
+		"erasableSyntaxOnly": true,
 		"paths": {
 			"@": ["./src"],
 			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["vite.config.${lang}",${prettier ? ` "${prettierConfigFileName}",` : ""} "src"]
+	"include": ["\${configDir}/src", "\${configDir}/*.js", "\${configDir}/*.ts"],
+	"exclude": ["\${configDir}/node_modules", "\${configDir}/dist"]
 }
 `,
 		},

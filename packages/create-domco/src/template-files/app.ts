@@ -11,7 +11,7 @@ const getTemplateFiles: GetTemplateFile = (options) => {
 	let content: string;
 
 	if (framework === "ovr") {
-		content = `import { tags } from "client:script";
+		content = `import * as script from "client:script";
 import { App, Render, Route } from "ovr";
 
 const app = new App();
@@ -27,22 +27,22 @@ app.use(page);
 export default app;
 `;
 	} else if (framework === "hono") {
-		content = `import { html } from "client:page";
+		content = `import * as page from "client:page";
 import { Hono } from "hono";
 
 const app = new Hono();
 
-app.get("/", (c) => c.html(html));
+app.get("/", (c) => c.html(page.html));
 
 export default app;
 `;
 	} else if (framework === "h3") {
-		content = `import { html } from "client:page";
+		content = `import * as page from "client:page";
 import { H3 } from "h3";
 
 const app = new H3();
 
-app.get("/", () => html);
+app.get("/", () => page.html);
 
 export default app;
 `;
@@ -58,7 +58,7 @@ app.use(html()).get("/", () => page.html);
 export default app;
 `;
 	} else if (framework === "mono-jsx") {
-		content = `import { tags } from "client:script";
+		content = `import * as script from "client:script";
 
 export default {
 	fetch() {
@@ -81,14 +81,14 @@ router.get(routes.home, () => createHtmlResponse(page.html));
 export default router;
 `;
 	} else {
-		content = `import { html } from "client:page";
+		content = `import * as page from "client:page";
 
 export default {${isTs ? "" : `\n\t/** @param {Request} req */`}
 	fetch(req${isTs ? ": Request" : ""}) {
 		const url = new URL(req.url);
 
 		if (url.pathname === "/") {
-			return new Response(html, { headers: { "content-type": "text/html" } });
+			return new Response(page.html, { headers: { "content-type": "text/html" } });
 		}
 
 		return new Response("Not found", { status: 404 });

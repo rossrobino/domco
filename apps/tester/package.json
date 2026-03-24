@@ -11,15 +11,15 @@
 	},
 	"devDependencies": {
 		"@domcojs/vercel": "*",
-		"@types/react": "^19.2.2",
-		"@types/react-dom": "^19.2.1",
-		"@vitejs/plugin-react": "^5.0.4",
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
+		"@vitejs/plugin-react": "^6.0.1",
 		"domco": "*"
 	},
 	"dependencies": {
-		"hono": "^4.9.10",
-		"react": "^19.2.0",
-		"react-dom": "^19.2.0",
-		"uico": "^0.10.3"
+		"hono": "^4.12.9",
+		"react": "^19.2.4",
+		"react-dom": "^19.2.4",
+		"uico": "^0.12.0"
 	}
 }

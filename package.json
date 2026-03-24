@@ -19,15 +19,15 @@
 		"release": "npm run build:packages && changeset publish"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.29.8",
+		"@changesets/cli": "^2.30.0",
 		"@robino/md": "^5.0.0",
 		"@robino/prettier": "^2.0.3",
-		"@robino/tsconfig": "^1.1.1",
-		"prettier": "^3.7.4",
+		"@robino/tsconfig": "^2.0.0",
+		"prettier": "^3.8.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
-		"turbo": "^2.6.3",
-		"typescript": "^5.9.3",
-		"vite": "^7.3.0",
-		"vitest": "^4.0.15"
+		"turbo": "^2.8.20",
+		"typescript": "^6.0.2",
+		"vite": "^8.0.2",
+		"vitest": "^4.1.1"
 	}
 }

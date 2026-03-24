@@ -15,9 +15,9 @@
 		"test:prepare": "rm -rf ./create-domco-test && npm run build",
 		"test": "npm run test:prepare && node ./dist/bin.js create-domco-test",
 		"test:args": "npm run test:prepare && node ./dist/bin.js create-domco-test --framework=ovr --adapter=vercel",
-		"dev": "tsc --watch",
+		"dev": "tsc --watch -p tsconfig.build.json",
 		"build:clean": "rm -rf ./dist",
-		"build:js": "tsc",
+		"build:js": "tsc -p tsconfig.build.json",
 		"build": "npm run build:clean & wait && npm run build:js"
 	},
 	"author": {
@@ -30,10 +30,13 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"@clack/prompts": "^1.0.1",
+		"@clack/prompts": "^1.1.0",
 		"domco": "^5.0.2",
 		"mri": "^1.2.0",
 		"package-manager-detector": "^1.6.0",
 		"prettier": "^3.8.1"
+	},
+	"devDependencies": {
+		"@types/node": "^25.5.0"
 	}
 }

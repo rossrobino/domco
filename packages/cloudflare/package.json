@@ -23,9 +23,9 @@
 		"!src/**/*.test.ts"
 	],
 	"scripts": {
-		"dev": "tsc --watch",
+		"dev": "tsc --watch -p tsconfig.build.json",
 		"build:clean": "rm -rf ./dist",
-		"build:js": "tsc",
+		"build:js": "tsc -p tsconfig.build.json",
 		"build": "npm run build:clean && npm run build:js"
 	},
 	"dependencies": {
