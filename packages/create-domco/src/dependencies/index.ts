@@ -23,6 +23,6 @@ export const getDependencies = () => {
 		// extras
 		prettier: "3.0.0",
 		prettierTailwind: "0.7.0", // minor since pre v1
-		tailwind: "4.0.0",
+		tailwind: "4.2.2", // lowest version that supports vite 8
 	} as const;
 };
