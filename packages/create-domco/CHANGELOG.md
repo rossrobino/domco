@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.5.0
+
+### Minor Changes
+
+- 386472f: Update templates to typescript@6, vite@8
+
 ## 4.4.5
 
 ### Patch Changes
