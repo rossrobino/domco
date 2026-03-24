@@ -1,4 +1,3 @@
-import "drab/dialog/define";
 import "drab/prefetch/define";
 
 const toCopy = document.querySelectorAll("pre, .copy-text");

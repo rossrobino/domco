@@ -16,7 +16,7 @@
 	},
 	"dependencies": {
 		"create-domco": "*",
-		"drab": "^7.0.3",
+		"drab": "^8.0.0",
 		"hono": "^4.12.9",
 		"uico": "^0.12.0"
 	}

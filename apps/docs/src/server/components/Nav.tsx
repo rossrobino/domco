@@ -11,7 +11,7 @@ export const Nav = () => {
 
 const SideBar = () => {
 	return (
-		<nav class="bg-base-900 sticky top-0 hidden h-screen w-[20vw] min-w-56 justify-end overflow-y-auto scheme-dark lg:flex">
+		<nav class="sticky top-0 hidden h-screen w-[20vw] min-w-56 justify-end overflow-y-auto lg:flex">
 			<div class="flex flex-col py-6 pr-12 pl-6">
 				<div class="pb-6">
 					<HomeLink />
@@ -26,23 +26,18 @@ const SideBar = () => {
 };
 
 const HomeLink = () => (
-	<a class="text-base-50 text-xl font-bold no-underline" href="/">
+	<a class="text-xl font-bold no-underline" href="/">
 		domco
 	</a>
 );
 
 const TopBar = () => {
 	return (
-		<drab-dialog
-			class="sticky top-0 z-10 flex items-center gap-3 p-3 backdrop-blur-md lg:hidden"
-			click-outside-close
-			remove-body-scroll
-			animation-keyframe-from-transform="translateX(-100%)"
-			animation-keyframe-to-transform="translateX(0)"
-		>
+		<div class="sticky top-0 z-10 flex items-center gap-3 p-3 backdrop-blur-md lg:hidden">
 			<button
-				data-trigger
 				aria-label="Open navigation"
+				commandfor="dialog"
+				command="show-modal"
 				type="button"
 				class="ghost icon"
 				id="dialog-trigger"
@@ -65,13 +60,19 @@ const TopBar = () => {
 			</button>
 
 			<dialog
-				data-content
-				class="bg-base-900 my-0 ml-0 h-full max-h-dvh scheme-dark shadow-sm backdrop:backdrop-blur"
+				id="dialog"
+				class="my-0 ml-0 h-full max-h-dvh shadow-sm backdrop:backdrop-blur"
 			>
-				<nav class="flex h-full min-w-64 flex-col p-6">
+				<nav class="bg-background flex h-full min-w-64 flex-col p-6">
 					<div class="flex items-center justify-between pb-6">
 						<HomeLink />
-						<button data-trigger type="button" class="ghost" title="Close">
+						<button
+							commandfor="dialog"
+							command="close"
+							type="button"
+							class="ghost"
+							title="Close"
+						>
 							<XSvg />
 						</button>
 					</div>
@@ -81,7 +82,7 @@ const TopBar = () => {
 					</div>
 				</nav>
 			</dialog>
-		</drab-dialog>
+		</div>
 	);
 };
 
