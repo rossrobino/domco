@@ -1,5 +1,11 @@
 # @domcojs/vercel
 
+## 3.1.4
+
+### Patch Changes
+
+- 758b0eb: Update dependencies and project templates for TypeScript 7.
+
 ## 3.1.3
 
 ### Patch Changes

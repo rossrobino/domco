@@ -1,5 +1,11 @@
 # create-domco
 
+## 4.6.0
+
+### Minor Changes
+
+- 758b0eb: Update dependencies and project templates for TypeScript 7.
+
 ## 4.5.0
 
 ### Minor Changes
