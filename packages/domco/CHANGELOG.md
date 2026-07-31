@@ -1,5 +1,11 @@
 # domco
 
+## 5.0.3
+
+### Patch Changes
+
+- 758b0eb: Update dependencies and project templates for TypeScript 7.
+
 ## 5.0.2
 
 ### Patch Changes
