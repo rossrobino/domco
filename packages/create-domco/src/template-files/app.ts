@@ -70,7 +70,9 @@ export default {
 `;
 	} else if (framework === "remix") {
 		content = `import * as page from "client:page";
-import { createHtmlResponse, createRouter, createRoutes } from "remix";
+import { createRouter } from "remix/fetch-router";
+import { createRoutes } from "remix/fetch-router/routes";
+import { createHtmlResponse } from "remix/response/html";
 
 const routes = createRoutes({ home: "/" });
 

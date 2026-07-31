@@ -44,8 +44,10 @@ export const configPlugin = async (
 				envDir: process.cwd(),
 				appType: "custom",
 				ssr: {
-					target: adapter?.target,
-					noExternal: build ? adapter?.noExternal : undefined,
+					...(adapter?.target ? { target: adapter.target } : {}),
+					...(build && adapter?.noExternal
+						? { noExternal: adapter.noExternal }
+						: {}),
 				},
 				optimizeDeps: {
 					// fixes TypeError when this is left undefined

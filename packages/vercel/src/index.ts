@@ -113,9 +113,11 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 			"Nodejs";
 	}
 
-	resolvedOptions.isr = options?.isr;
-	resolvedOptions.images = options?.images;
-	resolvedOptions.trailingSlash = options?.trailingSlash;
+	if (options?.isr) resolvedOptions.isr = options.isr;
+	if (options?.images) resolvedOptions.images = options.images;
+	if (options?.trailingSlash) {
+		resolvedOptions.trailingSlash = options.trailingSlash;
+	}
 
 	/**
 	 * This is applied in `dev` and `preview` so users can see the src images.
