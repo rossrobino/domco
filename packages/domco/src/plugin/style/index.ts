@@ -1,7 +1,8 @@
 import { dirNames, fileNames } from "../../constants/index.js";
-import { findFiles } from "../../util/fs/index.js";
+import { findFile, toPosix } from "../../util/fs/index.js";
 import { getChunk, getModule } from "../../util/manifest/index.js";
 import { resolveId } from "../../util/resolve-id/index.js";
+import path from "node:path";
 import type { Plugin } from "vite";
 
 /**
@@ -39,19 +40,16 @@ export const stylePlugin = (): Plugin => {
 				if (!pathName) pathName = "/";
 
 				if (!prod) {
-					const styleFiles = await findFiles({
-						dir: `${dirNames.src.base}/${dirNames.src.client}`,
-						checkEndings: [fileNames.style],
-					});
-
-					// link the style from source
-					let href = styleFiles[pathName]?.slice(
-						`/${dirNames.src.base}`.length,
+					const filePath = await findFile(
+						path.join(dirNames.src.base, dirNames.src.client, pathName),
+						[fileNames.style],
 					);
+					const href = filePath
+						? `/${toPosix(path.relative(dirNames.src.base, filePath))}`
+						: "";
 
 					if (!href) {
 						this.warn(`No client module found for ${pathName}`);
-						href = "";
 					}
 
 					return getModule({

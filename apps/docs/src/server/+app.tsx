@@ -28,7 +28,7 @@ app.get("/", (c) => {
 		{ title: "domco" },
 		<>
 			<Hero />
-			<section dangerouslySetInnerHTML={{ __html: preview.html }}></section>
+			<section dangerouslySetInnerHTML={{ __html: preview.html }} />
 			<div class="my-16 flex justify-center">
 				<a href="/tutorial" class="button p-6 text-lg">
 					Get Started

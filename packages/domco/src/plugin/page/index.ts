@@ -17,14 +17,22 @@ export const pagePlugin = (): Plugin => {
 
 	let devServer: ViteDevServer;
 
-	/** Watched page filePaths. */
-	const watched = new Set<string>();
+	/** Watched page file paths and their virtual module IDs. */
+	const watched = new Map<string, string>();
 
 	return {
 		name: `domco:${pageId}`,
 
 		configureServer(server) {
 			devServer = server;
+
+			devServer.watcher.on("all", (_event, filePath) => {
+				const id = watched.get(path.resolve(filePath));
+				if (!id) return;
+
+				const mod = devServer.moduleGraph.getModuleById(id);
+				if (mod) devServer.reloadModule(mod);
+			});
 		},
 
 		resolveId: {
@@ -68,17 +76,7 @@ export const pagePlugin = (): Plugin => {
 					// add base
 					const filePath = path.join(dirNames.src.base, src);
 
-					if (!watched.has(filePath)) {
-						// add listeners if they are not already there
-						watched.add(filePath);
-
-						devServer.watcher.on("all", (_event, fp) => {
-							if (fp.endsWith(filePath)) {
-								const mod = devServer.moduleGraph.getModuleById(id);
-								if (mod) devServer.reloadModule(mod);
-							}
-						});
-					}
+					watched.set(path.resolve(filePath), id);
 
 					try {
 						html = await fs.readFile(filePath, "utf-8");

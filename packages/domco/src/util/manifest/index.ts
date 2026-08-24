@@ -5,27 +5,64 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { Manifest, ManifestChunk } from "vite";
 
-let manifestCache: Manifest | null = null;
+let manifestCache: Promise<Manifest> | undefined;
+const chunkCache = new Map<string, Promise<Chunk>>();
 
 /**
  * @returns new or cached client `Manifest`
  */
 const getManifest = async () => {
 	if (!manifestCache) {
-		const str = await fs.readFile(
-			path.join(
-				dirNames.out.base,
-				dirNames.out.client.base,
-				".vite",
-				"manifest.json",
-			),
-			"utf-8",
-		);
-
-		manifestCache = JSON.parse(str) as Manifest;
+		manifestCache = fs
+			.readFile(
+				path.join(
+					dirNames.out.base,
+					dirNames.out.client.base,
+					".vite",
+					"manifest.json",
+				),
+				"utf-8",
+			)
+			.then((str) => JSON.parse(str) as Manifest)
+			.catch((error) => {
+				manifestCache = undefined;
+				throw error;
+			});
 	}
 
 	return manifestCache;
+};
+
+/**
+ * Resolves an entry chunk with direct manifest lookups.
+ *
+ * @param manifest Vite client manifest.
+ * @param pathName Route path.
+ * @param type Entry type.
+ * @returns Matching manifest chunk, if present.
+ */
+export const resolveChunk = (
+	manifest: Manifest,
+	pathName: string,
+	type: "page" | "script" | "style",
+) => {
+	const srcPath = toPosix(
+		path.join(
+			dirNames.src.client,
+			pathName,
+			type === "page"
+				? fileNames.page
+				: type === "script"
+					? fileNames.script
+					: fileNames.style,
+		),
+	);
+
+	if (type !== "script") return manifest[srcPath];
+
+	for (const id of toAllScriptEndings(srcPath)) {
+		if (manifest[id]) return manifest[id];
+	}
 };
 
 /**
@@ -36,7 +73,35 @@ const getManifest = async () => {
  * @param options
  * @returns The HTML <script> tags as a concatenated string and `src` paths.
  */
-export const getChunk = async ({
+export const getChunk = (options: {
+	/** @example "/react" */
+	pathName: string;
+
+	/** Pass through Vite plugin `this.error` */
+	error: (message: string) => never;
+
+	/**
+	 * If the pathname is an import. If so, it already is the full name.
+	 * So there is no need to check the manifest for all the endings, we
+	 * know it's already there.
+	 */
+	imp?: boolean;
+
+	/** Type of the entry point. */
+	type: "page" | "script" | "style";
+}): Promise<Chunk> => {
+	const key = `${options.imp ? "import" : options.type}:${options.pathName}`;
+	const cached = chunkCache.get(key);
+	if (cached) return cached;
+
+	const chunk = createChunk(options);
+	chunkCache.set(key, chunk);
+	chunk.catch(() => chunkCache.delete(key));
+
+	return chunk;
+};
+
+const createChunk = async ({
 	pathName,
 	error,
 	imp = false,
@@ -59,45 +124,9 @@ export const getChunk = async ({
 	type: "page" | "script" | "style";
 }): Promise<Chunk> => {
 	const manifest = await getManifest();
-
-	let manifestChunk: ManifestChunk | undefined;
-
-	if (imp) {
-		manifestChunk = manifest[pathName];
-	} else {
-		// find chunk
-		find: for (const [id, value] of Object.entries(manifest)) {
-			const srcPath = toPosix(
-				path.join(
-					dirNames.src.client,
-					pathName,
-					type === "page"
-						? fileNames.page
-						: type === "script"
-							? fileNames.script
-							: fileNames.style,
-				),
-			);
-
-			if (id === srcPath) {
-				// pages and style have the .html/.css extension
-				// ex: "client/react/+page.html"
-				manifestChunk = value;
-				break;
-			}
-
-			if (type === "script") {
-				// id is like this: "client/react/+script.tsx"
-				// remove leading / , try all endings
-				for (const idPath of toAllScriptEndings(srcPath)) {
-					if (id === idPath) {
-						manifestChunk = value;
-						break find;
-					}
-				}
-			}
-		}
-	}
+	const manifestChunk: ManifestChunk | undefined = imp
+		? manifest[pathName]
+		: resolveChunk(manifest, pathName, type);
 
 	const chunk: Chunk = {
 		tags: "",
@@ -148,44 +177,32 @@ export const getChunk = async ({
 		chunk.src.assets.push(...manifestChunk.assets);
 	}
 
-	if (
-		// only add dynamic imports from entry points to avoid infinite loop
+	const [dynamicChunks, importChunks] = await Promise.all([
+		// Only add dynamic imports from entry points to avoid infinite loops.
 		// https://github.com/rossrobino/domco/issues/93
-		!imp &&
-		manifestChunk.dynamicImports
-	) {
-		for (const impPathName of manifestChunk.dynamicImports) {
-			const impChunk = await getChunk({
-				pathName: impPathName,
-				imp: true,
-				error,
-				type: "script",
-			});
+		Promise.all(
+			(!imp ? (manifestChunk.dynamicImports ?? []) : []).map((impPathName) =>
+				getChunk({ pathName: impPathName, imp: true, error, type: "script" }),
+			),
+		),
+		Promise.all(
+			(manifestChunk.imports ?? []).map((impPathName) =>
+				getChunk({ pathName: impPathName, imp: true, error, type: "script" }),
+			),
+		),
+	]);
 
-			// dynamic chunks are not added to tags or flattened
-			// just pushed directly. You may not want to request them
-			// unless they are truly needed.
-			chunk.src.dynamic.push(impChunk);
-		}
-	}
+	// Dynamic chunks are not added to tags or flattened. Consumers may not want
+	// to request them unless they are truly needed.
+	chunk.src.dynamic.push(...dynamicChunks);
 
-	if (manifestChunk.imports) {
-		// recursively call on imports
-		for (const impPathName of manifestChunk.imports) {
-			const impChunk = await getChunk({
-				pathName: impPathName,
-				imp: true,
-				error,
-				type: "script",
-			});
-
-			chunk.tags += impChunk.tags;
-			chunk.src.module.push(...impChunk.src.module);
-			chunk.src.preload.push(...impChunk.src.preload);
-			chunk.src.style.push(...impChunk.src.style);
-			chunk.src.assets.push(...impChunk.src.assets);
-			chunk.src.dynamic.push(...impChunk.src.dynamic);
-		}
+	for (const impChunk of importChunks) {
+		chunk.tags += impChunk.tags;
+		chunk.src.module.push(...impChunk.src.module);
+		chunk.src.preload.push(...impChunk.src.preload);
+		chunk.src.style.push(...impChunk.src.style);
+		chunk.src.assets.push(...impChunk.src.assets);
+		chunk.src.dynamic.push(...impChunk.src.dynamic);
 	}
 
 	return chunk;

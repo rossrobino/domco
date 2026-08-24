@@ -2,7 +2,7 @@ import { dirNames, fileNames } from "../../constants/index.js";
 import type { Adapter } from "../../types/index.js";
 import {
 	copyDir,
-	findFiles,
+	findFilePaths,
 	removeDir,
 	removeEmptyDirs,
 } from "../../util/fs/index.js";
@@ -39,6 +39,7 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 				await build({ build: { ssr: true } });
 			} else {
 				const outDir = `${dirNames.out.base}/${dirNames.out.client.base}`;
+				const pageDir = path.join(outDir, dirNames.src.client);
 				const clientAssetDir = path.join(outDir, dirNames.out.client.immutable);
 				const ssrAssetDir = path.join(
 					dirNames.out.base,
@@ -47,7 +48,7 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 				);
 
 				await Promise.all([
-					removeHtml(outDir),
+					removeHtml(pageDir),
 					// copy ssr assets into client asset dir to serve
 					// https://vite.dev/config/build-options.html#build-emitassets
 					copyDir(ssrAssetDir, clientAssetDir),
@@ -55,7 +56,7 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 
 				await Promise.all([
 					removeDir(ssrAssetDir), // remove the ssr assets dir since it has been copied into client
-					removeEmptyDirs(outDir),
+					removeEmptyDirs(pageDir),
 				]);
 
 				const prerenderProcess = fork(
@@ -86,17 +87,26 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
  * contain what it needs from virtual module imports.
  */
 const removeHtml = async (dir: string) => {
-	const pageFiles = await findFiles({ dir, checkEndings: [fileNames.page] });
+	let pageFiles: string[];
 
-	const promises = [];
+	try {
+		pageFiles = await findFilePaths({ dir, checkEndings: [fileNames.page] });
+	} catch (error) {
+		if (
+			error &&
+			typeof error === "object" &&
+			"code" in error &&
+			error.code === "ENOENT" &&
+			"path" in error &&
+			error.path === dir
+		) {
+			return;
+		}
 
-	for (const filePath of Object.values(pageFiles)) {
-		promises.push(
-			fs.rm(path.join(process.cwd(), filePath), { recursive: true }),
-		);
+		throw error;
 	}
 
-	await Promise.all(promises);
+	await Promise.all(pageFiles.map((filePath) => fs.unlink(filePath)));
 };
 
 /**

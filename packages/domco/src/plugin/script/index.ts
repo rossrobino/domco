@@ -1,7 +1,8 @@
 import { dirNames, fileNames } from "../../constants/index.js";
-import { findFiles, toAllScriptEndings } from "../../util/fs/index.js";
+import { findFile, toAllScriptEndings, toPosix } from "../../util/fs/index.js";
 import { getChunk, getModule } from "../../util/manifest/index.js";
 import { resolveId } from "../../util/resolve-id/index.js";
+import path from "node:path";
 import type { Plugin } from "vite";
 
 /**
@@ -39,19 +40,16 @@ export const scriptPlugin = (): Plugin => {
 				if (!pathName) pathName = "/";
 
 				if (!prod) {
-					const scriptFiles = await findFiles({
-						dir: `${dirNames.src.base}/${dirNames.src.client}`,
-						checkEndings: toAllScriptEndings(fileNames.script),
-					});
-
-					// link the script from src
-					let src = scriptFiles[pathName]?.slice(
-						`/${dirNames.src.base}`.length,
+					const filePath = await findFile(
+						path.join(dirNames.src.base, dirNames.src.client, pathName),
+						toAllScriptEndings(fileNames.script),
 					);
+					const src = filePath
+						? `/${toPosix(path.relative(dirNames.src.base, filePath))}`
+						: "";
 
 					if (!src) {
 						this.warn(`No client module found for ${pathName}`);
-						src = "";
 					}
 
 					return getModule({

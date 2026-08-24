@@ -1,6 +1,10 @@
 import { dirNames, fileNames, ids } from "../../constants/index.js";
 import type { Adapter, DomcoConfig } from "../../types/index.js";
-import { findFiles, toAllScriptEndings } from "../../util/fs/index.js";
+import {
+	findFilePaths,
+	toAllScriptEndings,
+	toPosix,
+} from "../../util/fs/index.js";
 import path from "node:path";
 import process from "node:process";
 import { type Plugin, createLogger } from "vite";
@@ -96,33 +100,22 @@ const serverEntry = (adapter?: Adapter) => {
 };
 
 const clientEntry = async () => {
-	const [pages, scripts, styles] = await Promise.all([
-		findFiles({
-			dir: path.join(dirNames.src.base, dirNames.src.client),
-			checkEndings: [fileNames.page],
-		}),
-		findFiles({
-			dir: path.join(dirNames.src.base, dirNames.src.client),
-			checkEndings: toAllScriptEndings(fileNames.script),
-		}),
-		findFiles({
-			dir: path.join(dirNames.src.base, dirNames.src.client),
-			checkEndings: [fileNames.style],
-		}),
-	]);
+	const root = path.join(dirNames.src.base, dirNames.src.client);
+	const files = await findFilePaths({
+		dir: root,
+		checkEndings: [
+			fileNames.page,
+			...toAllScriptEndings(fileNames.script),
+			fileNames.style,
+		],
+	});
 
 	const entry: Record<string, string> = {};
 
 	// paths have to start with "src/" instead of just "/client"
 	// for builds to work on Windows
-	for (let [key, value] of [
-		...Object.entries(pages),
-		...Object.entries(scripts),
-		...Object.entries(styles),
-	]) {
-		// remove leading "/"
-		key = key.slice(1);
-		value = value.slice(1);
+	for (const value of files) {
+		let key = toPosix(path.relative(root, path.dirname(value)));
 
 		// suffix entries to not overlap others with the same path
 		// for example `/client/react/+page.html` and `/client/react/+script.ts`

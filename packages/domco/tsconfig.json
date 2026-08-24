@@ -1,4 +1,5 @@
 {
 	"extends": "@robino/tsconfig/check.json",
-	"compilerOptions": { "types": ["node"] }
+	"compilerOptions": { "types": ["node"] },
+	"include": ["src", "bench"]
 }
