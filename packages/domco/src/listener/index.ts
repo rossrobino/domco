@@ -1,5 +1,5 @@
 // Adapted from:
-// https://github.com/mjackson/remix-the-web/blob/main/packages/node-fetch-server
+// https://github.com/remix-run/remix/tree/main/packages/node-fetch-server
 // https://github.com/sveltejs/kit/blob/main/packages/kit/src/exports/node/index.js
 // to use as Vite middleware: https://github.com/mjackson/remix-the-web/issues/13
 import type { FetchHandler, MaybePromise } from "../types/index.js";
@@ -41,20 +41,45 @@ export const nodeListener = (
 	const onError = options?.onError ?? defaultErrorHandler;
 
 	return async (req, res) => {
-		const request = createRequest(req, res);
-
-		let web: Response;
-
+		let request: Request | undefined;
 		try {
-			web = await fetch(request);
+			request = createRequest(req, res);
+			const web = await fetch(request);
+
+			if (request.signal.aborted || res.destroyed) return;
+
+			setResponse(res, web, options?.onStreamError);
 		} catch (error) {
-			const errorResponse = await onError(error);
-			if (!errorResponse) return; // handled by the user, in this case - Vite middleware via `next(error)`
+			if (request?.signal.aborted || res.destroyed) return;
 
-			web = errorResponse;
+			let web: Response | void;
+			try {
+				web = await onError(error);
+			} catch (error) {
+				web = defaultErrorHandler(error);
+			}
+
+			// The user handled the error, for example by calling Vite's `next(error)`.
+			if (!web || request?.signal.aborted || res.destroyed) return;
+
+			try {
+				setResponse(res, web, options?.onStreamError);
+			} catch (error) {
+				const streamError =
+					error instanceof Error ? error : new Error(String(error));
+
+				if (res.headersSent) {
+					res.destroy(streamError);
+					options?.onStreamError?.(streamError);
+					return;
+				}
+
+				console.error(streamError);
+				for (const name of res.getHeaderNames()) res.removeHeader(name);
+				res.writeHead(500, { "Content-Type": "text/plain" });
+				res.end("Internal Server Error");
+			}
 		}
-
-		setResponse(res, web, options?.onStreamError);
 	};
 };
 
@@ -80,18 +105,23 @@ const setResponse = (
 		}
 	}
 
-	res.writeHead(web.status, headers);
+	if (web.body?.locked && res.req.method !== "HEAD") {
+		throw new Error(
+			"Fatal error: Response body is locked. " +
+				"This can happen when the response was already read (for example through 'response.json()' or 'response.text()').",
+		);
+	}
 
-	if (!web.body) {
+	res.writeHead(web.status, web.statusText, headers);
+
+	if (res.req.method === "HEAD") {
+		if (web.body && !web.body.locked) web.body.cancel().catch(() => {});
 		res.end();
 		return;
 	}
 
-	if (web.body.locked) {
-		res.end(
-			"Fatal error: Response body is locked. " +
-				"This can happen when the response was already read (for example through 'response.json()' or 'response.text()').",
-		);
+	if (!web.body) {
+		res.end();
 		return;
 	}
 
@@ -137,12 +167,18 @@ const setResponse = (
 		}
 	};
 
-	next();
+	void next();
 };
 
 const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 	const controller = new AbortController();
-	res.on("close", () => controller.abort());
+	let finished = false;
+	const abort = (reason?: unknown) => {
+		if (!finished) controller.abort(reason);
+	};
+
+	res.once("finish", () => (finished = true));
+	res.once("close", () => abort());
 
 	const method = req.method ?? "GET";
 
@@ -173,40 +209,95 @@ const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 	// to cast it here in order to set it without a type error.
 	// See https://fetch.spec.whatwg.org/#dom-requestinit-duplex
 	// https://github.com/mdn/content/issues/31735
-	const init: RequestInit & { duplex?: "half" } = { method, headers };
+	const init: RequestInit & { duplex?: "half" } = {
+		method,
+		headers,
+		signal: controller.signal,
+	};
 
 	if (method !== "GET" && method !== "HEAD") {
-		let cancelled = false;
+		let body: ReadableStreamDefaultController<Uint8Array> | undefined;
+		let ended = false;
+		let closed = false;
+
+		const cleanup = (keepError = false) => {
+			req.off("data", onData);
+			req.off("end", onEnd);
+			if (!keepError) req.off("error", onError);
+			req.off("close", onClose);
+		};
+
+		const close = () => {
+			if (closed) return;
+
+			closed = true;
+			cleanup();
+			body?.close();
+		};
+
+		const fail = (error: unknown, keepError = false) => {
+			if (closed) return;
+
+			closed = true;
+			cleanup(keepError);
+			abort(error);
+			body?.error(error);
+		};
+
+		const onData = (chunk: Buffer) => {
+			if (!body || closed) return;
+
+			body.enqueue(chunk);
+
+			if (body.desiredSize === null || body.desiredSize <= 0) req.pause();
+		};
+
+		const onEnd = () => {
+			ended = true;
+			close();
+		};
+
+		const isAborted = () =>
+			req.readableAborted ||
+			(req.destroyed && !req.complete && !req.readableEnded);
+
+		const onClose = () => {
+			if (!ended) {
+				fail(new DOMException("The request was aborted.", "AbortError"), true);
+			}
+		};
+		const onError = (error: Error) => (isAborted() ? onClose() : fail(error));
 
 		init.body = new ReadableStream({
 			start(c) {
-				req.on("data", (chunk: Buffer) => {
-					if (cancelled) return;
+				body = c;
+				req.once("error", onError);
 
-					c.enqueue(chunk);
+				if (isAborted()) {
+					onClose();
+					return;
+				}
 
-					if (c.desiredSize === null || c.desiredSize <= 0) {
-						req.pause();
-					}
-				});
+				if (req.readableEnded) {
+					ended = true;
+					close();
+					return;
+				}
 
-				req.on("end", () => {
-					if (cancelled) return;
+				req.on("data", onData);
+				req.once("end", onEnd);
+				req.once("close", onClose);
 
-					c.close();
-				});
-
-				req.on("error", (error) => {
-					cancelled = true;
-					c.error(error);
-				});
+				if (isAborted()) onClose();
 			},
 			pull() {
 				req.resume();
 			},
-			cancel(reason) {
-				cancelled = true;
-				req.destroy(reason);
+			cancel() {
+				if (closed) return;
+
+				closed = true;
+				cleanup();
 			},
 		});
 
