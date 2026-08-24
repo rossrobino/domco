@@ -2,7 +2,7 @@
 	"name": "domco-monorepo",
 	"private": true,
 	"type": "module",
-	"packageManager": "npm@12.0.2",
+	"packageManager": "npm@11.19.0",
 	"workspaces": [
 		"packages/*",
 		"apps/*"
