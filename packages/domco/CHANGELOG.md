@@ -1,5 +1,16 @@
 # domco
 
+## 5.0.4
+
+### Patch Changes
+
+- 1e2b9e3: Discover page, script, and style build entries with one client source-tree walk.
+- 1e2b9e3: Look up development scripts and styles within their requested route directory instead of rescanning the client tree.
+- f9e8998: Reduce build filesystem work by removing redundant existence checks, skipping missing optional copy sources, and limiting generated-page cleanup to the page output subtree.
+- 1e2b9e3: Resolve production manifest entries with direct lookups, single-flight manifest loading, cached chunks, and parallel import processing.
+- 1e2b9e3: Harden the Node listener request and response lifecycle by aborting disconnected requests, rejecting interrupted body reads, skipping response streams for `HEAD` requests, and routing conversion failures through the listener error handling.
+- 1e2b9e3: Use one shared page watcher while preserving reloads for `+page.html` changes.
+
 ## 5.0.3
 
 ### Patch Changes
