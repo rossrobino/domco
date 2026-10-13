@@ -1,5 +1,11 @@
 # create-domco
 
+## 5.0.0
+
+### Major Changes
+
+- 1805557: Remove the Deno Deploy adapter option. New projects can use Cloudflare, Vercel, or no adapter. The `--adapter=deno` flag is no longer supported and exits with an error before creating any files.
+
 ## 4.6.0
 
 ### Minor Changes
