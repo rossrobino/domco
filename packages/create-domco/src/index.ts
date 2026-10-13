@@ -24,7 +24,7 @@ type TemplateFile = { name: string; content: string };
 
 export type GetTemplateFileOptions = {
 	framework: null | "ovr" | "hono" | "mono-jsx" | "h3" | "elysia" | "remix";
-	adapter: null | "cloudflare" | "deno" | "vercel";
+	adapter: null | "cloudflare" | "vercel";
 	dir: string;
 	pm: AgentName;
 	lang: string;
@@ -168,11 +168,6 @@ export const createDomco = async () => {
 					hint: "https://domco.robino.dev/deploy#cloudflare",
 				},
 				{
-					value: "deno",
-					label: "Deno",
-					hint: "https://domco.robino.dev/deploy#deno",
-				},
-				{
 					value: "vercel",
 					label: "Vercel",
 					hint: "https://domco.robino.dev/deploy#vercel",
@@ -183,6 +178,13 @@ export const createDomco = async () => {
 	if (p.isCancel(adapter)) {
 		p.cancel(cancelMessage);
 		process.exit();
+	}
+
+	if (adapter !== null && adapter !== "cloudflare" && adapter !== "vercel") {
+		p.cancel(
+			`Unsupported deployment adapter: ${adapter}. Choose cloudflare or vercel, or omit --adapter to select none.`,
+		);
+		process.exit(1);
 	}
 
 	const extras = await p.multiselect({

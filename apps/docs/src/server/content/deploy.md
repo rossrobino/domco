@@ -101,19 +101,6 @@ The [Cloudflare](https://cloudflare.com) adapter outputs your application to run
 
 <img loading="lazy" src="/_vercel/image?url=/images/cloudflare/build-settings.png&w=1280&q=100" alt='A screenshot of the Cloudflare Build Settings UI. Set the Framework Preset field to "None", set the build command to "npm run build", and the build output directory to ".cloudflare".' />
 
-### Deno
-
-```bash
-npm i -D @domcojs/deno
-```
-
-The [Deno](https://deno.com) adapter outputs your application to run on [Deno Deploy](https://deno.com/deploy). You do not have to use Deno for development to use this adapter.
-
-- Runs on Deno.
-- Static files are served with [`@std/http/file-server`](https://jsr.io/@std/http).
-
-<img loading="lazy" src="/_vercel/image?url=/images/deno/build-settings.png&w=1280&q=100" alt='A screenshot of the Deno Deploy Project Configuration UI. Set the Framework Preset field to "None", set the build command to "deno run -A npm:vite build", and the entry point to "dist/server/main.js".' />
-
 ### Vercel
 
 ```bash

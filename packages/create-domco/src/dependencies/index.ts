@@ -17,7 +17,6 @@ export const getDependencies = () => {
 
 		// adapter
 		cloudflare: "2.0.0",
-		deno: "2.0.0",
 		vercel: "3.0.0",
 
 		// extras
