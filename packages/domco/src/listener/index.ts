@@ -28,6 +28,20 @@ type NodeListenerOptions = {
 	 * @param error
 	 */
 	onStreamError?: (error: unknown) => any;
+
+	/**
+	 * Use the `X-Forwarded-Proto` header to set the protocol of the `Request` URL.
+	 *
+	 * Only enable this when the app runs behind a proxy you trust that always
+	 * sets the header, for example a platform that ends TLS before forwarding
+	 * plain HTTP to the server. Otherwise clients can set the header themselves.
+	 *
+	 * When the header is missing or is not `http` or `https`, the protocol
+	 * falls back to whether the socket is encrypted.
+	 *
+	 * @default false
+	 */
+	trustForwardedProto?: boolean;
 };
 
 /**
@@ -43,7 +57,7 @@ export const nodeListener = (
 	return async (req, res) => {
 		let request: Request | undefined;
 		try {
-			request = createRequest(req, res);
+			request = createRequest(req, res, options?.trustForwardedProto);
 			const web = await fetch(request);
 
 			if (request.signal.aborted || res.destroyed) return;
@@ -170,7 +184,11 @@ const setResponse = (
 	void next();
 };
 
-const createRequest = (req: IncomingMessage, res: ServerResponse) => {
+const createRequest = (
+	req: IncomingMessage,
+	res: ServerResponse,
+	trustForwardedProto = false,
+) => {
 	const controller = new AbortController();
 	let finished = false;
 	const abort = (reason?: unknown) => {
@@ -191,7 +209,8 @@ const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 	}
 
 	const protocol =
-		"encrypted" in req.socket && req.socket.encrypted ? "https:" : "http:";
+		(trustForwardedProto && forwardedProtocol(headers)) ||
+		("encrypted" in req.socket && req.socket.encrypted ? "https:" : "http:");
 
 	let host = headers.get("Host") ?? "localhost";
 	if (
@@ -305,6 +324,20 @@ const createRequest = (req: IncomingMessage, res: ServerResponse) => {
 	}
 
 	return new Request(url, init);
+};
+
+/**
+ * @param headers request headers
+ * @returns the first protocol in `X-Forwarded-Proto` if it is `http` or `https`
+ */
+const forwardedProtocol = (headers: Headers) => {
+	const proto = headers
+		.get("X-Forwarded-Proto")
+		?.split(",", 1)[0]!
+		.trim()
+		.toLowerCase();
+
+	if (proto === "https" || proto === "http") return `${proto}:` as const;
 };
 
 const defaultErrorHandler = (error: unknown) => {

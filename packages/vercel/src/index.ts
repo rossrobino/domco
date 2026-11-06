@@ -23,7 +23,7 @@ const nodeEntry: AdapterEntry = ({ appId }) => ({
 import app from "${appId}";
 import { nodeListener } from "domco/listener";
 
-export default nodeListener(app.fetch);
+export default nodeListener(app.fetch, { trustForwardedProto: true });
 `,
 });
 
@@ -41,12 +41,21 @@ export const getRequest = (req: Request) => {
 
 	params.delete(pathnameParam);
 	url.pathname = pathname;
+	url.search = params.toString();
 
-	return new Request(url, {
+	const init: RequestInit & { duplex?: "half" } = {
 		method: req.method,
 		headers: req.headers,
-		body: req.body,
-	});
+		signal: req.signal,
+	};
+
+	if (req.body) {
+		// required by Node when the body is a stream
+		init.body = req.body;
+		init.duplex = "half";
+	}
+
+	return new Request(url, init);
 };
 
 /** Use when runtime is set to node + ISR. */
@@ -57,16 +66,59 @@ import app from "${appId}";
 import { nodeListener } from "domco/listener";
 import { getRequest } from "@domcojs/vercel";
 
-export default nodeListener((req) => app.fetch(getRequest(req)));
+export default nodeListener((req) => app.fetch(getRequest(req)), {
+	trustForwardedProto: true,
+});
 `,
 });
 
-/** Use when runtime is set to node. */
+/**
+ * Sets the protocol of the request URL to the protocol the client used.
+ *
+ * Vercel ends TLS at its edge and forwards plain HTTP to the function, and it
+ * always sets `X-Forwarded-Proto` to the client's protocol, so the header can
+ * be trusted here. Returns the original request when the protocol already
+ * matches or the header is missing.
+ *
+ * @param req the request from the runtime
+ * @returns a request with the client's protocol
+ */
+export const forwardedRequest = (req: Request) => {
+	const proto = req.headers
+		.get("X-Forwarded-Proto")
+		?.split(",", 1)[0]!
+		.trim()
+		.toLowerCase();
+
+	if (proto !== "https" && proto !== "http") return req;
+
+	const url = new URL(req.url);
+	if (url.protocol === `${proto}:`) return req;
+
+	url.protocol = proto;
+
+	const init: RequestInit & { duplex?: "half" } = {
+		method: req.method,
+		headers: req.headers,
+		signal: req.signal,
+	};
+
+	if (req.body) {
+		init.body = req.body;
+		init.duplex = "half";
+	}
+
+	return new Request(url, init);
+};
+
+/** Use when runtime is set to bun. */
 const bunEntry: AdapterEntry = ({ appId }) => ({
 	id: entryId,
 	code: `
 import app from "${appId}";
-export default app;
+import { forwardedRequest } from "@domcojs/vercel";
+
+export default { ...app, fetch: (req) => app.fetch(forwardedRequest(req)) };
 `,
 });
 

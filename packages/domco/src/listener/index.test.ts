@@ -238,4 +238,34 @@ describe("nodeListener", () => {
 
 		expect(cookies).toStrictEqual(["one=1; Path=/", "two=2; Path=/"]);
 	});
+
+	test("ignores X-Forwarded-Proto by default", async () => {
+		const port = await start(nodeListener((req) => new Response(req.url)));
+
+		const response = await call(port, {
+			headers: { Host: "example.com", "X-Forwarded-Proto": "https" },
+		});
+
+		expect(response.body).toBe("http://example.com/");
+	});
+
+	test("uses X-Forwarded-Proto when trustForwardedProto is set", async () => {
+		const port = await start(
+			nodeListener((req) => new Response(req.url), {
+				trustForwardedProto: true,
+			}),
+		);
+
+		const https = await call(port, {
+			headers: { Host: "example.com", "X-Forwarded-Proto": "HTTPS, http" },
+		});
+		const invalid = await call(port, {
+			headers: { Host: "example.com", "X-Forwarded-Proto": "ftp" },
+		});
+		const missing = await call(port, { headers: { Host: "example.com" } });
+
+		expect(https.body).toBe("https://example.com/");
+		expect(invalid.body).toBe("http://example.com/");
+		expect(missing.body).toBe("http://example.com/");
+	});
 });
