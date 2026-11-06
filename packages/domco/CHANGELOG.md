@@ -1,5 +1,11 @@
 # domco
 
+## 5.1.0
+
+### Minor Changes
+
+- f3a9ba2: Add a `trustForwardedProto` option to `nodeListener`. When enabled, the `Request` URL uses the protocol from the `X-Forwarded-Proto` header, for apps behind a trusted proxy that ends TLS. By default the header is ignored and the protocol still comes from the socket.
+
 ## 5.0.4
 
 ### Patch Changes

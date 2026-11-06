@@ -1,7 +1,7 @@
 {
 	"name": "@domcojs/vercel",
 	"description": "domco Vercel adapter",
-	"version": "3.1.4",
+	"version": "3.1.5",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
@@ -29,6 +29,6 @@
 		"build": "npm run build:clean && npm run build:js"
 	},
 	"dependencies": {
-		"domco": "^5.0.0"
+		"domco": "^5.1.0"
 	}
 }
