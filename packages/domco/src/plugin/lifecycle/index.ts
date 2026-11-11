@@ -13,7 +13,13 @@ import { fork } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
-import { type Plugin, type ResolvedConfig, build, loadEnv } from "vite";
+import {
+	type InlineConfig,
+	type Plugin,
+	type ResolvedConfig,
+	build,
+	loadEnv,
+} from "vite";
 
 /**
  * Runs logs and scripts throughout the build lifecycle.
@@ -40,7 +46,7 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 				console.log();
 
 				// initiate SSR build
-				await build({ build: { ssr: true } });
+				await build(ssrBuildConfig(config));
 			} else {
 				const outDir = `${dirNames.out.base}/${dirNames.out.client.base}`;
 				const pageDir = path.join(outDir, dirNames.src.client);
@@ -85,6 +91,20 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 		},
 	};
 };
+
+/**
+ * Config for the SSR build, which starts after the client build.
+ * Uses the same mode and config file as the client build, so for example
+ * `vite build --mode staging` builds both with `.env.staging`.
+ *
+ * @param config resolved Vite config of the client build
+ * @returns inline config for the SSR build
+ */
+export const ssrBuildConfig = (config: ResolvedConfig): InlineConfig => ({
+	mode: config.mode,
+	configFile: config.configFile ?? false,
+	build: { ssr: true },
+});
 
 /**
  * The prerender process imports the server entry, so the app can read

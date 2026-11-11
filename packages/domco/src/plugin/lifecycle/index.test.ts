@@ -1,4 +1,4 @@
-import { prerenderEnv } from "./index.js";
+import { prerenderEnv, ssrBuildConfig } from "./index.js";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -56,5 +56,26 @@ describe("prerenderEnv", () => {
 		const env = prerenderEnv(config({ mode: "production", envDir: false }));
 
 		expect(env).toBe(process.env);
+	});
+});
+
+describe("ssrBuildConfig", () => {
+	test("uses the client build's mode and config file", () => {
+		expect(
+			ssrBuildConfig({
+				mode: "staging",
+				configFile: "/app/vite.custom.ts",
+			} as ResolvedConfig),
+		).toStrictEqual({
+			mode: "staging",
+			configFile: "/app/vite.custom.ts",
+			build: { ssr: true },
+		});
+	});
+
+	test("does not look for a config file when the client build had none", () => {
+		expect(
+			ssrBuildConfig({ mode: "production" } as ResolvedConfig).configFile,
+		).toBe(false);
 	});
 });
