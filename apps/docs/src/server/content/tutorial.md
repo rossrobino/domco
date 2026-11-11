@@ -71,6 +71,23 @@ export default { fetch: app.fetch };
 export default app;
 ```
 
+#### Client IP
+
+domco passes connection information to `fetch` as the second argument. `info.ip` is the client's IP address, which you can use for rate limits or logs.
+
+```ts
+// src/server/+app
+import type { FetchInfo } from "domco";
+
+export default {
+	fetch(req: Request, info?: FetchInfo) {
+		return new Response(`Your IP is ${info?.ip}`);
+	},
+};
+```
+
+domco never reads `info.ip` from a header the client can set. The dev and preview servers pass the socket's address, and each [adapter](/deploy#adapters) passes the client IP its platform verifies. If you are using a router like [ovr](https://github.com/rossrobino/ovr), pass `app.fetch` directly and it receives `info` as its options.
+
 ### +page
 
 To create a page, add `+page.html` file in a directory within `src/client/`.
@@ -205,7 +222,7 @@ export default {
 };
 ```
 
-After the Vite build is complete, domco will import `default.fetch` from your application and make a request to each `default.prerender` path provided. The responses will be written to `dist/client/(path)` files upon build. If the path does not have an extension, `/index.html` will be added to the end of the file path.
+After the Vite build is complete, domco will import `default.fetch` from your application and make a request to each `default.prerender` path provided. domco imports your `+app` module during every build to read `prerender`, even when it has nothing to prerender. Before importing it, domco loads every variable from your project's [`.env` files](https://vite.dev/guide/env-and-mode#env-files) for the build's mode into `process.env`, without overwriting variables that are already set. If your app checks environment variables as it loads, set them in the build environment or a `.env` file, or check them when the first request arrives. When the import fails, domco logs the error and the build continues without prerendering. The responses will be written to `dist/client/(path)` files upon build. If the path does not have an extension, `/index.html` will be added to the end of the file path.
 
 For the export above, domco would request each path and generate the following files from the responses.
 

@@ -1,4 +1,4 @@
-import { adapter, forwardedRequest, getRequest } from "./index.js";
+import { adapter, fetchInfo, forwardedRequest, getRequest } from "./index.js";
 import type { VercelAdapterOptions } from "./types.js";
 import fs from "node:fs/promises";
 import { type Server, createServer, request as sendRequest } from "node:http";
@@ -13,16 +13,24 @@ vi.mock("@domcojs/vercel", () => import("./index.js"));
 
 let dir: string;
 let appId: string;
+let ipAppId: string;
 const servers: Server[] = [];
 
 beforeAll(async () => {
 	// inside the package so the entries can resolve their bare imports
 	dir = await fs.mkdtemp(path.join(import.meta.dirname, "..", ".test-entry-"));
 	appId = path.join(dir, "app.js");
-	await fs.writeFile(
-		appId,
-		"export default { fetch: (req) => new Response(req.url) };",
-	);
+	ipAppId = path.join(dir, "ip-app.js");
+	await Promise.all([
+		fs.writeFile(
+			appId,
+			"export default { fetch: (req) => new Response(req.url) };",
+		),
+		fs.writeFile(
+			ipAppId,
+			'export default { fetch: (req, info) => new Response(info?.ip ?? "none") };',
+		),
+	]);
 });
 
 afterAll(async () => {
@@ -41,9 +49,9 @@ afterAll(async () => {
 let count = 0;
 
 /** Writes the adapter's entry to disk and imports its default export. */
-const loadEntry = async (options?: VercelAdapterOptions) => {
+const loadEntry = async (options?: VercelAdapterOptions, app = appId) => {
 	const { entry } = await adapter(options);
-	const { code } = entry!({ appId });
+	const { code } = entry!({ appId: app });
 	const file = path.join(dir, `main-${count++}.js`);
 	await fs.writeFile(file, code);
 	return (await import(file)).default;
@@ -133,6 +141,72 @@ describe("vercel entry", () => {
 		);
 
 		expect(await res.text()).toBe("https://app.vercel.app/");
+	});
+});
+
+describe("client IP", () => {
+	// Vercel overwrites `x-forwarded-for` at its edge, a client can still send `x-real-ip`
+	const headers = {
+		"X-Forwarded-For": "203.0.113.1",
+		"X-Real-IP": "198.51.100.7",
+	};
+
+	test("node entry passes the IP Vercel sets", async () => {
+		const listener = await loadEntry(undefined, ipAppId);
+
+		expect(await call(listener, "/", headers)).toBe("203.0.113.1");
+	});
+
+	test("node entry falls back to the socket without the header", async () => {
+		const listener = await loadEntry(undefined, ipAppId);
+
+		expect(await call(listener, "/", { "X-Real-IP": "198.51.100.7" })).toBe(
+			"127.0.0.1",
+		);
+	});
+
+	test("ISR entry passes the IP Vercel sets", async () => {
+		const listener = await loadEntry({ isr: { expiration: 60 } }, ipAppId);
+
+		expect(await call(listener, "/fn?__pathname=", headers)).toBe(
+			"203.0.113.1",
+		);
+	});
+
+	test("bun entry passes the IP Vercel sets", async () => {
+		const app = await loadEntry({ config: { runtime: "bun1.x" } }, ipAppId);
+
+		const withHeader: Response = await app.fetch(
+			new Request("https://app.vercel.app/", { headers }),
+		);
+		const without: Response = await app.fetch(
+			new Request("https://app.vercel.app/", {
+				headers: { "X-Real-IP": "198.51.100.7" },
+			}),
+		);
+
+		expect(await withHeader.text()).toBe("203.0.113.1");
+		expect(await without.text()).toBe("none");
+	});
+
+	test("fetchInfo uses the last valid address", () => {
+		const info = (value: string) =>
+			fetchInfo(
+				new Request("https://a/", { headers: { "X-Forwarded-For": value } }),
+			);
+
+		expect(info("203.0.113.1, 2001:db8::1")).toStrictEqual({
+			ip: "2001:db8::1",
+		});
+		expect(info("not-an-ip")).toStrictEqual({});
+	});
+});
+
+describe("runtime", () => {
+	test("defaults to the latest Node.js LTS on Vercel", async () => {
+		expect(await adapter()).toMatchObject({
+			message: "created nodejs26.x build .vercel/",
+		});
 	});
 });
 

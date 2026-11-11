@@ -6,8 +6,30 @@ export type MaybePromise<T> = T | Promise<T>;
 /** `default` export from the SSR entry point. */
 export type App = { fetch: FetchHandler; prerender?: Prerender };
 
-/** Fetch handler, takes a web request and returns a web response. */
-export type FetchHandler = (req: Request) => MaybePromise<Response>;
+/**
+ * Information about the connection that the server passes to `fetch`
+ * as the second argument.
+ */
+export type FetchInfo = {
+	/**
+	 * IP address of the client: the socket peer, or the client IP that a
+	 * platform or proxy in front of the server verified and set.
+	 * Never read from a header the client can set.
+	 *
+	 * `undefined` when the server cannot determine it.
+	 */
+	ip?: string;
+};
+
+/**
+ * Fetch handler, takes a web request and returns a web response.
+ *
+ * domco and its adapters pass connection information as the second argument.
+ */
+export type FetchHandler = (
+	req: Request,
+	info?: FetchInfo,
+) => MaybePromise<Response>;
 
 /** Paths to prerender at build time. */
 export type Prerender =

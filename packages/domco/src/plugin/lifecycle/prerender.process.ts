@@ -99,7 +99,11 @@ const prerender = async () => {
 			/* @vite-ignore */
 			entryPath
 		).catch((error) => {
-			console.error(`Error: Failed to import: ${entryPath}`);
+			console.error(
+				`Error: Failed to import the server entry to read its prerender paths, so nothing was prerendered: ${entryPath}\n` +
+					"domco imports the app during the build. If it checks environment variables as it loads, " +
+					"set them in the build environment or a `.env` file, or check them on the first request instead.",
+			);
 			console.error(error);
 
 			return { default: { fetch: () => {} } };

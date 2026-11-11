@@ -13,7 +13,7 @@ import { fork } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
-import { type Plugin, build } from "vite";
+import { type Plugin, type ResolvedConfig, build, loadEnv } from "vite";
 
 /**
  * Runs logs and scripts throughout the build lifecycle.
@@ -23,12 +23,16 @@ import { type Plugin, build } from "vite";
  */
 export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 	let ssr: boolean | undefined;
+	let config: ResolvedConfig;
 
 	return {
 		name: "domco:lifecycle",
 		apply: "build",
 		async config(_config, { isSsrBuild }) {
 			ssr = isSsrBuild;
+		},
+		configResolved(resolved) {
+			config = resolved;
 		},
 
 		async closeBundle() {
@@ -61,7 +65,7 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 
 				const prerenderProcess = fork(
 					path.join(import.meta.dirname, "prerender.process.js"),
-					{ stdio: "inherit" },
+					{ stdio: "inherit", env: prerenderEnv(config) },
 				);
 
 				prerenderProcess.on("exit", async () => {
@@ -80,6 +84,22 @@ export const lifecyclePlugin = (adapter?: Adapter): Plugin => {
 			}
 		},
 	};
+};
+
+/**
+ * The prerender process imports the server entry, so the app can read
+ * variables from the project's `.env` files as it loads, the same files Vite
+ * loads for the build. Variables already set in the environment take precedence.
+ *
+ * @param config resolved Vite config of the SSR build
+ * @returns environment for the prerender process
+ */
+export const prerenderEnv = (config: ResolvedConfig): NodeJS.ProcessEnv => {
+	if (config.envDir === false) return process.env;
+
+	// the "" prefix returns every variable, not only `VITE_` ones,
+	// merged with `process.env`, which takes precedence
+	return loadEnv(config.mode, config.envDir, "");
 };
 
 /**

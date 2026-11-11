@@ -39,9 +39,18 @@ export const adapter: AdapterBuilder = async () => {
 			return {
 				id: "_worker",
 				code: `
-					import app from "${appId}";
-					export default app;
-				`,
+import app from "${appId}";
+
+export default {
+	...app,
+	// Cloudflare sets \`CF-Connecting-IP\` to the client's IP address at its edge.
+	// \`env\` and \`ctx\` move after domco's \`info\` argument.
+	fetch: (req, env, ctx) => {
+		const ip = req.headers.get("CF-Connecting-IP");
+		return app.fetch(req, ip ? { ip } : {}, env, ctx);
+	},
+};
+`,
 			};
 		},
 

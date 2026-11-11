@@ -2,12 +2,13 @@
 // https://github.com/remix-run/remix/tree/main/packages/node-fetch-server
 // https://github.com/sveltejs/kit/blob/main/packages/kit/src/exports/node/index.js
 // to use as Vite middleware: https://github.com/mjackson/remix-the-web/issues/13
-import type { FetchHandler, MaybePromise } from "../types/index.js";
+import type { FetchHandler, FetchInfo, MaybePromise } from "../types/index.js";
 import type {
 	IncomingMessage,
 	RequestListener,
 	ServerResponse,
 } from "node:http";
+import { isIP } from "node:net";
 
 type NodeListenerOptions = {
 	/**
@@ -42,6 +43,23 @@ type NodeListenerOptions = {
 	 * @default false
 	 */
 	trustForwardedProto?: boolean;
+
+	/**
+	 * Name of a header that a proxy in front of the server sets to the client's
+	 * IP address, for example `"X-Forwarded-For"` or `"X-Real-IP"`.
+	 * The last address in the header is passed to `fetch` as `info.ip`, since
+	 * that is the one the nearest proxy added.
+	 *
+	 * Only set this when the app runs behind a proxy you trust that always
+	 * overwrites or appends to the header. Otherwise clients can choose their
+	 * own IP address.
+	 *
+	 * When the header is missing or is not a valid IP address, `info.ip`
+	 * falls back to the socket's remote address.
+	 *
+	 * @default undefined // uses the socket's remote address
+	 */
+	ipHeader?: string;
 };
 
 /**
@@ -58,7 +76,10 @@ export const nodeListener = (
 		let request: Request | undefined;
 		try {
 			request = createRequest(req, res, options?.trustForwardedProto);
-			const web = await fetch(request);
+			const web = await fetch(
+				request,
+				fetchInfo(req, request.headers, options?.ipHeader),
+			);
 
 			if (request.signal.aborted || res.destroyed) return;
 
@@ -338,6 +359,30 @@ const forwardedProtocol = (headers: Headers) => {
 		.toLowerCase();
 
 	if (proto === "https" || proto === "http") return `${proto}:` as const;
+};
+
+/**
+ * @param req Node request
+ * @param headers web request headers
+ * @param ipHeader trusted header that holds the client IP
+ * @returns connection information to pass to `fetch`
+ */
+const fetchInfo = (
+	req: IncomingMessage,
+	headers: Headers,
+	ipHeader?: string,
+): FetchInfo => {
+	if (ipHeader) {
+		const forwarded = headers.get(ipHeader);
+		if (forwarded) {
+			const ip = forwarded.slice(forwarded.lastIndexOf(",") + 1).trim();
+			if (isIP(ip)) return { ip };
+		}
+	}
+
+	const ip = req.socket.remoteAddress;
+
+	return ip ? { ip } : {};
 };
 
 const defaultErrorHandler = (error: unknown) => {

@@ -268,4 +268,37 @@ describe("nodeListener", () => {
 		expect(invalid.body).toBe("http://example.com/");
 		expect(missing.body).toBe("http://example.com/");
 	});
+
+	test("passes the socket's address and ignores client IP headers by default", async () => {
+		const port = await start(
+			nodeListener((_req, info) => new Response(info?.ip ?? "none")),
+		);
+
+		const response = await call(port, {
+			headers: { "X-Forwarded-For": "203.0.113.1", "X-Real-IP": "203.0.113.2" },
+		});
+
+		expect(response.body).toBe("127.0.0.1");
+	});
+
+	test("uses the last address in ipHeader", async () => {
+		const port = await start(
+			nodeListener((_req, info) => new Response(info?.ip ?? "none"), {
+				ipHeader: "X-Forwarded-For",
+			}),
+		);
+
+		const forwarded = await call(port, {
+			headers: { "X-Forwarded-For": "203.0.113.1, 2001:db8::1" },
+		});
+		// the other header is not trusted
+		const other = await call(port, { headers: { "X-Real-IP": "203.0.113.2" } });
+		const invalid = await call(port, {
+			headers: { "X-Forwarded-For": "not-an-ip" },
+		});
+
+		expect(forwarded.body).toBe("2001:db8::1");
+		expect(other.body).toBe("127.0.0.1");
+		expect(invalid.body).toBe("127.0.0.1");
+	});
 });

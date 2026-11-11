@@ -47,9 +47,11 @@ export type NodejsServerlessFunctionConfig = ServerlessFunctionConfig & {
 	 * Specifies which "runtime" will be used to execute the Serverless Function.
 	 * See [Runtimes](https://vercel.com/docs/functions/serverless-functions/runtimes) for more information.
 	 *
-	 * @default "nodejs24.x"
+	 * See [Node.js versions](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions) for the versions Vercel offers.
+	 *
+	 * @default "nodejs26.x"
 	 */
-	runtime: "nodejs24.x" | (string & {});
+	runtime: "nodejs26.x" | "nodejs24.x" | "nodejs22.x" | (string & {});
 
 	/**
 	 * Specifies which launcher to use. Currently only "Nodejs" is supported.
@@ -249,7 +251,7 @@ export type VercelAdapterOptions = {
 	 *
 	 * {
 	 * 	handler: "main.js",
-	 * 	runtime: "nodejs22.x",
+	 * 	runtime: "nodejs26.x",
 	 * 	launcherType: "Nodejs",
 	 * }
 	 */

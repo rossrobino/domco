@@ -28,7 +28,7 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 				devServer.middlewares.use(async (req, res, next) => {
 					nodeListener(
 						// Copied from https://github.com/honojs/vite-plugins/blob/main/packages/dev-server/src/dev-server.ts
-						async (request) => {
+						async (request, info) => {
 							const app = validateEntry(
 								await devServer.ssrLoadModule(
 									path.join(
@@ -40,7 +40,7 @@ export const configureServerPlugin = (adapter?: Adapter): Plugin => {
 								),
 							);
 
-							const res = await app.fetch(request);
+							const res = await app.fetch(request, info);
 
 							if (!(res instanceof Response)) throw res;
 

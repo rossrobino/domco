@@ -59,6 +59,17 @@ const server = createServer((req, res) =>
 server.listen(3000);
 ```
 
+`nodeListener` passes the socket's address to `fetch` as [`info.ip`](/tutorial#client-ip). If the server runs behind a proxy you trust, such as a load balancer that sets the client IP and protocol in a header, tell `nodeListener` which header to read. Only do this when the proxy always overwrites or appends to the header, otherwise clients can choose their own IP address.
+
+```ts
+nodeListener(app.fetch, {
+	// the last address in the header is used
+	ipHeader: "X-Forwarded-For",
+	// use the protocol in `X-Forwarded-Proto` for `req.url`
+	trustForwardedProto: true,
+});
+```
+
 Run this module to start your server and navigate to http://localhost:3000/ to view your application.
 
 ```bash
@@ -98,6 +109,8 @@ The [Cloudflare](https://cloudflare.com) adapter outputs your application to run
 
 - Runs on [workerd](https://github.com/cloudflare/workerd).
 - Outputs public assets to be served on Cloudflare's CDN.
+- Passes the client IP from Cloudflare's [`CF-Connecting-IP`](https://developers.cloudflare.com/fundamentals/reference/http-headers/#cf-connecting-ip) header as [`info.ip`](/tutorial#client-ip).
+- `fetch` receives `(req, info, env, ctx)`: domco's `info` comes second, and Cloudflare's [`env` and `ctx`](https://developers.cloudflare.com/workers/runtime-apis/handlers/fetch/) come third and fourth.
 
 <img loading="lazy" src="/_vercel/image?url=/images/cloudflare/build-settings.png&w=1280&q=100" alt='A screenshot of the Cloudflare Build Settings UI. Set the Framework Preset field to "None", set the build command to "npm run build", and the build output directory to ".cloudflare".' />
 
@@ -110,6 +123,8 @@ npm i -D @domcojs/vercel
 The [Vercel](https://vercel.com) adapter outputs your application to the [Build Output API](https://vercel.com/docs/build-output-api/v3) specification.
 
 - Runs on [Node.js](https://vercel.com/docs/functions/runtimes/node-js), [Node.js with ISR](https://vercel.com/docs/incremental-static-regeneration) or [Bun](https://vercel.com/docs/functions/runtimes/bun).
+  - Defaults to `nodejs26.x`, the latest Node.js LTS on Vercel. Set `config.runtime` to choose [another version](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions), or `"bun1.x"` for Bun.
+- Passes the client IP from Vercel's [`x-forwarded-for`](https://vercel.com/docs/headers/request-headers#x-forwarded-for) header, which Vercel overwrites at its edge, as [`info.ip`](/tutorial#client-ip). `req.url` uses the client's protocol from `x-forwarded-proto`.
 - Outputs public assets to be served on Vercel's [Edge Network](https://vercel.com/docs/edge-network/overview).
 - Supports on demand [Image Optimization](https://vercel.com/docs/image-optimization) when configured in the adapter config.
   - Set the `src` attribute of an image using the `/_vercel/image/...` [optimized URL format](https://vercel.com/docs/image-optimization#optimized-url-format). In `dev` and `preview` modes, domco will redirect to the original image.

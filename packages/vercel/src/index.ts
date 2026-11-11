@@ -6,14 +6,28 @@ import type {
 	Route,
 	VercelAdapterOptions,
 } from "./types.js";
-import type { AdapterBuilder, AdapterEntry, AdapterMiddleware } from "domco";
+import type {
+	AdapterBuilder,
+	AdapterEntry,
+	AdapterMiddleware,
+	FetchInfo,
+} from "domco";
 import { dirNames, headers } from "domco/constants";
 import { clearDir, copyClient, copyServer } from "domco/util";
 import { version } from "domco/version";
 import fs from "node:fs/promises";
+import { isIP } from "node:net";
 import path from "node:path";
 
 const entryId = "main";
+
+/**
+ * Vercel sets this header to the client's IP address at its edge, and
+ * overwrites any value the client sends to prevent IP spoofing.
+ *
+ * @see https://vercel.com/docs/headers/request-headers#x-forwarded-for
+ */
+const ipHeader = "x-forwarded-for";
 const pathnameParam = "__pathname";
 
 /** Use when runtime is set to node. */
@@ -23,7 +37,10 @@ const nodeEntry: AdapterEntry = ({ appId }) => ({
 import app from "${appId}";
 import { nodeListener } from "domco/listener";
 
-export default nodeListener(app.fetch, { trustForwardedProto: true });
+export default nodeListener(app.fetch, {
+	trustForwardedProto: true,
+	ipHeader: "${ipHeader}",
+});
 `,
 });
 
@@ -66,8 +83,9 @@ import app from "${appId}";
 import { nodeListener } from "domco/listener";
 import { getRequest } from "@domcojs/vercel";
 
-export default nodeListener((req) => app.fetch(getRequest(req)), {
+export default nodeListener((req, info) => app.fetch(getRequest(req), info), {
 	trustForwardedProto: true,
+	ipHeader: "${ipHeader}",
 });
 `,
 });
@@ -111,14 +129,30 @@ export const forwardedRequest = (req: Request) => {
 	return new Request(url, init);
 };
 
+/**
+ * Gets the client's IP address from the header Vercel sets at its edge.
+ * Uses the last address in case anything was appended after the client's.
+ *
+ * @param req the request from the runtime
+ * @returns connection information to pass to `fetch`
+ */
+export const fetchInfo = (req: Request): FetchInfo => {
+	const ip = req.headers.get(ipHeader)?.split(",").at(-1)?.trim();
+
+	return ip && isIP(ip) ? { ip } : {};
+};
+
 /** Use when runtime is set to bun. */
 const bunEntry: AdapterEntry = ({ appId }) => ({
 	id: entryId,
 	code: `
 import app from "${appId}";
-import { forwardedRequest } from "@domcojs/vercel";
+import { fetchInfo, forwardedRequest } from "@domcojs/vercel";
 
-export default { ...app, fetch: (req) => app.fetch(forwardedRequest(req)) };
+export default {
+	...app,
+	fetch: (req) => app.fetch(forwardedRequest(req), fetchInfo(req)),
+};
 `,
 });
 
@@ -152,7 +186,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 	const resolvedOptions: RequiredOptions = {
 		config: {
 			handler: `${entryId}.js`,
-			runtime: "nodejs24.x",
+			runtime: "nodejs26.x", // latest LTS on Vercel
 			supportsResponseStreaming: true, // required for bun streaming
 		},
 	};
