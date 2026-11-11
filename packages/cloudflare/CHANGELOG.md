@@ -1,5 +1,18 @@
 # @domcojs/cloudflare
 
+## 3.0.0
+
+### Major Changes
+
+- 1897fe1: Pass the client's IP address to `fetch` as `info.ip`, from Cloudflare's `CF-Connecting-IP` header. `fetch` now receives `(req, info, env, ctx)`: Cloudflare's `env` and `ctx` move from the second and third arguments to the third and fourth. Update a handler written as `fetch(req, env, ctx)` to `fetch(req, info, env, ctx)`.
+
+### Patch Changes
+
+- Updated dependencies [1897fe1]
+- Updated dependencies [1897fe1]
+- Updated dependencies [837dc9a]
+  - domco@5.2.0
+
 ## 2.0.2
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # domco
 
+## 5.2.0
+
+### Minor Changes
+
+- 1897fe1: Pass the client's IP address to `fetch` as the second argument, `{ ip?: string }`, exported as the `FetchInfo` type. The IP is never read from a header the client can set: the dev and preview servers and `nodeListener` pass the socket's remote address. Behind a proxy you trust, set the new `ipHeader` option of `nodeListener` to the header the proxy sets, and the last address in it is used.
+
+### Patch Changes
+
+- 1897fe1: Load the project's `.env` files for the build's mode into `process.env` before importing the server entry to read its prerender paths, without overwriting variables that are already set. Apps that check environment variables as they load no longer fail to import during a local build that has a `.env` file. When the import still fails, the error now explains that domco imports the app during the build and that nothing was prerendered.
+- 837dc9a: Build the server with the same mode and config file as the client build. `vite build --mode staging` or `vite build --config vite.custom.ts` previously built the server in production mode with the default config file.
+
 ## 5.1.0
 
 ### Minor Changes

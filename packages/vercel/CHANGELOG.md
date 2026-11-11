@@ -1,5 +1,19 @@
 # @domcojs/vercel
 
+## 3.2.0
+
+### Minor Changes
+
+- 1897fe1: Pass the client's IP address to `fetch` as `info.ip` in the Node.js, Node.js with ISR, and Bun entries. The IP comes from the `x-forwarded-for` header, which Vercel overwrites at its edge to prevent spoofing.
+- 1897fe1: Default to the `nodejs26.x` runtime, the latest Node.js LTS on Vercel. Node.js 24 lacks newer APIs such as `Uint8Array.prototype.toBase64`. Set `config.runtime` to `"nodejs24.x"` to keep the previous runtime.
+
+### Patch Changes
+
+- Updated dependencies [1897fe1]
+- Updated dependencies [1897fe1]
+- Updated dependencies [837dc9a]
+  - domco@5.2.0
+
 ## 3.1.5
 
 ### Patch Changes
