@@ -8,6 +8,7 @@ import type {
 	RequestListener,
 	ServerResponse,
 } from "node:http";
+import { type Http2ServerRequest, constants } from "node:http2";
 import { isIP } from "node:net";
 
 type NodeListenerOptions = {
@@ -112,7 +113,8 @@ export const nodeListener = (
 				console.error(streamError);
 				for (const name of res.getHeaderNames()) res.removeHeader(name);
 				res.writeHead(500, { "Content-Type": "text/plain" });
-				res.end("Internal Server Error");
+				res.write("Internal Server Error");
+				end(res);
 			}
 		}
 	};
@@ -147,16 +149,18 @@ const setResponse = (
 		);
 	}
 
-	res.writeHead(web.status, web.statusText, headers);
+	// HTTP/2 has no status message, and Node warns when one is passed.
+	if (isHttp2(res)) res.writeHead(web.status, headers);
+	else res.writeHead(web.status, web.statusText, headers);
 
 	if (res.req.method === "HEAD") {
 		if (web.body && !web.body.locked) web.body.cancel().catch(() => {});
-		res.end();
+		end(res);
 		return;
 	}
 
 	if (!web.body) {
-		res.end();
+		end(res);
 		return;
 	}
 
@@ -196,13 +200,38 @@ const setResponse = (
 				}
 			}
 
-			res.end();
+			end(res);
 		} catch (error) {
 			cancel(error instanceof Error ? error : new Error(String(error)));
 		}
 	};
 
 	void next();
+};
+
+/**
+ * @param res Node response
+ * @returns whether the response comes from Node's HTTP/2 compatibility API
+ */
+const isHttp2 = (res: ServerResponse) =>
+	"stream" in res.req &&
+	Boolean((res.req as unknown as Http2ServerRequest).stream);
+
+/**
+ * Ends the response. Over HTTP/2, Node keeps the stream open while the request
+ * body is unfinished and paused, so a response sent without reading the whole
+ * body never finishes. Once the response is complete, close the stream with
+ * `NO_ERROR`, which tells the client to stop sending the body (RFC 9113 §8.1).
+ *
+ * @param res Node response
+ */
+const end = (res: ServerResponse) => {
+	res.end();
+
+	const req = res.req as unknown as Http2ServerRequest;
+	if (isHttp2(res) && !req.readableEnded) {
+		req.stream.close(constants.NGHTTP2_NO_ERROR);
+	}
 };
 
 const createRequest = (

@@ -6,6 +6,13 @@ import {
 	createServer,
 	request as sendRequest,
 } from "node:http";
+import {
+	type ClientHttp2Session,
+	type Http2Server,
+	type ServerHttp2Session,
+	connect,
+	createServer as createHttp2Server,
+} from "node:http2";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
 const servers: Server[] = [];
@@ -300,5 +307,178 @@ describe("nodeListener", () => {
 		expect(forwarded.body).toBe("2001:db8::1");
 		expect(other.body).toBe("127.0.0.1");
 		expect(invalid.body).toBe("127.0.0.1");
+	});
+});
+
+describe("nodeListener over HTTP/2", () => {
+	const http2Servers: Http2Server[] = [];
+	const sessions: ClientHttp2Session[] = [];
+	const serverSessions: ServerHttp2Session[] = [];
+
+	afterEach(async () => {
+		for (const session of [
+			...sessions.splice(0),
+			...serverSessions.splice(0),
+		]) {
+			session.destroy();
+		}
+		await Promise.all(
+			http2Servers
+				.splice(0)
+				.map(
+					(server) =>
+						new Promise<void>((resolve) => server.close(() => resolve())),
+				),
+		);
+	});
+
+	const startHttp2 = async (listener: RequestListener) => {
+		const server = createHttp2Server(listener as any);
+		http2Servers.push(server);
+		server.on("session", (session) => serverSessions.push(session));
+
+		await new Promise<void>((resolve) =>
+			server.listen(0, "127.0.0.1", resolve),
+		);
+
+		const address = server.address();
+		if (!address || typeof address === "string") {
+			throw new Error("Expected the listener to use a TCP port.");
+		}
+
+		const session = connect(`http://127.0.0.1:${address.port}`);
+		sessions.push(session);
+		return session;
+	};
+
+	const callHttp2 = (
+		session: ClientHttp2Session,
+		{ method = "GET", body }: { method?: string; body?: Buffer } = {},
+	) =>
+		new Promise<{ body: string; status: number | undefined }>(
+			(resolve, reject) => {
+				const stream = session.request({ ":method": method, ":path": "/" });
+				let status: number | undefined;
+				const chunks: Buffer[] = [];
+
+				stream.once("response", (headers) => (status = headers[":status"]));
+				stream.on("data", (chunk: Buffer) => chunks.push(chunk));
+				// wait for the whole stream to close, not just the response body,
+				// since an unfinished upload keeps the stream open
+				stream.once("close", () =>
+					resolve({ body: Buffer.concat(chunks).toString(), status }),
+				);
+				stream.once("error", reject);
+				// the server may close the stream before the whole body is sent
+				stream.end(body);
+			},
+		);
+
+	const upload = Buffer.alloc(4.5 * 1024 * 1024, "a");
+
+	test("finishes a response that leaves the request body unread", async () => {
+		const session = await startHttp2(
+			nodeListener(async () => {
+				await new Promise((resolve) => setTimeout(resolve, 300));
+				return new Response("Payload Too Large", { status: 413 });
+			}),
+		);
+
+		const response = await within(
+			callHttp2(session, { method: "POST", body: upload }),
+		);
+
+		expect(response).toEqual({ body: "Payload Too Large", status: 413 });
+	});
+
+	test("sends a whole large response that leaves the request body unread", async () => {
+		const size = 3 * 1024 * 1024;
+		const session = await startHttp2(
+			nodeListener(async () => {
+				await new Promise((resolve) => setTimeout(resolve, 300));
+				return new Response("a".repeat(size), { status: 413 });
+			}),
+		);
+
+		const response = await within(
+			callHttp2(session, { method: "POST", body: upload }),
+		);
+
+		expect(response.status).toBe(413);
+		expect(response.body.length).toBe(size);
+	});
+
+	test("finishes an empty response that leaves the request body unread", async () => {
+		const session = await startHttp2(
+			nodeListener(async () => {
+				await new Promise((resolve) => setTimeout(resolve, 300));
+				return new Response(null, { status: 413 });
+			}),
+		);
+
+		const response = await within(
+			callHttp2(session, { method: "POST", body: upload }),
+		);
+
+		expect(response).toEqual({ body: "", status: 413 });
+	});
+
+	test("reads the whole request body", async () => {
+		const session = await startHttp2(
+			nodeListener(
+				async (req) =>
+					new Response(String((await req.arrayBuffer()).byteLength)),
+			),
+		);
+
+		const response = await within(
+			callHttp2(session, { method: "POST", body: upload }),
+		);
+
+		expect(response).toEqual({ body: String(upload.byteLength), status: 200 });
+	});
+
+	test("streams a response", async () => {
+		const session = await startHttp2(
+			nodeListener(
+				() =>
+					new Response(
+						new ReadableStream({
+							async start(c) {
+								c.enqueue(new TextEncoder().encode("a"));
+								await new Promise((resolve) => setTimeout(resolve, 50));
+								c.enqueue(new TextEncoder().encode("b"));
+								c.close();
+							},
+						}),
+					),
+			),
+		);
+
+		const response = await within(callHttp2(session));
+
+		expect(response).toEqual({ body: "ab", status: 200 });
+	});
+
+	test("does not pass a status message to writeHead", async () => {
+		// Node only warns about status messages once per process, so check the call
+		const writeHead = vi.fn();
+		const listener = nodeListener(
+			() => new Response("ok", { statusText: "Fine" }),
+		);
+		const session = await startHttp2((req, res) => {
+			const original = res.writeHead.bind(res);
+			res.writeHead = ((...args: Parameters<typeof original>) => {
+				writeHead(...args);
+				return original(...args);
+			}) as typeof res.writeHead;
+			return listener(req, res);
+		});
+
+		const response = await within(callHttp2(session));
+
+		expect(response).toEqual({ body: "ok", status: 200 });
+		expect(writeHead).toHaveBeenCalledOnce();
+		expect(writeHead.mock.calls[0]).not.toContain("Fine");
 	});
 });

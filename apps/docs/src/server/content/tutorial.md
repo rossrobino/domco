@@ -236,6 +236,43 @@ For the export above, domco would request each path and generate the following f
 
 If you are using an [adapter](/deploy#adapters), these static files will be served in front of your `fetch` handler. So when an `index.html` file is found for the route, it is served directly without hitting your fetch handler.
 
+## Local HTTPS
+
+Browsers treat `http://localhost` as a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts), but some features, browsers, and setups still need HTTPS during development, for example passkeys, cookies with `Secure` or the `__Host-` prefix sent from another device on your network, or a custom hostname. To serve the dev server over HTTPS without certificate warnings, create a certificate your system trusts with [mkcert](https://github.com/FiloSottile/mkcert).
+
+```bash
+# add mkcert's local certificate authority to the system and browser trust stores, once per machine
+mkcert -install
+```
+
+```bash
+# create a certificate for localhost in the project
+mkcert -cert-file .cert/localhost.pem -key-file .cert/localhost-key.pem localhost 127.0.0.1 ::1
+```
+
+Then pass the files to [`server.https`](https://vite.dev/config/server-options#server-https) in your Vite config. [`vite preview`](https://vite.dev/config/preview-options#preview-https) uses the same setting.
+
+```ts {8-11}
+// vite.config.ts
+import { domco } from "domco";
+import fs from "node:fs";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+	plugins: [domco()],
+	server: {
+		https: {
+			cert: fs.readFileSync(".cert/localhost.pem"),
+			key: fs.readFileSync(".cert/localhost-key.pem"),
+		},
+	},
+});
+```
+
+Run `vite` and open `https://localhost:5173`. Add `.cert/` to `.gitignore`. The certificate is only trusted on machines that ran `mkcert -install`, and the key in `$(mkcert -CAROOT)` can sign certificates for any site, so never share it. To use a hostname such as `app.localhost` or your machine's network address, list it when creating the certificate. To open the site on another device, install mkcert's `rootCA.pem` on that device too.
+
+With HTTPS enabled, Vite serves the dev server over HTTP/2 and `req.url` starts with `https://`. Plugins such as [`@vitejs/plugin-basic-ssl`](https://github.com/vitejs/vite-plugin-basic-ssl) create a certificate the system doesn't trust, so browsers show a warning first.
+
 ## That's it!
 
 domco has a minimal API surface area and tries to get out of your way during development. For more examples (framework, library) check out the [domco-examples](https://github.com/rossrobino/domco-examples) repository.
