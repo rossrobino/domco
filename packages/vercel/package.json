@@ -18,6 +18,7 @@
 		}
 	},
 	"files": [
+		"CHANGELOG.md",
 		"dist",
 		"src",
 		"!src/**/*.test.ts"
