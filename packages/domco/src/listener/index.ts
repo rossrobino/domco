@@ -218,20 +218,43 @@ const isHttp2 = (res: ServerResponse) =>
 	Boolean((res.req as unknown as Http2ServerRequest).stream);
 
 /**
- * Ends the response. Over HTTP/2, Node keeps the stream open while the request
- * body is unfinished and paused, so a response sent without reading the whole
- * body never finishes. Once the response is complete, close the stream with
- * `NO_ERROR`, which tells the client to stop sending the body (RFC 9113 §8.1).
+ * Ends the response.
+ *
+ * Over HTTP/2, Node keeps the stream open while the client is still sending a
+ * request body that the app paused or never read, so the response never
+ * finishes and the client waits on its upload. Once the response has been
+ * sent, close the stream with `NO_ERROR`, which tells the client to stop
+ * sending the body (RFC 9113 §8.1).
+ *
+ * The close waits for the stream's `finish` and then a `setImmediate`, as Node
+ * does when it closes a stream whose request was never read. `finish` can fire
+ * while the response headers are still queued, and closing then makes nghttp2
+ * drop them, so the client gets no response. (`res` itself only emits
+ * `finish` once the stream has closed, so it can't be used.)
+ *
+ * The close is skipped when the client has nothing left to send: a request
+ * whose headers ended the stream (a GET without a body), a body the app read
+ * to the end, or a stream that has already closed.
  *
  * @param res Node response
  */
 const end = (res: ServerResponse) => {
-	res.end();
+	if (isHttp2(res)) {
+		const req = res.req as unknown as Http2ServerRequest;
+		const stream = req.stream;
 
-	const req = res.req as unknown as Http2ServerRequest;
-	if (isHttp2(res) && !req.readableEnded) {
-		req.stream.close(constants.NGHTTP2_NO_ERROR);
+		if (!stream.endAfterHeaders) {
+			stream.once("finish", () =>
+				setImmediate(() => {
+					if (req.readableEnded || stream.closed || stream.destroyed) return;
+
+					stream.close(constants.NGHTTP2_NO_ERROR);
+				}),
+			);
+		}
 	}
+
+	res.end();
 };
 
 const createRequest = (

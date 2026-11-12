@@ -355,26 +355,64 @@ describe("nodeListener over HTTP/2", () => {
 		session: ClientHttp2Session,
 		{ method = "GET", body }: { method?: string; body?: Buffer } = {},
 	) =>
-		new Promise<{ body: string; status: number | undefined }>(
-			(resolve, reject) => {
-				const stream = session.request({ ":method": method, ":path": "/" });
-				let status: number | undefined;
-				const chunks: Buffer[] = [];
+		new Promise<{
+			body: string;
+			status: number | undefined;
+			location?: string | string[];
+		}>((resolve, reject) => {
+			const stream = session.request({ ":method": method, ":path": "/" });
+			let status: number | undefined;
+			let location: string | string[] | undefined;
+			const chunks: Buffer[] = [];
 
-				stream.once("response", (headers) => (status = headers[":status"]));
-				stream.on("data", (chunk: Buffer) => chunks.push(chunk));
-				// wait for the whole stream to close, not just the response body,
-				// since an unfinished upload keeps the stream open
-				stream.once("close", () =>
-					resolve({ body: Buffer.concat(chunks).toString(), status }),
-				);
-				stream.once("error", reject);
-				// the server may close the stream before the whole body is sent
-				stream.end(body);
-			},
-		);
+			stream.once("response", (headers) => {
+				status = headers[":status"];
+				location = headers.location;
+			});
+			stream.on("data", (chunk: Buffer) => chunks.push(chunk));
+			// wait for the whole stream to close, not just the response body,
+			// since an unfinished upload keeps the stream open
+			stream.once("close", () =>
+				resolve({
+					body: Buffer.concat(chunks).toString(),
+					status,
+					...(location === undefined ? {} : { location }),
+				}),
+			);
+			stream.once("error", reject);
+			// the server may close the stream before the whole body is sent
+			stream.end(body);
+		});
 
 	const upload = Buffer.alloc(4.5 * 1024 * 1024, "a");
+
+	test("sends a bodiless response returned synchronously to a GET", async () => {
+		const session = await startHttp2(
+			nodeListener(
+				() =>
+					new Response(null, { status: 303, headers: { location: "/login" } }),
+			),
+		);
+
+		const response = await within(callHttp2(session));
+
+		expect(response).toEqual({ body: "", status: 303, location: "/login" });
+	});
+
+	test("sends a bodiless response returned synchronously to a POST", async () => {
+		const session = await startHttp2(
+			nodeListener(
+				() =>
+					new Response(null, { status: 303, headers: { location: "/login" } }),
+			),
+		);
+
+		const response = await within(
+			callHttp2(session, { method: "POST", body: upload }),
+		);
+
+		expect(response).toEqual({ body: "", status: 303, location: "/login" });
+	});
 
 	test("finishes a response that leaves the request body unread", async () => {
 		const session = await startHttp2(
