@@ -1,5 +1,11 @@
 # @domcojs/vercel
 
+## 3.2.2
+
+### Patch Changes
+
+- 3c6fa65: `trailingSlash: false` now redirects paths that end with a slash to the same path without it, as documented. Before, the option was ignored. ISR builds no longer add `__pathname` to the `allowQuery` array passed in the options, so running the build again doesn't add it twice.
+
 ## 3.2.1
 
 ### Patch Changes
