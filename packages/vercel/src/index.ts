@@ -207,7 +207,8 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 	if (options?.isr) resolvedOptions.isr = options.isr;
 	if (options?.images) resolvedOptions.images = options.images;
-	if (options?.trailingSlash) {
+	// `false` is an option too, it removes the slash
+	if (options?.trailingSlash !== undefined) {
 		resolvedOptions.trailingSlash = options.trailingSlash;
 	}
 
@@ -351,34 +352,22 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 			];
 
 			if (resolvedOptions.isr) {
-				const defaultIsr: Partial<PrerenderFunctionConfig> = {
+				const isr: PrerenderFunctionConfig = {
 					allowQuery: [],
 					group: 1,
 					passQuery: true,
+					...resolvedOptions.isr,
 				};
 
-				const mergedIsr: PrerenderFunctionConfig = Object.assign(
-					defaultIsr,
-					resolvedOptions.isr,
-				);
-
 				// must allow the pathname param otherwise all pages will be
-				// directed to "/"
-				if (mergedIsr.allowQuery) {
-					mergedIsr.allowQuery.push(pathnameParam);
-				} else {
-					mergedIsr.allowQuery = [pathnameParam];
-				}
+				// directed to "/" (a new array, so the user's options don't change)
+				isr.allowQuery = [...(isr.allowQuery ?? []), pathnameParam];
 
 				tasks.push(
 					// write prerender-config
 					fs.writeFile(
 						path.join(outDir, "functions", `${fnName}.prerender-config.json`),
-						JSON.stringify(
-							Object.assign(defaultIsr, resolvedOptions.isr),
-							null,
-							"\t",
-						),
+						JSON.stringify(isr, null, "\t"),
 					),
 				);
 			}
