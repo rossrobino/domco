@@ -130,6 +130,21 @@ describe("vercel entry", () => {
 		expect(await res.text()).toBe("https://app.vercel.app/page");
 	});
 
+	test("bun entry with ISR moves __pathname into the pathname", async () => {
+		const app = await loadEntry({
+			config: { runtime: "bun1.x" },
+			isr: { expiration: 60 },
+		});
+
+		const res: Response = await app.fetch(
+			new Request("http://app.vercel.app/fn?__pathname=page&x=1", {
+				headers: forwarded,
+			}),
+		);
+
+		expect(await res.text()).toBe("https://app.vercel.app/page?x=1");
+	});
+
 	test("bun entry keeps the request method and body", async () => {
 		const app = await loadEntry({ config: { runtime: "bun1.x" } });
 		const res: Response = await app.fetch(
@@ -199,6 +214,46 @@ describe("client IP", () => {
 			ip: "2001:db8::1",
 		});
 		expect(info("not-an-ip")).toStrictEqual({});
+	});
+});
+
+describe("routes", () => {
+	/** Runs the adapter in an empty project and returns the route to the function. */
+	const functionRoute = async (options?: VercelAdapterOptions) => {
+		const cwd = process.cwd();
+		const project = await fs.mkdtemp(path.join(dir, "project-"));
+		process.chdir(project);
+		try {
+			await (await adapter(options)).run?.();
+			const config = JSON.parse(
+				await fs.readFile(
+					path.join(project, ".vercel", "output", "config.json"),
+					"utf-8",
+				),
+			);
+			return config.routes.at(-1);
+		} finally {
+			process.chdir(cwd);
+		}
+	};
+
+	// Vercel passes the client's path and query to a function it rewrites to,
+	// with the query of the rewrite added, so only ISR may add `__pathname`
+	test("rewrites to the function without a query", async () => {
+		expect(await functionRoute()).toStrictEqual({
+			src: "^/(.*)$",
+			dest: "/fn",
+		});
+		expect(
+			await functionRoute({ config: { runtime: "bun1.x" } }),
+		).toStrictEqual({ src: "^/(.*)$", dest: "/fn" });
+	});
+
+	test("passes the pathname in __pathname with ISR", async () => {
+		expect(await functionRoute({ isr: { expiration: 60 } })).toStrictEqual({
+			src: "^/(.*)$",
+			dest: "/fn?__pathname=$1",
+		});
 	});
 });
 

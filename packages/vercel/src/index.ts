@@ -143,18 +143,24 @@ export const fetchInfo = (req: Request): FetchInfo => {
 };
 
 /** Use when runtime is set to bun. */
-const bunEntry: AdapterEntry = ({ appId }) => ({
-	id: entryId,
-	code: `
+const bunEntry = (isr: boolean): AdapterEntry => {
+	const request = isr
+		? "getRequest(forwardedRequest(req))"
+		: "forwardedRequest(req)";
+
+	return ({ appId }) => ({
+		id: entryId,
+		code: `
 import app from "${appId}";
-import { fetchInfo, forwardedRequest } from "@domcojs/vercel";
+import { fetchInfo, forwardedRequest${isr ? ", getRequest" : ""} } from "@domcojs/vercel";
 
 export default {
 	...app,
-	fetch: (req) => app.fetch(forwardedRequest(req), fetchInfo(req)),
+	fetch: (req) => app.fetch(${request}, fetchInfo(req)),
 };
 `,
-});
+	});
+};
 
 /**
  * Creates a [Vercel](https://vercel.com) build according to the build output API spec.
@@ -240,7 +246,7 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 
 	let entry: AdapterEntry;
 	if (resolvedOptions.config.runtime.startsWith("bun")) {
-		entry = bunEntry;
+		entry = bunEntry(Boolean(resolvedOptions.isr));
 	} else if (resolvedOptions.isr) {
 		entry = isrEntry;
 	} else {
@@ -293,7 +299,17 @@ export const adapter: AdapterBuilder<VercelAdapterOptions | undefined> = (
 				// required for static files, checks this first
 				{ methods: ["GET"], handle: "filesystem" },
 				// falls back to function, this reroutes everything
-				{ src: "^/(.*)$", dest: `/${fnName}?${pathnameParam}=$1` },
+				{
+					src: "^/(.*)$",
+					// Vercel passes the client's path and query to the function, with
+					// the query of the rewrite added, so only ISR adds `__pathname`.
+					// ISR caches by the function's path and `allowQuery`, so the
+					// client's path has to be in the query, and the entry moves it
+					// back (`getRequest`).
+					dest: resolvedOptions.isr
+						? `/${fnName}?${pathnameParam}=$1`
+						: `/${fnName}`,
+				},
 			);
 
 			const outputConfig: OutputConfig = {
