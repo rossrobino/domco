@@ -1,5 +1,11 @@
 # create-domco
 
+## 5.0.1
+
+### Patch Changes
+
+- 53d933f: chore: include `CHANGELOG.md` in the published package
+
 ## 5.0.0
 
 ### Major Changes
